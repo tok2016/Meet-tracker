@@ -1,0 +1,712 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI-спецификация для Meet-Трекера
+  description: |-
+    Спецификация сервера для проекта "Разработка web-сервиса 'Meet-Трекер'".
+  contact:
+    email: ratchet23122003@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Доска проекта
+  url: https://tracker.yandex.ru/pages/projects/1
+tags:
+  - name: summary
+    description: Access to summaries
+  - name: record
+    description: Access to audio files
+  - name: user
+    description: Access to users
+  - name: colors
+    description: Access to color palette
+paths:
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: Creates user
+      operationId: createUser
+      requestBody:
+        description: User data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRaw'
+      responses:
+        '201':
+          description: User account is created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid registration data
+  /users:
+    get:
+      tags:
+        - user
+      summary: Get users array
+      description: Gets 20 users from sorted and filtered array starting with the index = (page - 1) * 20. This can only be done by the logged admin.
+      operationId: getUsers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: To determaine the index of the starting element in array
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200': 
+          description: Users are found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403': 
+          description: Not allowed
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: User logs in
+      description: Logs user into the system
+      operationId: loginUser
+      requestBody:
+        description: Username and password to log in
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: 'theUser'
+                password:
+                  type: string
+                  example: '12345678'
+      responses:
+        '200':
+          description: Successful log in
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          description: Invalid username/password supplied
+  /user/logout:
+    post:
+      tags:
+        - user
+      summary: User logs out
+      description: Logs out current logged in user session
+      operationId: logoutUser
+      security:
+        - bearerAuth: []
+      responses:
+        default:
+          description: Successful log out
+  /user/{username}:
+    get:
+      tags:
+        - user
+      summary: Get user by username
+      description: Gets user by username
+      operationId: getUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: Username to find user and send it in resonce. This can only be done by the logged in user or admin.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User is found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithSummaries'          
+        '404':
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Update user
+      description: Updates user data. This can only be done by the logged in user.
+      operationId: updateUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: Needed to find user to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Updated user data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRaw'
+      responses:
+        '202':
+          description: User data is successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithSummaries'
+        '400': 
+          description: Invalid data
+        '401':
+          description: Unauthorized action
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: Deletes user. This can only be done by the logged in admin.
+      operationId: deleteUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: Needed to find user to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204': 
+          description: User is deleted
+        '400':
+          description: Invalid username supplied
+        '403':
+          description: Not allowed
+        '404':
+          description: User not found
+  /record:
+    post:
+      tags:
+        - record
+      summary: Upload record
+      description: Upload record to extract its audio, summarize and save it
+      operationId: uploadRecord
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Record data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Record'
+      responses:
+        '201':
+          description: Record is accpeted and sent to summarize
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Summary'
+        '400':
+          description: Invalid file format
+        '401':
+          description: Unauthorized action
+  /records:
+    get: 
+      tags:
+        - record
+      summary: Get records array
+      description: Gets 20 shaort records info from sorted and filtered array starting with the index = (page - 1) * 20. This can only be done by the logged admin.
+      operationId: getRecords
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: To determaine the index of the starting element in array
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200': 
+          description: Records are found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SummaryInfo'
+        '403': 
+          description: Not allowed
+  /record/{id}:
+    put:
+      tags:
+        - record
+      summary: Archivate the record
+      description: Archivates the record and saves it at the file property. This can only be done by the logged in admin
+      operationId: archivateRecord
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Needed to find record to archivate
+          required: true
+          schema:
+            type: integer
+      responses: 
+        '202': 
+          description: Audio record is archivated
+        '403':
+          description: Not allowed
+        '404': 
+          description: Record not found
+    delete:
+      tags:
+        - record
+      summary: Delete the record
+      description: Deletes the record and saves it at the file property. This can only be done by the logged in admin
+      operationId: deleteRecord
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Needed to find record to archivate
+          required: true
+          schema:
+            type: integer
+      responses: 
+        '204': 
+          description: Audio record is deleted
+        '403':
+          description: Not allowed
+        '404': 
+          description: Record not found
+  /summary/{id}:
+    get:
+      tags:
+        - summary
+      summary: Get summary data
+      description: Gets summary data with audio and its text. This can only be done by the logged in user
+      operationId: getSummary
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Needed to find summary
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200': 
+          description: Summary is found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Summary'
+        '401':
+          description: Unauthorized action
+        '404':
+          description: Summary not found
+    put: 
+      tags:
+        - summary
+      summary: Repeat record summarization
+      description: Repeats record summarization. This can only be done by the logged in user
+      operationId: resummarizeRecord
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Needed to find summary
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '202': 
+          description: Request is accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Summary'
+        '401':
+          description: Unauthorized action
+        '404':
+          description: Summary not found
+    delete:
+      tags:
+        - summary
+      summary: Delete summary data
+      description: Deletes summary data with its text, but not the record. This can only be done by the logged in admin
+      operationId: deleteSummary
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Needed to find summary
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204': 
+          description: Summary is deleted
+        '403':
+          description: Not allowed
+        '404':
+          description: Summary not found
+  /colors:
+    post:
+      tags:
+        - colors
+      summary: Change color palette
+      description: Uploades .svg file to extract colors from and save them. This can only be done by the logged in admin
+      operationId: changeColors
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: SVG-file
+        content:
+          application/json:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          description: Color palette has been saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ColorPalette"
+        '400':
+          description: Invalid file format
+        '403':
+          description: Not allowed
+    get:
+      tags:
+        - colors
+      summary: Get color palette
+      description: Gets the most recent color palette right at the start of application.
+      operationId: getColors
+      parameters: []
+      responses:
+        default: 
+          description: Colors are found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ColorPalette"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        password:
+          type: string
+          example: '12345678'
+        firstName:
+          type: string
+          example: Николай
+          default: Пользователь
+        lastName:
+          type: string
+          example: Мелехин
+        email:
+          type: string
+          example: test@email.com
+        isAdmin:
+          type: boolean
+          example: false
+          default: false
+        registrationDate:
+          type: string
+          format: date-time
+          example: "2024-10-12T12:12:10.736Z"
+        avatar: 
+          type: string
+          format: binary
+          default: null
+      required:
+      - id
+      - username
+      - password
+      - firstName
+      - email
+      - registrationDate
+    UserWithSummaries:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        password:
+          type: string
+          example: '12345678'
+        firstName:
+          type: string
+          example: Николай
+          default: Пользователь
+        lastName:
+          type: string
+          example: Мелехин
+        email:
+          type: string
+          example: test@email.com
+        isAdmin:
+          type: boolean
+          example: false
+          default: false
+        registrationDate:
+          type: string
+          format: date-time
+          example: "2024-10-12T12:12:10.736Z"
+        avatar: 
+          type: string
+          format: binary
+          default: null
+        summaries:
+          type: array
+          items: 
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 10
+              audioId:
+                type: integer
+                format: int64
+                example: 10
+              date:
+                type: string
+                format: date-time
+                example: "2024-10-14T09:32:12.908Z"
+              title:
+                type: string
+                example: "Встреча 14.10.2024"
+                default:
+                  $ref: "#/components/schemas/Summary/properties/date"
+          default: []
+      required:
+      - id
+      - username
+      - password
+      - firstName
+      - email
+      - registrationDate
+      - summaries
+    UserRaw:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        password:
+          type: string
+          example: '12345678'
+        firstName:
+          type: string
+          example: Николай
+          default: Пользователь
+        lastName:
+          type: string
+          example: Мелехин
+        email:
+          type: string
+          example: test@email.com
+        avatar: 
+          type: string
+          format: binary
+          default: null
+      required:
+      - username
+      - password
+      - firstName
+      - email
+    Summary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        userId:
+          type: integer
+          format: int64
+          example: 10
+        date:
+          type: string
+          format: date-time
+          example: "2024-10-14T09:32:12.908Z"
+        text:
+          type: string
+          example: "Все задачи сделаны"
+        title:
+          type: string
+          example: "Встреча 14.10.2024"
+          default:
+            $ref: "#/components/schemas/Summary/properties/date"
+        record:
+          type: object
+          properties:
+            file:
+              type: string
+              format: binary
+            isArchived:
+              type: boolean
+              example: false
+              default: false
+        status:
+          type: string
+          format: enum
+          example: success
+          default: pending
+      required:
+      - id
+      - userId
+      - date
+      - title
+      - status
+    SummaryInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        userId:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        date:
+          type: string
+          format: date-time
+          example: "2024-10-14T09:32:12.908Z"
+        title:
+          type: string
+          example: "Встреча 14.10.2024"
+          default:
+            $ref: "#/components/schemas/Summary/properties/date"
+        record:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              example: 10
+            hasFile:
+              type: boolean
+              example: true
+            isArchived:
+              type: boolean
+              example: false
+              default: false
+      required:
+      - id
+      - userId
+      - username
+      - date
+      - title
+      - status
+    Record:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 10
+        file:
+          type: string
+          format: binary
+        isArchived:
+          type: boolean
+          example: false
+          default: false
+      required:
+      - userId
+    ColorPalette:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        date:
+          type: string
+          format: date-time
+          example: "2024-10-14T09:32:12.908Z"
+        main:
+          type: string
+          format: hex
+          example: "#FFFFFF"
+          default: "#F59D0E"
+        secondary:
+          type: string
+          format: hex
+          example: "#FFFFFF"
+          default: "#DED60A"
+        tertiary:
+          type: string
+          format: hex
+          example: "#FFFFFF"
+          default: "#727271"
+        background:
+          type: string
+          format: hex
+          example: "#FFFFFF"
+          default: "#FFFFFF"
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
