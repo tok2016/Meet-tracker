@@ -6,6 +6,8 @@ from app.db import SessionDep
 from typing import Annotated
 from datetime import timedelta
 from app.utils import get_password_hash, verify_password, create_access_token
+
+
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
 router = APIRouter()
@@ -76,16 +78,8 @@ def authenticate(session: Session, email: str, password: str) -> User | None:
 
 @router.post("/user/login")
 def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep) -> Token:
-    user = authenticate(
-        session=session, email=form_data.username, password=form_data.password
-    )
+    user = authenticate( session=session, email=form_data.username, password=form_data.password )
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    #elif not user.is_active:
-    #    raise HTTPException(status_code=400, detail="Inactive user")
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    return Token(
-        access_token=create_access_token(
-            user.id, expires_delta=access_token_expires
-        )
-    )
+    return Token( access_token=create_access_token( user.id, expires_delta=access_token_expires ) )
