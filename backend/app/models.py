@@ -21,10 +21,16 @@ class UserCreate(UserBase):
     password: str
 
 class UserUpdate(UserBase):
-    username: str | None = None
-    first_name: str | None = None
-    last_name: str | None = None
-    password: str | None = None
+    username: str | None = Field(default=None)
+    first_name: str | None = Field(default=None)
+    last_name: str | None = Field(default=None)
+    password: str | None = Field(default=None)
+
+class UserUpdateMe(SQLModel):
+    email: EmailStr | None = Field(default=None)
+    username: str | None = Field(default=None)
+    first_name: str | None = Field(default=None)
+    last_name: str | None = Field(default=None)
 
 # JSON payload containing access token
 class Token(SQLModel):

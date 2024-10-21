@@ -7,7 +7,9 @@ from app.db import SessionDep
 from app.models import TokenPayload, User
 from sqlmodel import Session, select
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from fastapi import Depends
+from fastapi import Depends, HTTPException, status
+from jwt.exceptions import InvalidTokenError
+from pydantic import ValidationError
 
 
 ALGORITHM = "HS256"

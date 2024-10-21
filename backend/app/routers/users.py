@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from app.models import User, UserPublic, UserCreate, UserUpdate, Token
+from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.db import SessionDep
 from typing import Annotated
 from datetime import timedelta
-from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser
+from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -73,4 +73,17 @@ def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], sessi
 
 @router.get("/me", response_model=UserPublic)
 def read_user_me(current_user: CurrentUser):
+    return current_user
+
+@router.patch("/me", response_model=UserPublic)
+def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: CurrentUser):
+    if user_in.email:
+        existing_user = get_user_by_email(session=session, email=user_in.email)
+        if existing_user and existing_user.id != current_user.id:
+            raise HTTPException( status_code=409, detail="User with this email already exists" )
+    user_data = user_in.model_dump(exclude_unset=True)
+    current_user.sqlmodel_update(user_data)
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
     return current_user
