@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from app.models import User, UserPublic, UserCreate, UserUpdate, Token
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.db import SessionDep
 from typing import Annotated
 from datetime import timedelta
-from app.utils import get_password_hash, verify_password, create_access_token
+from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -62,19 +62,6 @@ def delete_user(user_username: int, session: SessionDep):
     session.commit()
     return {"ok": True}
 
-def get_user_by_email(session: Session, email: str) -> User | None:
-    statement = select(User).where(User.email == email)
-    session_user = session.exec(statement).first()
-    return session_user
-
-
-def authenticate(session: Session, email: str, password: str) -> User | None:
-    db_user = get_user_by_email(session=session, email=email)
-    if not db_user:
-        return None
-    if not verify_password(password, db_user.password):
-        return None
-    return db_user
 
 @router.post("/user/login")
 def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep) -> Token:
@@ -82,4 +69,8 @@ def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], sessi
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    return Token( access_token=create_access_token( user.id, expires_delta=access_token_expires ) )
+    return Token(access_token=create_access_token( user.id, expires_delta=access_token_expires ) )
+
+@router.get("/me", response_model=UserPublic)
+def read_user_me(current_user: CurrentUser):
+    return current_user

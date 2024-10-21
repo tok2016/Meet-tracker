@@ -6,7 +6,7 @@ import datetime
 class UserBase(SQLModel):
     username: str = Field(index=True)
     first_name: str = Field(max_length=30)
-    last_name: str = Field(max_length=30)
+    last_name: str | None = Field(max_length=30)
     email: EmailStr = Field(unique=True, max_length=50)
 
 class User(UserBase, table=True):
@@ -30,3 +30,6 @@ class UserUpdate(UserBase):
 class Token(SQLModel):
     access_token: str
     token_type: str = "bearer"
+
+class TokenPayload(SQLModel):
+    sub: str | None = None
