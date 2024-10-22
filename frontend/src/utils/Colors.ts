@@ -4,7 +4,13 @@ const UIColors: UIColorPalette = {
   main: '#F59D0E',
   secondary: '#F56B00',
   tertiary: '#F5F5F5',
-  background: '#FFFFFF'
+  background: '#FFFFFF',
+  mainGradient() {
+    return `linear-gradient(to right, ${this.main}, ${this.secondary})`;
+  },
+  secondaryGradient() {
+    return `linear-gradient(to right, ${this.main}, transparent)`;
+  }
 };
 
 const TextColors: TextColorPalette = {

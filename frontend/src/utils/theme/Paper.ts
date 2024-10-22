@@ -10,13 +10,13 @@ declare module '@mui/material/Paper' {
 
 const Paper: Components['MuiPaper'] = {
   defaultProps: {
-    color: UIColors.background,
+    color: UIColors.main,
     variant: 'elevation',
     elevation: 0,
     sx: {
       borderRadius: 10,
-      paddingX: 50,
-      paddingY: 40
+      paddingX: '2.6vw',
+      paddingY: '3.7vh',
     },
   },
   variants: [

@@ -13,11 +13,6 @@ const Button: Components['MuiButton'] = {
   defaultProps: {
     variant: 'contained',
     sx: {
-      color: TextColors.contrast,
-      fontFamily: 'Inter',
-      fontSize: 32,
-      fontWeight: 400,
-      backgroundColor: UIColors.main,
       borderRadius: 30,
       height: '2.2em'
     }
@@ -39,7 +34,8 @@ const Button: Components['MuiButton'] = {
         variant: 'containtedTetriatry'
       },
       style: {
-        backgroundColor: `linear-gradient(to right, ${UIColors.main}, ${UIColors.secondary})`,
+        backgroundColor: UIColors.mainGradient(),
+        color: TextColors.contrast,
         minHeight: '3em',
         paddingTop: '2em',
         borderRadius: 0

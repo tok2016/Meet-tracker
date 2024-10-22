@@ -24,7 +24,6 @@ const Typography: Components['MuiTypography'] = {
       subtitle1: 'p',
       subtitle2: 'p'
     },
-    fontFamily: 'Inter',
     fontSize: 32,
     fontWeight: 400,
     color: TextColors.main
@@ -35,11 +34,13 @@ const Typography: Components['MuiTypography'] = {
     },
     h2: {
       fontSize: 40,
-      fontWeight: 700
+      fontWeight: 700,
+      textAlign: 'center'
     },
     h3: {
       fontSize: 32,
-      fontWeight: 700
+      fontWeight: 700,
+      textAlign: 'center'
     },
     h4: {
       fontSize: 32,
@@ -51,10 +52,12 @@ const Typography: Components['MuiTypography'] = {
     },
     subtitle1: {
       fontSize: 16,
-      fontWeight: 700
+      fontWeight: 700,
+      textAlign: 'center'
     },
     subtitle2: {
-      fontSize: 16
+      fontSize: 16,
+      textAlign: 'center'
     }
   },
   variants: [
@@ -73,6 +76,7 @@ const Typography: Components['MuiTypography'] = {
       },
       style: {
         fontSize: 96,
+        textAlign: 'center'
       }
     },
     {
@@ -89,7 +93,8 @@ const Typography: Components['MuiTypography'] = {
         variant: 'h3Promo'
       },
       style: {
-        fontSize: 48
+        fontSize: 48,
+        textAlign: 'center'
       }
     },
     {

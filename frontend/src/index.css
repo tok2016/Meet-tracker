@@ -4,10 +4,15 @@
   font-weight: 400;
 
   color: #000000;
-  background-color: #FFFFFF;
+  background-color: #F5F5F5;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
 }

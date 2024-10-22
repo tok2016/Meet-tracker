@@ -5,6 +5,8 @@ export interface UIColorPalette {
   secondary: HexColor,
   tertiary: HexColor,
   background: HexColor,
+  mainGradient: () => string,
+  secondaryGradient: () => string
 };
 
 export interface TextColorPalette {
