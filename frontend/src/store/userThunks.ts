@@ -1,14 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { User, UserLogin, UserRaw, UserWithSummaries } from '../utils/types/User';
 import { AsyncThunkConfig } from './store';
 import AxiosInstance from '../utils/Axios';
-import Token from '../utils/types/Token';
+import Token, { TokenRaw } from '../utils/types/Token';
+import { camelToSnake, snakeToCamel } from '../utils/utils';
 
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/postUserData', 
   async (userData) => {
-    const responce = await AxiosInstance.post('/user', userData);
-    return responce.data as User;
+    const body = camelToSnake(userData);
+
+    const responce = await AxiosInstance.post('/user', body);
+    return snakeToCamel(responce.data) as User;
   }
 );
 
@@ -16,7 +20,15 @@ const postLogin = createAsyncThunk<Token, UserLogin, AsyncThunkConfig>(
   'user/postUserLogin',
   async (userLogin) => {
     const responce = await AxiosInstance.post('/user/login', userLogin);
-    return responce.data as Token;
+
+    const tokenRaw = responce.data as TokenRaw;
+
+    const token: Token = {
+      token: `${tokenRaw['token_type']} ${tokenRaw['access_token']}`,
+      expireTime: responce.headers['X-Expires-After']
+    };
+
+    return token;
   }
 );
 
@@ -38,7 +50,7 @@ const getCurrentUser = createAsyncThunk<UserWithSummaries, void, AsyncThunkConfi
       }
     });
 
-    return responce.data as UserWithSummaries;
+    return snakeToCamel(responce.data) as UserWithSummaries;
   }
 );
 
@@ -53,22 +65,23 @@ const getUserByUsername = createAsyncThunk<UserWithSummaries, string, AsyncThunk
       }
     });
 
-    return responce.data as UserWithSummaries;
+    return snakeToCamel(responce.data) as UserWithSummaries;
   }
 );
 
-const putUserChanges = createAsyncThunk<UserWithSummaries, UserRaw, AsyncThunkConfig>(
-  'user/putUserChanges',
+const patchUserChanges = createAsyncThunk<UserWithSummaries, UserRaw, AsyncThunkConfig>(
+  'user/patchUserChanges',
   async (userUpdate, { getState }) => {
     const {user} = getState();
+    const body = camelToSnake(userUpdate);
 
-    const responce = await AxiosInstance.put(`/user/${userUpdate.username}`, userUpdate, {
+    const responce = await AxiosInstance.patch(`/user/${userUpdate.username}`, body, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return responce.data as UserWithSummaries;
+    return snakeToCamel(responce.data) as UserWithSummaries;
   }
 );
 
@@ -86,4 +99,4 @@ const deleteUserData = createAsyncThunk<void, string, AsyncThunkConfig>(
 );
 
 export {getCurrentUser, getUserByUsername, postLogin, 
-  postLogout, postUserData, putUserChanges, deleteUserData};
+  postLogout, postUserData, patchUserChanges, deleteUserData};

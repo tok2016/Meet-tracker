@@ -1,6 +1,9 @@
-type BearerToken = `Bearer ${string}`
-
 export default interface Token {
-  token: BearerToken | undefined,
+  token: string | undefined,
   expireTime: string
+};
+
+export interface TokenRaw {
+  ['access_token']: string,
+  ['token_type']: string
 };

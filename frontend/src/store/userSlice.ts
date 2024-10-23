@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import UserState from '../utils/types/UserState';
 import { UserWithSummaries } from '../utils/types/User';
-import { deleteUserData, getCurrentUser, getUserByUsername, postLogin, postLogout, postUserData, putUserChanges } from './userThunks';
+import { deleteUserData, getCurrentUser, getUserByUsername, postLogin, postLogout, postUserData, patchUserChanges } from './userThunks';
 import { isActionWithError } from '../utils/types/ActionWithError';
 import Token from '../utils/types/Token';
 import { RootState } from './store';
@@ -66,7 +66,7 @@ const userSlice = createSlice({
         state.user = action.payload;
         state.status = 'success';
       })
-      .addCase(putUserChanges.fulfilled, (state, action) => {
+      .addCase(patchUserChanges.fulfilled, (state, action) => {
         state.user = action.payload;
         state.status = 'success';
       })
