@@ -15,5 +15,8 @@ export default defineConfig({
         assetFileNames: `static/[name].[ext]`,
       },
     }
+  },
+  server: {
+    host: '127.0.0.1'
   }
 })
