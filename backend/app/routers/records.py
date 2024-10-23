@@ -11,23 +11,36 @@ import whisper
 from faster_whisper import WhisperModel
 from whisper import tokenizer
 import io
+from langchain_ollama import OllamaLLM
+
+
 LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
 
-
+#Whsiper модель
 model_size = "large-v3"
-
-# Run on GPU with FP16
-model = WhisperModel(model_size, device="cpu", compute_type="int8")
-
-LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
+model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
+#Llama модель
+model_llama = OllamaLLM(model="llama3.1")
 
 router = APIRouter()
 
+#Запрос для использования только whisper
 @router.post("/record/")
-async def record_transcription( file: UploadFile = File(...), language: Union[str, None] = Query(default=None, enum=LANGUAGE_CODES),):
-    segments, info = model.transcribe(io.BytesIO(file.file.read()), beam_size=5)
+async def record_transcription( file: UploadFile = File(...)):
+    segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
     x = ""
     for segment in segments:
         x+=segment.text
         x+=" "
     return { "text": f"Transcribed text {x}" }
+
+#Запрос с whisper и llama
+@router.post("/record/full")
+async def record_summary( file: UploadFile = File(...)):
+    segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
+    x = ""
+    for segment in segments:
+        x+=segment.text
+        x+=" "
+    summary = model_llama.invoke(f"Обобщи текст {x}")
+    return { "text": f"Summarized text {summary}" }
