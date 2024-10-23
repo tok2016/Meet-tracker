@@ -44,6 +44,22 @@ paths:
                 $ref: '#/components/schemas/User'
         '400':
           description: Invalid registration data
+  /user/me:
+    get:
+      tags:
+        - user
+      summary: Get authorized user
+      description: Gets authorized user
+      operationId: getCurrentUser
+      responses: 
+        '200': 
+          description: User is authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithSummaries'
+        '401':
+          description: Unauthorized action 
   /users:
     get:
       tags:
@@ -86,9 +102,9 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
-                  example: 'theUser'
+                  example: 'test@email.com'
                 password:
                   type: string
                   example: '12345678'
