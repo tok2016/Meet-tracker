@@ -32,7 +32,7 @@ const getCurrentUser = createAsyncThunk<UserWithSummaries, void, AsyncThunkConfi
   async (_, { getState }) => {
     const {user} = getState();
 
-    const responce = await AxiosInstance.get(`/user/me`, {
+    const responce = await AxiosInstance.get(`/me`, {
       headers: {
         Authorization: user.auth.token
       }

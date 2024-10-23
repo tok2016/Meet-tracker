@@ -29,10 +29,7 @@ const selectUser = (state: RootState) => state.user;
 
 const initialState: UserState = {
   user: defaultUser,
-  auth: {
-    token: 'Bearer ',
-    expireTime: (new Date()).toString()
-  },
+  auth: defaultAuth,
   status: 'idle',
   error: undefined
 };

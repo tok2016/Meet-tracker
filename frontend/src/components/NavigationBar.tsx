@@ -50,21 +50,27 @@ const NavigationBar = () => {
         
         <div style={ {display: 'flex', gap: '30px', flexDirection: 'row', alignItems: 'center'} }>
           <Button 
-            hidden={user.id > 0}
+            style={{
+              display: user.id > 0 ? 'none' : 'inherit'
+            }}
             variant='contained' 
             onClick={() => navigate('/login')}>
               Войти
           </Button>
 
           <Button
-            hidden={user.id <= 0}
+            style={{
+              display: user.id <= 0 ? 'none' : 'inherit'
+            }}
             variant='transparent'
             onClick={logout} >
             Выйти
           </Button>
           
           <IconButton 
-            hidden={user.id <= 0}
+            style={{
+              display: user.id <= 0 ? 'none' : 'inherit'
+            }}
             color='primary' >
               <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />
           </IconButton>

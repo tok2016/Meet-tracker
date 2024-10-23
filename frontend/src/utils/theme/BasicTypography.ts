@@ -29,7 +29,14 @@ const BasicTypography: TypographyOptions = {
     textTransform: 'none',
     padding: 0,
     color: TextColors.contrast,
-    backgroundColor: UIColors.main
+    backgroundColor: UIColors.main,
+    ':disabled': {
+      backgroundColor: UIColors.tertiary,
+    },
+    ':hover': {
+      backgroundColor: UIColors.background,
+      color: TextColors.highlight,
+    }
   },
   h1: {
     [breakpoints.up('lg')]: {

@@ -1,7 +1,7 @@
 import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { FormEvent, useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
@@ -20,9 +20,7 @@ const LoginPage = () => {
   const dispatch = useAppDispatch();
   const {auth, user} = useAppSelector(selectUser);
 
-  const authorize = (evt: FormEvent<Element>) => {
-    evt.preventDefault();
-
+  const authorize = () => {
     const login: UserLogin = {
       email,
       password
@@ -68,8 +66,8 @@ const LoginPage = () => {
           }}/>
 
         <Button
-          type='submit'
-          onSubmit={authorize} 
+          onClick={authorize} 
+          disabled={!email || !password}
           variant='containtedSecondary'>
             Войти
         </Button>

@@ -6,7 +6,7 @@ const ListItemButton: Components['MuiListItemButton'] = {
     root: {
       backgroundColor: 'transparent',
       color: TextColors.main,
-      height: '5em',
+      height: '4em',
       paddingLeft: '2.5vw',
       ':hover': {
         backgroundColor: `${UIColors.main}80`,

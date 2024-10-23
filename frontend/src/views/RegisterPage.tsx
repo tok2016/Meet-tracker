@@ -1,7 +1,7 @@
 import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { FormEvent, useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
@@ -27,9 +27,7 @@ const RegisterPage = () => {
   const dispatch = useAppDispatch();
   const {user} = useAppSelector(selectUser);
 
-  const formUser = (evt: FormEvent<Element>) => {
-    evt.preventDefault();
-
+  const formUser = () => {
     const newUser: UserRaw = {
       username,
       password,
@@ -112,8 +110,8 @@ const RegisterPage = () => {
 
           <Button 
             variant='containtedSecondary'
-            type='submit'
-            onSubmit={formUser}>
+            disabled={!username || !email || !password || !repeatedPassword || !firstName}
+            onClick={formUser}>
               Зарегистрироваться
           </Button>
         </FieldsGroup>
