@@ -1,15 +1,45 @@
 import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import { useReducer, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FormEvent, useEffect, useReducer, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
+import { selectUser } from '../store/userSlice';
+import { UserLogin } from '../utils/types/User';
+import { getCurrentUser, postLogin } from '../store/userThunks';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isVisible, toggleVisibility] = useReducer((value) => !value, false);
+
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+  const {auth, user} = useAppSelector(selectUser);
+
+  const authorize = (evt: FormEvent<Element>) => {
+    evt.preventDefault();
+
+    const login: UserLogin = {
+      email,
+      password
+    };
+
+    dispatch(postLogin(login));
+  };
+
+  useEffect(() => {
+    if(auth.token) {
+      if(user.id > 0) {
+        navigate(`/user/${user.id}`);
+      } else {
+        dispatch(getCurrentUser());
+      }
+    }
+  });
 
   return (
     <FormHolder>
@@ -37,7 +67,12 @@ const LoginPage = () => {
             }
           }}/>
 
-        <Button variant='containtedSecondary'>Войти</Button>
+        <Button
+          type='submit'
+          onSubmit={authorize} 
+          variant='containtedSecondary'>
+            Войти
+        </Button>
       </FieldsGroup>
 
       <div>

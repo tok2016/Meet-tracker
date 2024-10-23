@@ -1,10 +1,14 @@
 import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import { useReducer, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FormEvent, useEffect, useReducer, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
+import { postUserData } from '../store/userThunks';
+import { UserRaw } from '../utils/types/User';
+import { selectUser } from '../store/userSlice';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState<string>('');
@@ -17,6 +21,33 @@ const RegisterPage = () => {
   const [repeatedPassword, setRepeatedPassword] = useState<string>('');
 
   const [isVisible, toggleVisibility] = useReducer((value) => !value, false);
+
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+  const {user} = useAppSelector(selectUser);
+
+  const formUser = (evt: FormEvent<Element>) => {
+    evt.preventDefault();
+
+    const newUser: UserRaw = {
+      username,
+      password,
+      email,
+      firstName,
+      lastName,
+      avatar: ''
+    };
+
+    dispatch(postUserData(newUser));
+  };
+
+  useEffect(() => {
+    if(user.id > 0) {
+      navigate('/login');
+      console.log(username);
+    }
+  });
 
   return (
     <FormHolder>
@@ -79,7 +110,12 @@ const RegisterPage = () => {
               }
             }}/>
 
-          <Button variant='containtedSecondary'>Зарегистрироваться</Button>
+          <Button 
+            variant='containtedSecondary'
+            type='submit'
+            onSubmit={formUser}>
+              Зарегистрироваться
+          </Button>
         </FieldsGroup>
       </div>
 

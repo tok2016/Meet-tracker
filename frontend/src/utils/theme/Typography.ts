@@ -1,6 +1,7 @@
 import { Components } from '@mui/material';
 
 import { TextColors } from '../Colors';
+import { breakpoints } from './BasicTypography';
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
@@ -24,39 +25,29 @@ const Typography: Components['MuiTypography'] = {
       subtitle1: 'p',
       subtitle2: 'p'
     },
-    fontSize: 32,
     fontWeight: 400,
     color: TextColors.main
   },
   styleOverrides: {
-    h1: {
-      fontSize: 64,
-    },
     h2: {
-      fontSize: 40,
       fontWeight: 700,
       textAlign: 'center'
     },
     h3: {
-      fontSize: 32,
       fontWeight: 700,
       textAlign: 'center'
     },
     h4: {
-      fontSize: 32,
       fontWeight: 700
     },
     body2: {
       color: TextColors.secondary,
-      fontSize: 24
     },
     subtitle1: {
-      fontSize: 16,
       fontWeight: 700,
       textAlign: 'center'
     },
     subtitle2: {
-      fontSize: 16,
       textAlign: 'center'
     }
   },
@@ -67,7 +58,13 @@ const Typography: Components['MuiTypography'] = {
       },
       style: {
         color: TextColors.highlight,
-        fontWeight: 700
+        fontWeight: 700,
+        [breakpoints.up('lg')]: {
+          fontSize: 48
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: 64
+        }
       }
     },
     {
@@ -75,7 +72,12 @@ const Typography: Components['MuiTypography'] = {
         variant: 'h2Promo'
       },
       style: {
-        fontSize: 96,
+        [breakpoints.up('lg')]: {
+          fontSize: 64
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: 96
+        },
         textAlign: 'center'
       }
     },
@@ -84,7 +86,12 @@ const Typography: Components['MuiTypography'] = {
         variant: 'h2PromoHighlight'
       },
       style: {
-        fontSize: 96,
+        [breakpoints.up('lg')]: {
+          fontSize: 64
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: 96
+        },
         color: TextColors.highlight
       }
     },
@@ -93,7 +100,12 @@ const Typography: Components['MuiTypography'] = {
         variant: 'h3Promo'
       },
       style: {
-        fontSize: 48,
+        [breakpoints.up('lg')]: {
+          fontSize: 32
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: 48
+        },
         textAlign: 'center'
       }
     },
@@ -102,7 +114,12 @@ const Typography: Components['MuiTypography'] = {
         variant: 'body2Highlight'
       },
       style: {
-        fontSize: 24,
+        [breakpoints.up('lg')]: {
+          fontSize: 16
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: 24
+        },
         fontWeight: 700
       }
     }

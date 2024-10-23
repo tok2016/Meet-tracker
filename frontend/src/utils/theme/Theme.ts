@@ -10,7 +10,6 @@ import TextField from './TextField';
 import Paper from './Paper';
 import AppBar from './AppBar';
 import IconButton from './IconButton';
-import { TextColors, UIColors } from '../Colors';
 import OutlinedInput from './OutlinedInput';
 import InputLabel from './InputLabel';
 import Drawer from './Drawer';
@@ -18,19 +17,11 @@ import ListItemButton from './ListItemButton';
 import ListItem from './ListItem';
 import ListItemText from './ListItemText';
 import Toolbar from './Toolbar';
+import BasicTypography from './BasicTypography';
+import { TextColors, UIColors } from '../Colors';
 
 const Theme = createTheme({
-  typography: {
-    fontFamily: 'Inter',
-    button: {
-      fontSize: 32,
-      fontWeight: 400,
-      textTransform: 'none',
-      padding: 0,
-      color: TextColors.contrast,
-      backgroundColor: UIColors.main
-    }
-  },
+  typography: BasicTypography,
   palette: {
     primary: {
       main: UIColors.main,
