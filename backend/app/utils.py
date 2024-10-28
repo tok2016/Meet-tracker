@@ -11,7 +11,6 @@ from fastapi import Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
 
-
 ALGORITHM = "HS256"
 SECRET_KEY = secrets.token_urlsafe(32)
 
