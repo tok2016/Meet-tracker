@@ -4,14 +4,17 @@ export interface UIColorPalette {
   main: HexColor,
   secondary: HexColor,
   tertiary: HexColor,
+  quaternary: HexColor,
   background: HexColor,
   mainGradient: () => string,
-  secondaryGradient: () => string
+  secondaryGradient: () => string,
+  mainHoverGradient: () => string
 };
 
 export interface TextColorPalette {
   main: HexColor,
   secondary: HexColor,
   highlight: HexColor,
-  contrast: HexColor
+  contrast: HexColor,
+  error: HexColor
 };

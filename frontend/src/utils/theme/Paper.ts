@@ -8,27 +8,36 @@ declare module '@mui/material/Paper' {
   }
 }
 
+const PAPER_SMALL_PADDING = '1.5em';
+
 const Paper: Components['MuiPaper'] = {
-  defaultProps: {
-    color: UIColors.main,
-    variant: 'elevation',
-    elevation: 0,
-    sx: {
-      borderRadius: 10,
-      paddingX: '2.6vw',
-      paddingY: '3.7vh',
-    },
-  },
-  variants: [
-    {
-      props: {
-        variant: 'elevationSmall'
-      },
-      style: {
-        padding: 30
-      }
+  styleOverrides: {
+    root: {
+      variants: [
+        {
+          props: {
+            variant: 'elevation'
+          },
+          style: {
+            backgroundColor: UIColors.background,
+            borderRadius: 10,
+            padding: '2vw 2vw',
+          }
+        },
+        {
+          props: {
+            variant: 'elevationSmall'
+          },
+          style: {
+            backgroundColor: UIColors.background,
+            borderRadius: 10,
+            padding: PAPER_SMALL_PADDING
+          }
+        }
+      ]
     }
-  ]
+  }
 };
 
 export default Paper;
+export {PAPER_SMALL_PADDING};

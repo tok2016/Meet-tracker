@@ -34,6 +34,12 @@ const Theme = createTheme({
       light: UIColors.background,
       dark: UIColors.background,
       contrastText: TextColors.main
+    },
+    error: {
+      main: TextColors.error,
+      light: TextColors.error,
+      dark: TextColors.error,
+      contrastText: TextColors.contrast
     }
   },
   components: {

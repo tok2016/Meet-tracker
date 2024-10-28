@@ -1,5 +1,9 @@
 import { Components } from '@mui/material';
 import { UIColors } from '../Colors';
+import { breakpoints } from './BasicTypography';
+import { AVATAR_WIDTH } from '../utils';
+
+const DRAWER_WIDTH = '15.6vw';
 
 const Drawer: Components['MuiDrawer'] = {
   defaultProps: {
@@ -9,12 +13,19 @@ const Drawer: Components['MuiDrawer'] = {
   },
   styleOverrides: {
     paper: {
-      width: '15.6vw',
+      width: DRAWER_WIDTH,
       backgroundColor: UIColors.background,
-      paddingTop: '15vh',
+      padding: 0,
+      [breakpoints.up('lg')]: {
+        paddingTop: `calc(${AVATAR_WIDTH.lg}px + 8vh)`
+      },
+      [breakpoints.only('xl')]: {
+        paddingTop: `calc(${AVATAR_WIDTH.xl}px + 8vh)`
+      },
       zIndex: 1
     }
   }
 };
 
 export default Drawer;
+export {DRAWER_WIDTH};

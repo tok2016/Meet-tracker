@@ -6,7 +6,8 @@ import { breakpoints } from './BasicTypography';
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
     containtedSecondary: true,
-    containtedTetriatry: true,
+    containtedTab: true,
+    containtedTabSelected: true,
     transparent: true
   }
 }
@@ -33,19 +34,41 @@ const Button: Components['MuiButton'] = {
         [breakpoints.only('xl')]: {
           fontSize: 24
         },
-        fontWeight: 700
+        fontWeight: 700,
+        boxShadow: '0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);',
+        ':hover': {
+          boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);'
+        }
       }
     },
     {
       props: {
-        variant: 'containtedTetriatry'
+        variant: 'containtedTabSelected'
       },
       style: {
-        backgroundColor: UIColors.mainGradient(),
+        background: UIColors.mainGradient(),
         color: TextColors.contrast,
         minHeight: '3em',
-        paddingTop: '2em',
-        borderRadius: 0
+        borderRadius: 10,
+        ':hover': {
+          background: UIColors.mainHoverGradient(),
+          color: TextColors.contrast
+        }
+      }
+    },
+    {
+      props: {
+        variant: 'containtedTab'
+      },
+      style: {
+        background: UIColors.quaternary,
+        color: TextColors.contrast,
+        minHeight: '3em',
+        borderRadius: 10,
+        ':hover': {
+          background: UIColors.mainHoverGradient(),
+          color: TextColors.contrast
+        }
       }
     },
     {

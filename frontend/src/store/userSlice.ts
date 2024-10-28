@@ -85,8 +85,6 @@ const userSlice = createSlice({
           state.status = endpoint === 'pending' ? 'pending' : 'idle';
           state.error = undefined;
         }
-
-        console.log(state.error);
       })
   }
 });

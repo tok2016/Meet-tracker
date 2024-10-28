@@ -1,3 +1,4 @@
+import MediaValue from './types/MediaValue';
 
 const camelToSnake = (obj: object) => {
   const result = obj;
@@ -29,4 +30,27 @@ const snakeToCamel = (obj: object) => {
   return result;
 };
 
-export {camelToSnake, snakeToCamel};
+const LOGO_WIDTH: MediaValue = {
+  xs: 20,
+  sm: 50,
+  md: 100,
+  lg: 150,
+  xl: 200
+};
+
+const AVATAR_WIDTH: MediaValue = {
+  xs: 10,
+  sm: 25,
+  md: 45,
+  lg: 65,
+  xl: 95
+}
+
+const statusesTranslations = {
+  ['idle']: 'Генерация',
+  ['pending']: 'Генерация',
+  ['success']: 'Готово',
+  ['error']: 'Ошибка'
+};
+
+export {camelToSnake, snakeToCamel, LOGO_WIDTH, AVATAR_WIDTH, statusesTranslations};

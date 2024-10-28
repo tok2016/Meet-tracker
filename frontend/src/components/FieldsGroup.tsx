@@ -7,7 +7,8 @@ const FieldsGroup = ({children}: {children: ReactNode}) => (
     paddingTop: '0.5em',
     gap: '3.5vh',
     maxHeight: '53vh',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    padding: '0 5px 10px'
   }}>
     {children}
   </div>
