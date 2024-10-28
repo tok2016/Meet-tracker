@@ -19,6 +19,7 @@ import ListItemText from './ListItemText';
 import Toolbar from './Toolbar';
 import BasicTypography from './BasicTypography';
 import { TextColors, UIColors } from '../Colors';
+import List from './List';
 
 const Theme = createTheme({
   typography: BasicTypography,
@@ -55,7 +56,8 @@ const Theme = createTheme({
     MuiListItem: ListItem,
     MuiListItemButton: ListItemButton,
     MuiListItemText: ListItemText,
-    MuiToolbar: Toolbar
+    MuiToolbar: Toolbar,
+    MuiList: List
   },
 });
 

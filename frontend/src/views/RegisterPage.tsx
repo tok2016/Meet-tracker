@@ -41,7 +41,7 @@ const RegisterPage = () => {
   };
 
   useEffect(() => {
-    if(user.id > 0) {
+    if(user.username) {
       navigate('/login');
       console.log(username);
     }

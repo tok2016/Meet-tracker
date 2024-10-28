@@ -4,7 +4,9 @@ import { UIColors } from '../Colors';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
-    elevationSmall: true
+    elevationSmall: true,
+    elevationInside: true,
+    elevationDashed: true
   }
 }
 
@@ -32,6 +34,27 @@ const Paper: Components['MuiPaper'] = {
             backgroundColor: UIColors.background,
             borderRadius: 10,
             padding: PAPER_SMALL_PADDING
+          }
+        },
+        {
+          props: {
+            variant: 'elevationInside'
+          },
+          style: {
+            backgroundColor: UIColors.tertiary,
+            borderRadius: 10,
+            padding: PAPER_SMALL_PADDING
+          }
+        },
+        {
+          props: {
+            variant: 'elevationDashed'
+          },
+          style: {
+            backgroundColor: UIColors.background,
+            border: `1px dashed ${UIColors.quaternary}`,
+            borderRadius: 15,
+            padding: 'calc(10px + 1vh) calc(50px + 5vh)'
           }
         }
       ]

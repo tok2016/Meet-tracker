@@ -25,3 +25,15 @@ a:hover {
   color: #F59D0E;
   transition: color 0.15s;
 }
+
+ol {
+  padding-left: 3em;
+}
+
+ol li::marker {
+  font-size: 18px;
+}
+
+input[type='file'] {
+  display: none;
+}
