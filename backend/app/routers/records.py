@@ -12,8 +12,6 @@ import io
 from langchain_ollama import OllamaLLM
 
 
-LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
-
 #Whsiper модель
 model_size = "large-v3"
 model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
