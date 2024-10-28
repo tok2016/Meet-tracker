@@ -4,12 +4,10 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.db import SessionDep
-from typing import Annotated, BinaryIO, Optional, Union, Iterable, Any
+from typing import Annotated
 from datetime import timedelta
 from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email
-import whisper
-from faster_whisper import WhisperModel
-from whisper import tokenizer
+from faster_whisper import WhisperModel, tokenizer
 import io
 from langchain_ollama import OllamaLLM
 
