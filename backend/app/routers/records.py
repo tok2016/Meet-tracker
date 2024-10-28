@@ -12,7 +12,7 @@ import io
 from langchain_ollama import OllamaLLM
 
 
-LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
+#LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
 
 #Whsiper модель
 model_size = "large-v3"

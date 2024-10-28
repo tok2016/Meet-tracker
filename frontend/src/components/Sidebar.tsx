@@ -1,56 +1,46 @@
 import { Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Page from '../utils/types/Page';
 
-interface SidebarPage {
-  name: string,
-  path: string | ((id: string) => string),
-  accessable: boolean
-};
-
-const sidebarPages: SidebarPage[] = [
+const sidebarPages: Page[] = [
   {
     name: 'Загрузить',
-    path: '/upload',
-    accessable: true
+    path: '/account/upload',
+    forAdmin: false
   },
   {
-    name: 'Ваши записи',
-    path: '/userSummaries',
-    accessable: true
-  },
-  {
-    name: 'Настройки',
-    path: '/settings',
-    accessable: false,
+    name: 'Недавнее',
+    path: '/account/recent',
+    forAdmin: false
   },
   {
     name: 'Профиль',
-    path: (id: string) => `/user/${id}`,
-    accessable: true
+    path: (id: string) => `/account/users/${id}`,
+    forAdmin: false
   },
   {
-    name: 'Все записи',
-    path: '/allSummaries',
-    accessable: false
-  },
-  {
-    name: 'Пользователи',
-    path: 'users',
-    accessable: false
+    name: 'Админ',
+    path: '/account/admin/',
+    forAdmin: true
   }
 ];
 
-const Sidebar = ({isVisible}: {isVisible: boolean}) => {
+const Sidebar = () => {
   const navigate = useNavigate();
   const {pathname} = useLocation();
 
   const [path, setPath] = useState<string>(pathname);
 
-  const pages = sidebarPages.filter((page) => page.accessable);
+  const pages = sidebarPages.filter((page) => !page.forAdmin);
+
+  const onButtonPageClick = (pagePath: string) => {
+    navigate(pagePath);
+    setPath(pagePath);
+  };
 
   return (
-    <Drawer hidden={!isVisible} variant='permanent'>
+    <Drawer variant='permanent'>
       <List>
         {pages.map((page) => {
           const pagePath = typeof page.path === 'function' ? page.path('1') : page.path;
@@ -58,12 +48,9 @@ const Sidebar = ({isVisible}: {isVisible: boolean}) => {
           return (
             <ListItem key={pagePath}>
               <ListItemButton
-                hidden={!page.accessable} 
+                hidden={page.forAdmin} 
                 selected={path === pagePath}
-                onClick={() => {
-                  navigate(pagePath);
-                  setPath(pagePath);
-                }}>
+                onClick={() => onButtonPageClick(pagePath)}>
                 <ListItemText>
                   {page.name}
                 </ListItemText>

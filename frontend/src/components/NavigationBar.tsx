@@ -4,26 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 import Logo from '../assets/Logo.png';
 import useMediaValue from '../hooks/useMediaValue';
-import MediaValue from '../utils/types/MediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/userSlice';
 import { postLogout } from '../store/userThunks';
-
-const LOGO_WIDTH: MediaValue = {
-  xs: 20,
-  sm: 50,
-  md: 100,
-  lg: 150,
-  xl: 200
-};
-
-const AVATAR_WIDTH: MediaValue = {
-  xs: 10,
-  sm: 25,
-  md: 45,
-  lg: 65,
-  xl: 95
-}
+import { LOGO_WIDTH, AVATAR_WIDTH } from '../utils/utils';
 
 const NavigationBar = () => {
   const logoWidth = useMediaValue(LOGO_WIDTH);

@@ -19,7 +19,17 @@ const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
 const postLogin = createAsyncThunk<Token, UserLogin, AsyncThunkConfig>(
   'user/postUserLogin',
   async (userLogin) => {
-    const responce = await AxiosInstance.post('/user/login', userLogin);
+    const body = new FormData();
+    
+    Object.entries(userLogin).forEach((property) => {
+      body.append(property[0], property[1]);
+    });
+
+    const responce = await AxiosInstance.post('/user/login', body, {
+      headers: {
+        'Content-Type': 'multipart/formData'
+      }
+    });
 
     const tokenRaw = responce.data as TokenRaw;
 

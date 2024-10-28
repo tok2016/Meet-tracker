@@ -1,4 +1,4 @@
-import { Record } from './Record';
+import { Record, RecordInfo } from './Record';
 import { Status } from './Status';
 
 export interface Summary {
@@ -11,4 +11,4 @@ export interface Summary {
   record: Record
 }
 
-export type SummaryInfo = Omit<Summary, 'userId'>;
+export type SummaryInfo = Omit<Summary, 'userId' | 'record'> & {record: RecordInfo};

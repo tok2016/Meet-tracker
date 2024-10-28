@@ -9,7 +9,8 @@ declare module '@mui/material/Typography' {
     h2Promo: true,
     h2PromoHighlight: true,
     h3Promo: true,
-    body2Highlight: true
+    body2Highlight: true,
+    h3Normal: true
   }
 }
 
@@ -121,6 +122,20 @@ const Typography: Components['MuiTypography'] = {
           fontSize: 24
         },
         fontWeight: 700
+      }
+    },
+    {
+      props: {
+        variant: 'h3Normal'
+      },
+      style: {
+        fontWeight: 400,
+        [breakpoints.up('lg')]: {
+          fontSize: 24
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: 32
+        }
       }
     }
   ]
