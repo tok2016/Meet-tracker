@@ -15,7 +15,7 @@ const AppBar: Components['MuiAppBar'] = {
       '& .MuiToolbar-root': {
         padding: 0
       },
-      position: 'relative'
+      position: 'fixed'
     }
   }
 };
