@@ -9,8 +9,6 @@ import subprocess
 model_size = "large-v3"
 model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
 #Pyannote
-#pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization", use_auth_token="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")
-pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token="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")
 #segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
 file_path = "backend/app/sounds/thing.mp4"
 #command = f"ffmpeg -i {file_path} -ab 160k -ac 2 -ar 44100 -vn audio.wav"
