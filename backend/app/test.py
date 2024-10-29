@@ -5,9 +5,12 @@ import io
 from pyannote.audio import Pipeline
 from pyannote.core import Segment, Annotation, Timeline
 import subprocess
+from langchain_ollama import OllamaLLM
 #Whsiper модель
 model_size = "large-v3"
 model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
+#Llama модель
+model_llama = OllamaLLM(model="llama3.1")
 #Pyannote
 #segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
 file_path = "backend/app/sounds/thing.mp4"
@@ -90,6 +93,12 @@ def write_to_txt(spk_sent, file):
 
 final_results = diarize_text(segments, diarization_results)
 
+lines = []
 for seg, spk, sent in final_results:
-    line = f'{seg.start:.2f} {seg.end:.2f} {spk} {sent}'
-    print(line)
+    line = f'{spk} {sent}'
+    lines.append(line)
+    #print(line)
+
+summary = model_llama.invoke(f"Обобщи текст по каждому пользователю {lines}")
+
+print(summary)
