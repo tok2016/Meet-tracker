@@ -18,7 +18,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const {auth, user} = useAppSelector(selectUser);
+  const {auth, user, status} = useAppSelector(selectUser);
 
   const authorize = () => {
     const login: UserLogin = {
@@ -30,9 +30,9 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    if(auth.token) {
-      if(user.id > 0) {
-        navigate(`/user/${user.id}`);
+    if(auth.token && status !== 'error') {
+      if(user.username) {
+        navigate(`/account/users/${user.id}`);
       } else {
         dispatch(getCurrentUser());
       }

@@ -1,5 +1,6 @@
-import { Paper, Typography } from '@mui/material';
 import { Summary } from '../utils/types/Summary';
+import TopicPlain from '../components/TopicPlain';
+import { Typography } from '@mui/material';
 
 const mockSummary: Summary = {
   id: 1,
@@ -16,13 +17,13 @@ const mockSummary: Summary = {
   $@/topic Задачи
   @/start 03:13
   @/end 06:01
-  @/text
-  @&/teammate Бараш
-  @/task 1. Написать стих на дереве. 2. Застрять на дереве. 3. Сломать скамейку. 4. Надавить на жалость, чтобы Крош простил.
-  @&/teammate Крош
-  @/task 1. Не мешать Барашу писать стих. 2. Построить из хлама подобие лестницы, чтобы достать Бараша с дерева.
-  @&/teammate Ёжик
-  @/task 1. Помочь Крошу построить подобие лестницы из хлама. 2. Уронить Бараша с дерева.
+  @/tasks
+  &/teammate Бараш
+  &/task 1. Написать стих на дереве. 2. Застрять на дереве. 3. Сломать скамейку. 4. Надавить на жалость, чтобы Крош простил.
+  &/teammate Крош
+  &/task 1. Не мешать Барашу писать стих. 2. Построить из хлама подобие лестницы, чтобы достать Бараша с дерева.
+  &/teammate Ёжик
+  &/task 1. Помочь Крошу построить подобие лестницы из хлама. 2. Уронить Бараша с дерева.
   `),
   status: 'success',
   date: new Date().toISOString(),
@@ -35,40 +36,22 @@ const mockSummary: Summary = {
   }
 };
 
-const TopicPlain = ({topic}: {topic: string}) => {
-  const subtopics = topic.split('@');
-
-  const theme = subtopics.find((sentence) => sentence.includes('/topic'));
-  const start = subtopics.find((sentence) => sentence.includes('/start'));
-  const end = subtopics.find((sentence) => sentence.includes('/end'))
-  const text = subtopics.find((sentence) => sentence.includes('/text'));
-
-  const tasks = text?.split('&');
-  
-  return (
-    <Paper>
-      <Typography variant='h4'>
-        {theme} {start} - {end}
-      </Typography>
-      <Paper>
-        {tasks 
-          ? <></> 
-          : <Typography variant='body1'>
-              {text}
-            </Typography>};
-      </Paper>
-    </Paper>
-  );
-};
+const MIN_TOPIC_LENGTH = 3;
 
 const SummaryPage = () => {
-  const topics = mockSummary.text.split('$');
+  const rawTopics = mockSummary.text.split('$');
 
+  const topics = rawTopics.map((topic, i) => ({
+    id: i,
+    topic,
+  }));
   
   return (
     <>
+      <Typography variant='h2' marginBottom='25px'>{mockSummary.title}</Typography>
+      <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
       {topics.map((topic) => (
-        <TopicPlain topic={topic}/>
+        topic.topic.length <= MIN_TOPIC_LENGTH || <TopicPlain topic={topic.topic} key={topic.id}/>
       ))}
     </>
   );

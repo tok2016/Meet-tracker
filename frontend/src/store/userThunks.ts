@@ -19,22 +19,23 @@ const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
 const postLogin = createAsyncThunk<Token, UserLogin, AsyncThunkConfig>(
   'user/postUserLogin',
   async (userLogin) => {
-    const body = new FormData();
-    
-    Object.entries(userLogin).forEach((property) => {
-      body.append(property[0], property[1]);
-    });
+
+    const body = `username=${encodeURIComponent(userLogin.email)}&password=${encodeURIComponent(userLogin.password)}`;
+
+    console.log(body);
 
     const responce = await AxiosInstance.post('/user/login', body, {
       headers: {
-        'Content-Type': 'multipart/formData'
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
 
     const tokenRaw = responce.data as TokenRaw;
 
+    const tokenTypeCapital = `${tokenRaw['token_type'].charAt(0).toUpperCase()}${tokenRaw['token_type'].slice(1)}`;
+
     const token: Token = {
-      token: `${tokenRaw['token_type']} ${tokenRaw['access_token']}`,
+      token: `${tokenTypeCapital} ${tokenRaw['access_token']}`,
       expireTime: responce.headers['X-Expires-After']
     };
 
@@ -54,7 +55,7 @@ const getCurrentUser = createAsyncThunk<UserWithSummaries, void, AsyncThunkConfi
   async (_, { getState }) => {
     const {user} = getState();
 
-    const responce = await AxiosInstance.get(`/me`, {
+    const responce = await AxiosInstance.get(`/user/me`, {
       headers: {
         Authorization: user.auth.token
       }

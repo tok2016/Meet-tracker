@@ -72,7 +72,7 @@ const BasicTypography: TypographyOptions = {
   },
   body1: {
     [breakpoints.up('lg')]: {
-      fontSize: 24
+      fontSize: 20
     },
     [breakpoints.only('xl')]: {
       fontSize: 32
@@ -80,7 +80,7 @@ const BasicTypography: TypographyOptions = {
   },
   body2: {
     [breakpoints.up('lg')]: {
-      fontSize: 24
+      fontSize: 20
     },
     [breakpoints.only('xl')]: {
       fontSize: 32
