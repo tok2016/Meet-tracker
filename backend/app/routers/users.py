@@ -71,11 +71,11 @@ def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], sessi
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     return Token(access_token=create_access_token( user.id, expires_delta=access_token_expires ) )
 
-@router.get("/user/me", response_model=UserPublic)
+@router.get("/current_user/", response_model=UserPublic)
 def read_user_me(current_user: CurrentUser):
     return current_user
 
-@router.patch("/user/me", response_model=UserPublic)
+@router.patch("/current_user/", response_model=UserPublic)
 def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: CurrentUser):
     if user_in.email:
         existing_user = get_user_by_email(session=session, email=user_in.email)
