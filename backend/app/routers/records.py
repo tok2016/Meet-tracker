@@ -37,7 +37,7 @@ async def record_transcription( file: UploadFile = File(...)):
         x+=" "
     return { "text": f"Transcribed text {x}" }
 
-#Запрос для использования только whisper
+#Запрос для распознования спикеров
 @router.post("/record/diarize")
 async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/sounds/test.wav"):
     audio = AudioSegment.from_file(io.BytesIO(file_path.file.read()))
