@@ -1,5 +1,3 @@
-import { Summary } from './Summary';
-
 export interface User {
   readonly id: number,
   readonly username: string,
@@ -9,12 +7,8 @@ export interface User {
   email: string,
   registrationDate: string,
   isAdmin: boolean,
-  avatar: string
+  avatar: string,
 };
-
-export interface UserWithSummaries extends User {
-  summaries: Summary[]
-}
 
 export type UserRaw = Omit<User, 'id' | 'registrationDate' | 'isAdmin'>;
 
@@ -28,3 +22,5 @@ export const defaultUserData: UserRaw = {
   email: '',
   avatar: ''
 };
+
+export const isUser = (user: User): user is User => (user as User).username !== undefined;

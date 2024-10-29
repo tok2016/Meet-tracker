@@ -4,9 +4,3 @@ export interface Record {
   file: string,
   isArchived: boolean
 };
-
-export interface RecordInfo {
-  id: number,
-  hasFile: boolean,
-  isArchived: boolean
-};

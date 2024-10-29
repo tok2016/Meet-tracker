@@ -6,9 +6,9 @@ import { useEffect, useReducer, useState } from 'react';
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { postUserData } from '../store/userThunks';
+import { postUserData } from '../store/user/userThunks';
 import { UserRaw } from '../utils/types/User';
-import { selectUser } from '../store/userSlice';
+import { selectUser } from '../store/user/userSlice';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState<string>('');
@@ -43,7 +43,6 @@ const RegisterPage = () => {
   useEffect(() => {
     if(user.username) {
       navigate('/login');
-      console.log(username);
     }
   });
 

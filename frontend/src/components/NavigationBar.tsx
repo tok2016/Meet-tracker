@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../assets/Logo.png';
 import useMediaValue from '../hooks/useMediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectUser } from '../store/userSlice';
-import { postLogout } from '../store/userThunks';
+import { selectUser } from '../store/user/userSlice';
+import { postLogout } from '../store/user/userThunks';
 import { LOGO_WIDTH, AVATAR_WIDTH } from '../utils/utils';
 
 const NavigationBar = () => {

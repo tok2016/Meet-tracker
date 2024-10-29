@@ -6,9 +6,9 @@ import { useEffect, useReducer, useState } from 'react';
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectUser } from '../store/userSlice';
+import { selectUser } from '../store/user/userSlice';
 import { UserLogin } from '../utils/types/User';
-import { getCurrentUser, postLogin } from '../store/userThunks';
+import { getCurrentUser, postLogin } from '../store/user/userThunks';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');

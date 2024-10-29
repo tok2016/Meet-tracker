@@ -1,8 +1,13 @@
-import { Summary } from '../utils/types/Summary';
+//import { Summary } from '../utils/types/Summary';
 import TopicPlain from '../components/TopicPlain';
 import { Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
+import { selectSummary } from '../store/summary/summarySlice';
+import { useEffect } from 'react';
+import { getSummary } from '../store/summary/summaryThunks';
 
-const mockSummary: Summary = {
+/*const mockSummary: Summary = {
   id: 1,
   title: 'Встреча 17.12.2023',
   text: (`
@@ -34,21 +39,32 @@ const mockSummary: Summary = {
     file: '',
     userId: 1
   }
-};
+};*/
 
 const MIN_TOPIC_LENGTH = 3;
 
 const SummaryPage = () => {
-  const rawTopics = mockSummary.text.split('$');
+  const {id} = useParams();
+
+  const {summary} = useAppSelector(selectSummary);
+  const dispatch = useAppDispatch();
+
+  const rawTopics = summary.text.split('$');
 
   const topics = rawTopics.map((topic, i) => ({
     id: i,
     topic,
   }));
+
+  useEffect(() => {
+    if(id && summary.id.toString() !== id) {
+      dispatch(getSummary(id));
+    }
+  }, [id, dispatch, summary.id]);
   
   return (
     <>
-      <Typography variant='h2' marginBottom='25px'>{mockSummary.title}</Typography>
+      <Typography variant='h2' marginBottom='25px'>{summary.title}</Typography>
       <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
       {topics.map((topic) => (
         topic.topic.length <= MIN_TOPIC_LENGTH || <TopicPlain topic={topic.topic} key={topic.id}/>

@@ -1,12 +1,8 @@
-import { SerializedError } from '@reduxjs/toolkit';
-
-import { Status } from './Status';
 import Token from './Token';
-import { UserWithSummaries } from './User';
+import { User } from './User';
+import DefaultState from './DefaultState';
 
-export default interface UserState {
-  user: UserWithSummaries,
-  auth: Token,
-  status: Status,
-  error: SerializedError | undefined
+export default interface UserState extends DefaultState {
+  user: User,
+  auth: Token
 };
