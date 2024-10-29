@@ -4,8 +4,9 @@ from pyannote.audio import Pipeline
 from pyannote.core import Segment, Annotation, Timeline
 import subprocess
 from langchain_ollama import OllamaLLM
-from utils import diarize_text
-from hf_token import auth_token_hf
+from app.utils import diarize_text
+from app.hf_token import auth_token_hf
+from pydub import AudioSegment
 #Whsiper модель
 model_size = "large-v3"
 model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
@@ -15,11 +16,15 @@ pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth
 #Pyannote
 #segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
 file_path = "backend/app/sounds/thing.mp4"
+audio = AudioSegment.from_file(file_path, "mp4")
+f = io.BytesIO()
+audio.export(f, format="wav")
+f.name = "test.wav"
 #command = f"ffmpeg -i {file_path} -ab 160k -ac 2 -ar 44100 -vn audio.wav"
 #subprocess.call(command, shell=True)
 
-segments, info = model_whisper.transcribe("backend/app/sounds/audio.wav", beam_size=5)
-diarization_results = pipeline("backend/app/sounds/audio.wav")
+segments, info = model_whisper.transcribe(f, beam_size=5)
+diarization_results = pipeline(f)
 #x = ""
 #for segment in segments:
 #    x+=segment.text

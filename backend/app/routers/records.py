@@ -10,7 +10,11 @@ from app.utils import get_password_hash, verify_password, create_access_token, a
 from faster_whisper import WhisperModel, tokenizer
 import io
 from langchain_ollama import OllamaLLM
-
+from pydub import AudioSegment
+from app.utils import diarize_text
+from app.hf_token import auth_token_hf
+from pyannote.audio import Pipeline
+from pyannote.core import Segment, Annotation, Timeline
 
 #LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
 
@@ -31,6 +35,22 @@ async def record_transcription( file: UploadFile = File(...)):
         x+=segment.text
         x+=" "
     return { "text": f"Transcribed text {x}" }
+
+#Запрос для использования только whisper
+@router.post("/record/diarize")
+async def record_diarize( file: UploadFile = File(...), file_name: str = "backend/app/sounds/test.wav"):
+    audio = AudioSegment.from_file(f"backend/app/sounds/{file.filename}", format="mp4")
+    audio.export(file_name, format="wav")
+    segments, info = model_whisper.transcribe(file_name, beam_size=5)
+    #segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
+    pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=auth_token_hf)
+    diarization_results = pipeline(file_name)
+    final_results = diarize_text(segments, diarization_results)
+    lines = ""
+    for seg, spk, sent in final_results:
+        line = f'{spk} {sent}'
+        lines += f"{line}   "
+    return { "text": f"Transcribed text {lines}" }
 
 #Запрос с whisper и llama
 @router.post("/record/full")

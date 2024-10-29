@@ -3,8 +3,8 @@ from typing import Any, Annotated
 import secrets
 import jwt
 from datetime import datetime, timedelta, timezone
-from db import SessionDep
-from models import TokenPayload, User
+from app.db import SessionDep
+from app.models import TokenPayload, User
 from sqlmodel import Session, select
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
