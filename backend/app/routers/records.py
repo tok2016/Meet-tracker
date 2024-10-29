@@ -15,6 +15,7 @@ from app.utils import diarize_text
 from app.hf_token import auth_token_hf
 from pyannote.audio import Pipeline
 from pyannote.core import Segment, Annotation, Timeline
+from pydantic import FilePath
 
 #LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
 
@@ -38,8 +39,8 @@ async def record_transcription( file: UploadFile = File(...)):
 
 #Запрос для использования только whisper
 @router.post("/record/diarize")
-async def record_diarize( file: UploadFile = File(...), file_name: str = "backend/app/sounds/test.wav"):
-    audio = AudioSegment.from_file(f"backend/app/sounds/{file.filename}", format="mp4")
+async def record_diarize( file_path: FilePath, file_name: str = "backend/app/sounds/test.wav"):
+    audio = AudioSegment.from_file(file_path, format="mp4")
     audio.export(file_name, format="wav")
     segments, info = model_whisper.transcribe(file_name, beam_size=5)
     #segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
