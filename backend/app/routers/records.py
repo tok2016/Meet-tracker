@@ -39,8 +39,8 @@ async def record_transcription( file: UploadFile = File(...)):
 
 #Запрос для использования только whisper
 @router.post("/record/diarize")
-async def record_diarize( file_path: FilePath, file_name: str = "backend/app/sounds/test.wav"):
-    audio = AudioSegment.from_file(file_path, format="mp4")
+async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/sounds/test.wav"):
+    audio = AudioSegment.from_file(io.BytesIO(file_path.file.read()), format="mp4")
     audio.export(file_name, format="wav")
     segments, info = model_whisper.transcribe(file_name, beam_size=5)
     #segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
