@@ -6,7 +6,6 @@ import { isActionWithError } from '../../utils/types/ActionWithError';
 import Token from '../../utils/types/Token';
 import { RootState } from '../store';
 import { User } from '../../utils/types/User';
-//import { TOKEN_TIME_TO_LIVE } from '../../utils/utils';
 
 const defaultUser: User = {
   id: 0,
@@ -39,11 +38,24 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setTokenFromStorage(state, action) {
-      state.auth.token = action.payload.token;
-      state.auth.expireTime = new Date(action.payload.expireTime).toISOString();
+      if(action.payload) {
+        const savedToken = JSON.parse(action.payload) as Token;
+
+        const isExpired = new Date(savedToken.expireTime) < new Date();
+
+        if(isExpired) {
+          localStorage.clear();
+        } else {
+          state.auth = savedToken;
+        }
+      }
     },
     setUserFromStorage(state, action) {
-      state.user = action.payload.user;
+      if(action.payload) {
+        const savedUser = JSON.parse(action.payload) as User;
+
+        state.user = savedUser;
+      }
     }
   },
   extraReducers(builder) {
@@ -52,28 +64,27 @@ const userSlice = createSlice({
         state.user = action.payload;
         state.status = 'success';
 
-        //sessionStorage.setItem('user', JSON.stringify(action.payload));
+        sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(postLogin.fulfilled, (state, action) => {
         state.auth = action.payload;
         state.status = 'success';
 
-        /*if(action.payload.token) {
-          const ttl = Date.now() + TOKEN_TIME_TO_LIVE;
-          localStorage.setItem('token', action.payload.token);
-          localStorage.setItem('expireTime', ttl.toString());
-        }*/
+        localStorage.setItem('auth', JSON.stringify(action.payload));
       })
       .addCase(postLogout.fulfilled, (state) => {
         state.user = defaultUser;
         state.auth = defaultAuth;
         state.status = 'success';
 
-        //localStorage.clear();
+        sessionStorage.clear();
+        localStorage.clear();
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.status = 'success';
+
+        sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(getUserByUsername.fulfilled, (state, action) => {
         state.user = action.payload;
@@ -104,4 +115,4 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 export {selectUser};
-export const {setTokenFromStorage} = userSlice.actions;
+export const {setTokenFromStorage, setUserFromStorage} = userSlice.actions;

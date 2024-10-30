@@ -44,7 +44,7 @@ const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
       } : {})}>
         <div style={subPlainsStyle}>
           <PlayCircleOutline sx={iconSx}/>
-          <Link to={`/account/summaries/${summary.id}`}>
+          <Link to={`/account/summaries/mock`}>
             <Typography variant='h3'>
               {summary.title}
             </Typography>

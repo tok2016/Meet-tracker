@@ -4,7 +4,7 @@ import { User, UserLogin, UserRaw } from '../../utils/types/User';
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
 import Token, { TokenRaw } from '../../utils/types/Token';
-import { camelToSnake, snakeToCamel } from '../../utils/utils';
+import { camelToSnake, snakeToCamel, TOKEN_TIME_TO_LIVE } from '../../utils/utils';
 
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/postUserData', 
@@ -32,9 +32,11 @@ const postLogin = createAsyncThunk<Token, UserLogin, AsyncThunkConfig>(
 
     const tokenTypeCapital = `${tokenRaw['token_type'].charAt(0).toUpperCase()}${tokenRaw['token_type'].slice(1)}`;
 
+    const expireTime = new Date(Date.now() + TOKEN_TIME_TO_LIVE).toISOString();
+
     const token: Token = {
       token: `${tokenTypeCapital} ${tokenRaw['access_token']}`,
-      expireTime: response.headers['X-Expires-After']
+      expireTime
     };
 
     return token;
@@ -43,8 +45,14 @@ const postLogin = createAsyncThunk<Token, UserLogin, AsyncThunkConfig>(
 
 const postLogout = createAsyncThunk<void, void, AsyncThunkConfig>(
   'user/postLogout',
-  async () => {
-    await AxiosInstance.post('/user/logout');
+  async (_, {getState}) => {
+    const {user} = getState();
+
+    await AxiosInstance.post('/user/logout', undefined, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
   }
 );
 

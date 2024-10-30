@@ -1,13 +1,13 @@
-//import { Summary } from '../utils/types/Summary';
+import { Summary } from '../utils/types/Summary';
 import TopicPlain from '../components/TopicPlain';
 import { Paper, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
+import { /*useAppDispatch,*/ useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
-import { useEffect } from 'react';
-import { getSummary } from '../store/summary/summaryThunks';
+/*import { useEffect } from 'react';
+import { getSummary } from '../store/summary/summaryThunks';*/
 
-/*const mockSummary: Summary = {
+const mockSummary: Summary = {
   id: 1,
   title: 'Встреча 17.12.2023',
   text: (`
@@ -39,7 +39,7 @@ import { getSummary } from '../store/summary/summaryThunks';
     file: '',
     userId: 1
   }
-};*/
+};
 
 const MIN_TOPIC_LENGTH = 3;
 
@@ -47,9 +47,11 @@ const SummaryPage = () => {
   const {id} = useParams();
 
   const {summary, summaryTest} = useAppSelector(selectSummary);
-  const dispatch = useAppDispatch();
+  //const dispatch = useAppDispatch();
 
-  const rawTopics = summary.text.split('$');
+  const finalSummary = summary.id ? summary : mockSummary;
+
+  const rawTopics = finalSummary.text.split('$');
 
   const topics = rawTopics.map((topic, i) => ({
     id: i,
@@ -62,7 +64,7 @@ const SummaryPage = () => {
     }
   }, [id, dispatch, summary.id]);*/
 
-  const mockSummary = summaryTest ? summaryTest : (
+  const mockSummaryTest = summaryTest ? summaryTest : (
     `Jealousy
       Turning saints into the sea
       Swimming through sick lullabies
@@ -72,17 +74,20 @@ const SummaryPage = () => {
       Open up my eager eyes
       'Cause I'm Mr. Brightside
     `);
-  
+
   return (
     <>
-      <Typography variant='h2' marginBottom='25px'>{summary.title ?? 'Дефолтная запись'}</Typography>
+      <Typography variant='h2' marginBottom='25px'>{finalSummary.title}</Typography>
       <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
-      {topics.map((topic) => (
-        topic.topic.length <= MIN_TOPIC_LENGTH || <TopicPlain topic={topic.topic} key={topic.id}/>
-      ))}
-      <Paper>
-        <Typography variant='body1' style={{whiteSpace: 'pre-line'}}>{mockSummary}</Typography>
-      </Paper>
+      {
+        id === 'mock' 
+        ? topics.map((topic) => (
+            topic.topic.length <= MIN_TOPIC_LENGTH || <TopicPlain topic={topic.topic} key={topic.id}/>
+          ))
+        : <Paper>
+            <Typography variant='body1' style={{whiteSpace: 'pre-line'}}>{mockSummaryTest}</Typography>
+          </Paper>
+      }
     </>
   );
 };

@@ -15,7 +15,7 @@ const NavigationBar = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const {user, auth} = useAppSelector(selectUser);
+  const {user} = useAppSelector(selectUser);
 
   const logout = () => {
     dispatch(postLogout())
@@ -44,7 +44,7 @@ const NavigationBar = () => {
 
           <Button
             style={{
-              display: user.username && auth.token ? 'inherit' : 'none'
+              display: user.username ? 'inherit' : 'none'
             }}
             variant='transparent'
             onClick={logout} >
