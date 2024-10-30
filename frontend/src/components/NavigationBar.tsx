@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../assets/Logo.png';
 import useMediaValue from '../hooks/useMediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectUser } from '../store/userSlice';
-import { postLogout } from '../store/userThunks';
+import { selectUser } from '../store/user/userSlice';
+import { postLogout } from '../store/user/userThunks';
 import { LOGO_WIDTH, AVATAR_WIDTH } from '../utils/utils';
 
 const NavigationBar = () => {
@@ -35,7 +35,7 @@ const NavigationBar = () => {
         <div style={ {display: 'flex', gap: '30px', flexDirection: 'row', alignItems: 'center'} }>
           <Button 
             style={{
-              display: user.id > 0 ? 'none' : 'inherit'
+              display: user.username ? 'none' : 'inherit'
             }}
             variant='contained' 
             onClick={() => navigate('/login')}>
@@ -44,7 +44,7 @@ const NavigationBar = () => {
 
           <Button
             style={{
-              display: user.id <= 0 ? 'none' : 'inherit'
+              display: user.username ? 'inherit' : 'none'
             }}
             variant='transparent'
             onClick={logout} >
@@ -53,7 +53,7 @@ const NavigationBar = () => {
           
           <IconButton 
             style={{
-              display: user.id <= 0 ? 'none' : 'inherit'
+              display: user.username ? 'inherit' : 'none'
             }}
             color='primary' >
               <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />

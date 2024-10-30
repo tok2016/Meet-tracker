@@ -1,18 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { User, UserLogin, UserRaw, UserWithSummaries } from '../utils/types/User';
-import { AsyncThunkConfig } from './store';
-import AxiosInstance from '../utils/Axios';
-import Token, { TokenRaw } from '../utils/types/Token';
-import { camelToSnake, snakeToCamel } from '../utils/utils';
+import { User, UserLogin, UserRaw } from '../../utils/types/User';
+import { AsyncThunkConfig } from '../store';
+import AxiosInstance from '../../utils/Axios';
+import Token, { TokenRaw } from '../../utils/types/Token';
+import { camelToSnake, snakeToCamel, TOKEN_TIME_TO_LIVE } from '../../utils/utils';
 
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/postUserData', 
   async (userData) => {
     const body = camelToSnake(userData);
 
-    const responce = await AxiosInstance.post('/user', body);
-    return snakeToCamel(responce.data) as User;
+    const response = await AxiosInstance.post('/user', body);
+    return snakeToCamel(response.data) as User;
   }
 );
 
@@ -22,21 +22,21 @@ const postLogin = createAsyncThunk<Token, UserLogin, AsyncThunkConfig>(
 
     const body = `username=${encodeURIComponent(userLogin.email)}&password=${encodeURIComponent(userLogin.password)}`;
 
-    console.log(body);
-
-    const responce = await AxiosInstance.post('/user/login', body, {
+    const response = await AxiosInstance.post('/user/login', body, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
 
-    const tokenRaw = responce.data as TokenRaw;
+    const tokenRaw = response.data as TokenRaw;
 
     const tokenTypeCapital = `${tokenRaw['token_type'].charAt(0).toUpperCase()}${tokenRaw['token_type'].slice(1)}`;
 
+    const expireTime = new Date(Date.now() + TOKEN_TIME_TO_LIVE).toISOString();
+
     const token: Token = {
       token: `${tokenTypeCapital} ${tokenRaw['access_token']}`,
-      expireTime: responce.headers['X-Expires-After']
+      expireTime
     };
 
     return token;
@@ -45,54 +45,60 @@ const postLogin = createAsyncThunk<Token, UserLogin, AsyncThunkConfig>(
 
 const postLogout = createAsyncThunk<void, void, AsyncThunkConfig>(
   'user/postLogout',
-  async () => {
-    await AxiosInstance.post('/user/logout');
+  async (_, {getState}) => {
+    const {user} = getState();
+
+    await AxiosInstance.post('/user/logout', undefined, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
   }
 );
 
-const getCurrentUser = createAsyncThunk<UserWithSummaries, void, AsyncThunkConfig>(
+const getCurrentUser = createAsyncThunk<User, void, AsyncThunkConfig>(
   'user/getCurrentUser',
   async (_, { getState }) => {
     const {user} = getState();
 
-    const responce = await AxiosInstance.get(`/user/me`, {
+    const response = await AxiosInstance.get(`/current_user/`, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return snakeToCamel(responce.data) as UserWithSummaries;
+    return snakeToCamel(response.data) as User;
   }
 );
 
-const getUserByUsername = createAsyncThunk<UserWithSummaries, string, AsyncThunkConfig>(
+const getUserByUsername = createAsyncThunk<User, string, AsyncThunkConfig>(
   'user/getUserByUsername',
   async (username, { getState }) => {
     const {user} = getState();
 
-    const responce = await AxiosInstance.get(`/user/${username}`, {
+    const response = await AxiosInstance.get(`/user/${username}`, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return snakeToCamel(responce.data) as UserWithSummaries;
+    return snakeToCamel(response.data) as User;
   }
 );
 
-const patchUserChanges = createAsyncThunk<UserWithSummaries, UserRaw, AsyncThunkConfig>(
+const patchUserChanges = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/patchUserChanges',
   async (userUpdate, { getState }) => {
     const {user} = getState();
     const body = camelToSnake(userUpdate);
 
-    const responce = await AxiosInstance.patch(`/user/${userUpdate.username}`, body, {
+    const response = await AxiosInstance.patch(`/user/${userUpdate.username}`, body, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return snakeToCamel(responce.data) as UserWithSummaries;
+    return snakeToCamel(response.data) as User;
   }
 );
 

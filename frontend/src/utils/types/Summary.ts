@@ -1,4 +1,4 @@
-import { Record, RecordInfo } from './Record';
+import { Record } from './Record';
 import { Status } from './Status';
 
 export interface Summary {
@@ -11,4 +11,13 @@ export interface Summary {
   record: Record
 }
 
-export type SummaryInfo = Omit<Summary, 'userId' | 'record'> & {record: RecordInfo};
+export type SummaryInfo = Omit<Summary, 'userId' | 'text'> & {hasText: boolean};
+
+export type SummaryUpdate = Pick<Summary, 'id' | 'title' | 'text'>;
+
+export type SummariesRaw = {
+  summaries: SummaryInfo[],
+  total: number
+};
+
+export const isSummary = (summary: unknown): summary is Summary => (summary as Summary).text !== undefined;

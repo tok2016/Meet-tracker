@@ -1,9 +1,16 @@
-import { Paper, Typography } from '@mui/material';
+import { Button, Paper, Typography } from '@mui/material';
 import { CloudUpload } from '@mui/icons-material';
+
 import { UIColors } from '../utils/Colors';
 import MediaValue from '../utils/types/MediaValue';
 import useMediaValue from '../hooks/useMediaValue';
 import UploadInput from '../components/UploadInput';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
+import { useState } from 'react';
+import { postRecordFileTest } from '../store/summary/summaryThunks';
+import { useNavigate } from 'react-router-dom';
+import { isSummary } from '../utils/types/Summary';
+import { selectSummary } from '../store/summary/summarySlice';
 
 const UPLOAD_WIDTH: MediaValue = {
   xs: 20,
@@ -15,6 +22,26 @@ const UPLOAD_WIDTH: MediaValue = {
 
 const UploadPage = () => {
   const uploadWidth = useMediaValue(UPLOAD_WIDTH);
+
+  const navigate = useNavigate();
+
+  const {status} = useAppSelector(selectSummary);
+  const dispatch = useAppDispatch();
+
+  const [file, setFile] = useState<File | undefined>(undefined);
+
+  const onFileUpload = () => {
+    if(file) {
+      dispatch(postRecordFileTest(file))
+        .then((response) => {
+          if(typeof response.payload === 'string') {
+            navigate(`/account/summaries/1}`);
+          } else if(isSummary(response.payload)) {
+            navigate(`/account/summaries/${response.payload.id}`);
+          }
+        });
+    }
+  };
 
   return (
     <Paper 
@@ -34,10 +61,23 @@ const UploadPage = () => {
           height: uploadWidth
         }}/>
 
-        <UploadInput />
+        <UploadInput 
+          fileName={file ? file.name : ''} 
+          setFile={setFile} 
+          disabled={status === 'pending'}/>
+
+        <Button 
+          variant='containtedSecondary' 
+          disabled={status === 'pending'}
+          style={{
+            display: file ? 'inherit' : 'none'
+          }}
+          onClick={onFileUpload}>
+            Отправить
+        </Button>
 
         <Typography variant='body2' textAlign='center'>
-          Внимание! <br /> Поддерживается только формат SVG!
+          Внимание!<br />Поддерживается только формат SVG!
         </Typography>
     </Paper>
   );

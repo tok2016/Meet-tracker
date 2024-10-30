@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import UserState from '../utils/types/UserState';
-import { UserWithSummaries } from '../utils/types/User';
+import UserState from '../../utils/types/UserState';
 import { deleteUserData, getCurrentUser, getUserByUsername, postLogin, postLogout, postUserData, patchUserChanges } from './userThunks';
-import { isActionWithError } from '../utils/types/ActionWithError';
-import Token from '../utils/types/Token';
-import { RootState } from './store';
+import { isActionWithError } from '../../utils/types/ActionWithError';
+import Token from '../../utils/types/Token';
+import { RootState } from '../store';
+import { User } from '../../utils/types/User';
 
-const defaultUser: UserWithSummaries = {
-  summaries: [],
+const defaultUser: User = {
   id: 0,
   username: '',
   password: '',
@@ -25,8 +24,6 @@ const defaultAuth: Token = {
   expireTime: (new Date()).toString()
 }
 
-const selectUser = (state: RootState) => state.user;
-
 const initialState: UserState = {
   user: defaultUser,
   auth: defaultAuth,
@@ -34,33 +31,60 @@ const initialState: UserState = {
   error: undefined
 };
 
+const selectUser = (state: RootState) => state.user;
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setTokenFromStorage(state, action) {
+      if(action.payload) {
+        const savedToken = JSON.parse(action.payload) as Token;
+
+        const isExpired = new Date(savedToken.expireTime) < new Date();
+
+        if(isExpired) {
+          localStorage.clear();
+        } else {
+          state.auth = savedToken;
+        }
+      }
+    },
+    setUserFromStorage(state, action) {
+      if(action.payload) {
+        const savedUser = JSON.parse(action.payload) as User;
+
+        state.user = savedUser;
+      }
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(postUserData.fulfilled, (state, action) => {
-        const user: UserWithSummaries = {
-          ...action.payload,
-          summaries: []
-        };
-
-        state.user = user;
+        state.user = action.payload;
         state.status = 'success';
+
+        sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(postLogin.fulfilled, (state, action) => {
         state.auth = action.payload;
         state.status = 'success';
+
+        localStorage.setItem('auth', JSON.stringify(action.payload));
       })
       .addCase(postLogout.fulfilled, (state) => {
         state.user = defaultUser;
         state.auth = defaultAuth;
         state.status = 'success';
+
+        sessionStorage.clear();
+        localStorage.clear();
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.status = 'success';
+
+        sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(getUserByUsername.fulfilled, (state, action) => {
         state.user = action.payload;
@@ -91,3 +115,4 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 export {selectUser};
+export const {setTokenFromStorage, setUserFromStorage} = userSlice.actions;
