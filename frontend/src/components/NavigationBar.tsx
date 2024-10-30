@@ -15,7 +15,7 @@ const NavigationBar = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const {user} = useAppSelector(selectUser);
+  const {user, auth} = useAppSelector(selectUser);
 
   const logout = () => {
     dispatch(postLogout())
@@ -35,7 +35,7 @@ const NavigationBar = () => {
         <div style={ {display: 'flex', gap: '30px', flexDirection: 'row', alignItems: 'center'} }>
           <Button 
             style={{
-              display: user.id > 0 ? 'none' : 'inherit'
+              display: user.username ? 'none' : 'inherit'
             }}
             variant='contained' 
             onClick={() => navigate('/login')}>
@@ -44,7 +44,7 @@ const NavigationBar = () => {
 
           <Button
             style={{
-              display: user.id <= 0 ? 'none' : 'inherit'
+              display: user.username && auth.token ? 'inherit' : 'none'
             }}
             variant='transparent'
             onClick={logout} >
@@ -53,7 +53,7 @@ const NavigationBar = () => {
           
           <IconButton 
             style={{
-              display: user.id <= 0 ? 'none' : 'inherit'
+              display: user.username ? 'inherit' : 'none'
             }}
             color='primary' >
               <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />

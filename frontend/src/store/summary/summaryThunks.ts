@@ -17,16 +17,40 @@ const postRecordFile = createAsyncThunk<Summary, File, AsyncThunkConfig>(
     const path = `${import.meta.env.AUDIO_STORAGE}${finalFile.name}`;
 
     formData.append('file_path', finalFile);
-    formData.append('file_name', path);
 
-    const response = await AxiosInstance.post('/record/diarize', formData, {
+    const response = await AxiosInstance.post(`/record/diarize?file_name=${path}`, formData, {
       timeout: RECORD_UPLOAD_TIMEOUT,
       headers: {
         Authorization: user.auth.token,
+        'Content-Type': 'multipart/fromData'
       },
     });
 
     return snakeToCamel(response.data) as Summary;
+  }
+);
+
+const postRecordFileTest = createAsyncThunk<string, File, AsyncThunkConfig>(
+  'summary/postRecordFileTest',
+  async (file, {getState}) => {
+    const formData = new FormData();
+
+    const {user} = getState();
+
+    const finalFile = new File([file], `${user.user.username}_${Date.now()}`, {type: file.type});
+    const path = `${import.meta.env.AUDIO_STORAGE}${finalFile.name}`;
+
+    formData.append('file_path', finalFile);
+
+    const response = await AxiosInstance.post(`/record/diarize?file_name=${path}`, formData, {
+      timeout: RECORD_UPLOAD_TIMEOUT,
+      headers: {
+        Authorization: user.auth.token,
+        'Content-Type': 'multipart/fromData'
+      },
+    });
+
+    return response.data.text;
   }
 );
 
@@ -96,4 +120,4 @@ const getSummaries = createAsyncThunk<SummariesRaw, number, AsyncThunkConfig>(
   }
 );
 
-export {postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries};
+export {postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, postRecordFileTest};

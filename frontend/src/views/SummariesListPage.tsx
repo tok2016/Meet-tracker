@@ -47,6 +47,7 @@ const SummariesListPage = () => {
         count={total % SUMMARIES_PER_PAGE + 1}
         defaultPage={1}
         shape='rounded' 
+        color='primary'
         showFirstButton
         showLastButton
         onChange={onPageChange}/>

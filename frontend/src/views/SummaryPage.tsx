@@ -1,6 +1,6 @@
 //import { Summary } from '../utils/types/Summary';
 import TopicPlain from '../components/TopicPlain';
-import { Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
@@ -46,7 +46,7 @@ const MIN_TOPIC_LENGTH = 3;
 const SummaryPage = () => {
   const {id} = useParams();
 
-  const {summary} = useAppSelector(selectSummary);
+  const {summary, summaryTest} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
   const rawTopics = summary.text.split('$');
@@ -56,19 +56,33 @@ const SummaryPage = () => {
     topic,
   }));
 
-  useEffect(() => {
+  /*useEffect(() => {
     if(id && summary.id.toString() !== id) {
       dispatch(getSummary(id));
     }
-  }, [id, dispatch, summary.id]);
+  }, [id, dispatch, summary.id]);*/
+
+  const mockSummary = summaryTest ? summaryTest : (
+    `Jealousy
+      Turning saints into the sea
+      Swimming through sick lullabies
+      Choking on your alibi
+      But it's just the price I pay
+      Destiny is calling me
+      Open up my eager eyes
+      'Cause I'm Mr. Brightside
+    `);
   
   return (
     <>
-      <Typography variant='h2' marginBottom='25px'>{summary.title}</Typography>
+      <Typography variant='h2' marginBottom='25px'>{summary.title ?? 'Дефолтная запись'}</Typography>
       <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
       {topics.map((topic) => (
         topic.topic.length <= MIN_TOPIC_LENGTH || <TopicPlain topic={topic.topic} key={topic.id}/>
       ))}
+      <Paper>
+        <Typography variant='body1' style={{whiteSpace: 'pre-line'}}>{mockSummary}</Typography>
+      </Paper>
     </>
   );
 };

@@ -7,7 +7,7 @@ import useMediaValue from '../hooks/useMediaValue';
 import UploadInput from '../components/UploadInput';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { useState } from 'react';
-import { postRecordFile } from '../store/summary/summaryThunks';
+import { postRecordFileTest } from '../store/summary/summaryThunks';
 import { useNavigate } from 'react-router-dom';
 import { isSummary } from '../utils/types/Summary';
 import { selectSummary } from '../store/summary/summarySlice';
@@ -32,9 +32,11 @@ const UploadPage = () => {
 
   const onFileUpload = () => {
     if(file) {
-      dispatch(postRecordFile(file))
+      dispatch(postRecordFileTest(file))
         .then((response) => {
-          if(isSummary(response.payload)) {
+          if(typeof response.payload === 'string') {
+            navigate(`/account/summaries/1}`);
+          } else if(isSummary(response.payload)) {
             navigate(`/account/summaries/${response.payload.id}`);
           }
         });
@@ -67,6 +69,9 @@ const UploadPage = () => {
         <Button 
           variant='containtedSecondary' 
           disabled={status === 'pending'}
+          style={{
+            display: file ? 'inherit' : 'none'
+          }}
           onClick={onFileUpload}>
             Отправить
         </Button>
