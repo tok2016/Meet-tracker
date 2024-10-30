@@ -32,7 +32,7 @@ const LoginPage = () => {
   useEffect(() => {
     if(auth.token && status !== 'error') {
       if(user.username) {
-        navigate(`/account/users/${user.id}`);
+        navigate(`/account/users/${user.username}`);
       } else {
         dispatch(getCurrentUser());
       }
@@ -48,6 +48,7 @@ const LoginPage = () => {
           value={email}
           type='email'
           label='Электронная почта'
+          autoComplete='off'
           required
           onChange={(evt) => setEmail(evt.target.value)}/>
 

@@ -55,7 +55,8 @@ const NavigationBar = () => {
             style={{
               display: user.username ? 'inherit' : 'none'
             }}
-            color='primary' >
+            color='primary'
+            onClick={() => navigate(`/account/users/${user.username}`)} >
               <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />
           </IconButton>
         </div>

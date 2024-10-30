@@ -20,7 +20,7 @@ const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
         accept='audio/*,video/*' 
         disabled={disabled} 
         onChange={onFileChoice} />
-      <Button variant='contained'>
+      <Button variant='contained' disabled={disabled}>
         <label htmlFor='file'>Загрузить</label>
       </Button>
       <Typography variant='subtitle1'>{fileName}</Typography>
