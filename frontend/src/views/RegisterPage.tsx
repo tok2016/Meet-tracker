@@ -56,6 +56,7 @@ const RegisterPage = () => {
             value={username}
             type='text'
             label='Логин'
+            autoComplete='off'
             required
             onChange={(evt) => setUsername(evt.target.value)}/>
 
@@ -63,6 +64,7 @@ const RegisterPage = () => {
             value={email}
             type='email'
             label='Электронная почта'
+            autoComplete='off'
             required
             onChange={(evt) => setEmail(evt.target.value)}/>
 
@@ -70,6 +72,7 @@ const RegisterPage = () => {
             value={firstName}
             type='text'
             label='Имя'
+            autoComplete='off'
             required
             onChange={(evt) => setFirstName(evt.target.value)}/>
 
@@ -77,6 +80,7 @@ const RegisterPage = () => {
             value={lastName}
             type='text'
             label='Фамилия'
+            autoComplete='off'
             onChange={(evt) => setLastName(evt.target.value)}/>
 
           <TextField 

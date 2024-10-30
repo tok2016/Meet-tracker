@@ -2,6 +2,8 @@ import { Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/mater
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Page from '../utils/types/Page';
+import { useAppSelector } from '../hooks/useAppDispatch';
+import { selectUser } from '../store/user/userSlice';
 
 const sidebarPages: Page[] = [
   {
@@ -16,7 +18,7 @@ const sidebarPages: Page[] = [
   },
   {
     name: 'Профиль',
-    path: (id: string) => `/account/users/${id}`,
+    path: (username: string) => `/account/users/${username}`,
     forAdmin: false
   },
   {
@@ -32,6 +34,8 @@ const Sidebar = () => {
 
   const [path, setPath] = useState<string>(pathname);
 
+  const {user} = useAppSelector(selectUser);
+
   const pages = sidebarPages.filter((page) => !page.forAdmin);
 
   const onButtonPageClick = (pagePath: string) => {
@@ -43,7 +47,7 @@ const Sidebar = () => {
     <Drawer variant='permanent'>
       <List>
         {pages.map((page) => {
-          const pagePath = typeof page.path === 'function' ? page.path('1') : page.path;
+          const pagePath = typeof page.path === 'function' ? page.path(user.username) : page.path;
 
           return (
             <ListItem key={pagePath}>
