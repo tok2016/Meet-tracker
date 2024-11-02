@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, UploadFile, File
+from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe
 from sqlmodel import Field, Session, SQLModel, create_engine, select
@@ -6,6 +7,7 @@ from app.db import SessionDep
 from typing import Annotated
 from datetime import timedelta
 from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email
+import os
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -87,3 +89,26 @@ def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: Cur
     session.commit()
     session.refresh(current_user)
     return current_user
+
+@router.post("/current_user/upload_picture")
+def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(...),):
+    #Путь где будет располагаться загруженная картинка
+    path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/"
+    full_image_path = os.path.join(path_image_dir, file.filename)
+
+    if not os.path.exists(path_image_dir):
+        os.mkdir(path_image_dir)
+
+    file_name = full_image_path.replace(file.filename, "profile.png")
+
+    with open(file_name, "wb") as f:
+        f.write(file.file.read())
+        f.flush()
+        f.close()
+    
+    return {"image": f"{full_image_path}"}
+
+@router.get("/current_user/profile_picture")
+def get_profile_picture(current_user: CurrentUser):
+    path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/profile.png"
+    return FileResponse(path_image_dir)

@@ -51,7 +51,8 @@ async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/s
     for seg, spk, sent in final_results:
         line = f'{spk} {sent}'
         lines += f"{line}   "
-    return { "text": f"Transcribed text {lines}" }
+    summary = model_llama.invoke(f"Обобщи текст в целом {lines}. Обобщи текст по каждому говорящему отдельно. Выдели отдельные задачи если они присутствуют")
+    return { "text": f"Summarized text: {summary}" }
 
 #Запрос с whisper и llama
 @router.post("/record/full")
