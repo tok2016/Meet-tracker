@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, UploadFile, File
+from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe
 from sqlmodel import Field, Session, SQLModel, create_engine, select
@@ -92,7 +93,6 @@ def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: Cur
 @router.post("/current_user/upload_picture")
 def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(...),):
     #Путь где будет располагаться загруженная картинка
-    cwd = os.getcwdb()
     path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/"
     full_image_path = os.path.join(path_image_dir, file.filename)
 
@@ -107,3 +107,8 @@ def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(..
         f.close()
     
     return {"image": f"{full_image_path}"}
+
+@router.get("/current_user/profile_picture")
+def get_profile_picture(current_user: CurrentUser):
+    path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/profile.png"
+    return FileResponse(path_image_dir)
