@@ -1,11 +1,11 @@
-import { IconButton, Paper, Typography } from '@mui/material';
+import { IconButton, Input, Paper, Typography } from '@mui/material';
 import { HTMLInputTypeAttribute, KeyboardEvent, useReducer, useState } from 'react';
 import { Check, Close, Edit } from '@mui/icons-material';
 
 import IconForInput from './IconForInput';
 import { UIColors } from '../utils/Colors';
 import CopyButton from './CopyButton';
-import { INPUT_ICON_WIDTH } from '../utils/utils';
+import { UserIconSx } from '../utils/theme/UserIcon';
 
 type UserInfoInputProps = {
   label: string,
@@ -39,7 +39,7 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, apply}: UserI
 
   return (
     <Paper 
-      variant='elevationInside'
+      variant='elevationInput'
       sx={(theme) => (theme.components?.MuiPaper ? {
         ...theme.components.MuiPaper?.defaultProps?.sx,
         display: 'flex',
@@ -51,40 +51,56 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, apply}: UserI
 
       <div style={{
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '10px',
+        width: '100%'
       }}>
         <IconForInput type={type} readOnly={readOnly}/>
 
-        <div style={{
+        <div className='user-input' style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '1px'
+          gap: '1px',
+          width: '100%'
         }}>
-          <Typography variant='body1'>{label}</Typography>
-          <input 
-            className='user-input' 
+          <Typography variant='body1' width='100%'>{label}</Typography>
+          <Input
+            disableUnderline 
             type={type} 
             value={value} 
             readOnly={readOnly || !isEditable} 
             onChange={(evt) => setValue(evt.target.value)}
-            onKeyDown={onKeyDown} />
+            onKeyDown={onKeyDown}
+            sx={{
+              width: '100%'
+            }}
+            inputProps={{
+              style: {
+                padding: '2px 0px'
+              }
+            }} />
         </div>
       </div>
 
       {readOnly 
         ? <CopyButton value={value} onError={() => {}}/> 
         : (isEditable 
-          ? <div>
+          ? <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '10px'
+            }}>
               <IconButton color='secondary' onClick={onApply}>
-                <Check sx={{width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}} /> 
+                <Check sx={UserIconSx} /> 
               </IconButton>
 
               <IconButton color='secondary' onClick={onCancel}>
-                <Close sx={{width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}} />
+                <Close sx={UserIconSx} />
               </IconButton>
             </div>
           : <IconButton color='secondary' onClick={toggleEdit}>
-              <Edit sx={{width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}} />
+              <Edit sx={UserIconSx} />
             </IconButton>
           )
       }

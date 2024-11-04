@@ -91,7 +91,7 @@ const RegisterPage = () => {
             onChange={(evt) => setPassword(evt.target.value)}
             slotProps={{
               input: {
-                endAdornment: <IconButton color='primary' onClick={toggleVisibility}>
+                endAdornment: <IconButton color='secondary' onClick={toggleVisibility}>
                                 {isVisible ? <VisibilityOff /> : <Visibility />}
                               </IconButton>
               }

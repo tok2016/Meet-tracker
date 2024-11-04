@@ -53,7 +53,7 @@ const Paper: Components['MuiPaper'] = {
           },
           style: {
             backgroundColor: UIColors.background,
-            border: `1px dashed ${UIColors.quaternary}`,
+            border: `1px dashed ${UIColors.disabled}`,
             borderRadius: 15,
             padding: 'calc(10px + 1vh) calc(50px + 5vh)'
           }
@@ -65,8 +65,8 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: UIColors.background,
             borderRadius: 10,
-            padding: '1em 2em',
-            paddingLeft: '3em'
+            padding: '0.5em 1em',
+            paddingLeft: '1.5em'
           }
         }
       ]

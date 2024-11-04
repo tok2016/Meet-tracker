@@ -1,17 +1,38 @@
 import { Avatar, Button, Typography } from '@mui/material';
+import { AccountCircle, Logout } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import UserInfoInput from '../components/UserInfoInput';
-import { UserRaw } from '../utils/types/User';
-import { patchUserChanges } from '../store/user/userThunks';
-import { AccountCircle, Logout } from '@mui/icons-material';
+import { User, UserRaw } from '../utils/types/User';
+import { patchUserChanges, postLogout } from '../store/user/userThunks';
+
 const UserPage = () => {
-  const {user} = useAppSelector(selectUser);
+  const navigate = useNavigate();
+
+  //const {user} = useAppSelector(selectUser);
+  const user: User = {
+    id: 1,
+    username: 'Musya',
+    firstName: 'Муся',
+    lastName: 'Беспородная',
+    email: 'musyathebest@somemail.com',
+    password: '11111111111',
+    isAdmin: false,
+    registrationDate: new Date().toISOString(),
+    avatar: ''
+  }
   const dispatch = useAppDispatch();
+
+  const userDate = new Date(user.registrationDate).toLocaleDateString();
 
   const sendUpdate = (updatedUser: UserRaw) => {
     dispatch(patchUserChanges(updatedUser));
+  };
+
+  const logout = () => {
+    dispatch(postLogout()).then(() => navigate('/login'));
   };
 
   return (
@@ -25,22 +46,25 @@ const UserPage = () => {
         <div style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px'
         }}>
           <div style={{
             display: 'flex',
             flexDirection: 'row',
+            alignItems: 'center'
           }}>
             {user.avatar 
-              ? <Avatar src={user.avatar}/>
-              : <AccountCircle />}
+              ? <Avatar src={user.avatar} sx={{width: '2.5em', height: '2.5em'}} />
+              : <AccountCircle sx={{width: '2.5em', height: '2.5em'}} />}
             <div>
-              <Typography variant='h3'>{user.firstName} {user.lastName}</Typography>
-              <Typography variant='body1'>{user.email}</Typography>
+              <Typography variant='h4'>{user.firstName} {user.lastName}</Typography>
+              <Typography variant='body1'>Дата регистрации: {userDate}</Typography>
             </div>
           </div>
 
-          <Button variant='transparent' startIcon={<Logout />}>
+          <Button variant='danger' startIcon={<Logout />} onClick={logout}>
             Выйти
           </Button>
         </div>

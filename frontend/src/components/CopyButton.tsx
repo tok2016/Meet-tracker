@@ -2,7 +2,7 @@ import { ContentCopy } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useRef } from 'react';
 
-import { INPUT_ICON_WIDTH } from '../utils/utils';
+import { UserIconSx } from '../utils/theme/UserIcon';
 
 const CopyButton = ({value, onError}: {value: string, onError: () => void}) => {
   const hiddenRef = useRef<HTMLTextAreaElement>(null);
@@ -29,7 +29,7 @@ const CopyButton = ({value, onError}: {value: string, onError: () => void}) => {
       <IconButton 
         color='secondary'
         onClick={copyToClipboard}>
-        <ContentCopy sx={{width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}}/>
+        <ContentCopy sx={UserIconSx}/>
       </IconButton>
 
       <textarea 

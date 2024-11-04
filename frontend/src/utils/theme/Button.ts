@@ -8,7 +8,8 @@ declare module '@mui/material/Button' {
     containtedSecondary: true,
     containtedTab: true,
     containtedTabSelected: true,
-    transparent: true
+    transparent: true,
+    danger: true
   }
 }
 
@@ -61,7 +62,7 @@ const Button: Components['MuiButton'] = {
         variant: 'containtedTab'
       },
       style: {
-        background: UIColors.quaternary,
+        background: UIColors.disabled,
         color: TextColors.contrast,
         minHeight: '3em',
         borderRadius: 10,
@@ -78,6 +79,23 @@ const Button: Components['MuiButton'] = {
       style: {
         backgroundColor: 'transparent',
         color: TextColors.secondary
+      }
+    },
+    {
+      props: {
+        variant: 'danger'
+      },
+      style: {
+        color: TextColors.error,
+        backgroundColor: 'transparent',
+        ':hover': {
+          backgroundColor: TextColors.error,
+          color: TextColors.contrast
+        },
+        ':active': {
+          color: TextColors.main,
+          backgroundColor: 'transparent',
+        }
       }
     }
   ]

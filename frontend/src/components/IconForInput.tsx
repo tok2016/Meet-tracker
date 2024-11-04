@@ -2,18 +2,20 @@ import { HTMLInputTypeAttribute } from 'react';
 import { Tag, Info, Email, Key } from '@mui/icons-material';
 
 import { TextColors } from '../utils/Colors';
-import { INPUT_ICON_WIDTH } from '../utils/utils';
+import { UserIconSx } from '../utils/theme/UserIcon';
 
 const IconForInput = ({type, readOnly}: {type: HTMLInputTypeAttribute, readOnly: boolean}) => {
+  const sx = {...UserIconSx, color: TextColors.main };
+
   switch(type) {
     case 'email':
-      return <Email sx={{color: TextColors.main, width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}} />
+      return <Email sx={sx} />
     case 'password': 
-      return <Key sx={{color: TextColors.main, width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}} />
+      return <Key sx={sx} />
   }
   return readOnly 
-    ? <Tag sx={{color: TextColors.main, width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}} /> 
-    : <Info sx={{color: TextColors.main, width: INPUT_ICON_WIDTH, height: INPUT_ICON_WIDTH}} />
+    ? <Tag sx={sx} /> 
+    : <Info sx={sx} />
 };
 
 export default IconForInput;
