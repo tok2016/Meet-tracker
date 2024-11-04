@@ -55,13 +55,13 @@ const Typography: Components['MuiTypography'] = {
   variants: [
     {
       props: {
-        variant: 'h1Highlight'
+        variant: 'h1Highlight',
       },
       style: {
         color: TextColors.highlight,
         fontWeight: 700,
         [breakpoints.up('lg')]: {
-          fontSize: 48
+          fontSize: 40
         },
         [breakpoints.only('xl')]: {
           fontSize: 64
@@ -70,25 +70,27 @@ const Typography: Components['MuiTypography'] = {
     },
     {
       props: {
-        variant: 'h2Promo'
+        variant: 'h2Promo',
       },
       style: {
         [breakpoints.up('lg')]: {
-          fontSize: 64
+          fontSize: 48
         },
         [breakpoints.only('xl')]: {
           fontSize: 96
         },
-        textAlign: 'center'
+        textAlign: 'center',
+        width: '100%',
+        fontWeight: 400
       }
     },
     {
       props: {
-        variant: 'h2PromoHighlight'
+        variant: 'h2PromoHighlight',
       },
       style: {
         [breakpoints.up('lg')]: {
-          fontSize: 64
+          fontSize: 48
         },
         [breakpoints.only('xl')]: {
           fontSize: 96
@@ -102,17 +104,18 @@ const Typography: Components['MuiTypography'] = {
       },
       style: {
         [breakpoints.up('lg')]: {
-          fontSize: 32
+          fontSize: 28
         },
         [breakpoints.only('xl')]: {
           fontSize: 48
         },
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: 400
       }
     },
     {
       props: {
-        variant: 'body2Highlight'
+        variant: 'body2Highlight',
       },
       style: {
         [breakpoints.up('lg')]: {
@@ -126,12 +129,12 @@ const Typography: Components['MuiTypography'] = {
     },
     {
       props: {
-        variant: 'h3Normal'
+        variant: 'h3Normal',
       },
       style: {
         fontWeight: 400,
         [breakpoints.up('lg')]: {
-          fontSize: 24
+          fontSize: 18
         },
         [breakpoints.only('xl')]: {
           fontSize: 32

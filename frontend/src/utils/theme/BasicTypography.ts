@@ -20,7 +20,7 @@ const BasicTypography: TypographyOptions = {
   fontFamily: 'Inter',
   button: {
     [breakpoints.up('lg')]: {
-      fontSize: 24
+      fontSize: 20
     },
     [breakpoints.only('xl')]: {
       fontSize: 32
@@ -40,7 +40,7 @@ const BasicTypography: TypographyOptions = {
   },
   h1: {
     [breakpoints.up('lg')]: {
-      fontSize: 48
+      fontSize: 40
     },
     [breakpoints.only('xl')]: {
       fontSize: 64
@@ -48,7 +48,7 @@ const BasicTypography: TypographyOptions = {
   },
   h2: {
     [breakpoints.up('lg')]: {
-      fontSize: 32
+      fontSize: 36
     },
     [breakpoints.only('xl')]: {
       fontSize: 40
@@ -56,7 +56,7 @@ const BasicTypography: TypographyOptions = {
   },
   h3: {
     [breakpoints.up('lg')]: {
-      fontSize: 24
+      fontSize: 20
     },
     [breakpoints.only('xl')]: {
       fontSize: 32
@@ -64,7 +64,7 @@ const BasicTypography: TypographyOptions = {
   },
   h4: {
     [breakpoints.up('lg')]: {
-      fontSize: 24
+      fontSize: 20
     },
     [breakpoints.only('xl')]: {
       fontSize: 32
@@ -72,7 +72,7 @@ const BasicTypography: TypographyOptions = {
   },
   body1: {
     [breakpoints.up('lg')]: {
-      fontSize: 20
+      fontSize: 18
     },
     [breakpoints.only('xl')]: {
       fontSize: 32
@@ -80,7 +80,7 @@ const BasicTypography: TypographyOptions = {
   },
   body2: {
     [breakpoints.up('lg')]: {
-      fontSize: 20
+      fontSize: 18
     },
     [breakpoints.only('xl')]: {
       fontSize: 32

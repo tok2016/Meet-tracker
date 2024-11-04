@@ -1,4 +1,4 @@
-import { AppBar, Button, IconButton, Toolbar } from '@mui/material';
+import { AppBar, Avatar, Button, IconButton, Toolbar } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -57,7 +57,9 @@ const NavigationBar = () => {
             }}
             color='primary'
             onClick={() => navigate(`/account/users/${user.username}`)} >
-              <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />
+              {user.avatar 
+                ? <Avatar src={user.avatar} sx={ {width: avatarWidth, height: avatarWidth} }/> 
+                : <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />}
           </IconButton>
         </div>
       </Toolbar>

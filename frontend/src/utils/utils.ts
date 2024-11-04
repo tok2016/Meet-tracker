@@ -2,20 +2,22 @@ import MediaValue from './types/MediaValue';
 
 const TOKEN_TIME_TO_LIVE = 1000 * 60 * 24 * 7;
 
+const INPUT_ICON_WIDTH = '1.5em';
+
 const LOGO_WIDTH: MediaValue = {
   xs: 20,
-  sm: 50,
-  md: 100,
-  lg: 150,
+  sm: 40,
+  md: 80,
+  lg: 120,
   xl: 200
 };
 
 const AVATAR_WIDTH: MediaValue = {
   xs: 10,
   sm: 25,
-  md: 45,
-  lg: 65,
-  xl: 95
+  md: 40,
+  lg: 60,
+  xl: 90
 }
 
 const statusesTranslations = {
@@ -55,4 +57,4 @@ const snakeToCamel = (obj: object) => {
   return result;
 };
 
-export {camelToSnake, snakeToCamel, LOGO_WIDTH, AVATAR_WIDTH, statusesTranslations, TOKEN_TIME_TO_LIVE};
+export {camelToSnake, snakeToCamel, LOGO_WIDTH, AVATAR_WIDTH, statusesTranslations, TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH};
