@@ -59,16 +59,6 @@ model = model.bind_tools(
 
 router = APIRouter()
 
-#Запрос для использования только whisper
-@router.post("/record/")
-async def record_transcription( file: UploadFile = File(...)):
-    segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
-    x = ""
-    for segment in segments:
-        x+=segment.text
-        x+=" "
-    return { "text": f"Transcribed text {x}" }
-
 #Запрос для распознования спикеров
 @router.post("/record/diarize")
 async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/sounds/test.wav"):
@@ -84,14 +74,3 @@ async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/s
         lines += f"{line}   "
     summary_common = model.invoke(f"Summarize text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
     return { "Общая информация": f"{summary_common}" }
-
-#Запрос с whisper и llama
-@router.post("/record/full")
-async def record_summary( file: UploadFile = File(...)):
-    segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
-    x = ""
-    for segment in segments:
-        x+=segment.text
-        x+=" "
-    summary = model_llama.invoke(f"Обобщи текст {x}")
-    return { "text": f"Summarized text {summary}" }
