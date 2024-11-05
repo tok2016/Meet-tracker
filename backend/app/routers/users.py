@@ -8,6 +8,7 @@ from typing import Annotated
 from datetime import timedelta
 from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email
 import os
+from pathlib import Path
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -93,8 +94,9 @@ def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: Cur
 @router.post("/current_user/upload_picture")
 def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(...),):
     #Путь где будет располагаться загруженная картинка
-    path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/"
-    full_image_path = os.path.join(path_image_dir, file.filename)
+    path_parent = Path(__file__).parent.parent.as_posix()
+    path_image_dir = path_parent + "/images/user/profile/" + str(current_user.id) + "/"
+    full_image_path = os.path.join( path_image_dir, file.filename)
 
     if not os.path.exists(path_image_dir):
         os.mkdir(path_image_dir)
@@ -110,5 +112,6 @@ def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(..
 
 @router.get("/current_user/profile_picture")
 def get_profile_picture(current_user: CurrentUser):
-    path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/profile.png"
+    path_parent = Path(__file__).parent.parent.as_posix()
+    path_image_dir = path_parent + "/images/user/profile/" + str(current_user.id) + "/profile.png"
     return FileResponse(path_image_dir)
