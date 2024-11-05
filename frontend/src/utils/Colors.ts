@@ -4,7 +4,8 @@ const UIColors: UIColorPalette = {
   main: '#F59D0E',
   secondary: '#F56B00',
   tertiary: '#F5F5F5',
-  quaternary: '#8B8B8B',
+  quaternary: '#E7E7E7',
+  disabled: '#8B8B8B',
   background: '#FFFFFF',
   mainGradient() {
     return `linear-gradient(to right, ${this.main}, ${this.secondary})`;

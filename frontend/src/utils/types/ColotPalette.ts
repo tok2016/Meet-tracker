@@ -5,6 +5,7 @@ export interface UIColorPalette {
   secondary: HexColor,
   tertiary: HexColor,
   quaternary: HexColor,
+  disabled: HexColor,
   background: HexColor,
   mainGradient: () => string,
   secondaryGradient: () => string,

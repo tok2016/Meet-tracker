@@ -13,7 +13,7 @@ const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
   };
 
   return (
-    <>
+    <div style={{marginBottom: '20px'}}>
       <input 
         id='file' 
         type='file' 
@@ -24,7 +24,7 @@ const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
         <label htmlFor='file'>Загрузить</label>
       </Button>
       <Typography variant='subtitle1'>{fileName}</Typography>
-    </>
+    </div>
   );
 };
 

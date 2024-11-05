@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import UserState from '../../utils/types/UserState';
-import { deleteUserData, getCurrentUser, getUserByUsername, postLogin, postLogout, postUserData, patchUserChanges } from './userThunks';
+import { deleteUserData, getCurrentUser, getUserByUsername, postLogin, postLogout, postUserData, patchUserChanges, patchCurrentUser, getUserAvatar, postUserAvatar } from './userThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
 import Token from '../../utils/types/Token';
 import { RootState } from '../store';
@@ -79,6 +79,22 @@ const userSlice = createSlice({
 
         sessionStorage.clear();
         localStorage.clear();
+
+        URL.revokeObjectURL(state.user.avatar);
+      })
+      .addCase(postLogout.rejected, (state) => {
+        state.user = defaultUser;
+        state.auth = defaultAuth;
+        state.status = 'success';
+
+        sessionStorage.clear();
+        localStorage.clear();
+
+        URL.revokeObjectURL(state.user.avatar);
+      })
+      .addCase(postUserAvatar.fulfilled, (state, action) => {
+        state.user.avatar = action.payload;
+        state.status = 'success';
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
@@ -87,6 +103,14 @@ const userSlice = createSlice({
         sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(getUserByUsername.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = 'success';
+      })
+      .addCase(getUserAvatar.fulfilled, (state, action) => {
+        state.user.avatar = action.payload;
+        state.status = 'success';
+      })
+      .addCase(patchCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.status = 'success';
       })

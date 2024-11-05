@@ -7,16 +7,24 @@ const IconButton: Components['MuiIconButton'] = {
       padding: 0,
       '*': {
         color: UIColors.main,
-        width: '100%',
-        height: '100%'
+      },
+      ':hover *': {
+        color: UIColors.secondary
+      },
+      ':active *': {
+        color: UIColors.quaternary
       }
     },
     colorSecondary: {
       padding: 0,
       '*': {
-        color: TextColors.main,
-        width: '100%',
-        height: '100%'
+        color: TextColors.main
+      },
+      ':hover *': {
+        color: TextColors.highlight
+      },
+      ':active *': {
+        color: TextColors.secondary
       }
     }
   }

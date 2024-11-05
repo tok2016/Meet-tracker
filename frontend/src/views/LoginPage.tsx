@@ -8,7 +8,7 @@ import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { UserLogin } from '../utils/types/User';
-import { getCurrentUser, postLogin } from '../store/user/userThunks';
+import { getCurrentUser, getUserAvatar, postLogin } from '../store/user/userThunks';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -35,6 +35,7 @@ const LoginPage = () => {
         navigate(`/account/users/${user.username}`);
       } else {
         dispatch(getCurrentUser());
+        dispatch(getUserAvatar());
       }
     }
   });
@@ -60,7 +61,7 @@ const LoginPage = () => {
           onChange={(evt) => setPassword(evt.target.value)}
           slotProps={{
             input: {
-              endAdornment: <IconButton color='primary' onClick={toggleVisibility}>
+              endAdornment: <IconButton color='secondary' onClick={toggleVisibility}>
                               {isVisible ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
             }

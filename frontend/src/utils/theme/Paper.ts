@@ -6,7 +6,8 @@ declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
     elevationSmall: true,
     elevationInside: true,
-    elevationDashed: true
+    elevationDashed: true,
+    elevationInput: true
   }
 }
 
@@ -52,9 +53,20 @@ const Paper: Components['MuiPaper'] = {
           },
           style: {
             backgroundColor: UIColors.background,
-            border: `1px dashed ${UIColors.quaternary}`,
+            border: `1px dashed ${UIColors.disabled}`,
             borderRadius: 15,
             padding: 'calc(10px + 1vh) calc(50px + 5vh)'
+          }
+        },
+        {
+          props: {
+            variant: 'elevationInput'
+          },
+          style: {
+            backgroundColor: UIColors.background,
+            borderRadius: 10,
+            padding: '0.5em 1em',
+            paddingLeft: '1.5em'
           }
         }
       ]
