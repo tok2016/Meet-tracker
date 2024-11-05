@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, UploadFile, Form
+from .ollama_functions import OllamaFunctions
 from fastapi.responses import StreamingResponse
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-from app.db import SessionDep
 from typing import Annotated
 from datetime import timedelta
 from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email
@@ -17,25 +16,48 @@ from pyannote.audio import Pipeline
 from pyannote.core import Segment, Annotation, Timeline
 from pydantic import FilePath
 
-#LANGUAGE_CODES = sorted(tokenizer.LANGUAGES.keys())
-
 #Whsiper модель
 model_size = "large-v3"
 model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
 #Llama модель
-model_llama = OllamaLLM(model="llama3.1")
+model = OllamaFunctions(model="llama3.1", format="json")
+model = model.bind_tools(
+    tools=[
+        {
+            "name": "summarize_text",
+            "description": "Summarize text",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "topic": {
+                        "type": "string",
+                        "description": "Topic of the text",
+                    },
+                    "text": {
+                        "type": "string",
+                        "description": "Short summary of the text",
+                    },
+                    "start": {
+                        "type": "string",
+                        "description": "Time when first segment starts",
+                    },
+                    "end": {
+                        "type": "string",
+                        "description": "Time when last segment ends",
+                    },
+                    "speakers": {
+                        "type": "string",
+                        "description": "Speakers with names"
+                    }
+                },
+                "required": ["topic", "text", "start", "end", "speakers"],
+            },
+        }
+    ],
+    function_call={"name": "summarize_text"},
+)
 
 router = APIRouter()
-
-#Запрос для использования только whisper
-@router.post("/record/")
-async def record_transcription( file: UploadFile = File(...)):
-    segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
-    x = ""
-    for segment in segments:
-        x+=segment.text
-        x+=" "
-    return { "text": f"Transcribed text {x}" }
 
 #Запрос для распознования спикеров
 @router.post("/record/diarize")
@@ -43,24 +65,12 @@ async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/s
     audio = AudioSegment.from_file(io.BytesIO(file_path.file.read()))
     audio.export(file_name, format="wav")
     segments, info = model_whisper.transcribe(file_name, beam_size=5)
-    #segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
     pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=auth_token_hf)
     diarization_results = pipeline(file_name)
     final_results = diarize_text(segments, diarization_results)
     lines = ""
     for seg, spk, sent in final_results:
-        line = f'{spk} {sent}'
+        line = f'Start: {seg.start} End: {seg.end} Speaker: {spk} Sentence: {sent}'
         lines += f"{line}   "
-    summary = model_llama.invoke(f"Обобщи текст в целом {lines}. Обобщи текст по каждому говорящему отдельно. Выдели отдельные задачи если они присутствуют")
-    return { "text": f"Summarized text: {summary}" }
-
-#Запрос с whisper и llama
-@router.post("/record/full")
-async def record_summary( file: UploadFile = File(...)):
-    segments, info = model_whisper.transcribe(io.BytesIO(file.file.read()), beam_size=5)
-    x = ""
-    for segment in segments:
-        x+=segment.text
-        x+=" "
-    summary = model_llama.invoke(f"Обобщи текст {x}")
-    return { "text": f"Summarized text {summary}" }
+    summary_common = model.invoke(f"Summarize text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
+    return { "Общая информация": f"{summary_common}" }
