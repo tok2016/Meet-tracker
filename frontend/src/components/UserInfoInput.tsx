@@ -1,5 +1,5 @@
 import { IconButton, Input, Paper, Typography } from '@mui/material';
-import { HTMLInputTypeAttribute, KeyboardEvent, useReducer, useState } from 'react';
+import { HTMLInputTypeAttribute, KeyboardEvent, useEffect, useReducer, useState } from 'react';
 import { Check, Close, Edit } from '@mui/icons-material';
 
 import IconForInput from './IconForInput';
@@ -36,6 +36,12 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, apply}: UserI
       onCancel();
     }
   }
+
+  useEffect(() => {
+    if(defaultValue) {
+      setValue(defaultValue)
+    }
+  }, [defaultValue]);
 
   return (
     <Paper 

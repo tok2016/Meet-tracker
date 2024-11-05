@@ -3,7 +3,7 @@ import NavigationBar from '../components/NavigationBar';
 import Router from './Router';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser, setTokenFromStorage, setUserFromStorage } from '../store/user/userSlice';
-import { getCurrentUser } from '../store/user/userThunks';
+import { getCurrentUser, getUserAvatar } from '../store/user/userThunks';
 
 const PageLayout = () => {
 
@@ -26,6 +26,12 @@ const PageLayout = () => {
       }
     }
   }, [user.username, auth.token, dispatch])
+
+  useEffect(() => {
+    if(auth.token) {
+      dispatch(getUserAvatar());
+    }
+  }, [auth.token, dispatch]);
 
   return (
     <>

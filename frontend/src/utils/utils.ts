@@ -1,5 +1,7 @@
 import MediaValue from './types/MediaValue';
 
+const BASE_URL = 'http://127.0.0.1:90';
+
 const TOKEN_TIME_TO_LIVE = 1000 * 60 * 24 * 7;
 
 const INPUT_ICON_WIDTH = '1.5em';
@@ -18,7 +20,15 @@ const AVATAR_WIDTH: MediaValue = {
   md: 40,
   lg: 60,
   xl: 90
-}
+};
+
+const AVATAR_EDITOR_WIDTH: MediaValue = {
+  xs: 50,
+  sm: 100,
+  md: 200,
+  lg: 350,
+  xl: 500
+};
 
 const statusesTranslations = {
   ['idle']: 'Генерация',
@@ -57,4 +67,5 @@ const snakeToCamel = (obj: object) => {
   return result;
 };
 
-export {camelToSnake, snakeToCamel, LOGO_WIDTH, AVATAR_WIDTH, statusesTranslations, TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH};
+export {camelToSnake, snakeToCamel, LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
+  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL};

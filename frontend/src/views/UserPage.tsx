@@ -1,18 +1,19 @@
-import { Avatar, Button, Typography } from '@mui/material';
-import { AccountCircle, Logout } from '@mui/icons-material';
+import { Button, Typography } from '@mui/material';
+import { Logout } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import UserInfoInput from '../components/UserInfoInput';
-import { User, UserRaw } from '../utils/types/User';
-import { patchUserChanges, postLogout } from '../store/user/userThunks';
+import { UserRaw } from '../utils/types/User';
+import { patchCurrentUser, postLogout } from '../store/user/userThunks';
+import AvatarUploadInput from '../components/AvatarUploadInput';
 
 const UserPage = () => {
   const navigate = useNavigate();
 
-  //const {user} = useAppSelector(selectUser);
-  const user: User = {
+  const {user} = useAppSelector(selectUser);
+  /*const user: User = {
     id: 1,
     username: 'Musya',
     firstName: 'Муся',
@@ -22,13 +23,13 @@ const UserPage = () => {
     isAdmin: false,
     registrationDate: new Date().toISOString(),
     avatar: ''
-  }
+  }*/
   const dispatch = useAppDispatch();
 
   const userDate = new Date(user.registrationDate).toLocaleDateString();
 
   const sendUpdate = (updatedUser: UserRaw) => {
-    dispatch(patchUserChanges(updatedUser));
+    dispatch(patchCurrentUser(updatedUser));
   };
 
   const logout = () => {
@@ -55,9 +56,7 @@ const UserPage = () => {
             flexDirection: 'row',
             alignItems: 'center'
           }}>
-            {user.avatar 
-              ? <Avatar src={user.avatar} sx={{width: '2.5em', height: '2.5em'}} />
-              : <AccountCircle sx={{width: '2.5em', height: '2.5em'}} />}
+            <AvatarUploadInput sx={{width: '2.5em', height: '2.5em'}} />
             <div>
               <Typography variant='h4'>{user.firstName} {user.lastName}</Typography>
               <Typography variant='body1'>Дата регистрации: {userDate}</Typography>
