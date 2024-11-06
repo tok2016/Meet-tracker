@@ -1,29 +1,29 @@
 import { Paper, Typography } from '@mui/material';
 
-import { Topic } from '../utils/types/Topic';
-import { useMemo } from 'react';
+type Task = {
+  speaker: string,
+  task: string
+};
 
-const TaskPlain = ({task}: {task: Topic}) => {
-  const tasksList = useMemo(() => task['/task'].split(/[\d].\s/), [task]);
-  const orderedTasks = tasksList.map((item, i) => ({
-    id: i,
-    task: item
-  }));
+const TaskPlain = ({task}: {task: string | Task}) => {
+  if(typeof task === 'string') {
+    return (
+      <Paper variant='elevationSmall'>
+        <Typography variant='body1'>
+          {task}
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <Paper variant='elevationSmall'>
       <Typography variant='h4'>
-        {task['/teammate']}
+        {task.speaker}
       </Typography>
-        <ol type='1'>
-          {orderedTasks.map((oTask) => (
-            <li key={oTask.id} hidden={oTask.task.length <= 0}>
-              <Typography variant='body1'>{oTask.task}</Typography>
-            </li>
-          ))}
-        </ol>
+      <Typography variant='body1'>{task.task}</Typography>
     </Paper>
-  );
+  )
 };
 
 export default TaskPlain;

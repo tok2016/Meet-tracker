@@ -13,7 +13,7 @@ const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
   };
 
   return (
-    <div style={{marginBottom: '20px'}}>
+    <div style={{marginBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px'}}>
       <input 
         id='file' 
         type='file' 

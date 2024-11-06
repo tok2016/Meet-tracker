@@ -1,56 +1,44 @@
-import { IconButton, Paper, Typography } from '@mui/material';
+import { IconButton, Input, Paper, Stack, Typography } from '@mui/material';
 import { TurnLeft, TurnRight } from '@mui/icons-material';
-import { useMemo, useReducer } from 'react';
+import { useMemo, useReducer, useState } from 'react';
 
-import { Topic } from '../utils/types/Topic';
 import TaskPlain from './TaskPlain';
 import { TextColors } from '../utils/Colors';
 import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
+import TopicContent, { isTopicContent } from '../utils/types/TopicContent';
+import TextArea from './TextArea';
 
-const formatTopic = (topic: string): Topic => {
-  const formatted: Topic = {};
+const parseTopicContent = (content: string): TopicContent => {
+  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
+  const stringJsonSingular = stringEntry?.match(/{.{1,}}/g);
+  const stringJson = stringJsonSingular ? stringJsonSingular[0].replace(/'/g, '"') : '';
+  const rawContent = JSON.parse(stringJson);
 
-  const subtopics = topic.split('@');
-  const keys = topic.match(/\/\w+[a-z]/g);
+  const defaultContent: TopicContent = {
+    topic: '',
+    text: '',
+    start: '',
+    end: '',
+    speakers: ''
+  };
 
-  if(keys) {
-    keys.forEach((key) => {
-      if(key !== 'teammate' && key !== 'task') {
-        const txt = subtopics.find((t) => t.includes(key));
-        if(txt) {
-          formatted[key] = txt.replace(key, '').trim();
-        }
-      }
-    });
-  }
-
-  return formatted;
+  return isTopicContent(rawContent['args']) ? rawContent['args'] as TopicContent : defaultContent;
 };
 
-const formatTasksList = (originalTasks: string): Topic[] => {
-  const tasks: Topic[] = [];
-
-  if(originalTasks) {
-    const rawTasks = originalTasks.split('&');
-    const teammates = rawTasks.filter((task) => task.includes('/teammate'));
-    const tasksForTeammates = rawTasks.filter((task) => task.includes('/task'));
-    teammates.forEach((teammate, i) => {
-      tasks.push({
-        ['id']: i.toString(),
-        ['/teammate']: teammate.replace('/teammate', ''). trim(),
-        ['/task']: tasksForTeammates[i].replace('/task', '').trim()
-      });
-    })
-  }
-
-  return tasks;
-};
-
-const TopicPlain = ({topic}: {topic: string}) => {
+const TopicPlain = ({topic}: {topic: string[]}) => {
   const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
 
-  const topicFormatted = useMemo(() => formatTopic(topic), [topic]);
-  const tasks = useMemo(() => formatTasksList(topicFormatted['/tasks']), [topicFormatted]);
+  const title = topic[0];
+  const content = useMemo(() => parseTopicContent(topic[1]), [topic]);
+  const tasks = useMemo(() => content.tasks?.split(', '), [content]);
+
+  const [customTitle, setCustomTitle] = useState<string>(title);
+  const [customText, setCustomText] = useState<string>(content.text);
+  const [customSpeakers, setCustomSpeakers] = useState<string>(content.speakers);
+
+  if(!content.topic) {
+    return;
+  }
 
   return (
     <Paper 
@@ -64,21 +52,42 @@ const TopicPlain = ({topic}: {topic: string}) => {
         justifyContent: 'center',
         gap: '15px'
       } : {})}>
-          <Typography variant='h3'>
-            {topicFormatted['/topic']} {topicFormatted['/start']} - {topicFormatted['/end']}
-          </Typography>
-        
-          <Typography variant='body1'>
-            {isRolledDown ? topicFormatted['/text'] : ''}
-          </Typography>
+          <Stack direction='row' alignItems='center' alignSelf='center'>
+            <Input
+              type='text' 
+              disableUnderline
+              value={customTitle}
+              itemType=''
+              onChange={(evt) => setCustomTitle(evt.target.value)} />
+
+            <Typography variant='body1'>
+              {content.start} - {content.end}
+            </Typography>
+          </Stack>
+
+          <TextArea 
+            readOnly={false}
+            variant='body1'
+            hidden={!isRolledDown} 
+            value={customText}
+            setter={setCustomText}>
+          </TextArea>
+
+          <TextArea 
+            readOnly={false}
+            variant='body2'
+            hidden={!isRolledDown} 
+            value={customSpeakers}
+            setter={setCustomSpeakers}>
+          </TextArea>
 
           <Paper variant='elevationInside' style={{
-            display: tasks.length && isRolledDown ? 'flex' : 'none',
+            display: tasks?.length && isRolledDown ? 'flex' : 'none',
             flexDirection: 'column',
             gap: '20px'
           }}>
-            {tasks.map((task) => (
-              <TaskPlain key={task['id']} task={task}/>
+            {tasks?.map((task, i) => (
+              <TaskPlain key={Date.now() + i} task={task}/>
             ))}
           </Paper>
 

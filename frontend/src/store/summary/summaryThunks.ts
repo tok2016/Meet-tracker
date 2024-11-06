@@ -38,7 +38,8 @@ const postRecordFileTest = createAsyncThunk<string, File, AsyncThunkConfig>(
     const {user} = getState();
 
     const finalFile = new File([file], `${user.user.username}_${Date.now()}`, {type: file.type});
-    const path = `${import.meta.env.AUDIO_STORAGE}${finalFile.name}`;
+
+    const path = `app/sounds/${finalFile.name}`;
 
     formData.append('file_path', finalFile);
 
@@ -50,7 +51,7 @@ const postRecordFileTest = createAsyncThunk<string, File, AsyncThunkConfig>(
       },
     });
 
-    return response.data.text;
+    return response.data;
   }
 );
 

@@ -54,7 +54,8 @@ const UserPage = () => {
           <div style={{
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'center'
+            alignItems: 'center',
+            gap: '10px'
           }}>
             <AvatarUploadInput sx={{width: '2.5em', height: '2.5em'}} />
             <div>
