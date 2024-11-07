@@ -8,7 +8,6 @@ import MediaValue from '../utils/types/MediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { postRecordFileTest } from '../store/summary/summaryThunks';
-import { isSummary } from '../utils/types/Summary';
 import { UIColors } from '../utils/Colors';
 import UploadInput from './UploadInput';
 
@@ -38,11 +37,7 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
       dispatch(postRecordFileTest(file))
         .then((response) => {
           console.log(response);
-          if(typeof response.payload === 'string') {
-            navigate(`/account/summaries/1}`);
-          } else if(isSummary(response.payload)) {
-            navigate(`/account/summaries/${response.payload.id}`);
-          }
+          navigate(`/account/summaries/mock`);
         });
     }
   };
