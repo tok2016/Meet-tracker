@@ -7,7 +7,7 @@ import { getCurrentUser, getUserAvatar } from '../store/user/userThunks';
 
 const PageLayout = () => {
 
-  const {user, auth} = useAppSelector(selectUser);
+  const {user, auth, status} = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -21,11 +21,11 @@ const PageLayout = () => {
     if(!user.username) {
       const savedUser = sessionStorage.getItem('user');
       dispatch(setUserFromStorage(savedUser));
-      if(!savedUser && auth.token) {
+      if(!savedUser && auth.token && status !== 'error' && status !== 'pending') {
         dispatch(getCurrentUser());
       }
     }
-  }, [user.username, auth.token, dispatch])
+  }, [user.username, auth.token, status, dispatch])
 
   useEffect(() => {
     if(auth.token) {

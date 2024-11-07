@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly AUDIO_STORAGE: string
+  readonly SOUNDS_LOCATION: string
   // more env variables...
 }
 

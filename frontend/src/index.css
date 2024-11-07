@@ -37,3 +37,11 @@ ol li::marker {
 input[type='file'] {
   display: none;
 }
+
+textarea {
+  border: none;
+}
+
+textarea:focus {
+  border: solid 2px #8B8B8B;
+}

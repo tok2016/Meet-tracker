@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import Page from '../utils/types/Page';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -15,14 +15,15 @@ const ButtonsTab = ({pages}: {pages: Page[]}) => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      gap: '3.5vw',
-      overflowX: 'auto',
-      width: '100%',
-      marginBottom: '45px'
-    }}>
+    <Stack
+      display='flex'
+      flexDirection='row'
+      gap='3.5vw'
+      width='100%'
+      marginBottom='45px'
+      sx={{
+        overflowX: 'auto'
+      }}>
       {pages.map((page) => {
         const pagePath = typeof page.path === 'function' ? page.path('1') : page.path;
 
@@ -35,7 +36,7 @@ const ButtonsTab = ({pages}: {pages: Page[]}) => {
           </Button>
         )
       })}
-    </div>
+    </Stack>
   );
 };
 

@@ -37,6 +37,7 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
     if(file) {
       dispatch(postRecordFileTest(file))
         .then((response) => {
+          console.log(response);
           if(typeof response.payload === 'string') {
             navigate(`/account/summaries/1}`);
           } else if(isSummary(response.payload)) {

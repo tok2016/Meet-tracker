@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Button, IconButton, Toolbar } from '@mui/material';
+import { AppBar, Avatar, Button, IconButton, Stack, Toolbar } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,7 +32,11 @@ const NavigationBar = () => {
           width={logoWidth} 
           onClick={() => navigate('/')}/>
         
-        <div style={ {display: 'flex', gap: '30px', flexDirection: 'row', alignItems: 'center'} }>
+        <Stack
+          display='flex'
+          gap='30px'
+          flexDirection='row'
+          alignItems='center'>
           <Button 
             style={{
               display: user.username ? 'none' : 'inherit'
@@ -61,7 +65,7 @@ const NavigationBar = () => {
                 ? <Avatar src={user.avatar} sx={ {width: avatarWidth, height: avatarWidth} }/> 
                 : <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />}
           </IconButton>
-        </div>
+        </Stack>
       </Toolbar>
     </AppBar>
   );

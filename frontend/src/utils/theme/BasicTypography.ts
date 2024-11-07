@@ -2,6 +2,7 @@ import { BreakpointsOptions, createTheme } from '@mui/material';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 
 import { TextColors, UIColors } from '../Colors';
+import { LgFontSizes, XlFontSizes } from './FontSizes';
 
 const Breakpoints: BreakpointsOptions = {
   values: {
@@ -20,10 +21,10 @@ const BasicTypography: TypographyOptions = {
   fontFamily: 'Inter',
   button: {
     [breakpoints.up('lg')]: {
-      fontSize: 20
+      fontSize: LgFontSizes.h3
     },
     [breakpoints.only('xl')]: {
-      fontSize: 32
+      fontSize: XlFontSizes.h3
     },
     fontWeight: 400,
     textTransform: 'none',
@@ -40,66 +41,66 @@ const BasicTypography: TypographyOptions = {
   },
   h1: {
     [breakpoints.up('lg')]: {
-      fontSize: 40
+      fontSize: LgFontSizes.h1
     },
     [breakpoints.only('xl')]: {
-      fontSize: 64
+      fontSize: XlFontSizes.h1
     }
   },
   h2: {
     [breakpoints.up('lg')]: {
-      fontSize: 36
+      fontSize: LgFontSizes.h2
     },
     [breakpoints.only('xl')]: {
-      fontSize: 40
+      fontSize: XlFontSizes.h2
     }
   },
   h3: {
     [breakpoints.up('lg')]: {
-      fontSize: 20
+      fontSize: LgFontSizes.h3
     },
     [breakpoints.only('xl')]: {
-      fontSize: 32
+      fontSize: XlFontSizes.h3
     }
   },
   h4: {
     [breakpoints.up('lg')]: {
-      fontSize: 20
+      fontSize: LgFontSizes.h4
     },
     [breakpoints.only('xl')]: {
-      fontSize: 32
+      fontSize: XlFontSizes.h4
     }
   },
   body1: {
     [breakpoints.up('lg')]: {
-      fontSize: 18
+      fontSize: LgFontSizes.body1
     },
     [breakpoints.only('xl')]: {
-      fontSize: 32
+      fontSize: XlFontSizes.body1
     }
   },
   body2: {
     [breakpoints.up('lg')]: {
-      fontSize: 18
+      fontSize: LgFontSizes.body2
     },
     [breakpoints.only('xl')]: {
-      fontSize: 32
+      fontSize: XlFontSizes.body2
     }
   },
   subtitle1: {
     [breakpoints.up('lg')]: {
-      fontSize: 12
+      fontSize: LgFontSizes.subtitle1
     },
     [breakpoints.only('xl')]: {
-      fontSize: 16
+      fontSize: XlFontSizes.subtitle1
     }
   },
   subtitle2: {
     [breakpoints.up('lg')]: {
-      fontSize: 12
+      fontSize: LgFontSizes.subtitle2
     },
     [breakpoints.only('xl')]: {
-      fontSize: 16
+      fontSize: XlFontSizes.subtitle2
     }
   },
 }
