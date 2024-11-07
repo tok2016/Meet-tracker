@@ -5,31 +5,14 @@ import { useMemo, useReducer, useState } from 'react';
 import TaskPlain from './TaskPlain';
 import { TextColors } from '../utils/Colors';
 import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
-import TopicContent, { isTopicContent } from '../utils/types/TopicContent';
+import TopicContent from '../utils/types/TopicContent';
 import TextArea from './TextArea';
 
-const parseTopicContent = (content: string): TopicContent => {
-  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
-  const stringJsonSingular = stringEntry?.match(/{.{1,}}/g);
-  const stringJson = stringJsonSingular ? stringJsonSingular[0].replace(/'/g, '"') : '';
-  const rawContent = JSON.parse(stringJson);
-
-  const defaultContent: TopicContent = {
-    topic: '',
-    text: '',
-    start: '',
-    end: '',
-    speakers: ''
-  };
-
-  return isTopicContent(rawContent['args']) ? rawContent['args'] as TopicContent : defaultContent;
-};
-
-const TopicPlain = ({topic}: {topic: string[]}) => {
+const TopicPlain = ({topic}: {topic: [string, TopicContent]}) => {
   const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
 
-  const title = topic[0];
-  const content = useMemo(() => parseTopicContent(topic[1]), [topic]);
+  const [title, content] = topic;
+
   const tasks = useMemo(() => content.tasks?.split(', '), [content]);
 
   const [customTitle, setCustomTitle] = useState<string>(title);

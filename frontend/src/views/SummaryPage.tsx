@@ -3,41 +3,30 @@ import { Typography } from '@mui/material';
 //import { useEffect } from 'react';
 
 import TopicPlain from '../components/TopicPlain';
-//import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-//import { selectSummary } from '../store/summary/summarySlice';
+import { /*useAppDispatch,*/ useAppSelector } from '../hooks/useAppDispatch';
+import { selectSummary } from '../store/summary/summarySlice';
+//import { postRecordFileTest } from '../store/summary/summaryThunks';
 //import { getSummary } from '../store/summary/summaryThunks';
-import mockSummary from './example.json';
-
-//const MIN_TOPIC_LENGTH = 3;
 
 const SummaryPage = () => {
   //const {id} = useParams();
 
-  //const {summary} = useAppSelector(selectSummary);
+  const {summary} = useAppSelector(selectSummary);
   //const dispatch = useAppDispatch();
-
-  const mockTitle = 'Meeting 1';
 
   /*useEffect(() => {
     if(id && summary.id.toString() !== id) {
       dispatch(getSummary(id));
+      //dispatch(postRecordFileTest(new File([], 'no'))) for test
     }
   }, [id, dispatch, summary.id]);*/
 
   return (
     <>
-      <Typography variant='h2' marginBottom='25px'>{mockTitle}</Typography>
+      <Typography variant='h2' marginBottom='25px'>{summary.title}</Typography>
       <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
-      {
-        /*id === 'mock' 
-        ? topics.map((topic) => (
-            topic.topic.length <= MIN_TOPIC_LENGTH || <TopicPlain topic={topic.topic} key={topic.id}/>
-          ))
-        : <Paper>
-            <Typography variant='body1' style={{whiteSpace: 'pre-line'}}>{mockSummaryTest}</Typography>
-          </Paper>*/
-        
-        Object.entries(mockSummary).map((pair) => (
+      {        
+        Object.entries(summary.text).map((pair) => (
           <TopicPlain key={pair[0]} topic={pair}/>
         ))
       }

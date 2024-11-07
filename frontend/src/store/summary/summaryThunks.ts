@@ -1,10 +1,42 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
 import { camelToSnake, snakeToCamel } from '../../utils/utils';
-import { SummariesRaw, Summary, SummaryInfo, SummaryUpdate } from '../../utils/types/Summary';
+import Summary, { SummaryContent, SummariesRaw, SummaryInfo, SummaryUpdate, RawSummaryContent, RawSummary } from '../../utils/types/Summary';
+import TopicContent, { isTopicContent } from '../../utils/types/TopicContent';
+//import mockSummary from './example.json';
 
 const RECORD_UPLOAD_TIMEOUT = 1000 * 60 * 5;
+
+const parseTopicContent = (content: string): TopicContent => {
+  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
+  const stringJsonSingular = stringEntry?.match(/{.{1,}}/g);
+  const stringJson = stringJsonSingular ? stringJsonSingular[0].replace(/'/g, '"') : '';
+  const rawContent = JSON.parse(stringJson);
+
+  const defaultContent: TopicContent = {
+    topic: '',
+    text: '',
+    start: '',
+    end: '',
+    speakers: ''
+  };
+
+  return isTopicContent(rawContent['args']) ? rawContent['args'] as TopicContent : defaultContent;
+}
+
+const getSummaryContent = (rawContent: RawSummaryContent): SummaryContent => {
+  const topics = Object.entries(rawContent);
+
+  const result: SummaryContent = {};
+
+  topics.forEach((pair) => {
+    result[pair[0] as keyof SummaryContent] = parseTopicContent(pair[1]);
+  });
+
+  return result;
+};
 
 const postRecordFile = createAsyncThunk<Summary, File, AsyncThunkConfig>(
   'summary/postRecordFile',
@@ -26,11 +58,17 @@ const postRecordFile = createAsyncThunk<Summary, File, AsyncThunkConfig>(
       },
     });
 
-    return snakeToCamel(response.data) as Summary;
+    const rawSummary = snakeToCamel(response.data) as RawSummary;
+    const summary: Summary = {
+      ...rawSummary,
+      text: getSummaryContent(rawSummary.text)
+    }
+
+    return summary;
   }
 );
 
-const postRecordFileTest = createAsyncThunk<string, File, AsyncThunkConfig>(
+const postRecordFileTest = createAsyncThunk<Summary, File, AsyncThunkConfig>(
   'summary/postRecordFileTest',
   async (file, {getState}) => {
     const formData = new FormData();
@@ -51,7 +89,24 @@ const postRecordFileTest = createAsyncThunk<string, File, AsyncThunkConfig>(
       },
     });
 
-    return response.data;
+    const content = getSummaryContent(response.data);
+
+    const summary: Summary = {
+      id: 1,
+      userId: 1,
+      title: 'Meeting 1',
+      date: new Date().toISOString(),
+      text: content,
+      status: 'success',
+      record: {
+        id: 1,
+        userId: 1,
+        file: '',
+        isArchived: false
+      }
+    }
+
+    return summary;
   }
 );
 

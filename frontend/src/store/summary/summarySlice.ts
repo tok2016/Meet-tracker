@@ -4,7 +4,7 @@ import { Record } from '../../utils/types/Record';
 import SummaryState from '../../utils/types/SummaryState';
 import { postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, postRecordFileTest } from './summaryThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
-import { Summary } from '../../utils/types/Summary';
+import Summary from '../../utils/types/Summary';
 import { RootState } from '../store';
 
 const defaultRecord: Record = {
@@ -18,7 +18,7 @@ const defaultSummary: Summary = {
   id: 0,
   userId: 0,
   title: '',
-  text: '',
+  text: {},
   date: (new Date()).toString(),
   record: defaultRecord,
   status: 'idle'
@@ -47,7 +47,7 @@ const summarySlide = createSlice({
       })
       .addCase(postRecordFileTest.fulfilled, (state, action) => {
         state.status = 'success';
-        state.summaryTest = action.payload;
+        state.summary = action.payload;
       })
       .addCase(getSummary.fulfilled, (state, action) => {
         state.status = 'success';
