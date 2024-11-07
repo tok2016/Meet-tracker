@@ -20,7 +20,7 @@ from pydantic import FilePath
 model_size = "large-v3"
 model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
 #Llama модель
-model = OllamaFunctions(model="llama3.1", format="json")
+model = OllamaFunctions(model="llama3.1", format="json", base_url="http://127.0.0.1:11434/")
 model = model.bind_tools(
     tools=[
         {
@@ -72,5 +72,5 @@ async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/s
     for seg, spk, sent in final_results:
         line = f'Start: {seg.start} End: {seg.end} Speaker: {spk} Sentence: {sent}'
         lines += f"{line}   "
-    summary_common = model.invoke(f"Determine the topic of the text {lines} Summarize the text. Determine when it starts and ends. List speakers with names")
+    summary_common = model.invoke(f"Summarize text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
     return { "Общая информация": f"{summary_common}" }
