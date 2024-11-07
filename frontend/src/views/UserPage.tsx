@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { Logout } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,30 +44,28 @@ const UserPage = () => {
         width: '60%',
         margin: '4.5vh auto 0'
       }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '20px'
-        }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: '10px'
-          }}>
+        <Stack
+          display='flex'
+          flexDirection='row'
+          justifyContent='space-between'
+          alignItems='center'
+          marginBottom='20px'>
+            <Stack
+              display='flex'
+              flexDirection='row'
+              alignItems='center'
+              gap='10px'>
             <AvatarUploadInput sx={{width: '2.5em', height: '2.5em'}} />
             <div>
               <Typography variant='h4'>{user.firstName} {user.lastName}</Typography>
               <Typography variant='body1'>Дата регистрации: {userDate}</Typography>
             </div>
-          </div>
+            </Stack>
 
           <Button variant='danger' startIcon={<Logout />} onClick={logout}>
             Выйти
           </Button>
-        </div>
+        </Stack>
 
         <UserInfoInput 
           type='text' 

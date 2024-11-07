@@ -1,11 +1,11 @@
-import { Paper, SxProps, Typography } from '@mui/material';
+import { Paper, Stack, SxProps, Typography } from '@mui/material';
 import { Description, InsertDriveFile, PlayCircleOutline, VolumeOff, VolumeUp } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 import { SummaryInfo } from '../utils/types/Summary';
 import { TextColors } from '../utils/Colors';
 import { statusesTranslations } from '../utils/utils';
-import { CSSProperties, memo } from 'react';
+import { memo } from 'react';
 import { Theme } from '@emotion/react';
 import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
 
@@ -23,7 +23,7 @@ const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
     height: '1em'
   };
 
-  const subPlainsStyle: CSSProperties = {
+  const subPlainsStyle: SxProps<Theme> = {
     display: 'flex',
     flexDirection: 'row',
     gap: '1em',
@@ -42,16 +42,16 @@ const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
         alignItems: 'center',
         width: `calc(100% - 2 * ${PAPER_SMALL_PADDING})`
       } : {})}>
-        <div style={subPlainsStyle}>
+        <Stack sx={subPlainsStyle}>
           <PlayCircleOutline sx={iconSx}/>
           <Link to={`/account/summaries/mock`}>
             <Typography variant='h3'>
               {summary.title}
             </Typography>
           </Link>
-        </div>
+        </Stack>
 
-        <div style={subPlainsStyle}>
+        <Stack sx={subPlainsStyle}>
           <Typography variant='h3' color={summary.status === 'error' ? 'error' : 'textPrimary'}>
             {statusesTranslations[summary.status]}
           </Typography>
@@ -60,7 +60,7 @@ const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
           <Typography variant='h3Normal'>
             {date}
           </Typography>
-        </div>
+        </Stack>
     </Paper>
   );
 };

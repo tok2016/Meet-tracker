@@ -1,4 +1,4 @@
-import { IconButton, Input, Paper, Typography } from '@mui/material';
+import { IconButton, Input, Paper, Stack, Typography } from '@mui/material';
 import { HTMLInputTypeAttribute, KeyboardEvent, useEffect, useReducer, useState } from 'react';
 import { Check, Close, Edit } from '@mui/icons-material';
 
@@ -55,56 +55,53 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, apply}: UserI
         marginBottom: '20px'
       } : {})}>
 
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: '10px',
-        width: '100%'
-      }}>
+      <Stack
+        display='flex'
+        flexDirection='row'
+        alignItems='center'
+        gap='10px'
+        width='100%'>
         <IconForInput type={type} readOnly={readOnly}/>
 
-        <div className='user-input' style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1px',
-          width: '100%'
-        }}>
-          <Typography variant='body1' width='100%'>{label}</Typography>
-          <Input
-            disableUnderline 
-            type={type} 
-            value={value} 
-            readOnly={readOnly || !isEditable} 
-            onChange={(evt) => setValue(evt.target.value)}
-            onKeyDown={onKeyDown}
-            sx={{
-              width: '100%'
-            }}
-            inputProps={{
-              style: {
-                padding: '2px 0px'
-              }
-            }} />
-        </div>
-      </div>
+        <Stack
+          display='flex'
+          flexDirection='column'
+          gap='1px'
+          width='100%'>
+            <Typography variant='body1' width='100%'>{label}</Typography>
+            <Input
+              disableUnderline 
+              type={type} 
+              value={value} 
+              readOnly={readOnly || !isEditable} 
+              onChange={(evt) => setValue(evt.target.value)}
+              onKeyDown={onKeyDown}
+              sx={{
+                width: '100%'
+              }}
+              inputProps={{
+                style: {
+                  padding: '2px 0px'
+                }
+              }} />
+        </Stack>
+      </Stack>
 
       {readOnly 
         ? <CopyButton value={value} onError={() => {}}/> 
         : (isEditable 
-          ? <div style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: '10px'
-            }}>
-              <IconButton color='secondary' onClick={onApply}>
-                <Check sx={UserIconSx} /> 
-              </IconButton>
+          ? <Stack 
+              display='flex'
+              flexDirection='row'
+              gap='10px'>
+                <IconButton color='secondary' onClick={onApply}>
+                  <Check sx={UserIconSx} /> 
+                </IconButton>
 
-              <IconButton color='secondary' onClick={onCancel}>
-                <Close sx={UserIconSx} />
-              </IconButton>
-            </div>
+                <IconButton color='secondary' onClick={onCancel}>
+                  <Close sx={UserIconSx} />
+                </IconButton>
+            </Stack>
           : <IconButton color='secondary' onClick={toggleEdit}>
               <Edit sx={UserIconSx} />
             </IconButton>

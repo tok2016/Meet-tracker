@@ -7,6 +7,8 @@ import { TextColors } from '../utils/Colors';
 import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
 import TopicContent from '../utils/types/TopicContent';
 import TextArea from './TextArea';
+import { breakpoints } from '../utils/theme/BasicTypography';
+import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
 
 const TopicPlain = ({topic}: {topic: [string, TopicContent]}) => {
   const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
@@ -41,9 +43,17 @@ const TopicPlain = ({topic}: {topic: [string, TopicContent]}) => {
               disableUnderline
               value={customTitle}
               itemType=''
-              onChange={(evt) => setCustomTitle(evt.target.value)} />
+              onChange={(evt) => setCustomTitle(evt.target.value)}
+              sx={{
+                [breakpoints.up('lg')]: {
+                  fontSize: LgFontSizes.h3
+                },
+                [breakpoints.only('xl')]: {
+                  fontSize: XlFontSizes.h3
+                }
+              }} />
 
-            <Typography variant='body1'>
+            <Typography variant='h3'>
               {content.start} - {content.end}
             </Typography>
           </Stack>

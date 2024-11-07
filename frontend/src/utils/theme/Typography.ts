@@ -2,6 +2,7 @@ import { Components } from '@mui/material';
 
 import { TextColors } from '../Colors';
 import { breakpoints } from './BasicTypography';
+import { LgFontSizes, XlFontSizes } from './FontSizes';
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
@@ -61,10 +62,10 @@ const Typography: Components['MuiTypography'] = {
         color: TextColors.highlight,
         fontWeight: 700,
         [breakpoints.up('lg')]: {
-          fontSize: 40
+          fontSize: LgFontSizes.h1Highlight
         },
         [breakpoints.only('xl')]: {
-          fontSize: 64
+          fontSize: XlFontSizes.h1Highlight
         }
       }
     },
@@ -74,10 +75,10 @@ const Typography: Components['MuiTypography'] = {
       },
       style: {
         [breakpoints.up('lg')]: {
-          fontSize: 48
+          fontSize: LgFontSizes.h2Promo
         },
         [breakpoints.only('xl')]: {
-          fontSize: 96
+          fontSize: XlFontSizes.h2Promo
         },
         textAlign: 'center',
         width: '100%',
@@ -90,10 +91,10 @@ const Typography: Components['MuiTypography'] = {
       },
       style: {
         [breakpoints.up('lg')]: {
-          fontSize: 48
+          fontSize: LgFontSizes.h2PromoHighlight
         },
         [breakpoints.only('xl')]: {
-          fontSize: 96
+          fontSize: XlFontSizes.h2PromoHighlight
         },
         color: TextColors.highlight
       }
@@ -104,10 +105,10 @@ const Typography: Components['MuiTypography'] = {
       },
       style: {
         [breakpoints.up('lg')]: {
-          fontSize: 28
+          fontSize: LgFontSizes.h3Promo
         },
         [breakpoints.only('xl')]: {
-          fontSize: 48
+          fontSize: XlFontSizes.h3Promo
         },
         textAlign: 'center',
         fontWeight: 400
@@ -119,10 +120,10 @@ const Typography: Components['MuiTypography'] = {
       },
       style: {
         [breakpoints.up('lg')]: {
-          fontSize: 16
+          fontSize: LgFontSizes.body2Highlight
         },
         [breakpoints.only('xl')]: {
-          fontSize: 24
+          fontSize: XlFontSizes.body2Highlight
         },
         fontWeight: 700
       }
@@ -134,10 +135,10 @@ const Typography: Components['MuiTypography'] = {
       style: {
         fontWeight: 400,
         [breakpoints.up('lg')]: {
-          fontSize: 18
+          fontSize: LgFontSizes.h3Normal
         },
         [breakpoints.only('xl')]: {
-          fontSize: 32
+          fontSize: XlFontSizes.h3Normal
         }
       }
     }

@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { ChangeEvent } from 'react';
 
 type UploadProps = {
@@ -13,7 +13,12 @@ const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
   };
 
   return (
-    <div style={{marginBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px'}}>
+    <Stack
+      display='flex'
+      flexDirection='column'
+      alignItems='center'
+      gap='10px'
+      marginBottom='20px'>
       <input 
         id='file' 
         type='file' 
@@ -24,7 +29,7 @@ const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
         <label htmlFor='file'>Загрузить</label>
       </Button>
       <Typography variant='subtitle1'>{fileName}</Typography>
-    </div>
+    </Stack>
   );
 };
 
