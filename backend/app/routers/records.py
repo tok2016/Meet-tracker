@@ -72,5 +72,5 @@ async def record_diarize( file_path: UploadFile, file_name: str = "backend/app/s
     for seg, spk, sent in final_results:
         line = f'Start: {seg.start} End: {seg.end} Speaker: {spk} Sentence: {sent}'
         lines += f"{line}   "
-    summary_common = model.invoke(f"Summarize text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
+    summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
     return { "Общая информация": f"{summary_common}" }
