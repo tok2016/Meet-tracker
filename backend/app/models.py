@@ -46,6 +46,3 @@ class Summary(SQLModel, table=True):
     audio_id: str | None = Field(default=None)
     date: datetime.datetime = Field(default_factory=datetime.datetime.utcnow, nullable=False)
     text: str
-
-class SummaryPublic(Summary):
-    id: int
