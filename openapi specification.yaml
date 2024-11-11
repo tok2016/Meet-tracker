@@ -254,14 +254,14 @@ paths:
       tags:
         - record
       summary: Get records array
-      description: Gets 20 shaort records info from sorted and filtered array starting with the index = (page - 1) * 20. This can only be done by the logged admin.
+      description: Gets 20 short records info from sorted and filtered array starting with the index = (page - 1) * 20. This can only be done by the logged admin.
       operationId: getRecords
       security:
         - bearerAuth: []
       parameters:
         - name: page
           in: query
-          description: To determaine the index of the starting element in array
+          description: To determine the index of the starting element in array
           required: true
           schema:
             type: integer

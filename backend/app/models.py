@@ -39,3 +39,10 @@ class Token(SQLModel):
 
 class TokenPayload(SQLModel):
     sub: str | None = None
+
+class Summary(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    user_id: int | None = Field(default=None, foreign_key="user.id")
+    audio_id: str | None = Field(default=None)
+    date: datetime.datetime = Field(default_factory=datetime.datetime.utcnow, nullable=False)
+    text: str
