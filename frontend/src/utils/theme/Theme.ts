@@ -20,6 +20,7 @@ import Toolbar from './Toolbar';
 import BasicTypography from './BasicTypography';
 import { TextColors, UIColors } from '../Colors';
 import List from './List';
+import FilledInput from './FilledInput';
 
 const Theme = createTheme({
   typography: BasicTypography,
@@ -51,6 +52,7 @@ const Theme = createTheme({
     MuiAppBar: AppBar,
     MuiIconButton: IconButton,
     MuiOutlinedInput: OutlinedInput,
+    MuiFilledInput: FilledInput,
     MuiInputLabel: InputLabel,
     MuiDrawer: Drawer,
     MuiListItem: ListItem,

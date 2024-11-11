@@ -27,7 +27,7 @@ const Router = () => (
 
       <Route path='admin'>
         <Route path='settings' element={<SettingsPage />} />
-        <Route path='summaries' element={<SummariesListPage />} />
+        <Route path='summaries' element={<SummariesListPage isAdmin />} />
         <Route path='users' element={<UsersListPage />} />
         <Route path='addUser' element={<RegisterPage />} />
       </Route>

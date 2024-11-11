@@ -9,6 +9,8 @@ import { selectSummary } from '../store/summary/summarySlice';
 import { getSummaries } from '../store/summary/summaryThunks';
 import { Pagination } from '@mui/material';
 import { SummaryInfo } from '../utils/types/Summary';
+import FilterMenu from '../components/FiltersMenu';
+import Filter from '../utils/types/Filter';
 
 const SUMMARIES_PER_PAGE = 20;
 
@@ -21,7 +23,17 @@ const RecentSubpages: Page[] = [
   }
 ];
 
-const SummariesListPage = () => {
+const defaultFilter: Filter = {
+  sort: 'title',
+  direction: 1,
+  title: '',
+  username: '',
+  from: '',
+  to: '',
+  archived: false
+};
+
+const SummariesListPage = ({isAdmin = false}: {isAdmin?: boolean}) => {
   const [page, setPage] = useState<number>(1);
 
   const {summaries, total} = useAppSelector(selectSummary);
@@ -37,9 +49,16 @@ const SummariesListPage = () => {
     dispatch(getSummaries(page));
   }, [page, dispatch]);
 
+  const submit = (filter: Filter) => {
+    
+  }
+
   return (
     <>
       <ButtonsTab pages={RecentSubpages}/>
+      <FilterMenu 
+        defaultFilter={defaultFilter}
+        submit={submit} />
       <div>
         {finalSummaries.map((summary) => (
           <SummaryPlain key={summary.id} summary={summary} />
