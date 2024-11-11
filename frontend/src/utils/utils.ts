@@ -1,6 +1,6 @@
 import MediaValue from './types/MediaValue';
 
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'http://127.0.0.1:90';
 
 const TOKEN_TIME_TO_LIVE = 1000 * 60 * 24 * 7;
 
