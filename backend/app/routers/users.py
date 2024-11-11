@@ -93,7 +93,7 @@ def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: Cur
 @router.post("/current_user/upload_picture")
 def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(...),):
     #Путь где будет располагаться загруженная картинка
-    path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/"
+    path_image_dir = "app/images/user/profile/" + str(current_user.id) + "/"
     full_image_path = os.path.join(path_image_dir, file.filename)
 
     if not os.path.exists(path_image_dir):
@@ -110,5 +110,5 @@ def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(..
 
 @router.get("/current_user/profile_picture")
 def get_profile_picture(current_user: CurrentUser):
-    path_image_dir = "backend/app/images/user/profile/" + str(current_user.id) + "/profile.png"
+    path_image_dir = "app/images/user/profile/" + str(current_user.id) + "/profile.png"
     return FileResponse(path_image_dir)
