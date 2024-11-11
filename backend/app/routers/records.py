@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, UploadFile, Form
 from .ollama_functions import OllamaFunctions
 from fastapi.responses import StreamingResponse
-from app.models import Summary
+from app.models import Summary, SummaryPublic
 from app.utils import CurrentUser
 from typing import Annotated
 from datetime import timedelta
@@ -18,6 +18,7 @@ from pydantic import FilePath
 from uuid import uuid4
 import os
 import re
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 #Whsiper модель
 model_size = "large-v3"
@@ -95,13 +96,50 @@ async def record_diarize( file: UploadFile, session: SessionDep, current_user: C
 
     return { "Общая информация": f"{summary_common}" }
 
+@router.get("/records")
+async def read_records(session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=20)] = 20):
+    """
+    Function to get 20 summaries. Функция для для получения 20 (или меньше) резюме.
+    """
+    records = session.exec(select(Summary).offset(offset).limit(limit)).all()
+    return records
+
+@router.delete("/delete_record/{summary_id}/")
+async def delete_summary_record(session: SessionDep, summary_id: int):
+    """
+    Function to delete both summary and record. Функция для удаления текста и аудио.
+    """
+    summary_db = session.get(Summary, summary_id)
+    if not summary_db:
+        raise HTTPException(status_code=404, detail="Record not found")
+    audio_id = summary_db.audio_id
+    os.remove("app/sounds/" + audio_id + "/audio.wav")
+    session.delete(summary_db)
+    session.commit()
+    return HTTPException(status_code=204, detail="Audio record and summary are deleted")
+
+@router.delete("/delete_audio/{summary_id}/")
+async def delete_audio(session: SessionDep, summary_id: int):
+    """
+    Function to delete only audio Функция для удаления только аудио.
+    """
+    summary_db = session.get(Summary, summary_id)
+    if not summary_db:
+        raise HTTPException(status_code=404, detail="Record not found")
+    audio_id = summary_db.audio_id
+    os.remove("app/sounds/" + audio_id + "/audio.wav")
+    return HTTPException(status_code=204, detail="Audio record is deleted")
+
 @router.put("/summary/edit")
-async def edit_record(session: SessionDep, new_text: str, summary_id: int):
+async def edit_summary_text(session: SessionDep, text_input: str, summary_id: int):
+    """
+    Function to edit text of summary. Функция для редактирования только текста в резюме.
+    """
     summary_db = session.get(Summary, summary_id)
     old_data = summary_db.text
     #new_data = re.sub(r"'text': '(.*?)', 'start'", old_data, "new_text")
-    new_data = re.sub(r"(?<='text': ').+?(?=', 'start')", "Hiii", old_data)
-    summary_db.text = new_data
+    new_text = re.sub(r"(?<='text': ').+?(?=', 'start')", text_input, old_data)
+    summary_db.text = new_text
     session.add(summary_db)
     session.commit()
     session.refresh(summary_db)
