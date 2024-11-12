@@ -1,6 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { Logout } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { Delete, Logout } from '@mui/icons-material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
@@ -8,33 +9,42 @@ import UserInfoInput from '../components/UserInfoInput';
 import { UserRaw } from '../utils/types/User';
 import { patchCurrentUser, postLogout } from '../store/user/userThunks';
 import AvatarUploadInput from '../components/AvatarUploadInput';
+import { selectAdminData } from '../store/admin/adminSlice';
+import { deleteUserByUsername, getUserByUsername, patchUserByUsername } from '../store/admin/adminThunks';
 
-const UserPage = () => {
+
+const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
+  const {username} = useParams();
   const navigate = useNavigate();
 
-  const {user} = useAppSelector(selectUser);
-  /*const user: User = {
-    id: 1,
-    username: 'Musya',
-    firstName: 'Муся',
-    lastName: 'Беспородная',
-    email: 'musyathebest@somemail.com',
-    password: '11111111111',
-    isAdmin: false,
-    registrationDate: new Date().toISOString(),
-    avatar: ''
-  }*/
+  const {user: originalUser} = useAppSelector(selectUser);
+  const {user: anotherUser} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
+  const user = isForAdmin ? anotherUser : originalUser;
   const userDate = new Date(user.registrationDate).toLocaleDateString();
 
   const sendUpdate = (updatedUser: UserRaw) => {
-    dispatch(patchCurrentUser(updatedUser));
+    if(isForAdmin) {
+      dispatch(patchUserByUsername(updatedUser));
+    } else {
+      dispatch(patchCurrentUser(updatedUser));
+    }
   };
 
   const logout = () => {
     dispatch(postLogout()).then(() => navigate('/login'));
   };
+
+  const deleteUser = () => {
+    dispatch(deleteUserByUsername(user.username));
+  };
+
+  useEffect(() => {
+    if(isForAdmin && username) {
+      dispatch(getUserByUsername(username));
+    }
+  }, [username, dispatch]);
 
   return (
     <>
@@ -55,16 +65,29 @@ const UserPage = () => {
               flexDirection='row'
               alignItems='center'
               gap='10px'>
-            <AvatarUploadInput sx={{width: '2.5em', height: '2.5em'}} />
-            <div>
-              <Typography variant='h4'>{user.firstName} {user.lastName}</Typography>
-              <Typography variant='body1'>Дата регистрации: {userDate}</Typography>
-            </div>
+                <AvatarUploadInput sx={{width: '2.5em', height: '2.5em'}} defaultAvatar={user.avatar} />
+                <div>
+                  <Typography variant='h4'>{user.firstName} {user.lastName}</Typography>
+                  <Typography variant='body1'>Дата регистрации: {userDate}</Typography>
+                </div>
             </Stack>
 
-          <Button variant='danger' startIcon={<Logout />} onClick={logout}>
-            Выйти
-          </Button>
+            {isForAdmin 
+              ? <Button 
+                  variant='danger' 
+                  startIcon={<Delete />} 
+                  onClick={deleteUser}
+                  style={{
+                    display: user.isAdmin ? 'none' : 'inherit'
+                  }}>
+                    Удалить
+                </Button>
+              : <Button 
+                  variant='danger' 
+                  startIcon={<Logout />} 
+                  onClick={logout}>
+                    Выйти
+                </Button>}
         </Stack>
 
         <UserInfoInput 

@@ -14,6 +14,11 @@ export type UserRaw = Omit<User, 'id' | 'registrationDate' | 'isAdmin'>;
 
 export type UserLogin = Pick<User, 'email' | 'password'>;
 
+export type UsersRaw = {
+  users: User[],
+  total: number
+};
+
 export const defaultUserData: UserRaw = {
   username: '',
   password: '',
@@ -22,5 +27,17 @@ export const defaultUserData: UserRaw = {
   email: '',
   avatar: ''
 };
+
+export const defaultUser: User = {
+  id: 0,
+  username: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  registrationDate: (new Date()).toString(),
+  isAdmin: false,
+  avatar: ''
+}
 
 export const isUser = (user: User): user is User => (user as User).username !== undefined;

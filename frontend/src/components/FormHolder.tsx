@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import useMediaValue from '../hooks/useMediaValue';
 import { AVATAR_WIDTH } from '../utils/utils';
 
-const FormHolder = ({children}: {children: ReactNode}) => {
+const FormHolder = ({children, isForAdmin=false}: {children: ReactNode, isForAdmin?: boolean}) => {
   const marginTop = useMediaValue(AVATAR_WIDTH);
 
   return (
@@ -18,7 +18,7 @@ const FormHolder = ({children}: {children: ReactNode}) => {
         width: '25vw',
         minHeight: 'fit-content',
         margin: '0 auto',
-        marginTop: `calc(${marginTop}px + 8vh)`
+        marginTop: isForAdmin ? 0 : `calc(${marginTop}px + 8vh)`
       } : {})}>
       {children}
     </Paper>

@@ -1,25 +1,23 @@
 import { Typography } from '@mui/material';
-//import { useParams } from 'react-router-dom';
-//import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import TopicPlain from '../components/TopicPlain';
-import { /*useAppDispatch,*/ useAppSelector } from '../hooks/useAppDispatch';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
-//import { postRecordFileTest } from '../store/summary/summaryThunks';
-//import { getSummary } from '../store/summary/summaryThunks';
+import { getSummary } from '../store/summary/summaryThunks';
 
 const SummaryPage = () => {
-  //const {id} = useParams();
+  const {id} = useParams();
 
   const {summary} = useAppSelector(selectSummary);
-  //const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  /*useEffect(() => {
+  useEffect(() => {
     if(id && summary.id.toString() !== id) {
       dispatch(getSummary(id));
-      //dispatch(postRecordFileTest(new File([], 'no'))) for test
     }
-  }, [id, dispatch, summary.id]);*/
+  }, [id, dispatch, summary.id]);
 
   return (
     <>

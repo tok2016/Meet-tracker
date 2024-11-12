@@ -1,23 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import UserState from '../../utils/types/UserState';
-import { deleteUserData, getCurrentUser, getUserByUsername, postLogin, postLogout, postUserData, patchUserChanges, patchCurrentUser, getUserAvatar, postUserAvatar } from './userThunks';
+import { getCurrentUser, postLogin, postLogout, postUserData, patchCurrentUser, getUserAvatar, postUserAvatar } from './userThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
 import Token from '../../utils/types/Token';
 import { RootState } from '../store';
-import { User } from '../../utils/types/User';
-
-const defaultUser: User = {
-  id: 0,
-  username: '',
-  password: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  registrationDate: (new Date()).toString(),
-  isAdmin: false,
-  avatar: ''
-}
+import { defaultUser, User } from '../../utils/types/User';
 
 const defaultAuth: Token = {
   token: undefined,
@@ -102,25 +90,12 @@ const userSlice = createSlice({
 
         sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
-      .addCase(getUserByUsername.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.status = 'success';
-      })
       .addCase(getUserAvatar.fulfilled, (state, action) => {
         state.user.avatar = action.payload;
         state.status = 'success';
       })
       .addCase(patchCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.status = 'success';
-      })
-      .addCase(patchUserChanges.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.status = 'success';
-      })
-      .addCase(deleteUserData.fulfilled, (state) => {
-        state.user = defaultUser;
-        state.auth = defaultAuth;
         state.status = 'success';
       })
       .addDefaultCase((state, action) => {

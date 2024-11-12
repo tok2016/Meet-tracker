@@ -3,7 +3,7 @@ import Page from '../utils/types/Page';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const ButtonsTab = ({pages}: {pages: Page[]}) => {
+const ButtonsTab = ({pages, hidden=false}: {pages: Page[], hidden?: boolean}) => {
   const {pathname} = useLocation();
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ const ButtonsTab = ({pages}: {pages: Page[]}) => {
 
   return (
     <Stack
-      display='flex'
+      display={hidden ? 'none' : 'flex'}
       flexDirection='row'
       gap='3.5vw'
       width='100%'
@@ -25,17 +25,16 @@ const ButtonsTab = ({pages}: {pages: Page[]}) => {
         overflowX: 'auto'
       }}>
       {pages.map((page) => {
-        const pagePath = typeof page.path === 'function' ? page.path('1') : page.path;
-
+        const pagePath = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
         return (
           <Button
-            key={pagePath}
-            variant={pagePath === path || page.highlight ? 'containtedTabSelected' : 'containtedTab'}
-            onClick={() => onButtonPageClick(pagePath)}>
+            key={page.path}
+            variant={page.path === pagePath || page.highlight ? 'containtedTabSelected' : 'containtedTab'}
+            onClick={() => onButtonPageClick(page.path)}>
               {page.name}
           </Button>
-        )
-      })}
+        )}
+      )}
     </Stack>
   );
 };

@@ -1,4 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
@@ -9,30 +10,59 @@ import UsersListPage from './UsersListPage';
 import SettingsPage from './SettingsPage';
 import UploadPage from './UploadPage';
 import PageTemplate from './PageTemplate';
+import { useAppSelector } from '../hooks/useAppDispatch';
+import { selectUser } from '../store/user/userSlice';
+import AdminTemplate from './AdminTemplate';
 
-const Router = () => (
-  <Routes>
-    <Route path='/' element={<MainPage />} />
+const Router = () => {
+  const {user, auth} = useAppSelector(selectUser);
 
-    <Route path='/login' element={<LoginPage />} />
-    <Route path='/register' element={<RegisterPage />} />
+  const isAvailable = auth.token && user.username;
 
-    <Route path='/account' element={<PageTemplate />}>
-      <Route path='upload' element={<UploadPage />} />
+  return (
+    <Routes>
+      <Route path='/' element={<MainPage />} />
 
-      <Route path='recent' element={<SummariesListPage />} />
+      <Route 
+        path='/login' 
+        element={isAvailable
+          ? <Navigate to={'/account'} /> 
+          : <LoginPage />} />
+      <Route 
+        path='/register' 
+        element={isAvailable 
+          ? <Navigate to={'/account'} /> 
+          : <RegisterPage />} />
 
-      <Route path='users/:id' element={<UserPage />} />
-      <Route path='summaries/:id' element={<SummaryPage />} />
+      <Route 
+        path='/account' 
+        element={isAvailable 
+          ? <PageTemplate /> 
+          : <Navigate to='/login' />}>
+              <Route path='upload' element={<UploadPage />} />
 
-      <Route path='admin'>
-        <Route path='settings' element={<SettingsPage />} />
-        <Route path='summaries' element={<SummariesListPage />} />
-        <Route path='users' element={<UsersListPage />} />
-        <Route path='addUser' element={<RegisterPage />} />
+              <Route path='recent' element={<SummariesListPage />} />
+
+              <Route index element={<UserPage />} />
+              <Route path='summary/:id' element={<SummaryPage />} />
+
+              <Route 
+                path='admin'
+                element={user.isAdmin 
+                  ? <AdminTemplate /> 
+                  : <Navigate to={'/account'}/>}>
+                      <Route index element={<SettingsPage />} />
+
+                      <Route path='summaries' element={<SummariesListPage isForAdmin />} />
+                      <Route path='summaries/:id' element={<SummaryPage />} />
+
+                      <Route path='users' element={<UsersListPage />} />
+                      <Route path='users/:username' element={<UserPage isForAdmin />} />
+                      <Route path='addUser' element={<RegisterPage isForAdmin />} />
+              </Route>
       </Route>
-    </Route>
-  </Routes>
-);
+    </Routes>
+  );
+};
 
 export default Router;

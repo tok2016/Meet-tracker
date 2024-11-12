@@ -1,6 +1,8 @@
 import MediaValue from './types/MediaValue';
 
-const BASE_URL = 'http://127.0.0.1:90';
+const BASE_URL = 'http://127.0.0.1:8000';
+
+const ITEMS_PER_PAGE = 20;
 
 const TOKEN_TIME_TO_LIVE = 1000 * 60 * 24 * 7;
 
@@ -67,5 +69,10 @@ const snakeToCamel = (obj: object) => {
   return result;
 };
 
-export {camelToSnake, snakeToCamel, LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
-  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL};
+const arraySnakeToCamel = <Type, >(arr: object[]) => arr.map((obj) => snakeToCamel(obj)) as Type[];
+
+const getOffsetQuery = (page: number) => `offset=${(page - 1) * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`;
+
+export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery,
+  LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
+  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};

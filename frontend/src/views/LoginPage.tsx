@@ -32,7 +32,7 @@ const LoginPage = () => {
   useEffect(() => {
     if(auth.token && status !== 'error') {
       if(user.username) {
-        navigate(`/account/users/${user.username}`);
+        navigate('/account');
       } else {
         dispatch(getCurrentUser());
         dispatch(getUserAvatar());

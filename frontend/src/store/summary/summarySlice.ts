@@ -1,28 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Record } from '../../utils/types/Record';
 import SummaryState from '../../utils/types/SummaryState';
 import { postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, postRecordFileTest } from './summaryThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
-import Summary from '../../utils/types/Summary';
+import { defaultSummary } from '../../utils/types/Summary';
 import { RootState } from '../store';
-
-const defaultRecord: Record = {
-  id: 0,
-  file: '',
-  userId: 0,
-  isArchived: false
-};
-
-const defaultSummary: Summary = {
-  id: 0,
-  userId: 0,
-  title: '',
-  text: {},
-  date: (new Date()).toString(),
-  record: defaultRecord,
-  status: 'idle'
-};
 
 const initialState: SummaryState = {
   summary: defaultSummary,

@@ -10,6 +10,7 @@ import { selectSummary } from '../store/summary/summarySlice';
 import { postRecordFileTest } from '../store/summary/summaryThunks';
 import { UIColors } from '../utils/Colors';
 import UploadInput from './UploadInput';
+import { isSummary } from '../utils/types/Summary';
 
 
 
@@ -37,7 +38,9 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
       dispatch(postRecordFileTest(file))
         .then((response) => {
           console.log(response);
-          navigate(`/account/summaries/mock`);
+          if(isSummary(response.payload)) {
+            navigate(`/account/summary/${response.payload.id}`);
+          }
         });
     }
   };

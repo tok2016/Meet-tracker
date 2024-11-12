@@ -2,6 +2,7 @@ import { Components } from '@mui/material';
 
 import { TextColors, UIColors } from '../Colors';
 import { breakpoints } from './BasicTypography';
+import { LgFontSizes, XlFontSizes } from './FontSizes';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
@@ -9,7 +10,11 @@ declare module '@mui/material/Button' {
     containtedTab: true,
     containtedTabSelected: true,
     transparent: true,
-    danger: true
+    danger: true,
+    filter: true,
+    filterSelected: true,
+    filterValuable: true,
+    filterValue: true
   }
 }
 
@@ -94,6 +99,82 @@ const Button: Components['MuiButton'] = {
         },
         ':active': {
           color: TextColors.main,
+          backgroundColor: 'transparent',
+        }
+      }
+    },
+    {
+      props: {
+        variant: 'filter'
+      },
+      style: {
+        color: TextColors.secondary,
+        fontWeight: 700,
+        backgroundColor: 'transparent',
+        ':hover': {
+          color: TextColors.highlight,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
+          backgroundColor: 'transparent',
+        }
+      }
+    },
+    {
+      props: {
+        variant: 'filterSelected'
+      },
+      style: {
+        color: TextColors.highlight,
+        fontWeight: 700,
+        backgroundColor: 'transparent',
+        ':hover': {
+          color: TextColors.highlight,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
+          backgroundColor: 'transparent',
+        }
+      }
+    },
+    {
+      props: {
+        variant: 'filterValuable'
+      },
+      style: {
+        color: TextColors.main,
+        fontWeight: 700,
+        backgroundColor: 'transparent',
+        ':hover': {
+          color: TextColors.highlight,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
+          backgroundColor: 'transparent',
+        }
+      }
+    },
+    {
+      props: {
+        variant: 'filterValue'
+      },
+      style: {
+        color: TextColors.main,
+        backgroundColor: 'transparent',
+        fontWeight: 700,
+        [breakpoints.up('lg')]: {
+          fontSize: LgFontSizes.subtitle1
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: XlFontSizes.subtitle1
+        },
+        padding: 0,
+        height: '1.1em',
+        ':hover': {
+          color: TextColors.error,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
           backgroundColor: 'transparent',
         }
       }

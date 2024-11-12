@@ -45,3 +45,7 @@ textarea {
 textarea:focus {
   border: solid 2px #8B8B8B;
 }
+
+.filter-value:hover * {
+  color: #EE1313;
+}
