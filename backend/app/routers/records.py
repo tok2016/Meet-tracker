@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, UploadFile, Form
 from .ollama_functions import OllamaFunctions
-from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.responses import StreamingResponse
 from app.models import Summary
 from app.utils import CurrentUser
 from typing import Annotated
@@ -73,17 +73,17 @@ async def record_diarize( file: UploadFile, session: SessionDep, current_user: C
         os.mkdir(audio_dir)
     file_name = audio_dir + "audio.wav"
     audio.export(file_name, format="wav")
-    #segments, info = model_whisper.transcribe(file_name, beam_size=5)
-    #pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=auth_token_hf)
-    #diarization_results = pipeline(file_name)
-    #final_results = diarize_text(segments, diarization_results)
-    #lines = ""
-    #for seg, spk, sent in final_results:
-    #    line = f'Start: {seg.start} End: {seg.end} Speaker: {spk} Sentence: {sent}'
-    #    lines += f"{line}   "
-    #summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
+    segments, info = model_whisper.transcribe(file_name, beam_size=5)
+    pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=auth_token_hf)
+    diarization_results = pipeline(file_name)
+    final_results = diarize_text(segments, diarization_results)
+    lines = ""
+    for seg, spk, sent in final_results:
+        line = f'Start: {seg.start} End: {seg.end} Speaker: {spk} Sentence: {sent}'
+        lines += f"{line}   "
+    summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
     #Расскоментить эту строку если не хочется работать с лламой и виспером
-    summary_common = "content='' additional_kwargs={} response_metadata={} id='run-7a6c305b-38d7-4f81-91bd-5bff5e646b01-0' tool_calls=[{'name': 'summarize_text', 'args': {'topic': 'Conversation between family members', 'text': 'The conversation is about a person who is feeling down and their loved ones trying to comfort them.', 'start': '0.0', 'end': '20.14', 'speakers': 'SPEAKER_02, SPEAKER_00, SPEAKER_03'}, 'id': 'call_6c90d255c518452d800fc54711d70a74', 'type': 'tool_call'}]"
+    #summary_common = "content='' additional_kwargs={} response_metadata={} id='run-7a6c305b-38d7-4f81-91bd-5bff5e646b01-0' tool_calls=[{'name': 'summarize_text', 'args': {'topic': 'Conversation between family members', 'text': 'The conversation is about a person who is feeling down and their loved ones trying to comfort them.', 'start': '0.0', 'end': '20.14', 'speakers': 'SPEAKER_02, SPEAKER_00, SPEAKER_03'}, 'id': 'call_6c90d255c518452d800fc54711d70a74', 'type': 'tool_call'}]"
     db_summary = Summary(text=summary_common, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
@@ -98,18 +98,6 @@ async def read_records(session: SessionDep, offset: int = 0, limit: Annotated[in
     """
     records = session.exec(select(Summary).offset(offset).limit(limit)).all()
     return records
-
-@router.get("/summary/{summary_id}/")
-async def get_summary_record(session: SessionDep, summary_id: int):
-    """
-    Function to get one summary. Функция для получения одного резюме.
-    """
-    summary_db = session.get(Summary, summary_id)
-    if not summary_db:
-        raise HTTPException(status_code=404, detail="Summary not found")
-    audio_id = summary_db.audio_id
-    path_audio_dir = "app/sounds/" + audio_id + "/audio.wav"
-    return {"Summary": summary_db, "Audio": FileResponse(path_audio_dir)}
 
 @router.delete("/delete_record/{summary_id}/")
 async def delete_summary_record(session: SessionDep, summary_id: int):

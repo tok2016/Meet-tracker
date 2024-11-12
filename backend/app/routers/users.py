@@ -6,7 +6,7 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.db import SessionDep
 from typing import Annotated
 from datetime import timedelta
-from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email, upload_picture
+from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email
 import os
 
 
@@ -92,27 +92,23 @@ def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: Cur
 
 @router.post("/current_user/upload_picture")
 def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(...),):
-    full_image_path = upload_picture(current_user.id, file)
+    #Путь где будет располагаться загруженная картинка
+    path_image_dir = "app/images/user/profile/" + str(current_user.id) + "/"
+    full_image_path = os.path.join(path_image_dir, file.filename)
+
+    if not os.path.exists(path_image_dir):
+        os.mkdir(path_image_dir)
+
+    file_name = full_image_path.replace(file.filename, "profile.png")
+
+    with open(file_name, "wb") as f:
+        f.write(file.file.read())
+        f.flush()
+        f.close()
+    
     return {"image": f"{full_image_path}"}
 
 @router.get("/current_user/profile_picture")
 def get_profile_picture(current_user: CurrentUser):
     path_image_dir = "app/images/user/profile/" + str(current_user.id) + "/profile.png"
     return FileResponse(path_image_dir)
-
-@router.get("/user/{username}/profile_picture")
-def get_user_profile_picutre(user_username: int, current_user: CurrentUser):
-    if not current_user.is_admin:
-        raise HTTPException(
-            status_code=403, detail="Only admin"
-        ) 
-    path_image_dir = "app/images/user/profile/" + str(user_username) + "/profile.png"
-    return FileResponse(path_image_dir)
-
-@router.post("/user/{username}/profile_picture")
-def create_user_profile_picutre(user_username: int, current_user: CurrentUser, file: UploadFile = File(...),):
-    if not current_user.is_admin:
-        raise HTTPException( status_code=403, detail="Only admin" )
-    full_image_path = upload_picture(user_username, file)
-    return {"image": f"{full_image_path}"}
-     

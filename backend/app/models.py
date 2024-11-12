@@ -8,7 +8,6 @@ class UserBase(SQLModel):
     first_name: str = Field(max_length=30)
     last_name: str | None = Field(max_length=30)
     email: EmailStr = Field(unique=True, max_length=50)
-    is_admin: bool = False
 
 class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
