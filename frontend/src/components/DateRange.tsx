@@ -1,4 +1,4 @@
-import { Input, Stack } from '@mui/material';
+import { OutlinedInput, Stack } from '@mui/material';
 import { ChangeEvent } from 'react';
 
 type DateRangeProps = {
@@ -15,11 +15,11 @@ const DateRange = ({to, from, onToChange, onFromChange}: DateRangeProps) => {
       flexDirection='row'
       gap='5px'
       alignItems='center'>
-        <Input
+        <OutlinedInput
           type='date'
           value={from}
           onChange={onFromChange} />
-        <Input
+        <OutlinedInput
           type='date'
           value={to}
           onChange={onToChange} />

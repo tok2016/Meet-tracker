@@ -2,18 +2,12 @@ import { Theme } from '@emotion/react';
 import { AccountCircle } from '@mui/icons-material';
 import { Avatar, SxProps } from '@mui/material';
 
-import { useAppSelector } from '../hooks/useAppDispatch';
-import { selectUser } from '../store/user/userSlice';
 import AvatarEditorPopup from './AvatarEditorPopup';
 import { ChangeEvent, useReducer, useRef, useState } from 'react';
 
-const AvatarUploadInput = ({sx}: {sx: SxProps<Theme>}) => {
-  const {user} = useAppSelector(selectUser);
-
+const AvatarUploadInput = ({sx, defaultAvatar}: {sx: SxProps<Theme>, defaultAvatar: string}) => {
   const [avatar, setAvatar] = useState<File | undefined>(undefined);
   const [open, toggleOpen] = useReducer((value) => !value, false);
-
-  console.log(avatar);
 
   const avatarRef = useRef<HTMLInputElement>(null);
 
@@ -44,7 +38,7 @@ const AvatarUploadInput = ({sx}: {sx: SxProps<Theme>}) => {
         onChange={onFileChoice}
         onClick={(evt) => evt.currentTarget.value = ''} />
       <label htmlFor='avatar'>
-        {user.avatar ? <Avatar src={user.avatar} sx={sx} /> : <AccountCircle sx={sx} />}
+        {defaultAvatar ? <Avatar src={defaultAvatar} sx={sx} /> : <AccountCircle sx={sx} />}
       </label>
 
       <AvatarEditorPopup open={open} toggleOpen={closePopup} defaultAvatar={avatar}/>

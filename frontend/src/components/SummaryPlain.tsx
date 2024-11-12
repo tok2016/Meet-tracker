@@ -1,13 +1,12 @@
-import { Paper, Stack, SxProps, Typography } from '@mui/material';
+import { Stack, SxProps, Typography, Theme } from '@mui/material';
 import { Description, InsertDriveFile, PlayCircleOutline, VolumeOff, VolumeUp } from '@mui/icons-material';
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { SummaryInfo } from '../utils/types/Summary';
 import { TextColors } from '../utils/Colors';
 import { statusesTranslations } from '../utils/utils';
-import { memo } from 'react';
-import { Theme } from '@emotion/react';
-import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
+import ItemPlain from './ItemPlain';
 
 const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
   const date = new Date(summary.date).toLocaleDateString('ru-RU', {
@@ -31,37 +30,27 @@ const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
   };
 
   return (
-    <Paper 
-      variant='elevationSmall'
-      sx={(theme) => (theme.components?.MuiPaper ? {
-        ...theme.components.MuiPaper?.defaultProps?.sx,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: '20px',
-        alignItems: 'center',
-        width: `calc(100% - 2 * ${PAPER_SMALL_PADDING})`
-      } : {})}>
-        <Stack sx={subPlainsStyle}>
-          <PlayCircleOutline sx={iconSx}/>
-          <Link to={`/account/summaries/mock`}>
-            <Typography variant='h3'>
-              {summary.title}
-            </Typography>
-          </Link>
-        </Stack>
+    <ItemPlain>
+      <Stack sx={subPlainsStyle}>
+        <PlayCircleOutline sx={iconSx}/>
+        <Link to={`/account/summary/${summary.id}`}>
+          <Typography variant='h3'>
+            {summary.title}
+          </Typography>
+        </Link>
+      </Stack>
 
-        <Stack sx={subPlainsStyle}>
-          <Typography variant='h3' color={summary.status === 'error' ? 'error' : 'textPrimary'}>
-            {statusesTranslations[summary.status]}
-          </Typography>
-          {summary.record.file ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
-          {summary.hasText ? <Description sx={iconSx}/> : <InsertDriveFile sx={iconSx}/>}
-          <Typography variant='h3Normal'>
-            {date}
-          </Typography>
-        </Stack>
-    </Paper>
+      <Stack sx={subPlainsStyle}>
+        <Typography variant='h3' color={summary.status === 'error' ? 'error' : 'textPrimary'}>
+          {statusesTranslations[summary.status]}
+        </Typography>
+        {summary.record.file ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
+        {summary.hasText ? <Description sx={iconSx}/> : <InsertDriveFile sx={iconSx}/>}
+        <Typography variant='h3Normal'>
+          {date}
+        </Typography>
+      </Stack>
+    </ItemPlain>
   );
 };
 

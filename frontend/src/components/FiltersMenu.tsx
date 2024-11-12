@@ -7,6 +7,12 @@ import Search from './Search';
 import Filter, { FilterSortType } from '../utils/types/Filter';
 import DateRange from './DateRange';
 
+type FilterMenuProps = {
+  defaultFilter: Filter, 
+  hidden?: boolean,
+  submit: (filter: Filter) => void
+};
+
 const getSearchWord = (field: FilterSortType, filter: Filter) => {
   switch(field) {
     case 'title': 
@@ -18,14 +24,13 @@ const getSearchWord = (field: FilterSortType, filter: Filter) => {
   }
 };
 
-const FilterMenu = ({defaultFilter, submit}: {defaultFilter: Filter, submit: (filter: Filter) => void}) => {
+const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
   const [filter, setFilter] = useState<Filter>(defaultFilter);
-  const [field, setField] = useState<FilterSortType>('title');
 
-  const searchWord = getSearchWord(field, filter);
+  const searchWord = getSearchWord(filter.sort, filter);
 
   const onSearchChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    if(field === 'username') {
+    if(filter.sort === 'username') {
       setFilter((prev) => ({...prev, username: evt.target.value}));
     } else {
       setFilter((prev) => ({...prev, title: evt.target.value}));
@@ -33,10 +38,10 @@ const FilterMenu = ({defaultFilter, submit}: {defaultFilter: Filter, submit: (fi
   };
 
   const chooseField = (selectedField: FilterSortType) => {
-    if(selectedField === field) {
+    if(selectedField === filter.sort) {
       setFilter((prev) => ({...prev, direction: -prev.direction}));
     } else {
-      setField(selectedField);
+      setFilter((prev) => ({...prev, direction: 1, sort: selectedField}))
     }
   };
 
@@ -82,82 +87,93 @@ const FilterMenu = ({defaultFilter, submit}: {defaultFilter: Filter, submit: (fi
 
   return (
     <Stack 
-      display='flex'
+      display={hidden ? 'none' : 'flex'}
       flexDirection='row'
-      alignItems='center'>
-        <div>
-          <FilterAlt />
-          <Typography variant='h3' component='span'>Сортировка: </Typography>
-        </div>
+      justifyContent='space-between'
+      marginBottom='15px'>
+        <Stack
+          display='flex'
+          flexDirection='row'
+          alignItems='center'>
+            <Stack display='flex' flexDirection='row' gap='5px'>
+              <FilterAlt />
+              <Typography variant='h3'>Сортировка: </Typography>
+            </Stack>
 
-        <FilterField 
-          name='Название'
-          hidden={typeof filter.title === 'undefined'}
-          selected={field === 'title'}
-          value={filter.title ?? ''}
-          direction={filter.direction}
-          onChoice={() => chooseField('title')}
-          onCancel={() => setFilter((prev) => ({...prev, title: ''}))} />
+            <FilterField 
+              name='Название'
+              hidden={typeof filter.title === 'undefined'}
+              selected={filter.sort === 'title'}
+              value={filter.title ?? ''}
+              direction={filter.direction}
+              onChoice={() => chooseField('title')}
+              onCancel={() => setFilter((prev) => ({...prev, title: ''}))} />
 
-        <FilterField 
-          name='Имя'
-          hidden={typeof filter.name === 'undefined'}
-          selected={field === 'name'}
-          value={filter.name ?? ''}
-          direction={filter.direction}
-          onChoice={() => chooseField('name')}
-          onCancel={() => setFilter((prev) => ({...prev, name: ''}))} />
+            <FilterField 
+              name='Имя'
+              hidden={typeof filter.name === 'undefined'}
+              selected={filter.sort === 'name'}
+              value={filter.name ?? ''}
+              direction={filter.direction}
+              onChoice={() => chooseField('name')}
+              onCancel={() => setFilter((prev) => ({...prev, name: ''}))} />
 
-        <FilterField 
-          name='Дата'
-          selected={field === 'date'}
-          value={filter.from ? `${filter.from} - ${filter.to}` : ''}
-          direction={filter.direction}
-          onChoice={() => chooseField('date')}
-          onCancel={() => setFilter((prev) => ({...prev, from: '', to: ''}))} />
+            <FilterField 
+              name='Дата'
+              selected={filter.sort === 'date'}
+              value={filter.from ? `${filter.from} - ${filter.to}` : ''}
+              direction={filter.direction}
+              onChoice={() => chooseField('date')}
+              onCancel={() => setFilter((prev) => ({...prev, from: '', to: ''}))} />
 
-        <FilterField 
-          name='Логин'
-          selected={field === 'username'}
-          value={filter.username}
-          direction={filter.direction}
-          onChoice={() => chooseField('username')}
-          onCancel={() => setFilter((prev) => ({...prev, username: ''}))} />
+            <FilterField 
+              name='Логин'
+              selected={filter.sort === 'username'}
+              value={filter.username}
+              direction={filter.direction}
+              onChoice={() => chooseField('username')}
+              onCancel={() => setFilter((prev) => ({...prev, username: ''}))} />
 
-        <Button 
-          variant={filter.archived ? 'filterValuable' : 'filter'}
-          style={{
-            display: typeof filter.archived === 'undefined' ? 'none' : 'inherit'
-          }}
-          onClick={() => setFilter((prev) => ({...prev, archived: !prev.archived}))}>
-            Архив
-        </Button>
+            <Button 
+              variant={filter.archived ? 'filterValuable' : 'filter'}
+              style={{
+                display: typeof filter.archived === 'undefined' ? 'none' : 'inherit'
+              }}
+              onClick={() => setFilter((prev) => ({...prev, archived: !prev.archived}))}>
+                Архив
+            </Button>
 
-        <Button
-          variant={filter.admin ? 'filterValuable' : 'filter'}
-          style={{
-            display: typeof filter.admin === 'undefined' ? 'none' : 'inherit'
-          }}
-          onClick={() => setFilter((prev) => ({...prev, admin: !prev.admin}))}>
-            Администратор
-        </Button>
+            <Button
+              variant={filter.admin ? 'filterValuable' : 'filter'}
+              style={{
+                display: typeof filter.admin === 'undefined' ? 'none' : 'inherit'
+              }}
+              onClick={() => setFilter((prev) => ({...prev, admin: !prev.admin}))}>
+                Администратор
+            </Button>
+        </Stack>
         
-        {field === 'date' 
-          ? <DateRange
-              to={filter.to}
-              from={filter.from}
-              onToChange={onToChange}
-              onFromChange={onFromChange} />
-          : <Search 
-              word={searchWord}
-              onChange={onSearchChange}
-              onSubmit={onFilterSubmit} />}
+        <Stack
+          display='flex'
+          flexDirection='row'
+          gap='10px'>
+            {filter.sort === 'date' 
+              ? <DateRange
+                  to={filter.to}
+                  from={filter.from}
+                  onToChange={onToChange}
+                  onFromChange={onFromChange} />
+              : <Search 
+                  word={searchWord}
+                  onChange={onSearchChange}
+                  onSubmit={onFilterSubmit} />}
 
-        <IconButton
-          color='secondary'
-          onClick={onFilterSubmit}>
-          <SearchIcon />
-        </IconButton>
+            <IconButton
+              color='secondary'
+              onClick={onFilterSubmit}>
+              <SearchIcon />
+            </IconButton>
+        </Stack>
     </Stack>
   );
 };

@@ -28,3 +28,20 @@ export type RawSummaryContent = {[topic: string]: string};
 export type RawSummary = Omit<Summary, 'text'> & {text: RawSummaryContent};
 
 export const isSummary = (summary: unknown): summary is Summary => (summary as Summary).text !== undefined;
+
+export const defaultRecord: Record = {
+  id: 0,
+  file: '',
+  userId: 0,
+  isArchived: false
+};
+
+export const defaultSummary: Summary = {
+  id: 0,
+  userId: 0,
+  title: '',
+  text: {},
+  date: (new Date()).toString(),
+  record: defaultRecord,
+  status: 'idle'
+};

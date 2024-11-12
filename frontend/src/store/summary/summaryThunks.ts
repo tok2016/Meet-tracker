@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
-import { camelToSnake, snakeToCamel } from '../../utils/utils';
+import { arraySnakeToCamel, camelToSnake, getOffsetQuery, snakeToCamel } from '../../utils/utils';
 import Summary, { SummaryContent, SummariesRaw, SummaryInfo, SummaryUpdate, RawSummaryContent, RawSummary } from '../../utils/types/Summary';
 import TopicContent, { isTopicContent } from '../../utils/types/TopicContent';
 //import mockSummary from './example.json';
@@ -75,13 +75,11 @@ const postRecordFileTest = createAsyncThunk<Summary, File, AsyncThunkConfig>(
 
     const {user} = getState();
 
-    const finalFile = new File([file], `${user.user.username}_${Date.now()}`, {type: file.type});
+    const finalFile = new File([file], 'audio', {type: file.type});
 
-    const path = `app/sounds/${finalFile.name}`;
+    formData.append('file', finalFile);
 
-    formData.append('file_path', finalFile);
-
-    const response = await AxiosInstance.post(`/record/diarize?file_name=${path}`, formData, {
+    const response = await AxiosInstance.post('/record/diarize', formData, {
       timeout: RECORD_UPLOAD_TIMEOUT,
       headers: {
         Authorization: user.auth.token,
@@ -159,13 +157,15 @@ const getSummaries = createAsyncThunk<SummariesRaw, number, AsyncThunkConfig>(
   async (page, {getState}) => {
     const {user} = getState();
 
-    const response = await AxiosInstance.get(`/summaries?page=${page}`, {
+    const query = getOffsetQuery(page);
+
+    const response = await AxiosInstance.get(`/records?${query}`, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    const summaries = (response.data.summaries as object[]).map((summary) => snakeToCamel(summary)) as SummaryInfo[];
+    const summaries = arraySnakeToCamel<SummaryInfo>(response.data.summaries as object[]);
 
     const summariesWithTotal: SummariesRaw = {
       summaries,

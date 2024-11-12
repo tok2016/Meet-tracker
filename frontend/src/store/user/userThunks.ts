@@ -12,7 +12,12 @@ const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
     const body = camelToSnake(userData);
 
     const response = await AxiosInstance.post('/user', body);
-    return snakeToCamel(response.data) as User;
+
+    //needs to be deleted
+    const returnUser = snakeToCamel(response.data) as User;
+    returnUser.isAdmin = returnUser.username === 'admin';
+
+    return returnUser;
   }
 );
 
@@ -67,7 +72,11 @@ const getCurrentUser = createAsyncThunk<User, void, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel(response.data) as User;
+    //needs to be deleted
+    const returnUser = snakeToCamel(response.data) as User;
+    returnUser.isAdmin = returnUser.username === 'admin';
+
+    return returnUser;
   }
 );
 
@@ -84,51 +93,10 @@ const patchCurrentUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel(response.data) as User;
-  }
-);
+    const returnUser = snakeToCamel(response.data) as User;
+    returnUser.isAdmin = returnUser.username === 'admin';
 
-const getUserByUsername = createAsyncThunk<User, string, AsyncThunkConfig>(
-  'user/getUserByUsername',
-  async (username, { getState }) => {
-    const {user} = getState();
-
-    const response = await AxiosInstance.get(`/user/${username}`, {
-      headers: {
-        Authorization: user.auth.token
-      }
-    });
-
-    return snakeToCamel(response.data) as User;
-  }
-);
-
-const patchUserChanges = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
-  'user/patchUserChanges',
-  async (userUpdate, { getState }) => {
-    const {user} = getState();
-    const body = camelToSnake(userUpdate);
-
-    const response = await AxiosInstance.patch(`/user/${userUpdate.username}`, body, {
-      headers: {
-        Authorization: user.auth.token
-      }
-    });
-
-    return snakeToCamel(response.data) as User;
-  }
-);
-
-const deleteUserData = createAsyncThunk<void, string, AsyncThunkConfig>(
-  'user/deleteUserData',
-  async (username, { getState }) => {
-    const {user} = getState();
-
-    await AxiosInstance.delete(`/user/${username}`, {
-      headers: {
-        Authorization: user.auth.token
-      }
-    });
+    return returnUser;
   }
 );
 
@@ -181,6 +149,5 @@ const getUserAvatar = createAsyncThunk<string, void, AsyncThunkConfig>(
   }
 );
 
-export {getCurrentUser, getUserByUsername, getUserAvatar, 
-  postLogin, postLogout, postUserData, postUserAvatar, 
-  patchCurrentUser, patchUserChanges, deleteUserData};
+export {getCurrentUser, getUserAvatar, 
+  postLogin, postLogout, postUserData, postUserAvatar, patchCurrentUser};

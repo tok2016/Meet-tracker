@@ -18,7 +18,7 @@ const sidebarPages: Page[] = [
   },
   {
     name: 'Профиль',
-    path: (username: string) => `/account/users/${username}`,
+    path: '/account',
     forAdmin: false
   },
   {
@@ -36,7 +36,7 @@ const Sidebar = () => {
 
   const {user} = useAppSelector(selectUser);
 
-  const pages = sidebarPages.filter((page) => !page.forAdmin);
+  const pages = sidebarPages.filter((page) => user.isAdmin || !page.forAdmin);
 
   const onButtonPageClick = (pagePath: string) => {
     navigate(pagePath);
@@ -46,22 +46,19 @@ const Sidebar = () => {
   return (
     <Drawer variant='permanent'>
       <List>
-        {pages.map((page) => {
-          const pagePath = typeof page.path === 'function' ? page.path(user.username) : page.path;
-
-          return (
-            <ListItem key={pagePath}>
+        {pages.map((page) => (
+            <ListItem key={page.path}>
               <ListItemButton
-                hidden={page.forAdmin} 
-                selected={path === pagePath}
-                onClick={() => onButtonPageClick(pagePath)}>
+                hidden={!user.isAdmin && page.forAdmin} 
+                selected={path === page.path}
+                onClick={() => onButtonPageClick(page.path)}>
                 <ListItemText>
                   {page.name}
                 </ListItemText>
               </ListItemButton>
             </ListItem>
-          );
-        })}
+          )
+        )}
       </List>
     </Drawer>
   );

@@ -9,8 +9,10 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { postUserData } from '../store/user/userThunks';
 import { UserRaw } from '../utils/types/User';
 import { selectUser } from '../store/user/userSlice';
+import { postNewUser } from '../store/admin/adminThunks';
+import { selectAdminData } from '../store/admin/adminSlice';
 
-const RegisterPage = () => {
+const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
 
@@ -25,7 +27,8 @@ const RegisterPage = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const {user} = useAppSelector(selectUser);
+  const {user: originalUser} = useAppSelector(selectUser);
+  const {user: anotherUser} = useAppSelector(selectAdminData);
 
   const formUser = () => {
     const newUser: UserRaw = {
@@ -37,17 +40,27 @@ const RegisterPage = () => {
       avatar: ''
     };
 
-    dispatch(postUserData(newUser));
+    if(isForAdmin) {
+      dispatch(postNewUser(newUser));
+    } else {
+      dispatch(postUserData(newUser));
+    }
   };
 
   useEffect(() => {
-    if(user.username) {
-      navigate('/login');
+    if(isForAdmin) {
+      if(anotherUser.username) {
+        navigate(`/account/admin/users/${anotherUser.username}`);
+      }
+    } else {
+      if(originalUser.username) {
+        navigate('/login');
+      }
     }
   });
 
   return (
-    <FormHolder>
+    <FormHolder isForAdmin={isForAdmin}>
       <div>
         <Typography variant='h2' marginBottom='3.5vh'>Регистрация</Typography>
 
@@ -120,7 +133,9 @@ const RegisterPage = () => {
         </FieldsGroup>
       </div>
 
-      <div>
+      <div style={{
+        display: isForAdmin ? 'none' : 'inherit'
+      }}>
         <Typography variant='subtitle2' marginBottom={'0.5vh'}>У вас уже есть учетная запись?</Typography>
         <Link to='/login'>
           <Typography variant='subtitle1'>Войти</Typography>

@@ -109,10 +109,14 @@ const Button: Components['MuiButton'] = {
       },
       style: {
         color: TextColors.secondary,
-        fontWeight: 400,
+        fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: TextColors.highlight
+          color: TextColors.highlight,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
+          backgroundColor: 'transparent',
         }
       }
     },
@@ -122,10 +126,14 @@ const Button: Components['MuiButton'] = {
       },
       style: {
         color: TextColors.highlight,
-        fontWeight: 400,
+        fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: TextColors.highlight
+          color: TextColors.highlight,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
+          backgroundColor: 'transparent',
         }
       }
     },
@@ -135,10 +143,14 @@ const Button: Components['MuiButton'] = {
       },
       style: {
         color: TextColors.main,
-        fontWeight: 400,
+        fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: TextColors.highlight
+          color: TextColors.highlight,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
+          backgroundColor: 'transparent',
         }
       }
     },
@@ -157,9 +169,13 @@ const Button: Components['MuiButton'] = {
           fontSize: XlFontSizes.subtitle1
         },
         padding: 0,
-        height: '1em',
+        height: '1.1em',
         ':hover': {
-          color: TextColors.error
+          color: TextColors.error,
+          backgroundColor: 'transparent',
+        },
+        ':active': {
+          backgroundColor: 'transparent',
         }
       }
     }

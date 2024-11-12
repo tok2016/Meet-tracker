@@ -1,18 +1,18 @@
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Pagination } from '@mui/material';
+
 import ButtonsTab from '../components/ButtonsTab';
 import Page from '../utils/types/Page';
-import fakeSummaries from '../utils/mockSummaries.json';
-//import { SummaryInfo } from '../utils/types/Summary';
 import SummaryPlain from '../components/SummaryPlain';
-import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getSummaries } from '../store/summary/summaryThunks';
-import { Pagination } from '@mui/material';
-import { SummaryInfo } from '../utils/types/Summary';
 import FilterMenu from '../components/FiltersMenu';
 import Filter from '../utils/types/Filter';
-
-const SUMMARIES_PER_PAGE = 20;
+import { ITEMS_PER_PAGE } from '../utils/utils';
+import { selectUser } from '../store/user/userSlice';
+import { getAllSummaries } from '../store/admin/adminThunks';
+import { selectAdminData } from '../store/admin/adminSlice';
 
 const RecentSubpages: Page[] = [
   {
@@ -33,21 +33,28 @@ const defaultFilter: Filter = {
   archived: false
 };
 
-const SummariesListPage = ({isAdmin = false}: {isAdmin?: boolean}) => {
+const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
   const [page, setPage] = useState<number>(1);
 
-  const {summaries, total} = useAppSelector(selectSummary);
+  const {user} = useAppSelector(selectUser);
+  const {summaries: userSummaries, total} = useAppSelector(selectSummary);
+  const {summaries: adminSummaries, summariesTotal} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
   const onPageChange = (_evt: ChangeEvent<unknown>, value: number) => {
     setPage(value);
   }
 
-  const finalSummaries = summaries.length ? summaries : fakeSummaries as SummaryInfo[];
+  const summaries = user.isAdmin ? adminSummaries : userSummaries;
+  const totalCount = user.isAdmin ? summariesTotal : total;
 
   useEffect(() => {
-    dispatch(getSummaries(page));
-  }, [page, dispatch]);
+    if(user.isAdmin) {
+      dispatch(getAllSummaries(page));
+    } else {
+      dispatch(getSummaries(page));
+    }
+  }, [page, dispatch, user.isAdmin]);
 
   const submit = (filter: Filter) => {
     
@@ -55,17 +62,18 @@ const SummariesListPage = ({isAdmin = false}: {isAdmin?: boolean}) => {
 
   return (
     <>
-      <ButtonsTab pages={RecentSubpages}/>
+      <ButtonsTab pages={RecentSubpages} hidden={isForAdmin}/>
       <FilterMenu 
         defaultFilter={defaultFilter}
+        hidden={!isForAdmin}
         submit={submit} />
       <div>
-        {finalSummaries.map((summary) => (
+        {summaries.map((summary) => (
           <SummaryPlain key={summary.id} summary={summary} />
         ))}
       </div>
       <Pagination 
-        count={total % SUMMARIES_PER_PAGE + 1}
+        count={totalCount % ITEMS_PER_PAGE + 1}
         defaultPage={1}
         shape='rounded' 
         color='primary'

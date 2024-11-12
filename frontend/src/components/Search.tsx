@@ -16,11 +16,13 @@ const Search = ({word, onSubmit, onChange}: SearchProps) => {
 
   return (
     <TextField 
-      fullWidth
       variant='outlined'
       value={word}
       onChange={onChange}
-      onKeyDown={onEnterDown} />
+      onKeyDown={onEnterDown}
+      style={{
+        width: '20vw'
+      }} />
   );
 };
 

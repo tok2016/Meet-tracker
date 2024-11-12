@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import UserReducers from './user/userSlice';
 import SummaryReducers from './summary/summarySlice';
+import AdminReducers from './admin/adminSlice';
 
 const store = configureStore({
   reducer: {
     user: UserReducers,
-    summary: SummaryReducers
+    summary: SummaryReducers,
+    admin: AdminReducers
   }
 });
 

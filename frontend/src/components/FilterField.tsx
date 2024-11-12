@@ -1,5 +1,6 @@
 import { ArrowDownward, ArrowUpward, Clear } from '@mui/icons-material';
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
+import { breakpoints } from '../utils/theme/BasicTypography';
 
 type FilterFieldProps = {
   name: string, 
@@ -17,27 +18,46 @@ const FilterField = ({name, value, direction=1, hidden=false, selected=false, on
   return (
     <Stack
       display='flex'
-      flexDirection='column'>
-      <Button
-        variant={variant}
-        endIcon={direction > 0 ? <ArrowUpward /> : <ArrowDownward />}
-        onClick={onChoice}
-        style={{
-          display: hidden ? 'none' : 'inherit',
-        }}>
-        {name}
-      </Button>
-      
-      <Button
-        variant='filterValue'
-        endIcon={<Clear />}
-        onClick={onCancel}
-        style={{
-          display: value ? 'inherit' : 'none',
-          overflowX: 'hidden'
-        }}>
-          {value}
-      </Button>
+      flexDirection='column'
+      alignItems='center'
+      position='relative'>
+        <Button
+          variant={variant}
+          endIcon={selected ? (direction > 0 ? <ArrowUpward /> : <ArrowDownward />) : undefined}
+          onClick={onChoice}
+          style={{
+            display: hidden ? 'none' : 'inherit',
+          }}>
+            {name}
+        </Button>
+
+        <Stack
+          className='filter-value'
+          display={!value ? 'none' : 'flex'}
+          flexDirection='row'
+          width='fit-content'
+          maxWidth={`${name.length + 1}em`}
+          position='absolute'
+          sx={{
+            cursor: 'pointer',
+            [breakpoints.up('lg')]: {
+              top: '2.25rem'
+            },
+            [breakpoints.only('xl')]: {
+              top: '3rem'
+            }
+          }}
+          onClick={onCancel}>
+            <Typography 
+              variant='subtitle1'
+              overflow='hidden'
+              textOverflow='ellipsis'
+              textAlign='left'
+              noWrap>
+                {value}
+            </Typography>
+            <Clear />
+        </Stack>
     </Stack>
   );
 };
