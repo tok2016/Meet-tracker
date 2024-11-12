@@ -11,6 +11,7 @@ from fastapi import Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
 from pyannote.core import Segment, Annotation, Timeline
+import os
 
 ALGORITHM = "HS256"
 SECRET_KEY = secrets.token_urlsafe(32)
@@ -112,3 +113,19 @@ def diarize_text(transcribe_res, diarization_result):
     spk_text = add_speaker_info_to_text(timestamp_segments, diarization_result)
     res_processed = merge_sentence(spk_text)
     return res_processed
+
+def upload_picture(id, file):
+    #Путь где будет располагаться загруженная картинка
+    path_image_dir = "app/images/user/profile/" + str(id) + "/"
+    full_image_path = os.path.join(path_image_dir, file.filename)
+
+    if not os.path.exists(path_image_dir):
+        os.mkdir(path_image_dir)
+
+    file_name = full_image_path.replace(file.filename, "profile.png")
+
+    with open(file_name, "wb") as f:
+        f.write(file.file.read())
+        f.flush()
+        f.close()
+    return full_image_path
