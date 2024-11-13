@@ -9,6 +9,7 @@ from datetime import timedelta
 from app.utils import ( get_password_hash, verify_password, create_access_token, 
     authenticate, CurrentUser, get_user_by_email, upload_picture )
 import os
+import math
 from fastapi_filter import FilterDepends
 
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -118,11 +119,16 @@ def create_user_profile_picutre(user_username: int, current_user: CurrentUser, f
     return {"image": f"{full_image_path}"}
     
 @router.get("/user_filter/")
-async def filter_user(session: SessionDep, user_filter: UserFilter = FilterDepends(UserFilter),):
+async def filter_user(session: SessionDep, user_filter: UserFilter = FilterDepends(UserFilter), 
+        page: int = Query(ge=0, default=0), size: int = Query(ge=1, le=100)):
+    
+    #Пагинация
+    offset_min = page * size
+    offset_max = (page + 1) * size
+    #Сам фильтр
     query = select(User)
     query = user_filter.filter(query)
     query = user_filter.sort(query)
     result = session.execute(query).scalars().all()
-    total = len(result)
-    response = result + [ {"total": total} ]
+    response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
     return response
