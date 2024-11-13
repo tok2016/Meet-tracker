@@ -48,17 +48,21 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
   const summaries = user.isAdmin ? adminSummaries : userSummaries;
   const totalCount = user.isAdmin ? summariesTotal : total;
 
-  useEffect(() => {
-    if(user.isAdmin) {
-      dispatch(getAllSummaries(page));
-    } else {
-      dispatch(getSummaries(page));
-    }
-  }, [page, dispatch, user.isAdmin]);
-
   const submit = (filter: Filter) => {
     
   }
+
+  const updateSummariesList = (isAdmin: boolean, currentPage: number) => {
+    if(isAdmin) {
+      dispatch(getAllSummaries(currentPage));
+    } else {
+      dispatch(getSummaries(currentPage));
+    }
+  };
+
+  useEffect(() => {
+    updateSummariesList(user.isAdmin, page);
+  }, [page, dispatch, user.isAdmin]);
 
   return (
     <>
@@ -69,11 +73,15 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
         submit={submit} />
       <div>
         {summaries.map((summary) => (
-          <SummaryPlain key={summary.id} summary={summary} />
+          <SummaryPlain 
+            key={summary.id} 
+            summary={summary}
+            isForAdmin={isForAdmin}
+            onDelete={() => updateSummariesList(user.isAdmin, page)}/>
         ))}
       </div>
       <Pagination 
-        count={totalCount % ITEMS_PER_PAGE + 1}
+        count={Math.ceil(totalCount / ITEMS_PER_PAGE)}
         defaultPage={1}
         shape='rounded' 
         color='primary'

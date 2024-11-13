@@ -3,8 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '../store';
 import { User, UserRaw, UsersRaw } from '../../utils/types/User';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, camelToSnake, getOffsetQuery, snakeToCamel } from '../../utils/utils';
-import { SummariesRaw, SummaryInfo } from '../../utils/types/Summary';
+import { arraySnakeToCamel, camelToSnake, getFullSummaries, getOffsetQuery, snakeToCamel } from '../../utils/utils';
+import { SmallSummary, SummariesRaw } from '../../utils/types/Summary';
 
 const getUsers = createAsyncThunk<UsersRaw, number, AsyncThunkConfig>(
   'admin/getUsers', 
@@ -19,7 +19,8 @@ const getUsers = createAsyncThunk<UsersRaw, number, AsyncThunkConfig>(
       }
     });
 
-    const users = arraySnakeToCamel<User>(response.data.users);
+    const users = arraySnakeToCamel<User>(response.data);
+
     const usersWithTotal: UsersRaw = {
       users,
       total: response.data.total ? response.data.total : users.length
@@ -51,7 +52,7 @@ const getUserByUsername = createAsyncThunk<User, string, AsyncThunkConfig>(
   async (username, {getState}) => {
     const {user} = getState();
 
-    const response = await AxiosInstance.get(`user/${username}`, {
+    const response = await AxiosInstance.get(`user/${username}?user_username=${username}`, {
       headers: {
         Authorization: user.auth.token
       }
@@ -68,7 +69,7 @@ const patchUserByUsername = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
 
     const body = camelToSnake(userUpdate);
 
-    const response = await AxiosInstance.patch(`user/${userUpdate.username}`, body, {
+    const response = await AxiosInstance.patch(`user/${userUpdate.username}?user_username=${userUpdate.username}`, body, {
       headers: {
         Authorization: user.auth.token
       }
@@ -83,7 +84,7 @@ const deleteUserByUsername = createAsyncThunk<void, string, AsyncThunkConfig>(
   async (username, {getState}) => {
     const {user} = getState();
 
-    await AxiosInstance.delete(`user/${username}`, {
+    await AxiosInstance.delete(`user/${username}?user_username=${username}`, {
       headers: {
         Authorization: user.auth.token
       }
@@ -105,9 +106,9 @@ const getAllSummaries = createAsyncThunk<SummariesRaw, number, AsyncThunkConfig>
       }
     });
 
-    const summaries = arraySnakeToCamel<SummaryInfo>(response.data.summaries);
+    const summaries = arraySnakeToCamel<SmallSummary>(response.data);
     const summariesWithTotal: SummariesRaw = {
-      summaries,
+      summaries: getFullSummaries(summaries),
       total: response.data.token ? response.data.token : summaries.length
     };
 
@@ -115,7 +116,7 @@ const getAllSummaries = createAsyncThunk<SummariesRaw, number, AsyncThunkConfig>
   }
 );
 
-const deleteSummaryById = createAsyncThunk<void, string, AsyncThunkConfig>(
+const deleteSummaryById = createAsyncThunk<void, number, AsyncThunkConfig>(
   'admin/deleteSummaryById',
   async (summaryId, {getState}) => {
     const {user} = getState();
@@ -128,7 +129,7 @@ const deleteSummaryById = createAsyncThunk<void, string, AsyncThunkConfig>(
   }
 );
 
-const deleteRecordById = createAsyncThunk<void, string, AsyncThunkConfig>(
+const deleteRecordById = createAsyncThunk<void, string | number, AsyncThunkConfig>(
   'admin/deleteRecordById', 
   async (recordId, {getState}) => {
     const {user} = getState();

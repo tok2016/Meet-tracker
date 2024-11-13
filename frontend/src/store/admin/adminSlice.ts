@@ -59,7 +59,7 @@ const adminSlice = createSlice({
       })
       .addCase(deleteRecordById.fulfilled, (state) => {
         state.status = 'success';
-        state.summary = {...state.summary, record: defaultRecord};
+        state.summary = {...state.summary, record: defaultRecord, audioId: 0};
       })
       .addDefaultCase((state, action) => {
         const endpoint = action.type.split('/').pop();

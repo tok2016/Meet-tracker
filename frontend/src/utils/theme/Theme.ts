@@ -21,6 +21,8 @@ import BasicTypography from './BasicTypography';
 import { TextColors, UIColors } from '../Colors';
 import List from './List';
 import FilledInput from './FilledInput';
+import Menu from './Menu';
+import MenuItem from './MenuItem';
 
 const Theme = createTheme({
   typography: BasicTypography,
@@ -59,7 +61,9 @@ const Theme = createTheme({
     MuiListItemButton: ListItemButton,
     MuiListItemText: ListItemText,
     MuiToolbar: Toolbar,
-    MuiList: List
+    MuiList: List,
+    MuiMenu: Menu,
+    MuiMenuItem: MenuItem
   },
 });
 

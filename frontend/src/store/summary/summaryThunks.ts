@@ -2,41 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, camelToSnake, getOffsetQuery, snakeToCamel } from '../../utils/utils';
-import Summary, { SummaryContent, SummariesRaw, SummaryInfo, SummaryUpdate, RawSummaryContent, RawSummary } from '../../utils/types/Summary';
-import TopicContent, { isTopicContent } from '../../utils/types/TopicContent';
+import { arraySnakeToCamel, getFullSummaries, getFullSummary, getOffsetQuery, getSummaryContent, snakeToCamel } from '../../utils/utils';
+import Summary, { SummariesRaw, SummaryUpdate, RawSummary, SmallSummary } from '../../utils/types/Summary';
 //import mockSummary from './example.json';
 
 const RECORD_UPLOAD_TIMEOUT = 1000 * 60 * 5;
-
-const parseTopicContent = (content: string): TopicContent => {
-  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
-  const stringJsonSingular = stringEntry?.match(/{.{1,}}/g);
-  const stringJson = stringJsonSingular ? stringJsonSingular[0].replace(/'/g, '"') : '';
-  const rawContent = JSON.parse(stringJson);
-
-  const defaultContent: TopicContent = {
-    topic: '',
-    text: '',
-    start: '',
-    end: '',
-    speakers: ''
-  };
-
-  return isTopicContent(rawContent['args']) ? rawContent['args'] as TopicContent : defaultContent;
-}
-
-const getSummaryContent = (rawContent: RawSummaryContent): SummaryContent => {
-  const topics = Object.entries(rawContent);
-
-  const result: SummaryContent = {};
-
-  topics.forEach((pair) => {
-    result[pair[0] as keyof SummaryContent] = parseTopicContent(pair[1]);
-  });
-
-  return result;
-};
 
 const postRecordFile = createAsyncThunk<Summary, File, AsyncThunkConfig>(
   'summary/postRecordFile',
@@ -87,28 +57,14 @@ const postRecordFileTest = createAsyncThunk<Summary, File, AsyncThunkConfig>(
       },
     });
 
-    const content = getSummaryContent(response.data);
-
-    const summary: Summary = {
-      id: 1,
-      userId: 1,
-      title: 'Meeting 1',
-      date: new Date().toISOString(),
-      text: content,
-      status: 'success',
-      record: {
-        id: 1,
-        userId: 1,
-        file: '',
-        isArchived: false
-      }
-    }
+    const rawSummary = snakeToCamel(response.data.Summary) as SmallSummary;
+    const summary = getFullSummary(rawSummary);
 
     return summary;
   }
 );
 
-const getSummary = createAsyncThunk<Summary, string | number, AsyncThunkConfig>(
+const getSummary = createAsyncThunk<Summary, number, AsyncThunkConfig>(
   'summary/getSummary',
   async (summaryId, {getState}) => {
     const {user} = getState();
@@ -119,7 +75,10 @@ const getSummary = createAsyncThunk<Summary, string | number, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel(response.data) as Summary;
+    const rawSummary = snakeToCamel(response.data.Summary) as SmallSummary;
+    const summary = getFullSummary(rawSummary);
+
+    return summary;
   }
 );
 
@@ -127,19 +86,24 @@ const putSummaryChanges = createAsyncThunk<Summary, SummaryUpdate, AsyncThunkCon
   'summary/putSummaryChanges',
   async (summaryUpdate, {getState}) => {
     const {user} = getState();
-    const body = camelToSnake(summaryUpdate);
+    //const body = JSON.stringify(camelToSnake(summaryUpdate));
 
-    const response = await AxiosInstance.put(`/summary/${summaryUpdate.id}`, body, {
+    const query = `summary_id=${summaryUpdate.id}&text_input=${summaryUpdate.text['Общая информация'].text}`;
+
+    const response = await AxiosInstance.put(`/summary/edit?${query}`, undefined, {
       headers: {
         Authorization: user.auth.token
       }
     });
+    
+    const rawSummary = snakeToCamel(response.data) as SmallSummary;
+    const summary = getFullSummary(rawSummary);
 
-    return snakeToCamel(response.data) as Summary;
+    return summary;
   }
 );
 
-const deleteSummary = createAsyncThunk<void, string | number, AsyncThunkConfig>(
+const deleteSummary = createAsyncThunk<void, number, AsyncThunkConfig>(
   'summary/deleteSummary',
   async (summaryId, {getState}) => {
     const {user} = getState();
@@ -165,10 +129,10 @@ const getSummaries = createAsyncThunk<SummariesRaw, number, AsyncThunkConfig>(
       }
     });
 
-    const summaries = arraySnakeToCamel<SummaryInfo>(response.data.summaries as object[]);
+    const summaries = arraySnakeToCamel<SmallSummary>(response.data);
 
     const summariesWithTotal: SummariesRaw = {
-      summaries,
+      summaries: getFullSummaries(summaries),
       total: response.data.total ? response.data.total : summaries.length
     };
 

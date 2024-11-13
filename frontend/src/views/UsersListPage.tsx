@@ -33,8 +33,12 @@ const UsersListPage = () => {
 
   };
 
+  const updateUsersList = (currentPage: number) => {
+    dispatch(getUsers(currentPage));
+  };
+
   useEffect(() => {
-    dispatch(getUsers(page));
+    updateUsersList(page);
   }, [page, dispatch]);
 
   return (
@@ -45,11 +49,14 @@ const UsersListPage = () => {
         submit={submit} />
       <div>
         {users.map((user) => (
-          <UserPlain key={user.username} user={user} />
+          <UserPlain 
+            key={user.username} 
+            user={user} 
+            onDelete={() => updateUsersList(page)} />
         ))}
       </div>
       <Pagination 
-        count={usersTotal % ITEMS_PER_PAGE + 1}
+        count={Math.ceil(usersTotal / ITEMS_PER_PAGE)}
         defaultPage={1}
         shape='rounded' 
         color='primary'

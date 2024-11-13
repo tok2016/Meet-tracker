@@ -1,20 +1,20 @@
-import { Stack, SxProps, Typography, Theme } from '@mui/material';
+import { Stack, SxProps, Typography, Theme, MenuItem } from '@mui/material';
 import { Description, InsertDriveFile, PlayCircleOutline, VolumeOff, VolumeUp } from '@mui/icons-material';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { SummaryInfo } from '../utils/types/Summary';
 import { TextColors } from '../utils/Colors';
-import { statusesTranslations } from '../utils/utils';
+import { getLocaleString, statusesTranslations } from '../utils/utils';
 import ItemPlain from './ItemPlain';
+import PlainMenu from './PlainMenu';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { deleteRecordById, deleteSummaryById } from '../store/admin/adminThunks';
 
-const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
-  const date = new Date(summary.date).toLocaleDateString('ru-RU', {
-    weekday: undefined,
-    year: 'numeric',
-    day: '2-digit',
-    month: '2-digit'
-  });
+const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: SummaryInfo, isForAdmin: boolean, onDelete: () => void}) => {
+  const dispatch = useAppDispatch();
+
+  const date = getLocaleString(summary.date);
 
   const iconSx: SxProps<Theme> = {
     color: TextColors.main, 
@@ -27,6 +27,14 @@ const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
     flexDirection: 'row',
     gap: '1em',
     alignItems: 'center'
+  };
+
+  const deleteSummary = () => {
+    dispatch(deleteSummaryById(summary.id)).then(() => onDelete());
+  };
+
+  const deleteRecord = () => {
+    dispatch(deleteRecordById(summary.audioId)).then(() => onDelete());
   };
 
   return (
@@ -44,11 +52,15 @@ const RawSummaryPlain = ({summary}: {summary: SummaryInfo}) => {
         <Typography variant='h3' color={summary.status === 'error' ? 'error' : 'textPrimary'}>
           {statusesTranslations[summary.status]}
         </Typography>
-        {summary.record.file ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
+        {summary.audioId ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
         {summary.hasText ? <Description sx={iconSx}/> : <InsertDriveFile sx={iconSx}/>}
         <Typography variant='h3Normal'>
           {date}
         </Typography>
+        <PlainMenu hidden={!isForAdmin}>
+          <MenuItem onClick={deleteSummary}>Удалить резюме</MenuItem>
+          <MenuItem onClick={deleteRecord}>Удалить аудио</MenuItem>
+        </PlainMenu>
       </Stack>
     </ItemPlain>
   );

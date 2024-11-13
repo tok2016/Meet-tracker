@@ -1,5 +1,5 @@
 export interface Record {
-  id: number,
+  id: string | number,
   userId: number,
   file: string,
   isArchived: boolean

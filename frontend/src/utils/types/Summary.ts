@@ -11,7 +11,8 @@ export default interface Summary {
   date: string,
   text: SummaryContent,
   status: Status,
-  record: Record
+  record: Record,
+  audioId: string | number
 }
 
 export type SummaryInfo = Omit<Summary, 'userId' | 'text'> & {hasText: boolean};
@@ -26,6 +27,8 @@ export type SummariesRaw = {
 export type RawSummaryContent = {[topic: string]: string};
 
 export type RawSummary = Omit<Summary, 'text'> & {text: RawSummaryContent};
+
+export type SmallSummary = Pick<RawSummary, 'date' | 'audioId' | 'text' | 'id'>;
 
 export const isSummary = (summary: unknown): summary is Summary => (summary as Summary).text !== undefined;
 
@@ -43,5 +46,6 @@ export const defaultSummary: Summary = {
   text: {},
   date: (new Date()).toString(),
   record: defaultRecord,
-  status: 'idle'
+  status: 'idle',
+  audioId: 0
 };

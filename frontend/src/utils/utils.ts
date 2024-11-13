@@ -1,4 +1,6 @@
 import MediaValue from './types/MediaValue';
+import Summary, { RawSummaryContent, SmallSummary, SummaryContent, SummaryInfo } from './types/Summary';
+import TopicContent, { isTopicContent } from './types/TopicContent';
 
 const BASE_URL = 'http://127.0.0.1:8000';
 
@@ -73,6 +75,77 @@ const arraySnakeToCamel = <Type, >(arr: object[]) => arr.map((obj) => snakeToCam
 
 const getOffsetQuery = (page: number) => `offset=${(page - 1) * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`;
 
-export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery,
+const getLocaleString = (dateString: string) => new Date(dateString).toLocaleDateString('ru-RU', {
+  weekday: undefined,
+  year: 'numeric',
+  day: '2-digit',
+  month: '2-digit'
+});
+
+const parseTopicContent = (content: string): TopicContent => {
+  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
+  const stringJsonSingular = stringEntry?.match(/{.{1,}}/g);
+  const stringJson = stringJsonSingular ? stringJsonSingular[0].replace(/'/g, '"') : '';
+  const rawContent = JSON.parse(stringJson);
+
+  const defaultContent: TopicContent = {
+    topic: '',
+    text: '',
+    start: '',
+    end: '',
+    speakers: ''
+  };
+
+  return isTopicContent(rawContent['args']) ? rawContent['args'] as TopicContent : defaultContent;
+}
+
+const getSummaryContent = (rawContent: RawSummaryContent): SummaryContent => {
+  const topics = Object.entries(rawContent);
+
+  const result: SummaryContent = {};
+
+  topics.forEach((pair) => {
+    result[pair[0] as keyof SummaryContent] = parseTopicContent(pair[1]);
+  });
+
+  return result;
+};
+
+const getFullSummary = (rawSummary: SmallSummary): Summary => ({
+    id: rawSummary.id ?? 0,
+    userId: 1,
+    title: 'Meeting 1',
+    date: rawSummary.date ?? new Date().toISOString(),
+    text: rawSummary.text 
+      ? (typeof rawSummary.text === 'string' ? getSummaryContent(JSON.parse(rawSummary.text)) : getSummaryContent(rawSummary.text)) 
+      : {},
+    status: 'success',
+    record: {
+      id: 1,
+      userId: 1,
+      file: '',
+      isArchived: false
+    },
+    audioId: rawSummary.audioId ?? '0'
+  }
+);
+
+const getFullSummaries = (rawSummaries: SmallSummary[]): SummaryInfo[] => rawSummaries.map((rawSummary) => ({
+  id: rawSummary.id,
+  title: 'Meeting 1',
+  date: rawSummary.date,
+  status: 'success',
+  record: {
+    id: 1,
+    userId: 1,
+    file: '',
+    isArchived: false
+  },
+  audioId: rawSummary.audioId,
+  hasText: rawSummary.text !== undefined
+}))
+
+export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, 
+  getFullSummary, getFullSummaries, getSummaryContent,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};
