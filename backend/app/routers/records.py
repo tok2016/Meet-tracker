@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, UploadFile, Form
 from .ollama_functions import OllamaFunctions
 from fastapi.responses import StreamingResponse, FileResponse
-from app.models import Summary
+from app.models import Summary, SummaryFilter
 from app.utils import CurrentUser
 from typing import Annotated
-from datetime import timedelta
 from app.db import SessionDep
 from faster_whisper import WhisperModel, tokenizer
 import io
@@ -19,6 +18,8 @@ from uuid import uuid4
 import os
 import re
 from sqlmodel import Field, Session, SQLModel, create_engine, select
+import math
+from fastapi_filter import FilterDepends
 
 #Whsiper модель
 model_size = "large-v3"
@@ -152,3 +153,17 @@ async def edit_summary_text(session: SessionDep, text_input: str, summary_id: in
     session.refresh(summary_db)
     return summary_db
 
+
+@router.get("/summary_filter/")
+async def filter_summary(session: SessionDep, summary_filter: SummaryFilter = FilterDepends(SummaryFilter), 
+        page: int = Query(ge=0, default=0), size: int = Query(ge=1, le=100)):
+    #Пагинация
+    offset_min = page * size
+    offset_max = (page + 1) * size
+    #Сам фильтр
+    query = select(Summary)
+    query = summary_filter.filter(query)
+    query = summary_filter.sort(query)
+    result = session.execute(query).scalars().all()
+    response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
+    return response
