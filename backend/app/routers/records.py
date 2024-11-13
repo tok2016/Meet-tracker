@@ -85,12 +85,12 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     #summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
     #Расскоментить эту строку если не хочется работать с лламой и виспером
     summary_common = "content='' additional_kwargs={} response_metadata={} id='run-7a6c305b-38d7-4f81-91bd-5bff5e646b01-0' tool_calls=[{'name': 'summarize_text', 'args': {'topic': 'Conversation between family members', 'text': 'The conversation is about a person who is feeling down and their loved ones trying to comfort them.', 'start': '0.0', 'end': '20.14', 'speakers': 'SPEAKER_02, SPEAKER_00, SPEAKER_03'}, 'id': 'call_6c90d255c518452d800fc54711d70a74', 'type': 'tool_call'}]"
-    db_summary = Summary(text=summary_common, title = title, user_id = current_user.id, audio_id = audio_id)
+    db_summary = Summary(text=f"{summary_common}", title = title, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
     session.refresh(db_summary)
 
-    return { "Общая информация": f"{summary_common}" }
+    return db_summary
 
 @router.get("/records")
 async def read_records(session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=20)] = 20):
