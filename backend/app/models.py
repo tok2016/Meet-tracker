@@ -1,6 +1,6 @@
 
 from sqlmodel import Field, Session, SQLModel, create_engine, select
-from pydantic import EmailStr
+from pydantic import EmailStr, field_validator
 import datetime
 from fastapi_filter.contrib.sqlalchemy import Filter
 from typing import Optional
@@ -51,17 +51,27 @@ class Summary(SQLModel, table=True):
     text: str
 
 class UserFilter(Filter):
-    #username__in: Optional[list[str]] = Field(alias="usernames")
-    #registration_date__gte: Optional[datetime.datetime] = Field(alias="from")
-    #registration_date__lte: Optional[datetime.datetime] = Field(alias="to")
-    #first_name__in: Optional[list[str]] = Field(alias="first name")
-    #last_name__in: Optional[list[str]] = Field(alias="last name")
-
-    username__in: Optional[str]
-    registration_date__gte: Optional[datetime.datetime]
-    registration_date__lte: Optional[datetime.datetime]
-    first_name__in: Optional[str]
-    last_name__in: Optional[str]
+    username__like: Optional[str] = None
+    registration_date__gte: Optional[datetime.datetime] = None
+    registration_date__lte: Optional[datetime.datetime] = None
+    first_name__in: Optional[list[str]] = None
+    last_name__in: Optional[list[str]] = None
+    #is_admin__in: Optional[bool] = None
+    order_by: Optional[list[str]]
 
     class Constants(Filter.Constants):
         model = User
+    
+    @field_validator("order_by")
+    def restrict_sortable_fields(cls, value):
+        if value is None:
+            return None
+
+        allowed_field_names = ["username", "first_name", "last_name", "registration_date"]
+
+        for field_name in value:
+            field_name = field_name.replace("+", "").replace("-", "")  # 
+            if field_name not in allowed_field_names:
+                raise ValueError(f"You may only sort by: {', '.join(allowed_field_names)}")
+
+        return value
