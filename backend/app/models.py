@@ -2,6 +2,8 @@
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from pydantic import EmailStr
 import datetime
+from fastapi_filter.contrib.sqlalchemy import Filter
+from typing import Optional
 
 class UserBase(SQLModel):
     username: str = Field(index=True)
@@ -47,3 +49,19 @@ class Summary(SQLModel, table=True):
     audio_id: str | None = Field(default=None)
     date: datetime.datetime = Field(default_factory=datetime.datetime.utcnow, nullable=False)
     text: str
+
+class UserFilter(Filter):
+    #username__in: Optional[list[str]] = Field(alias="usernames")
+    #registration_date__gte: Optional[datetime.datetime] = Field(alias="from")
+    #registration_date__lte: Optional[datetime.datetime] = Field(alias="to")
+    #first_name__in: Optional[list[str]] = Field(alias="first name")
+    #last_name__in: Optional[list[str]] = Field(alias="last name")
+
+    username__in: Optional[str]
+    registration_date__gte: Optional[datetime.datetime]
+    registration_date__lte: Optional[datetime.datetime]
+    first_name__in: Optional[str]
+    last_name__in: Optional[str]
+
+    class Constants(Filter.Constants):
+        model = User
