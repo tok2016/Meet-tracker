@@ -6,7 +6,7 @@ import TopicPlain from '../components/TopicPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getSummary, putSummaryChanges } from '../store/summary/summaryThunks';
-import { SummaryContent, SummaryUpdate } from '../utils/types/Summary';
+import { SummaryUpdate } from '../utils/types/Summary';
 import TopicContent from '../utils/types/TopicContent';
 
 const SummaryPage = () => {
@@ -15,11 +15,11 @@ const SummaryPage = () => {
   const {summary} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
-  const [text, setText] = useState<SummaryContent>(summary.text);
+  const [text, setText] = useState<TopicContent[]>(summary.text);
   const disabled = useMemo(() => JSON.stringify(summary.text) === JSON.stringify(text), [summary.text, text]);
 
-  const updateSummary = (key: keyof SummaryContent, updatedContent: TopicContent) => {
-    setText((value) => ({...value, [key]: updatedContent}));
+  const updateSummary = (index: number, updatedContent: TopicContent) => {
+    setText((value) => value.map((content, i) => i === index ? updatedContent : content));
   };
 
   const sendUpdates = () => {
@@ -45,8 +45,12 @@ const SummaryPage = () => {
       <Typography variant='h2' marginBottom='25px'>{summary.title}</Typography>
       <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
       {        
-        Object.entries(summary.text).map((pair) => (
-          <TopicPlain key={pair[0]} topic={pair} updateSummary={updateSummary}/>
+        summary.text.map((content, i) => (
+          <TopicPlain 
+            key={content.topic} 
+            index={i} 
+            content={content} 
+            updateSummary={updateSummary}/>
         ))
       }
       <Button 

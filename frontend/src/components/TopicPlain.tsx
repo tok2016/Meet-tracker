@@ -9,19 +9,17 @@ import TopicContent from '../utils/types/TopicContent';
 import TextArea from './TextArea';
 import { breakpoints } from '../utils/theme/BasicTypography';
 import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
-import { SummaryContent } from '../utils/types/Summary';
 
 const TYPE_TIMEOUT = 2500;
 
 type TopicPlainProps = {
-  topic: [string, TopicContent], 
-  updateSummary: (key: keyof SummaryContent, updatedContent: TopicContent) => void
+  index: number,
+  content: TopicContent, 
+  updateSummary: (index: number, updatedContent: TopicContent) => void
 };
 
-const TopicPlain = ({topic, updateSummary}: TopicPlainProps) => {
+const TopicPlain = ({index, content, updateSummary}: TopicPlainProps) => {
   const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
-
-  const [title, content] = topic;
 
   const tasks = useMemo(() => content.tasks?.split(', '), [content]);
 
@@ -33,7 +31,7 @@ const TopicPlain = ({topic, updateSummary}: TopicPlainProps) => {
 
   const onKeyUp = () => {
     timer = setTimeout(() => {
-      updateSummary(title, {...content, topic: customTitle, text: customText, speakers: customSpeakers});
+      updateSummary(index, {...content, topic: customTitle, text: customText, speakers: customSpeakers});
     }, TYPE_TIMEOUT);
   };
 

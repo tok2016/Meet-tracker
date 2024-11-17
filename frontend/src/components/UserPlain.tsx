@@ -23,7 +23,7 @@ const RawUserPlain = ({user, onDelete}: {user: User, onDelete: () => void}) => {
   };
 
   const deleteUser = () => {
-    dispatch(deleteUserByUsername(user.username)).then(() => onDelete());
+    dispatch(deleteUserByUsername({id: user.id, username: user.username})).then(() => onDelete());
   };
 
   return (
@@ -32,7 +32,7 @@ const RawUserPlain = ({user, onDelete}: {user: User, onDelete: () => void}) => {
         ? <Avatar src={user.avatar} sx={avatarSx} />
         : <AccountCircle sx={avatarSx} />}
 
-      <Link to={`/account/admin/users/${user.username}`}>
+      <Link to={`/account/admin/users/${user.id}`}>
         <Typography variant='h3'>
           {user.username}
         </Typography>
@@ -54,7 +54,7 @@ const RawUserPlain = ({user, onDelete}: {user: User, onDelete: () => void}) => {
         {user.isAdmin ? 'Администратор' : 'Пользователь'}
       </Typography>
 
-      <PlainMenu hidden={false}>
+      <PlainMenu hidden={user.isAdmin}>
         <MenuItem onClick={deleteUser}>Удалить пользователя</MenuItem>
       </PlainMenu>
     </ItemPlain>

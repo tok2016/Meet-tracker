@@ -1,4 +1,4 @@
-export type FilterSortType = 'title' | 'username' | 'date' | 'name';
+export type FilterSortType = 'title' | 'username' | 'first_name' | 'date';
 
 export default interface Filter {
   sort: FilterSortType,
@@ -11,3 +11,15 @@ export default interface Filter {
   archived?: boolean,
   admin?: boolean
 }
+
+export const defaultFilter: Filter = {
+  sort: 'title',
+  direction: 0,
+  username: '',
+  from: '',
+  to: '',
+  title: '',
+  name: '',
+  archived: false,
+  admin: false
+};

@@ -1,6 +1,7 @@
+import Filter from './types/Filter';
 import MediaValue from './types/MediaValue';
-import Summary, { RawSummaryContent, SmallSummary, SummaryContent, SummaryInfo } from './types/Summary';
-import TopicContent, { isTopicContent } from './types/TopicContent';
+import Summary, { RawSummary, SummaryInfo } from './types/Summary';
+import TopicContent, { TopicFull } from './types/TopicContent';
 
 const BASE_URL = 'http://127.0.0.1:8000';
 
@@ -56,7 +57,7 @@ const camelToSnake = (obj: object) => {
   return result;
 };
 
-const snakeToCamel = (obj: object) => {
+const snakeToCamel = <Type, >(obj: object): Type => {
   const result = obj;
 
   for (const key in obj) {
@@ -68,7 +69,7 @@ const snakeToCamel = (obj: object) => {
     }
   }
 
-  return result;
+  return result as Type;
 };
 
 const arraySnakeToCamel = <Type, >(arr: object[]) => arr.map((obj) => snakeToCamel(obj)) as Type[];
@@ -82,70 +83,45 @@ const getLocaleString = (dateString: string) => new Date(dateString).toLocaleDat
   month: '2-digit'
 });
 
-const parseTopicContent = (content: string): TopicContent => {
+const parseSummaryContent = (content: string): TopicContent[] => {
   const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
-  const stringJsonSingular = stringEntry?.match(/{.{1,}}/g);
-  const stringJson = stringJsonSingular ? stringJsonSingular[0].replace(/'/g, '"') : '';
-  const rawContent = JSON.parse(stringJson);
+  const stringJsonSingular = stringEntry?.replace(/'/g, '"');
 
-  const defaultContent: TopicContent = {
-    topic: '',
-    text: '',
-    start: '',
-    end: '',
-    speakers: ''
-  };
+  if(!stringJsonSingular) {
+    return [];
+  }
 
-  return isTopicContent(rawContent['args']) ? rawContent['args'] as TopicContent : defaultContent;
-}
+  const topics: TopicContent[] = [];
 
-const getSummaryContent = (rawContent: RawSummaryContent): SummaryContent => {
-  const topics = Object.entries(rawContent);
+  const parsedRawContent = JSON.parse(stringJsonSingular) as TopicFull[];
+  parsedRawContent.map((raw) => topics.push(raw.args));
 
-  const result: SummaryContent = {};
-
-  topics.forEach((pair) => {
-    result[pair[0] as keyof SummaryContent] = parseTopicContent(pair[1]);
-  });
-
-  return result;
+  return topics;
 };
 
-const getFullSummary = (rawSummary: SmallSummary): Summary => ({
-    id: rawSummary.id ?? 0,
-    userId: 1,
-    title: 'Meeting 1',
-    date: rawSummary.date ?? new Date().toISOString(),
-    text: rawSummary.text 
-      ? (typeof rawSummary.text === 'string' ? getSummaryContent(JSON.parse(rawSummary.text)) : getSummaryContent(rawSummary.text)) 
-      : {},
+const getFullSummary = (rawSummary: RawSummary): Summary => ({
+    ...rawSummary,
+    text: parseSummaryContent(rawSummary.text),
     status: 'success',
-    record: {
-      id: 1,
-      userId: 1,
-      file: '',
-      isArchived: false
-    },
-    audioId: rawSummary.audioId ?? '0'
   }
 );
 
-const getFullSummaries = (rawSummaries: SmallSummary[]): SummaryInfo[] => rawSummaries.map((rawSummary) => ({
-  id: rawSummary.id,
-  title: 'Meeting 1',
-  date: rawSummary.date,
+const getFullSummaries = (rawSummaries: RawSummary[]): SummaryInfo[] => rawSummaries.map((rawSummary) => ({
+  ...rawSummary,
   status: 'success',
-  record: {
-    id: 1,
-    userId: 1,
-    file: '',
-    isArchived: false
-  },
-  audioId: rawSummary.audioId,
   hasText: rawSummary.text !== undefined
-}))
+}));
+
+const getCollectionQuery = (page: number, filter: Filter) => (typeof filter.title === 'undefined'
+  ? (
+    `page=${page - 1}&size=${ITEMS_PER_PAGE}&username__like=${filter.username}&registration_date__gte=${filter.from}&registration_date__lte=${filter.to}&first_name__like=${filter.name}&order_by=${filter.direction > 0 ? '' : '-'}${filter.sort === 'date' ? 'registration_date' : filter.sort}`
+  )
+  : (
+    `page=${page - 1}&size=${ITEMS_PER_PAGE}&title__like=${filter.title}&creation_date__gte=${filter.from}&creation_date__lte=${filter.to}&order_by=${filter.direction > 0 ? '' : '-'}${filter.sort === 'date' ? 'creation_date' : filter.sort}`
+  )
+);
 
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, 
-  getFullSummary, getFullSummaries, getSummaryContent,
+  getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};

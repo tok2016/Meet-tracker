@@ -7,7 +7,7 @@ import useMediaValue from '../hooks/useMediaValue';
 import MediaValue from '../utils/types/MediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
-import { postRecordFileTest } from '../store/summary/summaryThunks';
+import { postRecordFile } from '../store/summary/summaryThunks';
 import { UIColors } from '../utils/Colors';
 import UploadInput from './UploadInput';
 import { isSummary } from '../utils/types/Summary';
@@ -35,9 +35,8 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
 
   const onFileUpload = () => {
     if(file) {
-      dispatch(postRecordFileTest(file))
+      dispatch(postRecordFile({title: 'Встреча 1', file}))
         .then((response) => {
-          console.log(response);
           if(isSummary(response.payload)) {
             navigate(`/account/summary/${response.payload.id}`);
           }

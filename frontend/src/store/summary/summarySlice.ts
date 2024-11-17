@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import SummaryState from '../../utils/types/SummaryState';
-import { postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, postRecordFileTest } from './summaryThunks';
+import { postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries } from './summaryThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
 import { defaultSummary } from '../../utils/types/Summary';
 import { RootState } from '../store';
@@ -24,10 +24,6 @@ const summarySlide = createSlice({
   extraReducers(builder) {
     builder
       .addCase(postRecordFile.fulfilled, (state, action) => {
-        state.status = 'success';
-        state.summary = action.payload;
-      })
-      .addCase(postRecordFileTest.fulfilled, (state, action) => {
         state.status = 'success';
         state.summary = action.payload;
       })

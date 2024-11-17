@@ -13,7 +13,7 @@ const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
 
     const response = await AxiosInstance.post('/user', body);
 
-    return snakeToCamel(response.data) as User;
+    return snakeToCamel<User>(response.data);
   }
 );
 
@@ -68,7 +68,7 @@ const getCurrentUser = createAsyncThunk<User, void, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel(response.data) as User;
+    return snakeToCamel<User>(response.data);
   }
 );
 
@@ -85,7 +85,7 @@ const patchCurrentUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel(response.data) as User;
+    return snakeToCamel<User>(response.data);
   }
 );
 

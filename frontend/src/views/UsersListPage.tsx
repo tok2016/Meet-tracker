@@ -9,12 +9,12 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectAdminData } from '../store/admin/adminSlice';
 import { getUsers } from '../store/admin/adminThunks';
 
-const defaultFilter: Filter = {
+const defaultUserFilter: Filter = {
   sort: 'username',
   direction: 1,
   username: '',
-  from: '',
-  to: '',
+  from: '2011-10-05T14:48:00.000Z',
+  to: '2025-10-05T14:48:00.000Z',
   name: '',
   admin: false
 }
@@ -29,12 +29,12 @@ const UsersListPage = () => {
     setPage(value);
   }
 
-  const submit = (filter: Filter) => {
-
+  const updateUsersList = (currentPage: number, filter: Filter = defaultUserFilter) => {
+    dispatch(getUsers({page: currentPage, filter}));
   };
 
-  const updateUsersList = (currentPage: number) => {
-    dispatch(getUsers(currentPage));
+  const submit = (filter: Filter) => {
+    updateUsersList(page, filter);
   };
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const UsersListPage = () => {
     <>
       <FilterMenu
         hidden={false}
-        defaultFilter={defaultFilter}
+        defaultFilter={defaultUserFilter}
         submit={submit} />
       <div>
         {users.map((user) => (

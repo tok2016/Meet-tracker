@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import UserInfoInput from '../components/UserInfoInput';
-import { UserRaw } from '../utils/types/User';
+import { User } from '../utils/types/User';
 import { patchCurrentUser, postLogout } from '../store/user/userThunks';
 import AvatarUploadInput from '../components/AvatarUploadInput';
 import { selectAdminData } from '../store/admin/adminSlice';
@@ -14,7 +14,7 @@ import { deleteUserByUsername, getUserByUsername, patchUserByUsername } from '..
 
 
 const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
-  const {username} = useParams();
+  const {id} = useParams();
   const navigate = useNavigate();
 
   const {user: originalUser} = useAppSelector(selectUser);
@@ -24,9 +24,10 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const user = isForAdmin ? anotherUser : originalUser;
   const userDate = new Date(user.registrationDate).toLocaleDateString();
 
-  const sendUpdate = (updatedUser: UserRaw) => {
+  const sendUpdate = (updatedUser: User) => {
     if(isForAdmin) {
-      dispatch(patchUserByUsername(updatedUser));
+      const parsedId = parseInt(id ?? '');
+      dispatch(patchUserByUsername({...updatedUser, id: parsedId})).then(() => navigate('/account/admin/users'));
     } else {
       dispatch(patchCurrentUser(updatedUser));
     }
@@ -37,14 +38,16 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   };
 
   const deleteUser = () => {
-    dispatch(deleteUserByUsername(user.username));
+    const parsedId = parseInt(id ?? '');
+    dispatch(deleteUserByUsername({id: parsedId, username: user.username}));
   };
 
   useEffect(() => {
-    if(isForAdmin && username) {
-      dispatch(getUserByUsername(username));
+    const parsedId = parseInt(id ?? '');
+    if(isForAdmin && id) {
+      dispatch(getUserByUsername({id: parsedId, username: user.username}));
     }
-  }, [username, dispatch]);
+  }, [id, dispatch]);
 
   return (
     <>

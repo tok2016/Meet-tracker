@@ -2,45 +2,19 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, getFullSummaries, getFullSummary, getOffsetQuery, getSummaryContent, snakeToCamel } from '../../utils/utils';
-import Summary, { SummariesRaw, SummaryUpdate, RawSummary, SmallSummary } from '../../utils/types/Summary';
+import { arraySnakeToCamel, getCollectionQuery, getFullSummaries, getFullSummary, snakeToCamel } from '../../utils/utils';
+import Summary, { SummariesRaw, SummaryUpdate, RawSummary } from '../../utils/types/Summary';
+import CollectionData from '../../utils/types/CollectionData';
+import Filter, { defaultFilter } from '../../utils/types/Filter';
+import CollectionParams from '../../utils/types/CollectionParams';
+import RecordQuery from '../../utils/types/RecordQuery';
 //import mockSummary from './example.json';
 
 const RECORD_UPLOAD_TIMEOUT = 1000 * 60 * 5;
 
-const postRecordFile = createAsyncThunk<Summary, File, AsyncThunkConfig>(
+const postRecordFile = createAsyncThunk<Summary, RecordQuery, AsyncThunkConfig>(
   'summary/postRecordFile',
-  async (file, {getState}) => {
-    const formData = new FormData();
-
-    const {user} = getState();
-
-    const finalFile = new File([file], `${user.user.username}_${Date.now()}`, {type: file.type});
-    const path = `${import.meta.env.AUDIO_STORAGE}${finalFile.name}`;
-
-    formData.append('file_path', finalFile);
-
-    const response = await AxiosInstance.post(`/record/diarize?file_name=${path}`, formData, {
-      timeout: RECORD_UPLOAD_TIMEOUT,
-      headers: {
-        Authorization: user.auth.token,
-        'Content-Type': 'multipart/fromData'
-      },
-    });
-
-    const rawSummary = snakeToCamel(response.data) as RawSummary;
-    const summary: Summary = {
-      ...rawSummary,
-      text: getSummaryContent(rawSummary.text)
-    }
-
-    return summary;
-  }
-);
-
-const postRecordFileTest = createAsyncThunk<Summary, File, AsyncThunkConfig>(
-  'summary/postRecordFileTest',
-  async (file, {getState}) => {
+  async ({file, title}, {getState}) => {
     const formData = new FormData();
 
     const {user} = getState();
@@ -49,7 +23,7 @@ const postRecordFileTest = createAsyncThunk<Summary, File, AsyncThunkConfig>(
 
     formData.append('file', finalFile);
 
-    const response = await AxiosInstance.post('/record/diarize', formData, {
+    const response = await AxiosInstance.post(`/record/diarize?title=${title}`, formData, {
       timeout: RECORD_UPLOAD_TIMEOUT,
       headers: {
         Authorization: user.auth.token,
@@ -57,7 +31,7 @@ const postRecordFileTest = createAsyncThunk<Summary, File, AsyncThunkConfig>(
       },
     });
 
-    const rawSummary = snakeToCamel(response.data.Summary) as SmallSummary;
+    const rawSummary = snakeToCamel<RawSummary>(response.data);
     const summary = getFullSummary(rawSummary);
 
     return summary;
@@ -75,7 +49,7 @@ const getSummary = createAsyncThunk<Summary, number, AsyncThunkConfig>(
       }
     });
 
-    const rawSummary = snakeToCamel(response.data.Summary) as SmallSummary;
+    const rawSummary = snakeToCamel<RawSummary>(response.data.Summary);
     const summary = getFullSummary(rawSummary);
 
     return summary;
@@ -86,9 +60,8 @@ const putSummaryChanges = createAsyncThunk<Summary, SummaryUpdate, AsyncThunkCon
   'summary/putSummaryChanges',
   async (summaryUpdate, {getState}) => {
     const {user} = getState();
-    //const body = JSON.stringify(camelToSnake(summaryUpdate));
 
-    const query = `summary_id=${summaryUpdate.id}&text_input=${summaryUpdate.text['Общая информация'].text}`;
+    const query = `summary_id=${summaryUpdate.id}&text_input=${summaryUpdate.text[0].text}`;
 
     const response = await AxiosInstance.put(`/summary/edit?${query}`, undefined, {
       headers: {
@@ -96,7 +69,7 @@ const putSummaryChanges = createAsyncThunk<Summary, SummaryUpdate, AsyncThunkCon
       }
     });
     
-    const rawSummary = snakeToCamel(response.data) as SmallSummary;
+    const rawSummary = snakeToCamel<RawSummary>(response.data);
     const summary = getFullSummary(rawSummary);
 
     return summary;
@@ -116,28 +89,30 @@ const deleteSummary = createAsyncThunk<void, number, AsyncThunkConfig>(
   }
 );
 
-const getSummaries = createAsyncThunk<SummariesRaw, number, AsyncThunkConfig>(
+const getSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncThunkConfig>(
   'summary/getSummaries', 
-  async (page, {getState}) => {
+  async ({page, filter=defaultFilter}, {getState}) => {
     const {user} = getState();
 
-    const query = getOffsetQuery(page);
+    const customFilter: Filter = {...filter, username: user.user.username};
+    const query = getCollectionQuery(page, customFilter);
 
-    const response = await AxiosInstance.get(`/records?${query}`, {
+    const response = await AxiosInstance.get(`/summary_filter/?${query}`, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    const summaries = arraySnakeToCamel<SmallSummary>(response.data);
+    const data = snakeToCamel<CollectionData>(response.data.pop());
+    const summaries = arraySnakeToCamel<RawSummary>(response.data);
 
     const summariesWithTotal: SummariesRaw = {
       summaries: getFullSummaries(summaries),
-      total: response.data.total ? response.data.total : summaries.length
+      total: data.total ?? summaries.length
     };
 
     return summariesWithTotal as SummariesRaw;
   }
 );
 
-export {postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, postRecordFileTest};
+export {postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries};

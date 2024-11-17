@@ -14,7 +14,7 @@ import { deleteRecordById, deleteSummaryById } from '../store/admin/adminThunks'
 const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: SummaryInfo, isForAdmin: boolean, onDelete: () => void}) => {
   const dispatch = useAppDispatch();
 
-  const date = getLocaleString(summary.date);
+  const date = getLocaleString(summary.creationDate);
 
   const iconSx: SxProps<Theme> = {
     color: TextColors.main, 
@@ -34,7 +34,7 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
   };
 
   const deleteRecord = () => {
-    dispatch(deleteRecordById(summary.audioId)).then(() => onDelete());
+    dispatch(deleteRecordById(summary.id)).then(() => onDelete());
   };
 
   return (

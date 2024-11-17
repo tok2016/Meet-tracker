@@ -1,17 +1,13 @@
-import { Record } from './Record';
 import { Status } from './Status';
 import TopicContent from './TopicContent';
-
-export type SummaryContent = {[topic: string]: TopicContent};
 
 export default interface Summary {
   id: number,
   userId: number,
   title: string,
-  date: string,
-  text: SummaryContent,
+  creationDate: string,
+  text: TopicContent[],
   status: Status,
-  record: Record,
   audioId: string | number
 }
 
@@ -24,28 +20,16 @@ export type SummariesRaw = {
   total: number
 };
 
-export type RawSummaryContent = {[topic: string]: string};
-
-export type RawSummary = Omit<Summary, 'text'> & {text: RawSummaryContent};
-
-export type SmallSummary = Pick<RawSummary, 'date' | 'audioId' | 'text' | 'id'>;
+export type RawSummary = Omit<Summary, 'text' | 'status'> & {text: string};
 
 export const isSummary = (summary: unknown): summary is Summary => (summary as Summary).text !== undefined;
-
-export const defaultRecord: Record = {
-  id: 0,
-  file: '',
-  userId: 0,
-  isArchived: false
-};
 
 export const defaultSummary: Summary = {
   id: 0,
   userId: 0,
   title: '',
-  text: {},
-  date: (new Date()).toString(),
-  record: defaultRecord,
+  text: [],
+  creationDate: (new Date()).toString(),
   status: 'idle',
   audioId: 0
 };

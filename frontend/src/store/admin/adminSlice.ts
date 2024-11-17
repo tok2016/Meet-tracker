@@ -5,7 +5,7 @@ import { deleteRecordById, deleteSummaryById, deleteUserByUsername, getAllSummar
   getUserByUsername, getUsers, patchUserByUsername, postNewUser } from './adminThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
 import { defaultUser } from '../../utils/types/User';
-import { defaultRecord, defaultSummary } from '../../utils/types/Summary';
+import { defaultSummary } from '../../utils/types/Summary';
 import { RootState } from '../store';
 
 const initialState: AdminState = {
@@ -59,7 +59,7 @@ const adminSlice = createSlice({
       })
       .addCase(deleteRecordById.fulfilled, (state) => {
         state.status = 'success';
-        state.summary = {...state.summary, record: defaultRecord, audioId: 0};
+        state.summary = {...state.summary};
       })
       .addDefaultCase((state, action) => {
         const endpoint = action.type.split('/').pop();
