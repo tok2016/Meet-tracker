@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, UploadFile, Form
 from .ollama_functions import OllamaFunctions
 from fastapi.responses import StreamingResponse, FileResponse
-from app.models import Summary
+from app.models import Summary, SummaryFilter
 from app.utils import CurrentUser
 from typing import Annotated
-from datetime import timedelta
 from app.db import SessionDep
 from faster_whisper import WhisperModel, tokenizer
 import io
@@ -19,6 +18,8 @@ from uuid import uuid4
 import os
 import re
 from sqlmodel import Field, Session, SQLModel, create_engine, select
+import math
+from fastapi_filter import FilterDepends
 
 #Whsiper модель
 model_size = "large-v3"
@@ -65,7 +66,7 @@ router = APIRouter()
 
 #Запрос для распознования спикеров
 @router.post("/record/diarize")
-async def record_diarize( file: UploadFile, session: SessionDep, current_user: CurrentUser):
+async def record_diarize( file: UploadFile, session: SessionDep, title: str, current_user: CurrentUser):
     audio = AudioSegment.from_file(io.BytesIO(file.file.read()))
     audio_id = str(uuid4())
     audio_dir = "app/sounds/" + audio_id + "/"
@@ -84,12 +85,12 @@ async def record_diarize( file: UploadFile, session: SessionDep, current_user: C
     #summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
     #Расскоментить эту строку если не хочется работать с лламой и виспером
     summary_common = "content='' additional_kwargs={} response_metadata={} id='run-7a6c305b-38d7-4f81-91bd-5bff5e646b01-0' tool_calls=[{'name': 'summarize_text', 'args': {'topic': 'Conversation between family members', 'text': 'The conversation is about a person who is feeling down and their loved ones trying to comfort them.', 'start': '0.0', 'end': '20.14', 'speakers': 'SPEAKER_02, SPEAKER_00, SPEAKER_03'}, 'id': 'call_6c90d255c518452d800fc54711d70a74', 'type': 'tool_call'}]"
-    db_summary = Summary(text=summary_common, user_id = current_user.id, audio_id = audio_id)
+    db_summary = Summary(text=f"{summary_common}", title = title, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
     session.refresh(db_summary)
 
-    return { "Общая информация": f"{summary_common}" }
+    return db_summary
 
 @router.get("/records")
 async def read_records(session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=20)] = 20):
@@ -152,3 +153,17 @@ async def edit_summary_text(session: SessionDep, text_input: str, summary_id: in
     session.refresh(summary_db)
     return summary_db
 
+
+@router.get("/summary_filter/")
+async def filter_summary(session: SessionDep, summary_filter: SummaryFilter = FilterDepends(SummaryFilter), 
+        page: int = Query(ge=0, default=0), size: int = Query(ge=1, le=100)):
+    #Пагинация
+    offset_min = page * size
+    offset_max = (page + 1) * size
+    #Сам фильтр
+    query = select(Summary)
+    query = summary_filter.filter(query)
+    query = summary_filter.sort(query)
+    result = session.execute(query).scalars().all()
+    response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
+    return response

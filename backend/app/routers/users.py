@@ -1,14 +1,16 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, UploadFile, File
 from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe
+from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe, UserFilter
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.db import SessionDep
-from typing import Annotated
+from typing import Annotated, Optional
 from datetime import timedelta
-from app.utils import get_password_hash, verify_password, create_access_token, authenticate, CurrentUser, get_user_by_email, upload_picture
+from app.utils import ( get_password_hash, verify_password, create_access_token, 
+    authenticate, CurrentUser, get_user_by_email, upload_picture )
 import os
-
+import math
+from fastapi_filter import FilterDepends
 
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
@@ -115,4 +117,18 @@ def create_user_profile_picutre(user_username: int, current_user: CurrentUser, f
         raise HTTPException( status_code=403, detail="Only admin" )
     full_image_path = upload_picture(user_username, file)
     return {"image": f"{full_image_path}"}
-     
+    
+@router.get("/user_filter/")
+async def filter_user(session: SessionDep, user_filter: UserFilter = FilterDepends(UserFilter), 
+        page: int = Query(ge=0, default=0), size: int = Query(ge=1, le=100)):
+    
+    #Пагинация
+    offset_min = page * size
+    offset_max = (page + 1) * size
+    #Сам фильтр
+    query = select(User)
+    query = user_filter.filter(query)
+    query = user_filter.sort(query)
+    result = session.execute(query).scalars().all()
+    response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
+    return response
