@@ -7,4 +7,11 @@ export default interface TopicContent {
   tasks?: string
 };
 
+export type TopicFull = {
+  id: string,
+  name: string,
+  args: TopicContent,
+  type: string
+};
+
 export const isTopicContent = (content: object): content is TopicContent => (content as TopicContent).topic !== undefined;

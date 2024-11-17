@@ -57,7 +57,7 @@ const Router = () => {
                       <Route path='summaries/:id' element={<SummaryPage />} />
 
                       <Route path='users' element={<UsersListPage />} />
-                      <Route path='users/:username' element={<UserPage isForAdmin />} />
+                      <Route path='users/:id' element={<UserPage isForAdmin />} />
                       <Route path='addUser' element={<RegisterPage isForAdmin />} />
               </Route>
       </Route>

@@ -10,7 +10,9 @@ type TextAreaProps = {
   variant: 'body1' | 'body2' | 'body2Highlight',
   hidden: boolean,
   readOnly: boolean,
-  setter: Dispatch<SetStateAction<string>>
+  setter: Dispatch<SetStateAction<string>>,
+  onKeyUp: () => void
+  onKeyDown: () => void
 };
 
 const ColorsForTextArea = {
@@ -25,7 +27,7 @@ const FontWeightsForTextArea = {
   body2Highlight: 700
 }
 
-const TextArea = ({value, variant, hidden, readOnly, setter}: TextAreaProps) => {
+const TextArea = ({value, variant, hidden, readOnly, setter, onKeyDown, onKeyUp}: TextAreaProps) => {
   const {large, xLarge} = useMediaMatch();
 
   let fontSize = 18;
@@ -52,6 +54,8 @@ const TextArea = ({value, variant, hidden, readOnly, setter}: TextAreaProps) => 
       value={value}
       readOnly={readOnly}
       onChange={(evt) => setter(evt.target.value)}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
       > 
     </TextareaAutosize>
   );

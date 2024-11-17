@@ -17,8 +17,8 @@ const getSearchWord = (field: FilterSortType, filter: Filter) => {
   switch(field) {
     case 'title': 
       return filter.title ?? '';
-    case 'name':
-      return filter.title ?? '';
+    case 'first_name':
+      return filter.name ?? '';
     default:
       return filter.username
   }
@@ -30,10 +30,15 @@ const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
   const searchWord = getSearchWord(filter.sort, filter);
 
   const onSearchChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    if(filter.sort === 'username') {
-      setFilter((prev) => ({...prev, username: evt.target.value}));
-    } else {
-      setFilter((prev) => ({...prev, title: evt.target.value}));
+    switch(filter.sort) {
+      case 'title': 
+        setFilter((prev) => ({...prev, title: evt.target.value}));
+        break;
+      case 'first_name':
+        setFilter((prev) => ({...prev, name: evt.target.value}));
+        break;
+      default:
+        setFilter((prev) => ({...prev, username: evt.target.value}));
     }
   };
 
@@ -112,10 +117,10 @@ const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
             <FilterField 
               name='Имя'
               hidden={typeof filter.name === 'undefined'}
-              selected={filter.sort === 'name'}
+              selected={filter.sort === 'first_name'}
               value={filter.name ?? ''}
               direction={filter.direction}
-              onChoice={() => chooseField('name')}
+              onChoice={() => chooseField('first_name')}
               onCancel={() => setFilter((prev) => ({...prev, name: ''}))} />
 
             <FilterField 

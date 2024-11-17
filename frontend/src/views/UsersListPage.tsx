@@ -9,12 +9,12 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectAdminData } from '../store/admin/adminSlice';
 import { getUsers } from '../store/admin/adminThunks';
 
-const defaultFilter: Filter = {
+const defaultUserFilter: Filter = {
   sort: 'username',
   direction: 1,
   username: '',
-  from: '',
-  to: '',
+  from: '2011-10-05T14:48:00.000Z',
+  to: '2025-10-05T14:48:00.000Z',
   name: '',
   admin: false
 }
@@ -29,27 +29,34 @@ const UsersListPage = () => {
     setPage(value);
   }
 
-  const submit = (filter: Filter) => {
+  const updateUsersList = (currentPage: number, filter: Filter = defaultUserFilter) => {
+    dispatch(getUsers({page: currentPage, filter}));
+  };
 
+  const submit = (filter: Filter) => {
+    updateUsersList(page, filter);
   };
 
   useEffect(() => {
-    dispatch(getUsers(page));
+    updateUsersList(page);
   }, [page, dispatch]);
 
   return (
     <>
       <FilterMenu
         hidden={false}
-        defaultFilter={defaultFilter}
+        defaultFilter={defaultUserFilter}
         submit={submit} />
       <div>
         {users.map((user) => (
-          <UserPlain key={user.username} user={user} />
+          <UserPlain 
+            key={user.username} 
+            user={user} 
+            onDelete={() => updateUsersList(page)} />
         ))}
       </div>
       <Pagination 
-        count={usersTotal % ITEMS_PER_PAGE + 1}
+        count={Math.ceil(usersTotal / ITEMS_PER_PAGE)}
         defaultPage={1}
         shape='rounded' 
         color='primary'

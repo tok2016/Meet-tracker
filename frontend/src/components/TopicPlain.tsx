@@ -10,16 +10,34 @@ import TextArea from './TextArea';
 import { breakpoints } from '../utils/theme/BasicTypography';
 import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
 
-const TopicPlain = ({topic}: {topic: [string, TopicContent]}) => {
-  const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
+const TYPE_TIMEOUT = 2500;
 
-  const [title, content] = topic;
+type TopicPlainProps = {
+  index: number,
+  content: TopicContent, 
+  updateSummary: (index: number, updatedContent: TopicContent) => void
+};
+
+const TopicPlain = ({index, content, updateSummary}: TopicPlainProps) => {
+  const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
 
   const tasks = useMemo(() => content.tasks?.split(', '), [content]);
 
-  const [customTitle, setCustomTitle] = useState<string>(title);
+  const [customTitle, setCustomTitle] = useState<string>(content.topic);
   const [customText, setCustomText] = useState<string>(content.text);
   const [customSpeakers, setCustomSpeakers] = useState<string>(content.speakers);
+
+  let timer: number | undefined = undefined;
+
+  const onKeyUp = () => {
+    timer = setTimeout(() => {
+      updateSummary(index, {...content, topic: customTitle, text: customText, speakers: customSpeakers});
+    }, TYPE_TIMEOUT);
+  };
+
+  const onKeyDown = () => {
+    clearTimeout(timer);
+  };
 
   if(!content.topic) {
     return;
@@ -37,19 +55,34 @@ const TopicPlain = ({topic}: {topic: [string, TopicContent]}) => {
         justifyContent: 'center',
         gap: '15px'
       } : {})}>
-          <Stack direction='row' alignItems='center' alignSelf='center'>
+          <Stack 
+            display='flex' 
+            flexDirection='row' 
+            alignItems='center' 
+            alignSelf='center' 
+            gap='10px' 
+            justifyContent='center'
+            width='100%'>
             <Input
               type='text' 
               disableUnderline
               value={customTitle}
               itemType=''
               onChange={(evt) => setCustomTitle(evt.target.value)}
+              onKeyUp={onKeyUp}
+              onKeyDown={onKeyDown}
               sx={{
                 [breakpoints.up('lg')]: {
                   fontSize: LgFontSizes.h3
                 },
                 [breakpoints.only('xl')]: {
                   fontSize: XlFontSizes.h3
+                },
+                width: `${customTitle.length / 1.75}em`,
+                maxWidth: '50%',
+                '& .MuiInputBase-input': {
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
                 }
               }} />
 
@@ -63,7 +96,9 @@ const TopicPlain = ({topic}: {topic: [string, TopicContent]}) => {
             variant='body1'
             hidden={!isRolledDown} 
             value={customText}
-            setter={setCustomText}>
+            setter={setCustomText}
+            onKeyUp={onKeyUp}
+            onKeyDown={onKeyDown}>
           </TextArea>
 
           <TextArea 
@@ -71,7 +106,9 @@ const TopicPlain = ({topic}: {topic: [string, TopicContent]}) => {
             variant='body2'
             hidden={!isRolledDown} 
             value={customSpeakers}
-            setter={setCustomSpeakers}>
+            setter={setCustomSpeakers}
+            onKeyUp={onKeyUp}
+            onKeyDown={onKeyDown}>
           </TextArea>
 
           <Paper variant='elevationInside' style={{

@@ -50,7 +50,7 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   useEffect(() => {
     if(isForAdmin) {
       if(anotherUser.username) {
-        navigate(`/account/admin/users/${anotherUser.username}`);
+        navigate(`/account/admin/users/${anotherUser.id}`);
       }
     } else {
       if(originalUser.username) {

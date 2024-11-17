@@ -1,28 +1,33 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
-import { User, UserRaw, UsersRaw } from '../../utils/types/User';
+import { User, UserQuery, UserRaw, UsersRaw } from '../../utils/types/User';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, camelToSnake, getOffsetQuery, snakeToCamel } from '../../utils/utils';
-import { SummariesRaw, SummaryInfo } from '../../utils/types/Summary';
+import { arraySnakeToCamel, camelToSnake, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
+import { RawSummary, SummariesRaw } from '../../utils/types/Summary';
+import CollectionParams from '../../utils/types/CollectionParams';
+import { defaultFilter } from '../../utils/types/Filter';
+import CollectionData from '../../utils/types/CollectionData';
 
-const getUsers = createAsyncThunk<UsersRaw, number, AsyncThunkConfig>(
+const getUsers = createAsyncThunk<UsersRaw, CollectionParams, AsyncThunkConfig>(
   'admin/getUsers', 
-  async (page: number, {getState}) => {
+  async ({page, filter=defaultFilter}, {getState}) => {
     const {user} = getState();
 
-    const query = getOffsetQuery(page);
+    const query = getCollectionQuery(page, filter);
 
-    const response = await AxiosInstance.get(`/users?${query}`, {
+    const response = await AxiosInstance.get(`/user_filter/?${query}`, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    const users = arraySnakeToCamel<User>(response.data.users);
+    const data = snakeToCamel<CollectionData>(response.data.pop());
+    const users = arraySnakeToCamel<User>(response.data);
+
     const usersWithTotal: UsersRaw = {
       users,
-      total: response.data.total ? response.data.total : users.length
+      total: data.total ?? users.length
     };
 
     return usersWithTotal;
@@ -42,48 +47,48 @@ const postNewUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel(response.data) as User;
+    return snakeToCamel<User>(response.data);
   }
 );
 
-const getUserByUsername = createAsyncThunk<User, string, AsyncThunkConfig>(
+const getUserByUsername = createAsyncThunk<User, UserQuery, AsyncThunkConfig>(
   'admin/getUserByUsername',
-  async (username, {getState}) => {
+  async ({id, username}, {getState}) => {
     const {user} = getState();
 
-    const response = await AxiosInstance.get(`user/${username}`, {
+    const response = await AxiosInstance.get(`user/${id}?user_username=${id}`, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return snakeToCamel(response.data) as User;
+    return snakeToCamel<User>(response.data);
   }
 );
 
-const patchUserByUsername = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
+const patchUserByUsername = createAsyncThunk<User, User, AsyncThunkConfig>(
   'admin/patchUserByUsername',
   async (userUpdate, {getState}) => {
     const {user} = getState();
 
     const body = camelToSnake(userUpdate);
 
-    const response = await AxiosInstance.patch(`user/${userUpdate.username}`, body, {
+    const response = await AxiosInstance.patch(`user/${userUpdate.id}?user_username=${userUpdate.id}`, body, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return snakeToCamel(response.data) as User;
+    return snakeToCamel<User>(response.data);
   }
 );
 
-const deleteUserByUsername = createAsyncThunk<void, string, AsyncThunkConfig>(
+const deleteUserByUsername = createAsyncThunk<void, UserQuery, AsyncThunkConfig>(
   'admin/deleteUserByUsername',
-  async (username, {getState}) => {
+  async ({id, username}, {getState}) => {
     const {user} = getState();
 
-    await AxiosInstance.delete(`user/${username}`, {
+    await AxiosInstance.delete(`user/${id}?user_username=${id}`, {
       headers: {
         Authorization: user.auth.token
       }
@@ -92,30 +97,32 @@ const deleteUserByUsername = createAsyncThunk<void, string, AsyncThunkConfig>(
 );
 
 
-const getAllSummaries = createAsyncThunk<SummariesRaw, number, AsyncThunkConfig>(
+const getAllSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncThunkConfig>(
   'admin/getSummaries',
-  async (page, {getState}) => {
+  async ({page, filter=defaultFilter}, {getState}) => {
     const {user} = getState();
 
-    const query = getOffsetQuery(page);
+    const query = getCollectionQuery(page, filter);
 
-    const response = await AxiosInstance.get(`/records?${query}`, {
+    const response = await AxiosInstance.get(`/summary_filter/?${query}`, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    const summaries = arraySnakeToCamel<SummaryInfo>(response.data.summaries);
+    const data = snakeToCamel<CollectionData>(response.data.pop());
+    const summaries = arraySnakeToCamel<RawSummary>(response.data);
+
     const summariesWithTotal: SummariesRaw = {
-      summaries,
-      total: response.data.token ? response.data.token : summaries.length
+      summaries: getFullSummaries(summaries),
+      total: data.total ?? summaries.length
     };
 
     return summariesWithTotal;
   }
 );
 
-const deleteSummaryById = createAsyncThunk<void, string, AsyncThunkConfig>(
+const deleteSummaryById = createAsyncThunk<void, number, AsyncThunkConfig>(
   'admin/deleteSummaryById',
   async (summaryId, {getState}) => {
     const {user} = getState();
@@ -128,12 +135,12 @@ const deleteSummaryById = createAsyncThunk<void, string, AsyncThunkConfig>(
   }
 );
 
-const deleteRecordById = createAsyncThunk<void, string, AsyncThunkConfig>(
+const deleteRecordById = createAsyncThunk<void, number, AsyncThunkConfig>(
   'admin/deleteRecordById', 
-  async (recordId, {getState}) => {
+  async (summaryId, {getState}) => {
     const {user} = getState();
 
-    await AxiosInstance.delete(`/delete_audio/${recordId}`, {
+    await AxiosInstance.delete(`/delete_audio/${summaryId}`, {
       headers: {
         Authorization: user.auth.token
       }

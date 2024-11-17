@@ -13,11 +13,7 @@ const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
 
     const response = await AxiosInstance.post('/user', body);
 
-    //needs to be deleted
-    const returnUser = snakeToCamel(response.data) as User;
-    returnUser.isAdmin = returnUser.username === 'admin';
-
-    return returnUser;
+    return snakeToCamel<User>(response.data);
   }
 );
 
@@ -72,11 +68,7 @@ const getCurrentUser = createAsyncThunk<User, void, AsyncThunkConfig>(
       }
     });
 
-    //needs to be deleted
-    const returnUser = snakeToCamel(response.data) as User;
-    returnUser.isAdmin = returnUser.username === 'admin';
-
-    return returnUser;
+    return snakeToCamel<User>(response.data);
   }
 );
 
@@ -93,10 +85,7 @@ const patchCurrentUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
       }
     });
 
-    const returnUser = snakeToCamel(response.data) as User;
-    returnUser.isAdmin = returnUser.username === 'admin';
-
-    return returnUser;
+    return snakeToCamel<User>(response.data);
   }
 );
 
