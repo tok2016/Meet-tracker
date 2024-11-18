@@ -20,6 +20,7 @@ import re
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 import math
 from fastapi_filter import FilterDepends
+from zipfile import ZipFile
 
 #Whsiper модель
 model_size = "large-v3"
@@ -167,3 +168,21 @@ async def filter_summary(session: SessionDep, summary_filter: SummaryFilter = Fi
     result = session.execute(query).scalars().all()
     response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
     return response
+
+@router.get("/record/archive")
+async def archive_record(session: SessionDep, summary_id: int):
+    """
+    Function to archive audio. Функция для архивации аудио.
+    """
+    summary_db = session.get(Summary, summary_id)
+    if not summary_db:
+        raise HTTPException(status_code=404, detail="Record not found")
+    audio_id = summary_db.audio_id
+    audio_filename = "app/sounds/" + audio_id + "/audio.wav"
+    zipfile_name = "app/sounds/" + audio_id + "/audio.zip"
+    #audio_file = open(audio_filename, 'r')
+    with ZipFile(f"{zipfile_name}", 'w') as zip:
+        zip.write(audio_filename)
+    #audio_file.close()
+    os.remove(f"{audio_filename}") #Удаляем аудио
+    return HTTPException(status_code=204, detail="Audio record is archived")
