@@ -182,7 +182,7 @@ async def archive_record(session: SessionDep, summary_id: int):
     zipfile_name = "app/sounds/" + audio_id + "/audio.zip"
     #audio_file = open(audio_filename, 'r')
     with ZipFile(f"{zipfile_name}", 'w') as zip:
-        zip.write(audio_filename)
+        zip.write(audio_filename, "audio.wav")
     #audio_file.close()
     os.remove(f"{audio_filename}") #Удаляем аудио
     return HTTPException(status_code=204, detail="Audio record is archived")
