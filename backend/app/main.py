@@ -2,8 +2,11 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from .routers import users, records
 from app.db import create_db_and_tables
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 app = FastAPI()
+
+load_dotenv()
 
 origins = [
     "http://localhost",
