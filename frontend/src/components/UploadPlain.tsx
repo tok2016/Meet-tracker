@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Button, Paper, Typography } from '@mui/material';
+import { Button, Paper, TextField, Typography } from '@mui/material';
 import { CloudUpload } from '@mui/icons-material';
 
 import useMediaValue from '../hooks/useMediaValue';
@@ -32,10 +32,11 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
   const dispatch = useAppDispatch();
 
   const [file, setFile] = useState<File | undefined>(undefined);
+  const [title, setTitle] = useState<string>('');
 
   const onFileUpload = () => {
     if(file) {
-      dispatch(postRecordFile({title: 'Встреча 1', file}))
+      dispatch(postRecordFile({title, file}))
         .then((response) => {
           if(isSummary(response.payload)) {
             navigate(`/account/summary/${response.payload.id}`);
@@ -66,6 +67,17 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
           fileName={file ? file.name : ''} 
           setFile={setFile} 
           disabled={status === 'pending'}/>
+
+        <TextField
+          variant='outlined'
+          value={title}
+          disabled={status === 'pending'}
+          label='Название резюме'
+          style={{
+            display: file ? 'inherit' : 'none',
+            marginBottom: '10px'
+          }}
+          onChange={(evt) => setTitle(evt.target.value)} />
 
         <Button 
           variant='containtedSecondary' 

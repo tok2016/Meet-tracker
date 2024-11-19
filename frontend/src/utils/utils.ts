@@ -99,17 +99,18 @@ const parseSummaryContent = (content: string): TopicContent[] => {
   return topics;
 };
 
-const getFullSummary = (rawSummary: RawSummary): Summary => ({
+const getFullSummary = (rawSummary: RawSummary, audio: string = ''): Summary => ({
     ...rawSummary,
     text: parseSummaryContent(rawSummary.text),
     status: 'success',
+    audio
   }
 );
 
 const getFullSummaries = (rawSummaries: RawSummary[]): SummaryInfo[] => rawSummaries.map((rawSummary) => ({
   ...rawSummary,
   status: 'success',
-  hasText: rawSummary.text !== undefined
+  hasText: rawSummary.text !== undefined,
 }));
 
 const getCollectionQuery = (page: number, filter: Filter) => (typeof filter.title === 'undefined'

@@ -14,7 +14,7 @@ const PageTemplate = () => {
       <Sidebar />
       <Box sx={{
         marginTop: `calc(${marginTop}px + 8vh)`,
-        marginBottom: 0,
+        marginBottom: '50px',
         marginLeft: `calc(${DRAWER_WIDTH} + 3.1vw)`,
         marginRight: '3.1vw'
       }}>

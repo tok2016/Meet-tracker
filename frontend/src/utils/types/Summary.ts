@@ -8,7 +8,8 @@ export default interface Summary {
   creationDate: string,
   text: TopicContent[],
   status: Status,
-  audioId: string | number
+  audioId: string | number,
+  audio: string
 }
 
 export type SummaryInfo = Omit<Summary, 'userId' | 'text'> & {hasText: boolean};
@@ -31,5 +32,6 @@ export const defaultSummary: Summary = {
   text: [],
   creationDate: (new Date()).toString(),
   status: 'idle',
-  audioId: 0
+  audioId: '',
+  audio: ''
 };

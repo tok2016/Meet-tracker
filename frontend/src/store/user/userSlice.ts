@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import UserState from '../../utils/types/UserState';
-import { getCurrentUser, postLogin, postLogout, postUserData, patchCurrentUser, getUserAvatar, postUserAvatar } from './userThunks';
+import { getCurrentUser, postLogin, postLogout, postUserData, patchCurrentUser, getCurrentUserAvatar, postCurrentUserAvatar } from './userThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
 import Token from '../../utils/types/Token';
 import { RootState } from '../store';
@@ -80,7 +80,7 @@ const userSlice = createSlice({
 
         URL.revokeObjectURL(state.user.avatar);
       })
-      .addCase(postUserAvatar.fulfilled, (state, action) => {
+      .addCase(postCurrentUserAvatar.fulfilled, (state, action) => {
         state.user.avatar = action.payload;
         state.status = 'success';
       })
@@ -90,7 +90,7 @@ const userSlice = createSlice({
 
         sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
-      .addCase(getUserAvatar.fulfilled, (state, action) => {
+      .addCase(getCurrentUserAvatar.fulfilled, (state, action) => {
         state.user.avatar = action.payload;
         state.status = 'success';
       })

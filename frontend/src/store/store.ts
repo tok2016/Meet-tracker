@@ -3,12 +3,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import UserReducers from './user/userSlice';
 import SummaryReducers from './summary/summarySlice';
 import AdminReducers from './admin/adminSlice';
+import TimeCodeReducers from './timeCodeSlice';
 
 const store = configureStore({
   reducer: {
     user: UserReducers,
     summary: SummaryReducers,
-    admin: AdminReducers
+    admin: AdminReducers,
+    timeCode: TimeCodeReducers
   }
 });
 
