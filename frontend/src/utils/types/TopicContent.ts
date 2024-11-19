@@ -1,9 +1,11 @@
+import SpeakerContent from './SpeakerContent';
+
 export default interface TopicContent {
   topic: string,
   text: string,
   start: string,
   end: string,
-  speakers: string,
+  speakers: SpeakerContent[],
   tasks?: string
 };
 

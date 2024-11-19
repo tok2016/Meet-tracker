@@ -44,7 +44,8 @@ const TextArea = ({value, variant, hidden, readOnly, setter, onKeyDown, onKeyUp}
     fontWeight: FontWeightsForTextArea[variant as keyof object],
     outline: 'none',
     fontSize,
-    fontFamily: 'Inter'
+    fontFamily: 'Inter',
+    width: '100%'
   };
 
   return (

@@ -1,16 +1,15 @@
-import { IconButton, Input, Paper, Stack, Typography } from '@mui/material';
-import { TurnLeft, TurnRight } from '@mui/icons-material';
+import { Input, Paper, Stack, Typography } from '@mui/material';
 import { memo, useMemo, useReducer, useState } from 'react';
 
-import TaskPlain from './TaskPlain';
-import { TextColors } from '../utils/Colors';
-import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
+import SpeakerPlain from './SpeakerPlain';
 import TopicContent from '../utils/types/TopicContent';
 import TextArea from './TextArea';
 import { breakpoints } from '../utils/theme/BasicTypography';
 import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { setTimeCode } from '../store/timeCodeSlice';
+import RollDownButton from './RollDownButton';
+import { SpeakerWithIndex } from '../utils/types/SpeakerContent';
 
 const TYPE_TIMEOUT = 2500;
 
@@ -33,11 +32,12 @@ type TopicPlainProps = {
 const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
   const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
 
-  const tasks = useMemo(() => content.tasks?.split(', '), [content]);
+  const speakers = useMemo(() => (
+    content.speakers.map((speaker, i): SpeakerWithIndex => ({...speaker, index: i}))
+  ), [content]);
 
   const [customTitle, setCustomTitle] = useState<string>(content.topic);
   const [customText, setCustomText] = useState<string>(content.text);
-  const [customSpeakers, setCustomSpeakers] = useState<string>(content.speakers);
 
   const dispatch = useAppDispatch();
 
@@ -47,10 +47,21 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
 
   let timer: number | undefined = undefined;
 
-  const onKeyUp = () => {
+  const commitChanges = (speaker?: SpeakerWithIndex) => {
     timer = setTimeout(() => {
-      updateSummary(index, {...content, topic: customTitle, text: customText, speakers: customSpeakers});
+      if(!speaker) {
+        updateSummary(index, {...content, topic: customTitle, text: customText});
+      } else {
+        updateSummary(index, {
+          ...content, 
+          speakers: [...content.speakers.slice(0, speaker.index), speaker, ...content.speakers.slice(speaker.index + 1)]
+        });
+      }
     }, TYPE_TIMEOUT);
+  };
+
+  const onKeyUp = () => {
+    commitChanges();
   };
 
   const onKeyDown = () => {
@@ -82,7 +93,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
             justifyContent='center'
             width='100%'>
 
-            `<Input
+            <Input
               type='text' 
               disableUnderline
               value={customTitle}
@@ -91,6 +102,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
               onKeyUp={onKeyUp}
               onKeyDown={onKeyDown}
               sx={{
+                fontWeight: 700,
                 [breakpoints.up('lg')]: {
                   fontSize: LgFontSizes.h3
                 },
@@ -126,49 +138,21 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
             onKeyDown={onKeyDown}>
           </TextArea>
 
-          <TextArea 
-            readOnly={false}
-            variant='body2'
-            hidden={!isRolledDown} 
-            value={customSpeakers}
-            setter={setCustomSpeakers}
-            onKeyUp={onKeyUp}
-            onKeyDown={onKeyDown}>
-          </TextArea>
-
           <Paper variant='elevationInside' style={{
-            display: tasks?.length && isRolledDown ? 'flex' : 'none',
+            display: speakers.length && isRolledDown ? 'flex' : 'none',
             flexDirection: 'column',
             gap: '20px'
           }}>
-            {tasks?.map((task, i) => (
-              <TaskPlain key={Date.now() + i} task={task}/>
+            {speakers.map((speaker) => (
+              <SpeakerPlain 
+                key={speaker.index} 
+                speaker={speaker} 
+                onKeyDown={onKeyDown} 
+                commitChanges={commitChanges}/>
             ))}
           </Paper>
 
-          <IconButton
-            style={{
-              alignSelf: 'flex-end',
-              width: '1.5em',
-              height: '1.5em',
-              position: isRolledDown ? 'relative' : 'absolute',
-              right: isRolledDown ? undefined : PAPER_SMALL_PADDING,
-              top: isRolledDown ? undefined : `calc(${PAPER_SMALL_PADDING} / 2)`
-            }}
-            color='secondary'
-            onClick={rollPlain}>
-            {isRolledDown 
-            ? <TurnLeft 
-              sx={{
-                rotate: '90deg',
-                color: TextColors.main
-              }}/>
-            : <TurnRight sx={{
-                rotate: '90deg',
-                color: TextColors.main
-              }}/>
-            }
-          </IconButton>
+          <RollDownButton isRolledDown={isRolledDown} rollPlain={rollPlain} />
     </Paper>
   );
 };
