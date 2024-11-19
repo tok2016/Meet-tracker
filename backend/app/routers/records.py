@@ -111,9 +111,7 @@ async def get_summary_record(session: SessionDep, summary_id: int):
     summary_db = session.get(Summary, summary_id)
     if not summary_db:
         raise HTTPException(status_code=404, detail="Summary not found")
-    audio_id = summary_db.audio_id
-    path_audio_dir = "app/sounds/" + audio_id + "/audio.wav"
-    return {"Summary": summary_db, "Audio": FileResponse(path_audio_dir)}
+    return summary_db
 
 @router.delete("/delete_record/{summary_id}/")
 async def delete_summary_record(session: SessionDep, summary_id: int):
@@ -188,6 +186,14 @@ async def archive_record(session: SessionDep, summary_id: int):
     #audio_file.close()
     os.remove(f"{audio_filename}") #Удаляем аудио
     return HTTPException(status_code=204, detail="Audio record is archived")
+
+@router.get("/audio/{audio_id}")
+async def get_audio(audio_id: str):
+    """
+    Function to get one audio. Функция для получения одного аудио.
+    """
+    path_audio_dir = "app/sounds/" + audio_id + "/audio.wav"
+    return FileResponse(path_audio_dir)
 
 @router.post("/email")
 async def send_email_req(email_to: EmailStr):
