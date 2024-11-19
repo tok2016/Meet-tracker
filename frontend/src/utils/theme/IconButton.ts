@@ -10,9 +10,6 @@ const IconButton: Components['MuiIconButton'] = {
       },
       ':hover *': {
         color: UIColors.secondary
-      },
-      ':active *': {
-        color: UIColors.quaternary
       }
     },
     colorSecondary: {
@@ -22,9 +19,6 @@ const IconButton: Components['MuiIconButton'] = {
       },
       ':hover *': {
         color: TextColors.highlight
-      },
-      ':active *': {
-        color: TextColors.secondary
       }
     }
   }

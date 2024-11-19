@@ -1,5 +1,6 @@
 import Filter from './types/Filter';
 import MediaValue from './types/MediaValue';
+import SpeakerContent from './types/SpeakerContent';
 import Summary, { RawSummary, SummaryInfo } from './types/Summary';
 import TopicContent, { TopicFull } from './types/TopicContent';
 
@@ -83,18 +84,26 @@ const getLocaleString = (dateString: string) => new Date(dateString).toLocaleDat
   month: '2-digit'
 });
 
+const singularToDouble = (str: string): string => str.replace(/'/g, '"');
+
 const parseSummaryContent = (content: string): TopicContent[] => {
+  const regBoundaryQuotes = /'[^:,]{1,}'/g;
+  const regExtraBoundaryQuotes = /'[^:]{1,}'/g;
+
   const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
-  const stringJsonSingular = stringEntry?.replace(/'/g, '"');
+  const stringJsonSingular = stringEntry
+    ?.replace(regBoundaryQuotes, singularToDouble)
+    .replace(regExtraBoundaryQuotes, singularToDouble);
 
   if(!stringJsonSingular) {
     return [];
   }
 
-  const topics: TopicContent[] = [];
-
   const parsedRawContent = JSON.parse(stringJsonSingular) as TopicFull[];
-  parsedRawContent.map((raw) => topics.push(raw.args));
+  const topics = parsedRawContent.map((raw) => ({
+    ...raw.args,
+    speakers: arraySnakeToCamel<SpeakerContent>(raw.args.speakers)
+  }));
 
   return topics;
 };
