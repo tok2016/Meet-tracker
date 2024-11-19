@@ -1,6 +1,6 @@
 import { IconButton, Input, Paper, Stack, Typography } from '@mui/material';
 import { TurnLeft, TurnRight } from '@mui/icons-material';
-import { useMemo, useReducer, useState } from 'react';
+import { memo, useMemo, useReducer, useState } from 'react';
 
 import TaskPlain from './TaskPlain';
 import { TextColors } from '../utils/Colors';
@@ -9,16 +9,28 @@ import TopicContent from '../utils/types/TopicContent';
 import TextArea from './TextArea';
 import { breakpoints } from '../utils/theme/BasicTypography';
 import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { setTimeCode } from '../store/timeCodeSlice';
 
 const TYPE_TIMEOUT = 2500;
+
+const timeStringToSeconds = (timeString: string, delimiter: string = ':'): number => {
+  const values = timeString.split(delimiter).map((str) => parseFloat(str));
+  const seconds = values.reduceRight((prev, curr, i) => {
+    const normalizedCurr = Math.ceil(curr) * Math.pow(60, i);
+    return Math.ceil(prev) + normalizedCurr;
+  }, 0);
+
+  return seconds;
+};
 
 type TopicPlainProps = {
   index: number,
   content: TopicContent, 
-  updateSummary: (index: number, updatedContent: TopicContent) => void
+  updateSummary: (index: number, updatedContent: TopicContent) => void,
 };
 
-const TopicPlain = ({index, content, updateSummary}: TopicPlainProps) => {
+const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
   const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
 
   const tasks = useMemo(() => content.tasks?.split(', '), [content]);
@@ -26,6 +38,12 @@ const TopicPlain = ({index, content, updateSummary}: TopicPlainProps) => {
   const [customTitle, setCustomTitle] = useState<string>(content.topic);
   const [customText, setCustomText] = useState<string>(content.text);
   const [customSpeakers, setCustomSpeakers] = useState<string>(content.speakers);
+
+  const dispatch = useAppDispatch();
+
+  const changeTimeCode = (timeCode: string) => {
+    dispatch(setTimeCode(timeStringToSeconds(timeCode)));
+  };
 
   let timer: number | undefined = undefined;
 
@@ -63,7 +81,8 @@ const TopicPlain = ({index, content, updateSummary}: TopicPlainProps) => {
             gap='10px' 
             justifyContent='center'
             width='100%'>
-            <Input
+
+            `<Input
               type='text' 
               disableUnderline
               value={customTitle}
@@ -86,9 +105,15 @@ const TopicPlain = ({index, content, updateSummary}: TopicPlainProps) => {
                 }
               }} />
 
-            <Typography variant='h3'>
-              {content.start} - {content.end}
-            </Typography>
+            <div>
+              <Typography variant='h3' component='a' onClick={() => changeTimeCode(content.start)}>
+                {content.start}
+              </Typography>
+              <Typography variant='h3' component='span'> - </Typography>
+              <Typography variant='h3' component='a' onClick={() => changeTimeCode(content.end)}>
+                {content.end}
+              </Typography>
+            </div>
           </Stack>
 
           <TextArea 
@@ -147,5 +172,7 @@ const TopicPlain = ({index, content, updateSummary}: TopicPlainProps) => {
     </Paper>
   );
 };
+
+const TopicPlain = memo(TopicPlainRaw);
 
 export default TopicPlain;

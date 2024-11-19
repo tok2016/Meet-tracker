@@ -89,8 +89,8 @@ const patchCurrentUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   }
 );
 
-const postUserAvatar = createAsyncThunk<string, Blob, AsyncThunkConfig>(
-  'user/postUserAvatar',
+const postCurrentUserAvatar = createAsyncThunk<string, Blob, AsyncThunkConfig>(
+  'user/postCurrentUserAvatar',
   async (avatar, {getState}) => {
     const {user} = getState();
 
@@ -116,8 +116,8 @@ const postUserAvatar = createAsyncThunk<string, Blob, AsyncThunkConfig>(
   }
 );
 
-const getUserAvatar = createAsyncThunk<string, void, AsyncThunkConfig>(
-  'user/getUserAvatar',
+const getCurrentUserAvatar = createAsyncThunk<string, void, AsyncThunkConfig>(
+  'user/getCurrentUserAvatar',
   async (_, {getState}) => {
     const {user} = getState();
 
@@ -138,5 +138,5 @@ const getUserAvatar = createAsyncThunk<string, void, AsyncThunkConfig>(
   }
 );
 
-export {getCurrentUser, getUserAvatar, 
-  postLogin, postLogout, postUserData, postUserAvatar, patchCurrentUser};
+export {getCurrentUser, getCurrentUserAvatar, 
+  postLogin, postLogout, postUserData, postCurrentUserAvatar, patchCurrentUser};

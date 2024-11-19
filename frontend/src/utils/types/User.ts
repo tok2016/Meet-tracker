@@ -19,8 +19,6 @@ export type UsersRaw = {
   total: number
 };
 
-export type UserQuery = Pick<User, 'id' | 'username'>;
-
 export const defaultUserData: UserRaw = {
   username: '',
   password: '',

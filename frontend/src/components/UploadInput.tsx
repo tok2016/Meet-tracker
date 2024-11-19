@@ -1,5 +1,9 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../hooks/useAppDispatch';
+import { selectUser } from '../store/user/userSlice';
 
 type UploadProps = {
   fileName: string, 
@@ -8,8 +12,16 @@ type UploadProps = {
 };
 
 const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
+  const navigate = useNavigate();
+  const {user} = useAppSelector(selectUser);
+
   const onFileChoice = (evt: ChangeEvent<HTMLInputElement>) => {
-    setFile(evt.target.files ? evt.target.files[0] : undefined);
+    if(!user.username) {
+      evt.preventDefault();
+      navigate('/login');
+    } else {
+      setFile(evt.target.files ? evt.target.files[0] : undefined);
+    }
   };
 
   return (

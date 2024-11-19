@@ -12,10 +12,11 @@ type UserInfoInputProps = {
   defaultValue: string,
   type: HTMLInputTypeAttribute,
   readOnly?: boolean,
+  disabled?: boolean,
   apply: (update: string) => void
 };
 
-const UserInfoInput = ({label, defaultValue, type, readOnly=false, apply}: UserInfoInputProps) => {
+const UserInfoInput = ({label, defaultValue, type, readOnly=false, disabled=false, apply}: UserInfoInputProps) => {
   const [isEditable, toggleEdit] = useReducer((value) => !value, false);
   const [value, setValue] = useState<string>(defaultValue);
 
@@ -73,7 +74,8 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, apply}: UserI
               disableUnderline 
               type={type} 
               value={value} 
-              readOnly={readOnly || !isEditable} 
+              readOnly={readOnly || !isEditable}
+              disabled={disabled} 
               onChange={(evt) => setValue(evt.target.value)}
               onKeyDown={onKeyDown}
               sx={{

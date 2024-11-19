@@ -5,12 +5,14 @@ import { useEffect, useMemo, useState } from 'react';
 import TopicPlain from '../components/TopicPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
-import { getSummary, putSummaryChanges } from '../store/summary/summaryThunks';
+import { getAudioById, getSummary, putSummaryChanges } from '../store/summary/summaryThunks';
 import { SummaryUpdate } from '../utils/types/Summary';
 import TopicContent from '../utils/types/TopicContent';
+import AudioPlayer from '../components/AudioPlayer';
 
 const SummaryPage = () => {
   const {id} = useParams();
+  const parsedId = parseInt(id ?? '');
 
   const {summary} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
@@ -32,27 +34,41 @@ const SummaryPage = () => {
   };
 
   useEffect(() => {
-    const parsedId = parseInt(id ?? '');
     if(parsedId && summary.id !== parsedId) {
       dispatch(getSummary(parsedId));
     }
-  }, [id, dispatch, summary.id]);
+  }, [parsedId, dispatch]);
+
+  useEffect(() => {
+    if(summary.audioId) {
+      dispatch(getAudioById(summary.audioId));
+    }
+  }, [summary.audioId]);
 
   return (
     <Stack
       display='flex'
-      flexDirection='column'>
+      flexDirection='column'
+      alignItems='center'>
       <Typography variant='h2' marginBottom='25px'>{summary.title}</Typography>
+      {summary.id === parsedId && summary.audio 
+        ? <AudioPlayer audioUrl={summary.audio} />
+        : <></>}
+        
       <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
-      {        
-        summary.text.map((content, i) => (
-          <TopicPlain 
-            key={content.topic} 
-            index={i} 
-            content={content} 
-            updateSummary={updateSummary}/>
-        ))
-      }
+
+      <Stack width='100%'>
+        {        
+          summary.text.map((content, i) => (
+            <TopicPlain 
+              key={content.topic} 
+              index={i} 
+              content={content} 
+              updateSummary={updateSummary}/>
+          ))
+        }
+      </Stack>
+
       <Button 
         variant='containtedSecondary'
         disabled={disabled}

@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import AdminState from '../../utils/types/AdminState';
-import { deleteRecordById, deleteSummaryById, deleteUserByUsername, getAllSummaries, 
-  getUserByUsername, getUsers, patchUserByUsername, postNewUser } from './adminThunks';
+import { archiveRecordById, deleteRecordById, deleteSummaryById, deleteUserById, getAllSummaries, 
+  getUserAvatar, 
+  getUserById, getUsers, patchUserById, postNewUser, 
+  postUserAvatar} from './adminThunks';
 import { isActionWithError } from '../../utils/types/ActionWithError';
 import { defaultUser } from '../../utils/types/User';
 import { defaultSummary } from '../../utils/types/Summary';
@@ -36,17 +38,25 @@ const adminSlice = createSlice({
         state.status = 'success';
         state.user = action.payload;
       })
-      .addCase(getUserByUsername.fulfilled, (state, action) => {
+      .addCase(getUserById.fulfilled, (state, action) => {
         state.status = 'success';
         state.user = action.payload;
       })
-      .addCase(patchUserByUsername.fulfilled, (state, action) => {
+      .addCase(patchUserById.fulfilled, (state, action) => {
         state.status = 'success';
         state.user = action.payload;
       })
-      .addCase(deleteUserByUsername.fulfilled, (state) => {
+      .addCase(deleteUserById.fulfilled, (state) => {
         state.status = 'success';
         state.user = defaultUser;
+      })
+      .addCase(postUserAvatar.fulfilled, (state, action) => {
+        state.status = 'success',
+        state.user.avatar = action.payload;
+      })
+      .addCase(getUserAvatar.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.user.avatar = action.payload;
       })
       .addCase(getAllSummaries.fulfilled, (state, action) => {
         state.status = 'success';
@@ -57,9 +67,12 @@ const adminSlice = createSlice({
         state.status = 'success';
         state.summary = defaultSummary;
       })
+      .addCase(archiveRecordById.fulfilled, (state) => {
+        state.status = 'success';
+      })
       .addCase(deleteRecordById.fulfilled, (state) => {
         state.status = 'success';
-        state.summary = {...state.summary};
+        state.summary.audio = '';
       })
       .addDefaultCase((state, action) => {
         const endpoint = action.type.split('/').pop();
