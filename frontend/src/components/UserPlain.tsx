@@ -7,7 +7,7 @@ import { User } from '../utils/types/User';
 import ItemPlain from './ItemPlain';
 import PlainMenu from './PlainMenu';
 import { useAppDispatch } from '../hooks/useAppDispatch';
-import { deleteUserByUsername } from '../store/admin/adminThunks';
+import { deleteUserById } from '../store/admin/adminThunks';
 import { getLocaleString } from '../utils/utils';
 import { TextColors } from '../utils/Colors';
 
@@ -23,7 +23,7 @@ const RawUserPlain = ({user, onDelete}: {user: User, onDelete: () => void}) => {
   };
 
   const deleteUser = () => {
-    dispatch(deleteUserByUsername({id: user.id, username: user.username})).then(() => onDelete());
+    dispatch(deleteUserById(user.id)).then(() => onDelete());
   };
 
   return (

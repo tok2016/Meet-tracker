@@ -134,7 +134,7 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
       </div>
 
       <div style={{
-        display: isForAdmin ? 'none' : 'inherit'
+        display: isForAdmin ? 'none' : 'block'
       }}>
         <Typography variant='subtitle2' marginBottom={'0.5vh'}>У вас уже есть учетная запись?</Typography>
         <Link to='/login'>

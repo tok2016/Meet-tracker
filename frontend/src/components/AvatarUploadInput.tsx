@@ -5,7 +5,15 @@ import { Avatar, SxProps } from '@mui/material';
 import AvatarEditorPopup from './AvatarEditorPopup';
 import { ChangeEvent, useReducer, useRef, useState } from 'react';
 
-const AvatarUploadInput = ({sx, defaultAvatar}: {sx: SxProps<Theme>, defaultAvatar: string}) => {
+type AvatarUploadInputProps = {
+  sx: SxProps<Theme>, 
+  defaultAvatar: string, 
+  isForAdmin: boolean,
+  disabled: boolean,
+  userId: number
+};
+
+const AvatarUploadInput = ({sx, defaultAvatar, userId, isForAdmin=false, disabled=false}: AvatarUploadInputProps) => {
   const [avatar, setAvatar] = useState<File | undefined>(undefined);
   const [open, toggleOpen] = useReducer((value) => !value, false);
 
@@ -35,13 +43,19 @@ const AvatarUploadInput = ({sx, defaultAvatar}: {sx: SxProps<Theme>, defaultAvat
         id='avatar'
         type='file'
         accept='image/*'
+        disabled={disabled}
         onChange={onFileChoice}
         onClick={(evt) => evt.currentTarget.value = ''} />
       <label htmlFor='avatar'>
         {defaultAvatar ? <Avatar src={defaultAvatar} sx={sx} /> : <AccountCircle sx={sx} />}
       </label>
 
-      <AvatarEditorPopup open={open} toggleOpen={closePopup} defaultAvatar={avatar}/>
+      <AvatarEditorPopup 
+        open={open} 
+        isForAdmin={isForAdmin}
+        userId={userId}
+        toggleOpen={closePopup} 
+        defaultAvatar={avatar}/>
     </div>
   );
 };

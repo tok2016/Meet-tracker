@@ -8,7 +8,7 @@ import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { UserLogin } from '../utils/types/User';
-import { getCurrentUser, getUserAvatar, postLogin } from '../store/user/userThunks';
+import { getCurrentUser, getCurrentUserAvatar, postLogin } from '../store/user/userThunks';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -35,7 +35,7 @@ const LoginPage = () => {
         navigate('/account');
       } else {
         dispatch(getCurrentUser());
-        dispatch(getUserAvatar());
+        dispatch(getCurrentUserAvatar());
       }
     }
   });

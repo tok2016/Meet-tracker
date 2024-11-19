@@ -3,10 +3,9 @@ import NavigationBar from '../components/NavigationBar';
 import Router from './Router';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser, setTokenFromStorage, setUserFromStorage } from '../store/user/userSlice';
-import { getCurrentUser, getUserAvatar } from '../store/user/userThunks';
+import { getCurrentUser, getCurrentUserAvatar } from '../store/user/userThunks';
 
 const PageLayout = () => {
-
   const {user, auth, status} = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
@@ -29,7 +28,7 @@ const PageLayout = () => {
 
   useEffect(() => {
     if(auth.token) {
-      dispatch(getUserAvatar());
+      dispatch(getCurrentUserAvatar());
     }
   }, [auth.token, dispatch]);
 

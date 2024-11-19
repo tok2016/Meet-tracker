@@ -1,13 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
-import { User, UserQuery, UserRaw, UsersRaw } from '../../utils/types/User';
+import { User, UserRaw, UsersRaw } from '../../utils/types/User';
 import AxiosInstance from '../../utils/Axios';
 import { arraySnakeToCamel, camelToSnake, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
 import { RawSummary, SummariesRaw } from '../../utils/types/Summary';
 import CollectionParams from '../../utils/types/CollectionParams';
 import { defaultFilter } from '../../utils/types/Filter';
 import CollectionData from '../../utils/types/CollectionData';
+import UserAvatarQuery from '../../utils/types/UserAvatarQuery';
 
 const getUsers = createAsyncThunk<UsersRaw, CollectionParams, AsyncThunkConfig>(
   'admin/getUsers', 
@@ -51,9 +52,9 @@ const postNewUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   }
 );
 
-const getUserByUsername = createAsyncThunk<User, UserQuery, AsyncThunkConfig>(
-  'admin/getUserByUsername',
-  async ({id, username}, {getState}) => {
+const getUserById = createAsyncThunk<User, number, AsyncThunkConfig>(
+  'admin/getUserById',
+  async (id, {getState}) => {
     const {user} = getState();
 
     const response = await AxiosInstance.get(`user/${id}?user_username=${id}`, {
@@ -66,8 +67,8 @@ const getUserByUsername = createAsyncThunk<User, UserQuery, AsyncThunkConfig>(
   }
 );
 
-const patchUserByUsername = createAsyncThunk<User, User, AsyncThunkConfig>(
-  'admin/patchUserByUsername',
+const patchUserById = createAsyncThunk<User, User, AsyncThunkConfig>(
+  'admin/patchUserById',
   async (userUpdate, {getState}) => {
     const {user} = getState();
 
@@ -83,9 +84,9 @@ const patchUserByUsername = createAsyncThunk<User, User, AsyncThunkConfig>(
   }
 );
 
-const deleteUserByUsername = createAsyncThunk<void, UserQuery, AsyncThunkConfig>(
-  'admin/deleteUserByUsername',
-  async ({id, username}, {getState}) => {
+const deleteUserById = createAsyncThunk<void, number, AsyncThunkConfig>(
+  'admin/deleteUserById',
+  async (id, {getState}) => {
     const {user} = getState();
 
     await AxiosInstance.delete(`user/${id}?user_username=${id}`, {
@@ -96,6 +97,54 @@ const deleteUserByUsername = createAsyncThunk<void, UserQuery, AsyncThunkConfig>
   }
 );
 
+const postUserAvatar = createAsyncThunk<string, UserAvatarQuery, AsyncThunkConfig>(
+  'admin/postUserAvatar',
+  async ({id, file}, {getState}) => {
+    const {user, admin} = getState();
+
+    const finalAvatar = new File([file], `${admin.user.username}_${Date.now()}`, {type: file.type});
+
+    const formData = new FormData();
+    formData.append('file', finalAvatar);
+
+    await AxiosInstance.post(`/user/${id}/profile_picture?user_username=${id}`, formData, {
+      headers: {
+        Authorization: user.auth.token,
+        'Content-Type': 'multipart/formData'
+      }
+    });
+
+    if(admin.user.avatar) {
+      URL.revokeObjectURL(admin.user.avatar);
+    }
+
+    const avatarUrl = URL.createObjectURL(finalAvatar as File);
+
+    return avatarUrl as string;
+  }
+);
+
+const getUserAvatar = createAsyncThunk<string, number, AsyncThunkConfig>(
+  'admin/getUserAvatar',
+  async (id, {getState}) => {
+    const {user, admin} = getState();
+
+    const response = await AxiosInstance.get(`/user/${id}/profile_picture?user_username=${id}`, {
+      headers: {
+        Authorization: user.auth.token
+      },
+      responseType: 'blob'
+    });
+
+    if(admin.user.avatar) {
+      URL.revokeObjectURL(admin.user.avatar);
+    }
+
+    const avatarUrl = URL.createObjectURL(response.data);
+
+    return avatarUrl as string;
+  }
+);
 
 const getAllSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncThunkConfig>(
   'admin/getSummaries',
@@ -125,9 +174,26 @@ const getAllSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncTh
 const deleteSummaryById = createAsyncThunk<void, number, AsyncThunkConfig>(
   'admin/deleteSummaryById',
   async (summaryId, {getState}) => {
-    const {user} = getState();
+    const {user, summary} = getState();
 
     await AxiosInstance.delete(`/delete_record/${summaryId}`, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
+
+    if(summaryId === summary.summary.id && summary.summary.audio) {
+      URL.revokeObjectURL(summary.summary.audio);
+    }
+  }
+);
+
+const archiveRecordById = createAsyncThunk<void, number, AsyncThunkConfig>(
+  'admin/archiveRecordById',
+  async (summaryId, {getState}) => {
+    const {user} = getState();
+
+    await AxiosInstance.get(`/record/archive?summary_id=${summaryId}`, {
       headers: {
         Authorization: user.auth.token
       }
@@ -138,16 +204,20 @@ const deleteSummaryById = createAsyncThunk<void, number, AsyncThunkConfig>(
 const deleteRecordById = createAsyncThunk<void, number, AsyncThunkConfig>(
   'admin/deleteRecordById', 
   async (summaryId, {getState}) => {
-    const {user} = getState();
+    const {user, summary} = getState();
 
     await AxiosInstance.delete(`/delete_audio/${summaryId}`, {
       headers: {
         Authorization: user.auth.token
       }
     });
+
+    if(summaryId === summary.summary.id && summary.summary.audio) {
+      URL.revokeObjectURL(summary.summary.audio);
+    }
   }
 );
 
-export {getUsers, getUserByUsername, getAllSummaries, postNewUser, patchUserByUsername, 
-  deleteUserByUsername, deleteSummaryById, deleteRecordById
-};
+export {getUsers, getUserById, getUserAvatar, getAllSummaries, 
+  postNewUser, patchUserById, postUserAvatar,
+  deleteUserById, deleteSummaryById, deleteRecordById, archiveRecordById};

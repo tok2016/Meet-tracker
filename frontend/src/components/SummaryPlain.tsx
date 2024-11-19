@@ -9,7 +9,7 @@ import { getLocaleString, statusesTranslations } from '../utils/utils';
 import ItemPlain from './ItemPlain';
 import PlainMenu from './PlainMenu';
 import { useAppDispatch } from '../hooks/useAppDispatch';
-import { deleteRecordById, deleteSummaryById } from '../store/admin/adminThunks';
+import { archiveRecordById, deleteRecordById, deleteSummaryById } from '../store/admin/adminThunks';
 
 const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: SummaryInfo, isForAdmin: boolean, onDelete: () => void}) => {
   const dispatch = useAppDispatch();
@@ -37,6 +37,10 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
     dispatch(deleteRecordById(summary.id)).then(() => onDelete());
   };
 
+  const archiveRecord = () => {
+    dispatch(archiveRecordById(summary.id)).then(() => onDelete);
+  };
+
   return (
     <ItemPlain>
       <Stack sx={subPlainsStyle}>
@@ -52,7 +56,7 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
         <Typography variant='h3' color={summary.status === 'error' ? 'error' : 'textPrimary'}>
           {statusesTranslations[summary.status]}
         </Typography>
-        {summary.audioId ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
+        {summary.audio ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
         {summary.hasText ? <Description sx={iconSx}/> : <InsertDriveFile sx={iconSx}/>}
         <Typography variant='h3Normal'>
           {date}
@@ -60,6 +64,7 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
         <PlainMenu hidden={!isForAdmin}>
           <MenuItem onClick={deleteSummary}>Удалить резюме</MenuItem>
           <MenuItem onClick={deleteRecord}>Удалить аудио</MenuItem>
+          <MenuItem onClick={archiveRecord}>Архивировать аудио</MenuItem>
         </PlainMenu>
       </Stack>
     </ItemPlain>

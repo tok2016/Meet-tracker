@@ -5,7 +5,16 @@ import AvatarEditor from 'react-avatar-editor';
 import useMediaValue from '../hooks/useMediaValue';
 import { AVATAR_EDITOR_WIDTH } from '../utils/utils';
 import { useAppDispatch } from '../hooks/useAppDispatch';
-import { postUserAvatar } from '../store/user/userThunks';
+import { postCurrentUserAvatar } from '../store/user/userThunks';
+import { postUserAvatar } from '../store/admin/adminThunks';
+
+type AvatarEditorPopupProps = {
+  defaultAvatar: File | undefined, 
+  open: boolean, 
+  isForAdmin: boolean,
+  userId: number,
+  toggleOpen: () => void
+};
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
@@ -15,7 +24,7 @@ const MIN_ROTATION = 0;
 const MAX_ROTATION = 360;
 const ROTATION_STEP = 10;
 
-const AvatarEditorPopup = ({defaultAvatar, open, toggleOpen}: {defaultAvatar: File | undefined, open: boolean, toggleOpen: () => void}) => {
+const AvatarEditorPopup = ({defaultAvatar, open, isForAdmin=false, userId, toggleOpen}: AvatarEditorPopupProps) => {
   const editorWidth = useMediaValue(AVATAR_EDITOR_WIDTH) as number;
 
   const dispatch = useAppDispatch();
@@ -43,7 +52,11 @@ const AvatarEditorPopup = ({defaultAvatar, open, toggleOpen}: {defaultAvatar: Fi
     if(avatarRef.current) {
       avatarRef.current.getImage().toBlob((blob) => {
         if(blob) {
-          dispatch(postUserAvatar(blob));
+          if(isForAdmin) {
+            dispatch(postUserAvatar({id: userId, file: blob}));
+          } else {
+            dispatch(postCurrentUserAvatar(blob));
+          }
           close();
         }
       }, 'image/*');
