@@ -54,16 +54,19 @@ model = model.bind_tools(
                         "description": "Time when last segment ends",
                     },
                     "speakers": {
-                        "type": "object",
+                        "type": "array",
                         #"description": "Speakers with names and their tasks"
-                        "properties": {
-                            "speaker_name": {
-                                "type": "string",
-                                "description": "Name of the speaker",
-                            },
-                            "speaker_info": {
-                                "type": "string",
-                                "description": "Short summary of the speaker's speech",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "speaker_name": {
+                                    "type": "string",
+                                    "description": "Name of the speaker",
+                                },
+                                "speaker_info": {
+                                    "type": "string",
+                                    "description": "Short summary of the speaker's speech",
+                                },
                             },
                         },
                     },

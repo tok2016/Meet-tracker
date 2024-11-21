@@ -15,6 +15,7 @@ const defaultAuth: Token = {
 const initialState: UserState = {
   user: defaultUser,
   auth: defaultAuth,
+  wasLoggedOut: false,
   status: 'idle',
   error: undefined
 };
@@ -63,6 +64,7 @@ const userSlice = createSlice({
       .addCase(postLogout.fulfilled, (state) => {
         state.user = defaultUser;
         state.auth = defaultAuth;
+        state.wasLoggedOut = true;
         state.status = 'success';
 
         sessionStorage.clear();
@@ -73,6 +75,7 @@ const userSlice = createSlice({
       .addCase(postLogout.rejected, (state) => {
         state.user = defaultUser;
         state.auth = defaultAuth;
+        state.wasLoggedOut = true;
         state.status = 'success';
 
         sessionStorage.clear();

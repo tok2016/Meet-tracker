@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
@@ -10,22 +11,22 @@ import UsersListPage from './UsersListPage';
 import SettingsPage from './SettingsPage';
 import UploadPage from './UploadPage';
 import PageTemplate from './PageTemplate';
-import { useAppSelector } from '../hooks/useAppDispatch';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import AdminTemplate from './AdminTemplate';
-import { useEffect, useState } from 'react';
+import { selectDefaultPage, setDefaultPage } from '../store/pageSlice';
 
 const Router = () => {
-  const {user, auth} = useAppSelector(selectUser);
+  const {user, auth, wasLoggedOut} = useAppSelector(selectUser);
+  const {defaultPage} = useAppSelector(selectDefaultPage);
+  const dispatch = useAppDispatch();
 
   const {pathname} = useLocation();
-  const [defaultPath, setDefaultPath] = useState<string>('');
   const isAvailable = auth.token && user.username;
 
   useEffect(() => {
-    const path = pathname === '/login' || pathname === '/register' ? '/account' : pathname;
-    setDefaultPath(path);
-  });
+    dispatch(setDefaultPage(pathname));
+  }, [pathname]);
 
   return (
     <Routes>
@@ -34,12 +35,12 @@ const Router = () => {
       <Route 
         path='/login' 
         element={isAvailable
-          ? <Navigate to={defaultPath} /> 
+          ? <Navigate to={wasLoggedOut ? '/account' : defaultPage} /> 
           : <LoginPage />} />
       <Route 
         path='/register' 
         element={isAvailable 
-          ? <Navigate to={defaultPath} /> 
+          ? <Navigate to={defaultPage} /> 
           : <RegisterPage />} />
 
       <Route 

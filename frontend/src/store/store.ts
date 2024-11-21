@@ -4,13 +4,15 @@ import UserReducers from './user/userSlice';
 import SummaryReducers from './summary/summarySlice';
 import AdminReducers from './admin/adminSlice';
 import TimeCodeReducers from './timeCodeSlice';
+import PageReducer from './pageSlice';
 
 const store = configureStore({
   reducer: {
     user: UserReducers,
     summary: SummaryReducers,
     admin: AdminReducers,
-    timeCode: TimeCodeReducers
+    timeCode: TimeCodeReducers,
+    page: PageReducer
   }
 });
 

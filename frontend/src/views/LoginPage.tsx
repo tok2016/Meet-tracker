@@ -1,6 +1,6 @@
 import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useReducer, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
@@ -14,8 +14,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isVisible, toggleVisibility] = useReducer((value) => !value, false);
-
-  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const {auth, user, status} = useAppSelector(selectUser);
@@ -31,9 +29,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if(auth.token && status !== 'error') {
-      if(user.username) {
-        navigate('/account');
-      } else {
+      if(!user.username) {
         dispatch(getCurrentUser());
         dispatch(getCurrentUserAvatar());
       }

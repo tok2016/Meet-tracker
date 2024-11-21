@@ -4,5 +4,6 @@ import DefaultState from './DefaultState';
 
 export default interface UserState extends DefaultState {
   user: User,
-  auth: Token
+  auth: Token,
+  wasLoggedOut: boolean
 };
