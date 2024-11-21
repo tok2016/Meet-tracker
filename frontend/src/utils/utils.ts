@@ -1,6 +1,6 @@
 import Filter from './types/Filter';
 import MediaValue from './types/MediaValue';
-import SpeakerContent from './types/SpeakerContent';
+import SpeakerContent, { SpeakerArrayContent } from './types/SpeakerContent';
 import Summary, { RawSummary, SummaryInfo } from './types/Summary';
 import TopicContent, { TopicFull } from './types/TopicContent';
 
@@ -9,6 +9,8 @@ const BASE_URL = 'http://127.0.0.1:8000';
 const ITEMS_PER_PAGE = 20;
 
 const TOKEN_TIME_TO_LIVE = 1000 * 60 * 24 * 7;
+
+const FILTER_DATE_OFFSET = 1000 * 60 * 24 * 2;
 
 const INPUT_ICON_WIDTH = '1.5em';
 
@@ -84,13 +86,18 @@ const getLocaleString = (dateString: string) => new Date(dateString).toLocaleDat
   month: '2-digit'
 });
 
+const speakersObjectToArray = (obj: SpeakerArrayContent): SpeakerContent[] => obj.speakerName.map((name, i) => ({
+  speakerName: name,
+  speakerInfo: obj.speakerInfo[i]
+}));
+
 const singularToDouble = (str: string): string => str.replace(/'/g, '"');
 
 const parseSummaryContent = (content: string): TopicContent[] => {
   const regBoundaryQuotes = /'[^:,]{1,}'/g;
   const regExtraBoundaryQuotes = /'[^:]{1,}'/g;
 
-  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'));
+  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'))?.replace(/"/g, '\"');
   const stringJsonSingular = stringEntry
     ?.replace(regBoundaryQuotes, singularToDouble)
     .replace(regExtraBoundaryQuotes, singularToDouble);
@@ -102,7 +109,9 @@ const parseSummaryContent = (content: string): TopicContent[] => {
   const parsedRawContent = JSON.parse(stringJsonSingular) as TopicFull[];
   const topics = parsedRawContent.map((raw) => ({
     ...raw.args,
-    speakers: arraySnakeToCamel<SpeakerContent>(raw.args.speakers)
+    speakers: raw.args.speakers.length !== undefined 
+      ? arraySnakeToCamel<SpeakerContent>(raw.args.speakers)
+      : speakersObjectToArray(snakeToCamel<SpeakerArrayContent>(raw.args.speakers))
   }));
 
   return topics;
@@ -131,7 +140,13 @@ const getCollectionQuery = (page: number, filter: Filter) => (typeof filter.titl
   )
 );
 
+const getFilterWithDates = (filter: Filter) => ({
+  ...filter,
+  from: filter.from ? filter.from : '2011-01-01T00:00:00.000Z',
+  to: filter.to ? filter.to : (new Date(Date.now() + FILTER_DATE_OFFSET)).toISOString()
+});
+
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, 
-  getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent,
+  getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};

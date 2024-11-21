@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, getCollectionQuery, getFullSummaries, getFullSummary, getLocaleString, snakeToCamel } from '../../utils/utils';
+import { arraySnakeToCamel, getCollectionQuery, getFilterWithDates, getFullSummaries, getFullSummary, getLocaleString, snakeToCamel } from '../../utils/utils';
 import Summary, { SummariesRaw, SummaryUpdate, RawSummary } from '../../utils/types/Summary';
 import CollectionData from '../../utils/types/CollectionData';
 import Filter, { defaultFilter } from '../../utils/types/Filter';
@@ -104,7 +104,7 @@ const getSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncThunk
     const {user} = getState();
 
     const customFilter: Filter = {...filter, username: user.user.username};
-    const query = getCollectionQuery(page, customFilter);
+    const query = getCollectionQuery(page, getFilterWithDates(customFilter));
 
     const response = await AxiosInstance.get(`/summary_filter/?${query}`, {
       headers: {

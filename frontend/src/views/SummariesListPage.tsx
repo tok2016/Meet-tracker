@@ -28,8 +28,8 @@ const defaultSummaryFilter: Filter = {
   direction: 1,
   title: '',
   username: '',
-  from: '2011-10-05T14:48:00.000Z',
-  to: '2025-10-05T14:48:00.000Z',
+  from: '',
+  to: '',
   archived: false
 };
 

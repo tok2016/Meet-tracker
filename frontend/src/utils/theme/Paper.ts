@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { UIColors } from '../Colors';
+import { TextColors, UIColors } from '../Colors';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
@@ -34,7 +34,11 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: UIColors.background,
             borderRadius: 10,
-            padding: PAPER_SMALL_PADDING
+            padding: PAPER_SMALL_PADDING,
+            ':hover a': {
+              color: TextColors.highlight,
+              transition: 'color 0.15s'
+            }
           }
         },
         {

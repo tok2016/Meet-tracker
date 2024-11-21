@@ -3,10 +3,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '../store';
 import { User, UserRaw, UsersRaw } from '../../utils/types/User';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, camelToSnake, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
+import { arraySnakeToCamel, camelToSnake, getFilterWithDates, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
 import { RawSummary, SummariesRaw } from '../../utils/types/Summary';
 import CollectionParams from '../../utils/types/CollectionParams';
-import { defaultFilter } from '../../utils/types/Filter';
+import Filter, { defaultFilter } from '../../utils/types/Filter';
 import CollectionData from '../../utils/types/CollectionData';
 import UserAvatarQuery from '../../utils/types/UserAvatarQuery';
 
@@ -15,7 +15,7 @@ const getUsers = createAsyncThunk<UsersRaw, CollectionParams, AsyncThunkConfig>(
   async ({page, filter=defaultFilter}, {getState}) => {
     const {user} = getState();
 
-    const query = getCollectionQuery(page, filter);
+    const query = getCollectionQuery(page, getFilterWithDates(filter));
 
     const response = await AxiosInstance.get(`/user_filter/?${query}`, {
       headers: {
@@ -151,7 +151,7 @@ const getAllSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncTh
   async ({page, filter=defaultFilter}, {getState}) => {
     const {user} = getState();
 
-    const query = getCollectionQuery(page, filter);
+    const query = getCollectionQuery(page, getFilterWithDates(filter));
 
     const response = await AxiosInstance.get(`/summary_filter/?${query}`, {
       headers: {

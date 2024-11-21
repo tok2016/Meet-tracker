@@ -4,3 +4,8 @@ export default interface SpeakerContent {
 };
 
 export type SpeakerWithIndex = SpeakerContent & {index: number};
+
+export type SpeakerArrayContent = {
+  speakerName: string[],
+  speakerInfo: string[]
+};

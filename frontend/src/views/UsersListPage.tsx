@@ -13,8 +13,8 @@ const defaultUserFilter: Filter = {
   sort: 'username',
   direction: 1,
   username: '',
-  from: '2011-10-05T14:48:00.000Z',
-  to: '2025-10-05T14:48:00.000Z',
+  from: '',
+  to: '',
   name: '',
   admin: false
 }
@@ -50,7 +50,7 @@ const UsersListPage = () => {
       <div>
         {users.map((user) => (
           <UserPlain 
-            key={user.username} 
+            key={user.id} 
             user={user} 
             onDelete={() => updateUsersList(page)} />
         ))}

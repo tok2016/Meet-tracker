@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
@@ -13,11 +13,19 @@ import PageTemplate from './PageTemplate';
 import { useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import AdminTemplate from './AdminTemplate';
+import { useEffect, useState } from 'react';
 
 const Router = () => {
   const {user, auth} = useAppSelector(selectUser);
 
+  const {pathname} = useLocation();
+  const [defaultPath, setDefaultPath] = useState<string>('');
   const isAvailable = auth.token && user.username;
+
+  useEffect(() => {
+    const path = pathname === '/login' || pathname === '/register' ? '/account' : pathname;
+    setDefaultPath(path);
+  });
 
   return (
     <Routes>
@@ -26,12 +34,12 @@ const Router = () => {
       <Route 
         path='/login' 
         element={isAvailable
-          ? <Navigate to={'/account'} /> 
+          ? <Navigate to={defaultPath} /> 
           : <LoginPage />} />
       <Route 
         path='/register' 
         element={isAvailable 
-          ? <Navigate to={'/account'} /> 
+          ? <Navigate to={defaultPath} /> 
           : <RegisterPage />} />
 
       <Route 
