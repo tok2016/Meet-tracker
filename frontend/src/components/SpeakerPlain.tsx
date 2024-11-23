@@ -1,9 +1,9 @@
 import { Input, Paper } from '@mui/material';
 import { useReducer, useState } from 'react';
 
-import { SpeakerWithIndex } from '../utils/types/SpeakerContent';
-import { breakpoints } from '../utils/theme/BasicTypography';
-import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
+import { SpeakerWithIndex } from '../types/SpeakerContent';
+import { breakpoints } from '../theme/BasicTypography';
+import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
 import TextArea from './TextArea';
 import RollDownButton from './RollDownButton';
 

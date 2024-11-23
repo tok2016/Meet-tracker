@@ -7,7 +7,7 @@ import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { postUserData } from '../store/user/userThunks';
-import { UserRaw } from '../utils/types/User';
+import { UserRaw } from '../types/User';
 import { selectUser } from '../store/user/userSlice';
 import { postNewUser } from '../store/admin/adminThunks';
 import { selectAdminData } from '../store/admin/adminSlice';

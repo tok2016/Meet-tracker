@@ -4,13 +4,13 @@ import { Button, Paper, TextField, Typography } from '@mui/material';
 import { CloudUpload } from '@mui/icons-material';
 
 import useMediaValue from '../hooks/useMediaValue';
-import MediaValue from '../utils/types/MediaValue';
+import MediaValue from '../types/MediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { postRecordFile } from '../store/summary/summaryThunks';
 import { UIColors } from '../utils/Colors';
 import UploadInput from './UploadInput';
-import { isSummary } from '../utils/types/Summary';
+import { isSummary } from '../types/Summary';
 
 
 

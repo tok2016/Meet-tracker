@@ -1,5 +1,5 @@
 import { Components } from '@mui/material';
-import { UIColors } from '../Colors';
+import { UIColors } from '../utils/Colors';
 
 const AppBar: Components['MuiAppBar'] = {
   defaultProps: {

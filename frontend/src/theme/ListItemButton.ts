@@ -1,5 +1,5 @@
 import { Components } from '@mui/material';
-import { TextColors, UIColors } from '../Colors';
+import { TextColors, UIColors } from '../utils/Colors';
 
 const ListItemButton: Components['MuiListItemButton'] = {
   styleOverrides: {

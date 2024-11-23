@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { TextColors, UIColors } from '../Colors';
+import { TextColors, UIColors } from '../utils/Colors';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {

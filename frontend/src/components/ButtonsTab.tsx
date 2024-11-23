@@ -1,5 +1,5 @@
 import { Button, Stack } from '@mui/material';
-import Page from '../utils/types/Page';
+import Page from '../types/Page';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 

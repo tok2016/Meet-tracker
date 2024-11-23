@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
-import { User, UserRaw, UsersRaw } from '../../utils/types/User';
+import { User, UserRaw, UsersRaw } from '../../types/User';
 import AxiosInstance from '../../utils/Axios';
 import { arraySnakeToCamel, camelToSnake, getFilterWithDates, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
-import { RawSummary, SummariesRaw } from '../../utils/types/Summary';
-import CollectionParams from '../../utils/types/CollectionParams';
-import Filter, { defaultFilter } from '../../utils/types/Filter';
-import CollectionData from '../../utils/types/CollectionData';
-import UserAvatarQuery from '../../utils/types/UserAvatarQuery';
+import { RawSummary, SummariesRaw } from '../../types/Summary';
+import CollectionParams from '../../types/CollectionParams';
+import Filter, { defaultFilter } from '../../types/Filter';
+import CollectionData from '../../types/CollectionData';
+import UserAvatarQuery from '../../types/UserAvatarQuery';
 
 const getUsers = createAsyncThunk<UsersRaw, CollectionParams, AsyncThunkConfig>(
   'admin/getUsers', 

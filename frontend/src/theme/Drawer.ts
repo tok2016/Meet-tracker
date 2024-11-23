@@ -1,7 +1,7 @@
 import { Components } from '@mui/material';
-import { UIColors } from '../Colors';
+import { UIColors } from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { AVATAR_WIDTH } from '../utils';
+import { AVATAR_WIDTH } from '../utils/utils';
 
 const DRAWER_WIDTH = '15.6vw';
 

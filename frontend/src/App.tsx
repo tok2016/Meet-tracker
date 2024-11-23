@@ -3,7 +3,7 @@ import { ThemeProvider, THEME_ID } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import Theme from './utils/theme/Theme';
+import Theme from './theme/Theme';
 import PageLayout from './views/PageLayout';
 import store from './store/store';
 

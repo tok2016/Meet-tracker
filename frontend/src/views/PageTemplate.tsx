@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from '../components/Sidebar';
-import { DRAWER_WIDTH } from '../utils/theme/Drawer';
+import { DRAWER_WIDTH } from '../theme/Drawer';
 import { Box } from '@mui/material';
 import useMediaValue from '../hooks/useMediaValue';
 import { AVATAR_WIDTH } from '../utils/utils';

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import UserInfoInput from '../components/UserInfoInput';
-import { User } from '../utils/types/User';
+import { User } from '../types/User';
 import { patchCurrentUser, postLogout } from '../store/user/userThunks';
 import AvatarUploadInput from '../components/AvatarUploadInput';
 import { selectAdminData } from '../store/admin/adminSlice';

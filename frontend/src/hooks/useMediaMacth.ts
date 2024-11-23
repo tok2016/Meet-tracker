@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 
-import { breakpoints } from '../utils/theme/BasicTypography';
+import { breakpoints } from '../theme/BasicTypography';
 
 const useMediaMatch = () => {
   const xSmall = useMediaQuery(breakpoints.down('sm'));

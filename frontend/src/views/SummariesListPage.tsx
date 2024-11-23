@@ -2,17 +2,17 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Pagination } from '@mui/material';
 
 import ButtonsTab from '../components/ButtonsTab';
-import Page from '../utils/types/Page';
+import Page from '../types/Page';
 import SummaryPlain from '../components/SummaryPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getSummaries } from '../store/summary/summaryThunks';
 import FilterMenu from '../components/FiltersMenu';
-import Filter from '../utils/types/Filter';
+import Filter from '../types/Filter';
 import { ITEMS_PER_PAGE } from '../utils/utils';
 import { getAllSummaries } from '../store/admin/adminThunks';
 import { selectAdminData } from '../store/admin/adminSlice';
-import CollectionParams from '../utils/types/CollectionParams';
+import CollectionParams from '../types/CollectionParams';
 
 const RecentSubpages: Page[] = [
   {

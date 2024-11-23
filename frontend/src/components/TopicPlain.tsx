@@ -2,14 +2,14 @@ import { Input, Paper, Stack, Typography } from '@mui/material';
 import { memo, useMemo, useReducer, useState } from 'react';
 
 import SpeakerPlain from './SpeakerPlain';
-import TopicContent from '../utils/types/TopicContent';
+import TopicContent from '../types/TopicContent';
 import TextArea from './TextArea';
-import { breakpoints } from '../utils/theme/BasicTypography';
-import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
+import { breakpoints } from '../theme/BasicTypography';
+import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { setTimeCode } from '../store/timeCodeSlice';
 import RollDownButton from './RollDownButton';
-import { SpeakerWithIndex } from '../utils/types/SpeakerContent';
+import { SpeakerWithIndex } from '../types/SpeakerContent';
 
 const TYPE_TIMEOUT = 2500;
 

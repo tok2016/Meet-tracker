@@ -5,7 +5,7 @@ import { AVATAR_WIDTH } from '../utils/utils';
 import UploadPlain from '../components/UploadPlain';
 import Mouse from '../assets/Mouse.svg';
 import useMediaMatch from '../hooks/useMediaMacth';
-import PromoInfo from '../utils/types/PromoInfo';
+import PromoInfo from '../types/PromoInfo';
 import PromoStub from '../assets/PromoStub.svg';
 import Promo from '../components/Promo';
 

@@ -3,7 +3,7 @@ import { MenuItem, Typography } from '@mui/material';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
-import { User } from '../utils/types/User';
+import { User } from '../types/User';
 import ItemPlain from './ItemPlain';
 import PlainMenu from './PlainMenu';
 import { useAppDispatch } from '../hooks/useAppDispatch';

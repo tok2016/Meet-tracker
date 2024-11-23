@@ -1,8 +1,8 @@
-import Filter from './types/Filter';
-import MediaValue from './types/MediaValue';
-import SpeakerContent, { SpeakerArrayContent } from './types/SpeakerContent';
-import Summary, { RawSummary, SummaryInfo } from './types/Summary';
-import TopicContent, { TopicFull } from './types/TopicContent';
+import Filter from '../types/Filter';
+import MediaValue from '../types/MediaValue';
+import SpeakerContent, { SpeakerArrayContent } from '../types/SpeakerContent';
+import Summary, { RawSummary, SummaryInfo } from '../types/Summary';
+import TopicContent, { TopicFull } from '../types/TopicContent';
 
 const BASE_URL = 'http://127.0.0.1:8000';
 

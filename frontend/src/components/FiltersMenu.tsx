@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from 'react';
 
 import FilterField from './FilterField';
 import Search from './Search';
-import Filter, { FilterSortType } from '../utils/types/Filter';
+import Filter, { FilterSortType } from '../types/Filter';
 import DateRange from './DateRange';
 
 type FilterMenuProps = {

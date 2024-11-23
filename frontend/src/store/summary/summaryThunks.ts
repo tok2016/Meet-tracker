@@ -3,11 +3,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
 import { arraySnakeToCamel, getCollectionQuery, getFilterWithDates, getFullSummaries, getFullSummary, getLocaleString, snakeToCamel } from '../../utils/utils';
-import Summary, { SummariesRaw, SummaryUpdate, RawSummary } from '../../utils/types/Summary';
-import CollectionData from '../../utils/types/CollectionData';
-import Filter, { defaultFilter } from '../../utils/types/Filter';
-import CollectionParams from '../../utils/types/CollectionParams';
-import RecordQuery from '../../utils/types/RecordQuery';
+import Summary, { SummariesRaw, SummaryUpdate, RawSummary } from '../../types/Summary';
+import CollectionData from '../../types/CollectionData';
+import Filter, { defaultFilter } from '../../types/Filter';
+import CollectionParams from '../../types/CollectionParams';
+import RecordQuery from '../../types/RecordQuery';
 
 const RECORD_UPLOAD_TIMEOUT = 1000 * 60 * 10;
 

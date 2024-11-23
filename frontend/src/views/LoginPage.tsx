@@ -7,7 +7,7 @@ import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
-import { UserLogin } from '../utils/types/User';
+import { UserLogin } from '../types/User';
 import { getCurrentUser, getCurrentUserAvatar, postLogin } from '../store/user/userThunks';
 
 const LoginPage = () => {
