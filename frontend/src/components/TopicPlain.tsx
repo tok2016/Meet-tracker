@@ -109,7 +109,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
                 [breakpoints.only('xl')]: {
                   fontSize: XlFontSizes.h3
                 },
-                width: `${customTitle.length}em`,
+                width: `${customTitle.length / 1.5}em`,
                 maxWidth: '50%',
                 '& .MuiInputBase-input': {
                   overflow: "hidden",
