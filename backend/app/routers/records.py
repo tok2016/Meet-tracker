@@ -23,7 +23,6 @@ from fastapi_filter import FilterDepends
 from zipfile import ZipFile
 from app.email_funcs import send_email
 from pydantic.networks import EmailStr
-import torch
 
 #Whsiper модель
 model_size = "large-v3"
@@ -93,9 +92,6 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     audio.export(file_name, format="wav")
     segments, info = model_whisper.transcribe(file_name, beam_size=5)
     pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=auth_token_hf)
-    torch.backends.cuda.matmul.allow_tf32 = False
-    torch.backends.cudnn.allow_tf32 = False 
-    pipeline.to(torch.device("cuda"))
     diarization_results = pipeline(file_name)
     final_results = diarize_text(segments, diarization_results)
     lines = ""
