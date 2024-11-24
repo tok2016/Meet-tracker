@@ -5,8 +5,7 @@ export default interface TopicContent {
   text: string,
   start: string,
   end: string,
-  speakers: SpeakerContent[],
-  tasks?: string
+  speakers: SpeakerContent[]
 };
 
 export type TopicFull = {

@@ -79,7 +79,7 @@ const arraySnakeToCamel = <Type, >(arr: object[]) => arr.map((obj) => snakeToCam
 
 const getOffsetQuery = (page: number) => `offset=${(page - 1) * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`;
 
-const getLocaleString = (dateString: string) => new Date(dateString).toLocaleDateString('ru-RU', {
+const getLocaleString = (dateString?: string) => new Date(dateString ?? '').toLocaleDateString('ru-RU', {
   weekday: undefined,
   year: 'numeric',
   day: '2-digit',
@@ -146,7 +146,9 @@ const getFilterWithDates = (filter: Filter) => ({
   to: filter.to ? filter.to : (new Date(Date.now() + FILTER_DATE_OFFSET)).toISOString()
 });
 
-export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, 
+const screenSymbols = (str: string) => str.replace(/[~`!@#$%^&*()_\-+=|:;,.?<>{}\[\]]/g, (letter) => `\\${letter}`);
+
+export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};

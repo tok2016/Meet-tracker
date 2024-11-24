@@ -23,6 +23,8 @@ export type SummariesRaw = {
 
 export type RawSummary = Omit<Summary, 'text' | 'status'> & {text: string};
 
+export type SummaryInput = Pick<Summary, 'title' | 'text'>;
+
 export const isSummary = (summary: unknown): summary is Summary => (summary as Summary).text !== undefined;
 
 export const defaultSummary: Summary = {

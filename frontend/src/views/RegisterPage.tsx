@@ -1,7 +1,7 @@
 import { Button, IconButton, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
@@ -11,18 +11,25 @@ import { UserRaw } from '../types/User';
 import { selectUser } from '../store/user/userSlice';
 import { postNewUser } from '../store/admin/adminThunks';
 import { selectAdminData } from '../store/admin/adminSlice';
+import userSchema from '../schemas/userSchema';
+import { isValidationError } from '../schemas/validationError';
+import { UserValidationError } from '../types/UserValidationError';
+
+const defaultUserData: UserRaw = {
+  username: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  avatar: ''
+};
 
 const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-
-  const [password, setPassword] = useState<string>('');
+  const [userData, setUserData] = useState<UserRaw>(defaultUserData);
   const [repeatedPassword, setRepeatedPassword] = useState<string>('');
 
   const [isVisible, toggleVisibility] = useReducer((value) => !value, false);
+  const [error, setError] = useState<UserValidationError>(defaultUserData);
 
   const navigate = useNavigate();
 
@@ -30,20 +37,30 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const {user: originalUser} = useAppSelector(selectUser);
   const {user: anotherUser} = useAppSelector(selectAdminData);
 
-  const formUser = () => {
-    const newUser: UserRaw = {
-      username,
-      password,
-      email,
-      firstName,
-      lastName,
-      avatar: ''
-    };
+  const arePasswordsTheSame = repeatedPassword === userData.password;
+  const disabled = useMemo(() => Object.values(error).every((err) => !err), [error]);
 
+  const formUser = (user: UserRaw) => {
     if(isForAdmin) {
-      dispatch(postNewUser(newUser));
+      dispatch(postNewUser(user));
     } else {
-      dispatch(postUserData(newUser));
+      dispatch(postUserData(user));
+    }
+  };
+
+  const validateValue = (obj: Partial<UserRaw>) => {
+    const path = Object.keys(obj)[0];
+
+    try {
+      const validated = userSchema.validateSyncAt(path, obj);
+
+      setUserData(data => ({...data, [path]: validated}));
+      setError(data => ({...data, [path]: undefined}));
+    } catch(error) {
+      if(isValidationError(error)) {
+        setUserData(data => ({...data, ...obj}));
+        setError(data => ({...data, [path]: error.message}));
+      }
     }
   };
 
@@ -57,7 +74,7 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
         navigate('/login');
       }
     }
-  });
+  }, [originalUser.username, anotherUser.username]);
 
   return (
     <FormHolder isForAdmin={isForAdmin}>
@@ -66,42 +83,47 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
 
         <FieldsGroup>
           <TextField 
-            value={username}
+            value={userData.username}
             type='text'
             label='Логин'
             autoComplete='off'
             required
-            onChange={(evt) => setUsername(evt.target.value)}/>
+            helperText={error.username}
+            onChange={(evt) => validateValue({username: evt.target.value})}/>
 
           <TextField 
-            value={email}
+            value={userData.email}
             type='email'
             label='Электронная почта'
             autoComplete='off'
             required
-            onChange={(evt) => setEmail(evt.target.value)}/>
+            helperText={error.email}
+            onChange={(evt) => validateValue({email: evt.target.value})}/>
 
           <TextField 
-            value={firstName}
+            value={userData.firstName}
             type='text'
             label='Имя'
             autoComplete='off'
             required
-            onChange={(evt) => setFirstName(evt.target.value)}/>
+            helperText={error.firstName}
+            onChange={(evt) => validateValue({firstName: evt.target.value})}/>
 
           <TextField 
-            value={lastName}
+            value={userData.lastName}
             type='text'
             label='Фамилия'
             autoComplete='off'
-            onChange={(evt) => setLastName(evt.target.value)}/>
+            helperText={error.lastName}
+            onChange={(evt) => validateValue({lastName: evt.target.value})}/>
 
           <TextField 
-            value={password}
+            value={userData.password}
             type={isVisible ? 'text' : 'password'}
             label='Пароль'
             required
-            onChange={(evt) => setPassword(evt.target.value)}
+            helperText={error.password}
+            onChange={(evt) => validateValue({password: evt.target.value})}
             slotProps={{
               input: {
                 endAdornment: <IconButton color='secondary' onClick={toggleVisibility}>
@@ -115,6 +137,7 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
             type={isVisible ? 'text' : 'password'}
             label='Повторите пароль'
             required
+            helperText={arePasswordsTheSame ? '' : 'Пароли не совпадают'}
             onChange={(evt) => setRepeatedPassword(evt.target.value)}
             slotProps={{
               input: {
@@ -126,8 +149,8 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
 
           <Button 
             variant='containtedSecondary'
-            disabled={!username || !email || !password || !repeatedPassword || !firstName}
-            onClick={formUser}>
+            disabled={disabled || !arePasswordsTheSame}
+            onClick={() => formUser(userData)}>
               Зарегистрироваться
           </Button>
         </FieldsGroup>
