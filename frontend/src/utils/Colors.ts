@@ -1,4 +1,4 @@
-import {UIColorPalette, TextColorPalette} from './types/ColotPalette';
+import {UIColorPalette, TextColorPalette} from '../types/ColotPalette';
 
 const UIColors: UIColorPalette = {
   main: '#F59D0E',

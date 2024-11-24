@@ -1,7 +1,7 @@
 import { Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Page from '../utils/types/Page';
+import Page from '../types/Page';
 import { useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 

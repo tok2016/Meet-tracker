@@ -5,7 +5,7 @@ import { Check, Close, Edit } from '@mui/icons-material';
 import IconForInput from './IconForInput';
 import { UIColors } from '../utils/Colors';
 import CopyButton from './CopyButton';
-import { UserIconSx } from '../utils/theme/UserIcon';
+import { UserIconSx } from '../theme/UserIcon';
 
 type UserInfoInputProps = {
   label: string,

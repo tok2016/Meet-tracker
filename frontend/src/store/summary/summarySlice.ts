@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import SummaryState from '../../utils/types/SummaryState';
+import SummaryState from '../../types/SummaryState';
 import { postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, getAudioById } from './summaryThunks';
-import { isActionWithError } from '../../utils/types/ActionWithError';
-import { defaultSummary } from '../../utils/types/Summary';
+import { isActionWithError } from '../../types/ActionWithError';
+import { defaultSummary } from '../../types/Summary';
 import { RootState } from '../store';
 
 const initialState: SummaryState = {

@@ -2,7 +2,7 @@ import { TextareaAutosize } from '@mui/material';
 import { CSSProperties, Dispatch, SetStateAction } from 'react';
 
 import { TextColors } from '../utils/Colors';
-import { LgFontSizes, XlFontSizes } from '../utils/theme/FontSizes';
+import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
 import useMediaMatch from '../hooks/useMediaMacth';
 
 type TextAreaProps = {

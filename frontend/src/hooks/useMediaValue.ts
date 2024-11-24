@@ -1,4 +1,4 @@
-import MediaValue from '../utils/types/MediaValue';
+import MediaValue from '../types/MediaValue';
 import useMediaMatch from './useMediaMacth';
 
 const useMediaValue = (value: MediaValue) => {

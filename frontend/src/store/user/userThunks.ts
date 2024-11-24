@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { User, UserLogin, UserRaw } from '../../utils/types/User';
+import { User, UserLogin, UserRaw } from '../../types/User';
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
-import Token, { TokenRaw } from '../../utils/types/Token';
+import Token, { TokenRaw } from '../../types/Token';
 import { camelToSnake, snakeToCamel, TOKEN_TIME_TO_LIVE } from '../../utils/utils';
 
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(

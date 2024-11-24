@@ -6,8 +6,8 @@ import TopicPlain from '../components/TopicPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getAudioById, getSummary, putSummaryChanges } from '../store/summary/summaryThunks';
-import { SummaryUpdate } from '../utils/types/Summary';
-import TopicContent from '../utils/types/TopicContent';
+import { SummaryUpdate } from '../types/Summary';
+import TopicContent from '../types/TopicContent';
 import AudioPlayer from '../components/AudioPlayer';
 
 const SummaryPage = () => {

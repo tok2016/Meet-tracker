@@ -1,7 +1,7 @@
 import { BreakpointsOptions, createTheme } from '@mui/material';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 
-import { TextColors, UIColors } from '../Colors';
+import { TextColors, UIColors } from '../utils/Colors';
 import { LgFontSizes, XlFontSizes } from './FontSizes';
 
 const Breakpoints: BreakpointsOptions = {

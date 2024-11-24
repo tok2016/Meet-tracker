@@ -1,3 +1,5 @@
+import { UserValidationError } from './UserValidationError';
+
 export interface User {
   readonly id: number,
   readonly username: string,
@@ -11,6 +13,8 @@ export interface User {
 };
 
 export type UserRaw = Omit<User, 'id' | 'registrationDate' | 'isAdmin'>;
+
+export type UserRawWithError = UserRaw & {error: UserValidationError};
 
 export type UserLogin = Pick<User, 'email' | 'password'>;
 

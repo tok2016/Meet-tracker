@@ -2,7 +2,7 @@ import { Pagination } from '@mui/material';
 
 import FilterMenu from '../components/FiltersMenu';
 import UserPlain from '../components/UserPlain';
-import Filter from '../utils/types/Filter';
+import Filter from '../types/Filter';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { ITEMS_PER_PAGE } from '../utils/utils';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';

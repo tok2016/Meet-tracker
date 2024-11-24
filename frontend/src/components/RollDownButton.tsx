@@ -2,7 +2,7 @@ import { TurnLeft, TurnRight } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
 import { TextColors } from '../utils/Colors';
-import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
+import { PAPER_SMALL_PADDING } from '../theme/Paper';
 
 const RollDownButton = ({isRolledDown, rollPlain}: {isRolledDown: boolean, rollPlain: () => void}) => (
   <IconButton

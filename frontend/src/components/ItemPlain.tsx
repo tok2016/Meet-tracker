@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { PAPER_SMALL_PADDING } from '../utils/theme/Paper';
+import { PAPER_SMALL_PADDING } from '../theme/Paper';
 
 const ItemPlain = ({children}: {children: ReactNode}) => (
   <Paper 

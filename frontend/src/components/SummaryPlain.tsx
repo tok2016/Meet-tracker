@@ -3,7 +3,7 @@ import { Description, InsertDriveFile, PlayCircleOutline, VolumeOff, VolumeUp } 
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
-import { SummaryInfo } from '../utils/types/Summary';
+import { SummaryInfo } from '../types/Summary';
 import { TextColors } from '../utils/Colors';
 import { getLocaleString, statusesTranslations } from '../utils/utils';
 import ItemPlain from './ItemPlain';

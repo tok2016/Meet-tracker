@@ -1,12 +1,12 @@
 import { Components } from '@mui/material';
 
-import { UIColors, TextColors } from '../Colors';
+import { TextColors, UIColors } from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 
-const OutlinedInput: Components['MuiOutlinedInput'] = {
+const FilledInput: Components['MuiFilledInput'] = {
   styleOverrides: {
     root: {
-      border: `solid 1px ${UIColors.tertiary}`,
+      border: 'none',
       borderRadius: 10,
       backgroundColor: UIColors.background,
       color: TextColors.main,
@@ -17,8 +17,11 @@ const OutlinedInput: Components['MuiOutlinedInput'] = {
         fontSize: 24
       },
       height: '2.5em'
+    },
+    underline: {
+      display: 'none'
     }
   }
-}
+};
 
-export default OutlinedInput;
+export default FilledInput;

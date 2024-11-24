@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { TextColors } from '../Colors';
+import { TextColors } from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 
 const InputLabel: Components['MuiInputLabel'] = {

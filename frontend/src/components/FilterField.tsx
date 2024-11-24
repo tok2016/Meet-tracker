@@ -1,6 +1,6 @@
 import { ArrowDownward, ArrowUpward, Clear } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { breakpoints } from '../utils/theme/BasicTypography';
+import { breakpoints } from '../theme/BasicTypography';
 
 type FilterFieldProps = {
   name: string, 

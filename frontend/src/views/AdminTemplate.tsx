@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import ButtonsTab from '../components/ButtonsTab';
-import Page from '../utils/types/Page';
+import Page from '../types/Page';
 
 const AdminSubpages: Page[] = [
   {

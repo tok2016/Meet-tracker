@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import UserState from '../../utils/types/UserState';
+import UserState from '../../types/UserState';
 import { getCurrentUser, postLogin, postLogout, postUserData, patchCurrentUser, getCurrentUserAvatar, postCurrentUserAvatar } from './userThunks';
-import { isActionWithError } from '../../utils/types/ActionWithError';
-import Token from '../../utils/types/Token';
+import { isActionWithError } from '../../types/ActionWithError';
+import Token from '../../types/Token';
 import { RootState } from '../store';
-import { defaultUser, User } from '../../utils/types/User';
+import { defaultUser, User } from '../../types/User';
 
 const defaultAuth: Token = {
   token: undefined,

@@ -1,7 +1,7 @@
 import { SxProps, Theme } from '@mui/material';
 
-import { TextColors } from '../Colors';
-import { INPUT_ICON_WIDTH } from '../utils';
+import { TextColors } from '../utils/Colors';
+import { INPUT_ICON_WIDTH } from '../utils/utils';
 import { breakpoints } from './BasicTypography';
 
 const UserIconSx: SxProps<Theme> = {

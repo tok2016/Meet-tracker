@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import PromoInfo from '../utils/types/PromoInfo';
+import PromoInfo from '../types/PromoInfo';
 
 const Promo = ({promoInfo}: {promoInfo: PromoInfo}) => (
   <div style={{

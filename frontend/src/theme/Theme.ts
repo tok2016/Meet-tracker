@@ -18,7 +18,7 @@ import ListItem from './ListItem';
 import ListItemText from './ListItemText';
 import Toolbar from './Toolbar';
 import BasicTypography from './BasicTypography';
-import { TextColors, UIColors } from '../Colors';
+import { TextColors, UIColors } from '../utils/Colors';
 import List from './List';
 import FilledInput from './FilledInput';
 import Menu from './Menu';
