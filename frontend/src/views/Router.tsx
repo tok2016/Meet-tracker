@@ -15,6 +15,10 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import AdminTemplate from './AdminTemplate';
 import { selectDefaultPage, setDefaultPage } from '../store/pageSlice';
+import ColorsSettingsPage from './ColorsSettingsPage';
+import LLMSettingsPage from './LLMSettingsPage';
+import STTSettingsPage from './STTSettingsPage';
+import OtherSettingsPage from './OtherSettingsPage';
 
 const Router = () => {
   const {user, auth, wasLoggedOut} = useAppSelector(selectUser);
@@ -60,8 +64,15 @@ const Router = () => {
                 element={user.isAdmin 
                   ? <AdminTemplate /> 
                   : <Navigate to={'/account'}/>}>
-                      <Route index element={<SettingsPage />} />
+                      <Route path='settings' element={<SettingsPage />}>
+                        <Route index element={<Navigate to='colors' />}/>
+                        <Route path='colors' element={<ColorsSettingsPage />} />
+                        <Route path='llm' element={<LLMSettingsPage />} />
+                        <Route path='stt' element={<STTSettingsPage />} />
+                        <Route path='other' element={<OtherSettingsPage />} />
+                      </Route>
 
+                      <Route index element={<Navigate to='summaries'/>} />
                       <Route path='summaries' element={<SummariesListPage isForAdmin />} />
                       <Route path='summaries/:id' element={<SummaryPage />} />
 

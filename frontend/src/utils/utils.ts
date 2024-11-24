@@ -45,6 +45,16 @@ const statusesTranslations = {
   ['error']: 'Ошибка'
 };
 
+const jsonTypes = {
+  ['number']: 'Number',
+  ['string']: 'String',
+  ['boolean']: 'Boolean',
+  ['object']: 'Object',
+  ['array']: 'Array',
+  ['date']: 'Date',
+  ['binary']: 'Binary'
+};
+
 const camelToSnake = (obj: object) => {
   const result = obj;
 
@@ -150,5 +160,5 @@ const screenSymbols = (str: string) => str.replace(/[~`!@#$%^&*()_\-+=|:;,.?<>{}
 
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates,
-  LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, 
+  LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, jsonTypes,
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};

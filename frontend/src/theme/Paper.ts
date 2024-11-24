@@ -7,7 +7,8 @@ declare module '@mui/material/Paper' {
     elevationSmall: true,
     elevationInside: true,
     elevationDashed: true,
-    elevationInput: true
+    elevationInput: true,
+    elevationDarker: true
   }
 }
 
@@ -71,6 +72,16 @@ const Paper: Components['MuiPaper'] = {
             borderRadius: 10,
             padding: '0.5em 1em',
             paddingLeft: '1.5em'
+          }
+        },
+        {
+          props: {
+            variant: 'elevationDarker'
+          },
+          style: {
+            backgroundColor: UIColors.quaternary,
+            borderRadius: 5,
+            padding: '0.6em 0.8em'
           }
         }
       ]

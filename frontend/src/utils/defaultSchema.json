@@ -1,0 +1,35 @@
+{
+  "topic": {
+    "type": "string",
+    "description": "Topic of the text"
+  },
+  "text": {
+    "type": "string",
+    "description": "Short summary of the text"
+  },
+  "start": {
+    "type": "string",
+    "description": "Time when first segment starts"
+  },
+  "end": {
+    "type": "string",
+    "description": "Time when last segment ends"
+  },
+  "speakers": {
+    "type": "array",
+    "description": "Speakers with names and their tasks",
+    "items": {
+      "type": "object",
+      "properties": {
+        "speaker_name": {
+          "type": "string",
+          "description": "Name of the speaker"
+        },
+        "speaker_info": {
+          "type": "string",
+          "description": "Short summary of the speaker's speech"
+        }
+      }
+    }
+  }
+}
