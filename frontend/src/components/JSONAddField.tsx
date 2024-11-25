@@ -7,11 +7,14 @@ const JSONAddField = ({isInner=false}: {isInner?: boolean}) => (
     sx={{
       backgroundColor: isInner ? UIColors.quaternary : UIColors.background
     }}>
-      <TableCell>
+      <TableCell align='center'>
         <IconButton color='secondary'>
           <Add />
         </IconButton>
       </TableCell>
+      <TableCell></TableCell>
+      <TableCell></TableCell>
+      <TableCell></TableCell>
   </TableRow>
 );
 

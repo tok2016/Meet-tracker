@@ -133,7 +133,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
             variant='body1'
             hidden={!isRolledDown} 
             value={customText}
-            setter={setCustomText}
+            onChange={(evt) => setCustomText(evt.target.value)}
             onKeyUp={onKeyUp}
             onKeyDown={onKeyDown}>
           </TextArea>

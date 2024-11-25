@@ -1,24 +1,49 @@
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
+import { memo } from 'react';
 
-import { JSONSchema } from '../types/JSONSchema';
+import JSONField, { JSONSchema } from '../types/JSONSchema';
 import JSONFieldRow from './JSONFieldRow';
 import JSONAddField from './JSONAddField';
 
-const JSONTable = ({jsonSchema}: {jsonSchema: JSONSchema}) => {
+type JSONTableProps = {
+  jsonSchema: JSONSchema,
+  updateSchema: (updatedSchema: JSONSchema) => void
+};
+
+const JSONTableRaw = ({jsonSchema, updateSchema}: JSONTableProps) => {
+  const updateField = (updatedField: JSONField, key: string) => {
+    updateSchema({...jsonSchema, [key]: updatedField});
+  };
+
+  const updateKey = (updatedKey: string, key: string) => {
+    const newSchema = {
+      ...jsonSchema,
+      [updatedKey]: jsonSchema[key]
+    };
+    delete newSchema[key];
+
+    updateSchema(newSchema);
+  };
+
   return (
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell align='center'>Ключ</TableCell>
-          <TableCell align='center'>Описание</TableCell>
-          <TableCell align='center'>Тип</TableCell>
-          <TableCell></TableCell>
+          <TableCell width='30%'>Ключ</TableCell>
+          <TableCell width='30%'>Описание</TableCell>
+          <TableCell width='20%'>Тип</TableCell>
+          <TableCell width='20%'></TableCell>
         </TableRow>
       </TableHead>
 
       <TableBody>
-        {Object.entries(jsonSchema).map((entry, i) => (
-          <JSONFieldRow key={Date.now() + i} jsonKey={entry[0]} jsonField={entry[1]} />
+        {Object.entries(jsonSchema).map((entry) => (
+          <JSONFieldRow 
+            key={entry[0]} 
+            jsonKey={entry[0]} 
+            jsonField={entry[1]}
+            updateField={updateField}
+            updateKey={updateKey} />
         ))}
       </TableBody>
 
@@ -28,5 +53,7 @@ const JSONTable = ({jsonSchema}: {jsonSchema: JSONSchema}) => {
     </Table>
   );
 };
+
+const JSONTable = memo(JSONTableRaw);
 
 export default JSONTable;

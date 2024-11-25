@@ -1,5 +1,5 @@
 import { TextareaAutosize } from '@mui/material';
-import { CSSProperties, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, CSSProperties } from 'react';
 
 import { TextColors } from '../utils/Colors';
 import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
@@ -10,7 +10,7 @@ type TextAreaProps = {
   variant: 'body1' | 'body2' | 'body2Highlight',
   hidden: boolean,
   readOnly: boolean,
-  setter: Dispatch<SetStateAction<string>>,
+  onChange?: (evt: ChangeEvent<HTMLTextAreaElement>) => void,
   onKeyUp: () => void
   onKeyDown: () => void
 };
@@ -27,7 +27,7 @@ const FontWeightsForTextArea = {
   body2Highlight: 700
 }
 
-const TextArea = ({value, variant, hidden, readOnly, setter, onKeyDown, onKeyUp}: TextAreaProps) => {
+const TextArea = ({value, variant, hidden, readOnly, onChange, onKeyDown, onKeyUp}: TextAreaProps) => {
   const {large, xLarge} = useMediaMatch();
 
   let fontSize = 18;
@@ -54,7 +54,7 @@ const TextArea = ({value, variant, hidden, readOnly, setter, onKeyDown, onKeyUp}
       hidden={hidden}
       value={value}
       readOnly={readOnly}
-      onChange={(evt) => setter(evt.target.value)}
+      onChange={onChange}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
       > 

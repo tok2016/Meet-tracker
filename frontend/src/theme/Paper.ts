@@ -35,11 +35,7 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: UIColors.background,
             borderRadius: 10,
-            padding: PAPER_SMALL_PADDING,
-            ':hover a': {
-              color: TextColors.highlight,
-              transition: 'color 0.15s'
-            }
+            padding: PAPER_SMALL_PADDING
           }
         },
         {
@@ -81,7 +77,14 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: UIColors.quaternary,
             borderRadius: 5,
-            padding: '0.6em 0.8em'
+            padding: '0.6em 0.8em',
+            ':hover': {
+              cursor: 'pointer',
+              backgroundColor: UIColors.background
+            },
+            ':hover .title': {
+              color: TextColors.highlight
+            }
           }
         }
       ]

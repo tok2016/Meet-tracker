@@ -1,4 +1,6 @@
 import { Outlet } from 'react-router-dom';
+import { Stack } from '@mui/material';
+
 import ButtonsTab from '../components/ButtonsTab';
 import Page from '../types/Page';
 
@@ -28,7 +30,20 @@ const SettingsPages: Page[] = [
 const SettingsPage = () => (
   <>
     <ButtonsTab pages={SettingsPages} />
-    <Outlet />
+    <Stack
+      display='flex'
+      flexDirection='column'
+      gap='40px'
+      alignItems='center'
+      width='80%'
+      margin='0 auto'
+      sx={{
+        'h2': {
+          marginBottom: '20px'
+        }
+      }}>
+        <Outlet />
+    </Stack>
   </>
 );
 

@@ -61,7 +61,7 @@ const SpeakerPlain = ({speaker, commitChanges, onKeyDown}: SpeakerPlainProps) =>
           value={info}
           readOnly={false}
           hidden={!isRolledDown}
-          setter={setInfo}
+          onChange={(evt) => setInfo(evt.target.value)}
           onKeyUp={onKeyUp}
           onKeyDown={onKeyDown}
           >
