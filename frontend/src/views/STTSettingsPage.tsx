@@ -1,20 +1,38 @@
-import { MenuItem, Select, Stack, Switch, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Button, MenuItem, Select, Stack, Switch, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import { Language, MappedLanguages } from '../types/Language';
 import { STTOutput, STTOutputFormats } from '../types/STTOutput';
 import TextArea from '../components/TextArea';
 import STTConfig, { defaultSTTConfig } from '../types/STTConfig';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
+import { selectSettings } from '../store/settings/settingsSlice';
+import { getSTTConfig, postSTTSettings } from '../store/settings/settingsThunks';
 
 const STTSettingsPage = () => {
   const [sttConfig, setSTTConfig] = useState<STTConfig>(defaultSTTConfig);
   
+  const {stt} = useAppSelector(selectSettings);
+  const dispatch = useAppDispatch();
+
   const changeSTTConfig = (update: Partial<STTConfig>) => {
     setSTTConfig((prev) => ({
       ...prev,
       ...update
     }));
   };
+
+  const subminSettings = (update: STTConfig) => {
+    dispatch(postSTTSettings(update));
+  };
+
+  useEffect(() => {
+    dispatch(getSTTConfig());
+  }, []);
+
+  useEffect(() => {
+    setSTTConfig(stt);
+  }, [stt])
 
   return (
     <>
@@ -94,6 +112,12 @@ const STTSettingsPage = () => {
           onKeyDown={() => {}}>
         </TextArea>
       </Stack>
+
+      <Button
+        variant='contained'
+        onClick={() => subminSettings(sttConfig)}>
+          Сохранить
+      </Button>
     </>
   );
 };

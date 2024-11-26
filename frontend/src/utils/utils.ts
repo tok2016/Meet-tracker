@@ -77,7 +77,8 @@ const snakeToCamel = <Type, >(obj: object): Type => {
     const camel = key.replace(/[_][a-z]/g, (symbols) => symbols.toUpperCase().replace('_', ''));
 
     if(camel !== key) {
-      result[camel as keyof typeof obj] = obj[key as keyof typeof obj];
+      const value = obj[key as keyof typeof obj];
+      result[camel as keyof typeof obj] = typeof value === 'object' ? snakeToCamel<typeof value>(value) : value;
       delete result[key as keyof typeof obj];
     }
   }

@@ -8,6 +8,8 @@ export default interface LLMSettings {
   summaryStructure: JSONSchema
 };
 
+export type LLMSettingsRaw = Omit<LLMSettings, 'summaryStructure'> & {summaryStructure: string};
+
 export const defaultLLMSettings: LLMSettings = {
   name: 'llama3.1',
   parameterSize: '8.03B',
