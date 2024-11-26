@@ -1,31 +1,39 @@
 {
   "topic": {
+    "id": 0,
     "type": "string",
     "description": "Topic of the text"
   },
   "text": {
+    "id": 1,
     "type": "string",
     "description": "Short summary of the text"
   },
   "start": {
+    "id": 2,
     "type": "string",
     "description": "Time when first segment starts"
   },
   "end": {
+    "id": 3,
     "type": "string",
     "description": "Time when last segment ends"
   },
   "speakers": {
+    "id": 4,
     "type": "array",
     "description": "Speakers with names and their tasks",
     "items": {
+      "id": 5,
       "type": "object",
       "properties": {
         "speaker_name": {
+          "id": 6,
           "type": "string",
           "description": "Name of the speaker"
         },
         "speaker_info": {
+          "id": 7,
           "type": "string",
           "description": "Short summary of the speaker's speech"
         }

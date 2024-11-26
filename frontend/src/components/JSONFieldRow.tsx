@@ -1,12 +1,13 @@
 import { Delete, KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from '@mui/icons-material';
-import { IconButton, Input, Stack, TableCell, TableRow } from '@mui/material';
-import { useReducer } from 'react';
+import { IconButton, Input, SelectChangeEvent, Stack, TableCell, TableRow } from '@mui/material';
+import { memo, useReducer } from 'react';
 
-import JSONField from '../types/JSONSchema';
+import JSONField, { defaultItemsField } from '../types/JSONSchema';
 import TextArea from './TextArea';
 import JSONTypeField from './JSONTypeField';
 import { UIColors } from '../utils/Colors';
 import JSONAddField from './JSONAddField';
+import { generateKey } from '../utils/utils';
 
 type JSONFieldRowProps = {
   jsonField: JSONField | undefined, 
@@ -15,10 +16,21 @@ type JSONFieldRowProps = {
   isInner?: boolean, 
   readOnlyTitle?: boolean,
   updateField: (updatedField: JSONField, key: string) => void,
-  updateKey: (updatedKey: string, key: string) => void
+  updateKey: (updatedKey: string, key: string) => void,
+  deleteField: (key: string) => void,
+  addField: () => void
 }
 
-const JSONFieldRow = ({jsonField, jsonKey, isInner=false, readOnlyTitle=false, hidden=false, updateField, updateKey}: JSONFieldRowProps) => {
+const JSONFieldRowRaw = ({
+  jsonField, 
+  jsonKey, 
+  isInner=false, 
+  readOnlyTitle=false, 
+  hidden=false, 
+  updateField, 
+  updateKey, 
+  deleteField, 
+  addField}: JSONFieldRowProps) => {
   const [isOpened, toggleOpen] = useReducer((value) => !value, false);
 
   if(!jsonField || hidden) {
@@ -65,6 +77,49 @@ const JSONFieldRow = ({jsonField, jsonKey, isInner=false, readOnlyTitle=false, h
     updateField(newField, jsonKey);
   };
 
+  const addInnerField = () => {
+    if(!jsonField.properties) {
+      return;
+    }
+
+    const key = generateKey();
+    updateField({...jsonField, properties: {...jsonField.properties, [key]: defaultItemsField}}, jsonKey);
+  };
+
+  const deleteInnerField = (key: string) => {
+    if(!jsonField.properties) {
+      return;
+    }
+
+    const newField = jsonField;
+    if(newField.properties) {
+      delete newField.properties[key];
+    }
+
+    updateField(newField, jsonKey);
+  };
+
+  const onTypeSelect = (evt: SelectChangeEvent<string>) => {
+    const newField: Partial<JSONField> = {type: evt.target.value};
+
+    switch(newField.type) {
+      case 'array':
+        newField.items = defaultItemsField;
+        break;
+      case 'object':
+        const key = generateKey();
+        newField.properties = {
+          [key]: defaultItemsField
+        };
+        break;
+      default:
+        newField.items = undefined;
+        newField.properties = undefined;
+    }
+
+    changeFiled(newField);
+  };
+
   return (
     <>
       <TableRow
@@ -104,7 +159,7 @@ const JSONFieldRow = ({jsonField, jsonKey, isInner=false, readOnlyTitle=false, h
         <TableCell align='left'>
           <JSONTypeField 
             value={jsonField.type}
-            onSelect={(evt) => changeFiled({type: evt.target.value})} />
+            onSelect={onTypeSelect} />
         </TableCell>
             
         <TableCell align='center'>
@@ -114,8 +169,13 @@ const JSONFieldRow = ({jsonField, jsonKey, isInner=false, readOnlyTitle=false, h
             justifyContent='center'
             gap='10px'
             alignItems='center'>
-              <IconButton color='secondary'>
-                <Delete />
+              <IconButton 
+                color='secondary'
+                onClick={() => deleteField(jsonKey)}
+                style={{
+                  display: readOnlyTitle ? 'none' : 'inherit'
+                }}>
+                  <Delete />
               </IconButton>
 
               <IconButton 
@@ -133,25 +193,32 @@ const JSONFieldRow = ({jsonField, jsonKey, isInner=false, readOnlyTitle=false, h
         jsonKey='items' 
         jsonField={jsonField.items} 
         isInner
+        readOnlyTitle
         updateField={updateItems}
         updateKey={updateKey}
+        deleteField={deleteField}
+        addField={addField}
         hidden={!isOpened} />
       {jsonField.properties && isOpened 
         ? <>
             {Object.entries(jsonField.properties).map((entry) => (
               <JSONFieldRow
-                key={entry[0]} 
+                key={entry[1].id} 
                 jsonKey={entry[0]} 
                 jsonField={entry[1]} 
                 updateField={updateInnerField}
                 updateKey={updateInnerKey}
+                deleteField={deleteInnerField}
+                addField={addInnerField}
                 isInner />
             ))}
-            <JSONAddField isInner/>
+            <JSONAddField isInner onAddClick={addInnerField}/>
           </>
         : <></>}
     </>
   );
 };
+
+const JSONFieldRow = memo(JSONFieldRowRaw);
 
 export default JSONFieldRow;

@@ -1,9 +1,10 @@
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
 import { memo } from 'react';
 
-import JSONField, { JSONSchema } from '../types/JSONSchema';
+import JSONField, { defaultItemsField, JSONSchema } from '../types/JSONSchema';
 import JSONFieldRow from './JSONFieldRow';
 import JSONAddField from './JSONAddField';
+import { generateKey } from '../utils/utils';
 
 type JSONTableProps = {
   jsonSchema: JSONSchema,
@@ -25,6 +26,18 @@ const JSONTableRaw = ({jsonSchema, updateSchema}: JSONTableProps) => {
     updateSchema(newSchema);
   };
 
+  const deleteField = (key: string) => {
+    const newSchema = jsonSchema;
+    delete newSchema[key];
+
+    updateSchema(newSchema);
+  };
+
+  const addField = () => {
+    const key = generateKey();
+    updateSchema({...jsonSchema, [key]: defaultItemsField});
+  };
+
   return (
     <Table>
       <TableHead>
@@ -39,16 +52,18 @@ const JSONTableRaw = ({jsonSchema, updateSchema}: JSONTableProps) => {
       <TableBody>
         {Object.entries(jsonSchema).map((entry) => (
           <JSONFieldRow 
-            key={entry[0]} 
+            key={entry[1].id} 
             jsonKey={entry[0]} 
             jsonField={entry[1]}
             updateField={updateField}
-            updateKey={updateKey} />
+            updateKey={updateKey}
+            deleteField={deleteField}
+            addField={addField} />
         ))}
       </TableBody>
 
       <TableFooter>
-        <JSONAddField />
+        <JSONAddField onAddClick={addField} />
       </TableFooter>
     </Table>
   );

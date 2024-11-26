@@ -158,7 +158,9 @@ const getFilterWithDates = (filter: Filter) => ({
 
 const screenSymbols = (str: string) => str.replace(/[~`!@#$%^&*()_\-+=|:;,.?<>{}\[\]]/g, (letter) => `\\${letter}`);
 
-export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols,
+const generateKey = () => `Поле ${Date.now() % 1000}`;
+
+export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols, generateKey,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, jsonTypes,
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};

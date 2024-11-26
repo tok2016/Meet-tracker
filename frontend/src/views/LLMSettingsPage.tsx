@@ -60,6 +60,7 @@ const LLMSettingsPage = () => {
         </Typography>
 
         <TextArea
+          className='outlined'
           value={settings.prompt}
           variant='body1'
           hidden={false}

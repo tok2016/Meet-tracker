@@ -1,10 +1,21 @@
 import { MenuItem, Select, Stack, Switch, Typography } from '@mui/material';
+import { useState } from 'react';
 
-import { MappedLanguages } from '../types/Language';
-import { STTOutputFormats } from '../types/STTOutput';
+import { Language, MappedLanguages } from '../types/Language';
+import { STTOutput, STTOutputFormats } from '../types/STTOutput';
 import TextArea from '../components/TextArea';
+import STTConfig, { defaultSTTConfig } from '../types/STTConfig';
 
 const STTSettingsPage = () => {
+  const [sttConfig, setSTTConfig] = useState<STTConfig>(defaultSTTConfig);
+  
+  const changeSTTConfig = (update: Partial<STTConfig>) => {
+    setSTTConfig((prev) => ({
+      ...prev,
+      ...update
+    }));
+  };
+
   return (
     <>
       <Typography variant='h2'>
@@ -20,7 +31,9 @@ const STTSettingsPage = () => {
           <Typography variant='h3' textAlign='left'>
             Кодировка аудиозаписи средствами ffmpeg 
           </Typography>
-          <Switch />
+          <Switch 
+            value={sttConfig.encode}
+            onChange={(evt) => changeSTTConfig({encode: Boolean(evt.target.valueAsNumber)})} />
       </Stack>
 
       <Stack
@@ -32,7 +45,9 @@ const STTSettingsPage = () => {
           <Typography variant='h3' textAlign='left'>
             Распознавание времени слова в записи
           </Typography>
-          <Switch />
+          <Switch 
+            value={sttConfig.wordTimestamps}
+            onChange={(evt) => changeSTTConfig({wordTimestamps: Boolean(evt.target.valueAsNumber)})} />
       </Stack>
 
       <Stack alignSelf='flex-start'>
@@ -40,10 +55,12 @@ const STTSettingsPage = () => {
           Язык возвращаемого текста
         </Typography>
 
-        <Select value='en'>
-          {Object.entries(MappedLanguages).map((entry) => (
-            <MenuItem value={entry[0]}>{entry[1]}</MenuItem>
-          ))}
+        <Select 
+          value={sttConfig.language}
+          onChange={(evt) => changeSTTConfig({language: evt.target.value as Language})}>
+            {Object.entries(MappedLanguages).map((entry) => (
+              <MenuItem key={entry[0]} value={entry[0]}>{entry[1]}</MenuItem>
+            ))}
         </Select>
       </Stack>
 
@@ -52,10 +69,12 @@ const STTSettingsPage = () => {
           Формат возвращаемого текста
         </Typography>
 
-        <Select value='txt'>
-          {STTOutputFormats.map((format) => (
-            <MenuItem value={format}>{format}</MenuItem>
-          ))}
+        <Select 
+          value={sttConfig.output}
+          onChange={(evt) => changeSTTConfig({output: evt.target.value as STTOutput})}>
+            {STTOutputFormats.map((format) => (
+              <MenuItem key={format} value={format}>{format}</MenuItem>
+            ))}
         </Select>
       </Stack>
 
@@ -65,11 +84,12 @@ const STTSettingsPage = () => {
         </Typography>
 
         <TextArea 
-          value='' 
+          className='outlined'
+          value={sttConfig.initialPrompt} 
           variant='body1' 
           hidden={false} 
           readOnly={false} 
-          onChange={() => {}} 
+          onChange={(evt) => changeSTTConfig({initialPrompt: evt.target.value})} 
           onKeyUp={() => {}} 
           onKeyDown={() => {}}>
         </TextArea>

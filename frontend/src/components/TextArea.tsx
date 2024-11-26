@@ -1,7 +1,7 @@
 import { TextareaAutosize } from '@mui/material';
 import { ChangeEvent, CSSProperties } from 'react';
 
-import { TextColors } from '../utils/Colors';
+import { TextColors, UIColors } from '../utils/Colors';
 import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
 import useMediaMatch from '../hooks/useMediaMacth';
 
@@ -10,6 +10,7 @@ type TextAreaProps = {
   variant: 'body1' | 'body2' | 'body2Highlight',
   hidden: boolean,
   readOnly: boolean,
+  className?: string,
   onChange?: (evt: ChangeEvent<HTMLTextAreaElement>) => void,
   onKeyUp: () => void
   onKeyDown: () => void
@@ -27,7 +28,7 @@ const FontWeightsForTextArea = {
   body2Highlight: 700
 }
 
-const TextArea = ({value, variant, hidden, readOnly, onChange, onKeyDown, onKeyUp}: TextAreaProps) => {
+const TextArea = ({value, variant, hidden, readOnly, className, onChange, onKeyDown, onKeyUp}: TextAreaProps) => {
   const {large, xLarge} = useMediaMatch();
 
   let fontSize = 18;
@@ -50,7 +51,15 @@ const TextArea = ({value, variant, hidden, readOnly, onChange, onKeyDown, onKeyU
 
   return (
     <TextareaAutosize
-      style={styles}
+      style={className === 'outlined'
+        ? {
+            ...styles,
+            border: `solid 3px ${UIColors.main}`,
+            borderRadius: 15,
+            padding: '0.5em'
+          }
+        : styles
+      }
       hidden={hidden}
       value={value}
       readOnly={readOnly}
