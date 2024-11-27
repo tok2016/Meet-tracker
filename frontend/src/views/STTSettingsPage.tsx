@@ -1,4 +1,4 @@
-import { Button, MenuItem, Select, Stack, Switch, Typography } from '@mui/material';
+import { Button, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import { Language, MappedLanguages } from '../types/Language';
@@ -8,6 +8,7 @@ import STTConfig, { defaultSTTConfig } from '../types/STTConfig';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSettings } from '../store/settings/settingsSlice';
 import { getSTTConfig, postSTTSettings } from '../store/settings/settingsThunks';
+import { STTSize, STTSizes } from '../types/STTSize';
 
 const STTSettingsPage = () => {
   const [sttConfig, setSTTConfig] = useState<STTConfig>(defaultSTTConfig);
@@ -40,34 +41,6 @@ const STTSettingsPage = () => {
         Конфигурация speech-to-text модели
       </Typography>
 
-      <Stack
-        display='flex'
-        flexDirection='row'
-        gap='10px'
-        alignSelf='flex-start'
-        alignItems='center'>
-          <Typography variant='h3' textAlign='left'>
-            Кодировка аудиозаписи средствами ffmpeg 
-          </Typography>
-          <Switch 
-            value={sttConfig.encode}
-            onChange={(evt) => changeSTTConfig({encode: Boolean(evt.target.valueAsNumber)})} />
-      </Stack>
-
-      <Stack
-        display='flex'
-        flexDirection='row'
-        gap='10px'
-        alignSelf='flex-start'
-        alignItems='center'>
-          <Typography variant='h3' textAlign='left'>
-            Распознавание времени слова в записи
-          </Typography>
-          <Switch 
-            value={sttConfig.wordTimestamps}
-            onChange={(evt) => changeSTTConfig({wordTimestamps: Boolean(evt.target.valueAsNumber)})} />
-      </Stack>
-
       <Stack alignSelf='flex-start'>
         <Typography variant='h3' textAlign='left'>
           Язык возвращаемого текста
@@ -92,6 +65,20 @@ const STTSettingsPage = () => {
           onChange={(evt) => changeSTTConfig({output: evt.target.value as STTOutput})}>
             {STTOutputFormats.map((format) => (
               <MenuItem key={format} value={format}>{format}</MenuItem>
+            ))}
+        </Select>
+      </Stack>
+
+      <Stack alignSelf='flex-start'>
+        <Typography variant='h3' textAlign='left'>
+          Размер модели
+        </Typography>
+
+        <Select 
+          value={sttConfig.modelSize}
+          onChange={(evt) => changeSTTConfig({modelSize: evt.target.value as STTSize})}>
+            {STTSizes.map((size) => (
+              <MenuItem key={size} value={size}>{size}</MenuItem>
             ))}
         </Select>
       </Stack>

@@ -1,18 +1,17 @@
 import { Language } from './Language';
 import { STTOutput } from './STTOutput';
+import { STTSize } from './STTSize';
 
 export default interface STTConfig {
-  encode: boolean,
   language: Language,
   initialPrompt: string,
-  wordTimestamps: boolean,
-  output: STTOutput
+  output: STTOutput,
+  modelSize: STTSize
 };
 
 export const defaultSTTConfig: STTConfig = {
-  encode: true,
   language: 'en',
   initialPrompt: '',
-  wordTimestamps: true,
-  output: 'txt'
+  output: 'txt',
+  modelSize: 'large-v3'
 }
