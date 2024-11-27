@@ -6,12 +6,13 @@ import { defaultSTTConfig } from '../../types/STTConfig';
 import { RootState } from '../store';
 import { getLLMConfigs, getLLMSettings, getSTTConfig, postLLMSettings, postSTTSettings } from './settingsThunks';
 import { isActionWithError } from '../../types/ActionWithError';
+import defaultLLMConfigs from '../../utils/defaultLLMs.json';
 
 const selectSettings = (state: RootState) => state.settings;
 
 const initialState: SettingsState = {
   llm: defaultLLMSettings,
-  llms: [],
+  llms: defaultLLMConfigs,
   stt: defaultSTTConfig,
   status: 'idle',
   error: undefined

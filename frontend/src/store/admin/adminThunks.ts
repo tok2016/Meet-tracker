@@ -146,25 +146,6 @@ const getUserAvatar = createAsyncThunk<string, number, AsyncThunkConfig>(
   }
 );
 
-const patchUserAsAdmin = createAsyncThunk<User, User, AsyncThunkConfig>(
-  'admin/patchUserAsAdmin',
-  async ({id, isAdmin}, {getState}) => {
-    const {user} = getState();
-
-    const path = isAdmin 
-      ? `/user/${id}/remove_admin?user_username=${id}` 
-      : `/user/${id}/set_admin?user_username=${id}`;
-
-    const response = await AxiosInstance.patch(path, undefined, {
-      headers: {
-        Authorization: user.auth.token
-      }
-    });
-
-    return snakeToCamel<User>(response.data);
-  }
-);
-
 const getAllSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncThunkConfig>(
   'admin/getSummaries',
   async ({page, filter=defaultFilter}, {getState}) => {
@@ -238,5 +219,5 @@ const deleteRecordById = createAsyncThunk<void, number, AsyncThunkConfig>(
 );
 
 export {getUsers, getUserById, getUserAvatar, getAllSummaries, 
-  postNewUser, patchUserById, patchUserAsAdmin, postUserAvatar,
+  postNewUser, patchUserById, postUserAvatar,
   deleteUserById, deleteSummaryById, deleteRecordById, archiveRecordById};

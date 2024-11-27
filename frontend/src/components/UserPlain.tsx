@@ -7,7 +7,7 @@ import { User } from '../types/User';
 import ItemPlain from './ItemPlain';
 import PlainMenu from './PlainMenu';
 import { useAppDispatch } from '../hooks/useAppDispatch';
-import { deleteUserById, patchUserAsAdmin } from '../store/admin/adminThunks';
+import { deleteUserById, patchUserById } from '../store/admin/adminThunks';
 import { getLocaleString } from '../utils/utils';
 //import { TextColors } from '../utils/Colors';
 
@@ -27,7 +27,7 @@ const RawUserPlain = ({user, onDelete}: {user: User, onDelete: () => void}) => {
   };
 
   const toggleAdmin = () => {
-    dispatch(patchUserAsAdmin(user));
+    dispatch(patchUserById({...user, isAdmin: !user.isAdmin})).then(() => onDelete());
   };
 
   return (

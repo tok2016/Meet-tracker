@@ -44,4 +44,4 @@ export const defaultUser: User = {
   avatar: ''
 }
 
-export const isUser = (user: User): user is User => (user as User).username !== undefined;
+export const isUser = (user: unknown): user is User => (user as User).username !== undefined;
