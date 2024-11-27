@@ -1,10 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import AdminState from '../../types/AdminState';
-import { archiveRecordById, deleteRecordById, deleteSummaryById, deleteUserById, getAllSummaries, 
-  getUserAvatar, 
-  getUserById, getUsers, patchUserById, postNewUser, 
-  postUserAvatar} from './adminThunks';
+import { archiveRecordById, deleteRecordById, deleteSummaryById, deleteUserById, getAllSummaries, getUserAvatar, 
+  getUserById, getUsers, patchUserById, postNewUser, postUserAvatar} from './adminThunks';
 import { isActionWithError } from '../../types/ActionWithError';
 import { defaultUser } from '../../types/User';
 import { defaultSummary } from '../../types/Summary';

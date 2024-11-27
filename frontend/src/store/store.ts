@@ -5,6 +5,7 @@ import SummaryReducers from './summary/summarySlice';
 import AdminReducers from './admin/adminSlice';
 import TimeCodeReducers from './timeCodeSlice';
 import PageReducer from './pageSlice';
+import SettingsReducer from './settings/settingsSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ const store = configureStore({
     summary: SummaryReducers,
     admin: AdminReducers,
     timeCode: TimeCodeReducers,
-    page: PageReducer
+    page: PageReducer,
+    settings: SettingsReducer
   }
 });
 

@@ -26,7 +26,7 @@ const userSchema: ObjectSchema<UserRaw> = object({
               .matches(/^[a-zA-Zа-яА-Я]+$/, 'Имя может включать в себя толбко буквы английского и русского алфавитов'),
   lastName: string()
               .trim()
-              .matches(/^[a-zA-Zа-яА-Я]?$/, 'Фамилия может включать в себя толбко буквы английского и русского алфавитов')
+              .matches(/^[a-zA-Zа-яА-Я]*$/, 'Фамилия может включать в себя толбко буквы английского и русского алфавитов')
               .default(''),
   password: string()
               .required(REQUIRED_MESSAGE)

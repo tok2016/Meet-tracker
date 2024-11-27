@@ -6,7 +6,7 @@ import AxiosInstance from '../../utils/Axios';
 import { arraySnakeToCamel, camelToSnake, getFilterWithDates, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
 import { RawSummary, SummariesRaw } from '../../types/Summary';
 import CollectionParams from '../../types/CollectionParams';
-import Filter, { defaultFilter } from '../../types/Filter';
+import { defaultFilter } from '../../types/Filter';
 import CollectionData from '../../types/CollectionData';
 import UserAvatarQuery from '../../types/UserAvatarQuery';
 
@@ -28,7 +28,7 @@ const getUsers = createAsyncThunk<UsersRaw, CollectionParams, AsyncThunkConfig>(
 
     const usersWithTotal: UsersRaw = {
       users,
-      total: data.total ?? users.length
+      total: data.total === 0 ? users.length : data.total
     };
 
     return usersWithTotal;
@@ -164,7 +164,7 @@ const getAllSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncTh
 
     const summariesWithTotal: SummariesRaw = {
       summaries: getFullSummaries(summaries),
-      total: data.total ?? summaries.length
+      total: data.total === 0 ? summaries.length : data.total
     };
 
     return summariesWithTotal;

@@ -52,6 +52,8 @@ const Button: Components['MuiButton'] = {
         variant: 'containtedTabSelected'
       },
       style: {
+        width: '13vw',
+        lineHeight: 1,
         background: UIColors.mainGradient(),
         color: TextColors.contrast,
         minHeight: '3em',
@@ -67,6 +69,8 @@ const Button: Components['MuiButton'] = {
         variant: 'containtedTab'
       },
       style: {
+        width: '13vw',
+        lineHeight: 1,
         background: UIColors.disabled,
         color: TextColors.contrast,
         minHeight: '3em',
