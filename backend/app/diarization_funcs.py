@@ -458,7 +458,7 @@ def get_sentences_speaker_mapping(word_speaker_mapping, spk_ts):
     return snts
 
 
-def get_speaker_aware_transcript(sentences_speaker_mapping, f):
+def get_speaker_aware_transcript(sentences_speaker_mapping):
     x = ""
     time_start = sentences_speaker_mapping[0]["start_time"]
     time_end = sentences_speaker_mapping[-1]["end_time"]

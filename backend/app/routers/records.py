@@ -53,8 +53,7 @@ from app.diarization_funcs import (
 )
 
 #Whsiper модель
-model_size = "large-v3"
-model_whisper = WhisperModel(model_size, device="cpu", compute_type="int8")
+#model_size = "large-v3"
 #Llama модель
 model = OllamaFunctions(model="llama3.1", format="json", base_url="http://127.0.0.1:11434/")
 model = model.bind_tools(
@@ -121,19 +120,18 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     audio.export(file_name, format="wav")
     device = "cuda" if torch.cuda.is_available() else "cpu" #Cuda если есть
     #Используем виспер
+    model_whisper = WhisperModel("large-v3", device="cpu", compute_type="int8")
     whisper_pipeline = faster_whisper.BatchedInferencePipeline(model_whisper) #Пайплайн для виспера
     vocal_target = file_name #Аудио
     audio_waveform = faster_whisper.decode_audio(vocal_target)
     #Транскрипция
     batch_size = 8 #Можно в переменную!!!
     if batch_size > 0:
-        transcript_segments, info = whisper_pipeline.transcribe( audio_waveform, language,
-        suppress_tokens=suppress_tokens, batch_size=batch_size, without_timestamps=True,)
+        transcript_segments, info = whisper_pipeline.transcribe( audio_waveform, batch_size=batch_size, without_timestamps=True,)
     else:
-        transcript_segments, info = whisper_model.transcribe( audio_waveform, language, 
-        suppress_tokens=suppress_tokens, without_timestamps=True, vad_filter=True,)
+        transcript_segments, info = model_whisper.transcribe( audio_waveform, without_timestamps=True, vad_filter=True,)
     full_transcript = "".join(segment.text for segment in transcript_segments) #Полная транскрипция
-    del whisper_model, whisper_pipeline #Очищаем память
+    del model_whisper, whisper_pipeline #Очищаем память
     ####
     #Выравниваем новое аудио с оригинальным
     ####
@@ -141,7 +139,7 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     audio_waveform = ( torch.from_numpy(audio_waveform).to(alignment_model.dtype).to(alignment_model.device) )
     emissions, stride = generate_emissions( alignment_model, audio_waveform, batch_size=batch_size )
     del alignment_model
-    torch.cuda.empty_cache()
+    #torch.cuda.empty_cache()
     tokens_starred, text_starred = preprocess_text( full_transcript, romanize=True, language=langs_to_iso[info.language], )
     segments, scores, blank_token = get_alignments( emissions, tokens_starred, alignment_tokenizer, )
     spans = get_spans(tokens_starred, segments, blank_token)
@@ -153,10 +151,10 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     torchaudio.save( os.path.join(temp_path, "mono_file.wav"), audio_waveform.cpu().unsqueeze(0).float(),
         16000, channels_first=True, )
     #Диаризация
-    msdd_model = NeuralDiarizer(cfg=create_config(temp_path)).to("cuda")
+    msdd_model = NeuralDiarizer(cfg=create_config(temp_path))
     msdd_model.diarize()
     del msdd_model
-    torch.cuda.empty_cache()
+    #torch.cuda.empty_cache()
     #Сопоставляем спикеров с предложениями
     speaker_ts = []
     with open(os.path.join(temp_path, "pred_rttms", "mono_file.rttm"), "r") as f:
