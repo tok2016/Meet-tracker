@@ -110,7 +110,7 @@ router = APIRouter()
 
 #Запрос для распознования спикеров
 @router.post("/record/diarize")
-async def record_diarize( file: UploadFile, session: SessionDep, title: str, current_user: CurrentUser, batch_size: int):
+async def record_diarize( file: UploadFile, session: SessionDep, title: str, current_user: CurrentUser):
     #Конвертируем аудио/видео в wav
     audio = AudioSegment.from_file(io.BytesIO(file.file.read()))
     audio_id = str(uuid4())
@@ -125,6 +125,7 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     vocal_target = file_name #Аудио
     audio_waveform = faster_whisper.decode_audio(vocal_target)
     #Транскрипция
+    batch_size = 8 #Можно в переменную!!!
     if batch_size > 0:
         transcript_segments, info = whisper_pipeline.transcribe( audio_waveform, language,
         suppress_tokens=suppress_tokens, batch_size=batch_size, without_timestamps=True,)
