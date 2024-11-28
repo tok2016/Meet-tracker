@@ -13,7 +13,8 @@ const LgFontSizes = {
   h3Promo: 28,
   body2Highlight: 16,
   h3Normal: 18,
-  menuItem: 16
+  menuItem: 16,
+  table: 16
 };
 
 const XlFontSizes = {
@@ -31,7 +32,8 @@ const XlFontSizes = {
   h3Promo: 48,
   body2Highlight: 24,
   h3Normal: 32,
-  menuItem: 28
+  menuItem: 28,
+  table: 20
 };
 
 export {LgFontSizes, XlFontSizes};

@@ -21,7 +21,7 @@ const AdminSubpages: Page[] = [
   },
   {
     name: 'Настройки',
-    path: '/account/admin',
+    path: '/account/admin/settings',
     forAdmin: true
   }
 ];

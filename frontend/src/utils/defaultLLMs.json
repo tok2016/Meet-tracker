@@ -1,0 +1,67 @@
+[
+  {
+    "name": "qwen2",
+    "modifiedAt": "2024-25-09T14:56:49.277302595-07:00",
+    "size": 4724464026,
+    "digest": "dd314f039b9d",
+    "url": "https://ollama.com/library/qwen2",
+    "details": {
+      "format": "gguf",
+      "family": "qwen2",
+      "parameterSize": "7.62B",
+      "quantizationLevel": "Q4_0"
+    }
+  },
+  {
+    "name": "llama3.2",
+    "modifiedAt": "2024-25-09T14:56:49.277302595-07:00",
+    "size": 2147483648,
+    "digest": "a80c4f17acd5",
+    "url": "https://ollama.com/library/llama3.2",
+    "details": {
+      "format": "gguf",
+      "family": "llama",
+      "parameterSize": "3.21B",
+      "quantizationLevel": "Q4_K_M"
+    }
+  },
+  {
+    "name": "llama3.1",
+    "modifiedAt": "2024-25-09T14:56:49.277302595-07:00",
+    "size": 5046586573,
+    "digest": "42182419e950",
+    "url": "https://ollama.com/library/llama3.1",
+    "details": {
+      "format": "gguf",
+      "family": "llama",
+      "parameterSize": "8.03B",
+      "quantizationLevel": "Q4_0"
+    }
+  },
+  {
+    "name": "mistral",
+    "modifiedAt": "2024-25-07T14:56:49.277302595-07:00",
+    "size": 4402341479,
+    "digest": "f974a74358d6",
+    "url": "https://ollama.com/library/mistral",
+    "details": {
+      "format": "gguf",
+      "family": "llama",
+      "parameterSize": "7.25B",
+      "quantizationLevel": "Q4_0"
+    }
+  },
+  {
+    "name": "gemma",
+    "modifiedAt": "2024-25-04T14:56:49.277302595-07:00",
+    "size": 5368709120,
+    "digest": "a72c7f4d0a15",
+    "url": "https://ollama.com/library/gemma",
+    "details": {
+      "format": "gguf",
+      "family": "gemma",
+      "parameterSize": "8.54B",
+      "quantizationLevel": "Q4_0"
+    }
+  }
+]

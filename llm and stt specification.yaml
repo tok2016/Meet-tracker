@@ -1,0 +1,182 @@
+openapi: 3.0.3
+info:
+  title: LLM & STT - OpenAPI 3.0
+  description: It's about LLM & STT configuration sending from frontend
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+tags:
+  - name: llm
+    description: LLM config
+  - name: stt
+    description: STT config
+paths:
+  /llmSettings:
+    post:
+      tags:
+        - llm
+      summary: LLM configuration and work
+      description: Update LLM configuration and work. Admin only
+      operationId: setLLMSettings
+      requestBody:
+        description: LLM configuration, propmt and return structure
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LLMSettings"
+      responses:
+        '200':
+          description: LLM is updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LLMSettings"
+        '400':
+          description: LLM settings are invalid
+        '404':
+          description: LLM configuration is not found
+    get: 
+      tags:
+        - llm
+      summary: LLM settings info
+      description: Return LLM settings. Admin only
+      operationId: getLLMSettings
+      responses:
+        '200':
+          description: LLM settings are found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LLMSettings"
+        '404':
+          description: LLM configuration is not found
+  /llmConfigs:
+    get:
+      tags:
+        - llm
+      summary: LLM configs list
+      description: Return LLM configs list. Admin only
+      operationId: getLLMConfigsList
+      responses:
+        '200':
+          description: LLM configs list is found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LLMConfig"
+  /sttConfig:
+    post:
+      tags:
+        - stt
+      summary: STT configuration and work
+      description: Update STT configuration and work. Admin only
+      operationId: setSTTConfig
+      requestBody:
+        description: STT configuration
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/STTConfig"
+      responses:
+        '200':
+          description: STT is updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/STTConfig"
+        '400':
+          description: STT settings are invalid
+        '404':
+          description: STT configuration is not found
+    get: 
+      tags:
+        - stt
+      summary: STT config info
+      description: Return STT config. Admin only
+      operationId: getSTTCongfig
+      responses:
+        '200':
+          description: STT is found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/STTConfig"
+        '404':
+          description: STT configuration is not found
+components:
+  schemas:
+    LLMDetails:
+      type: object
+      properties:
+        format:
+          type: string
+          description: LLM format
+        family:
+          type: string
+          description: LLM architecture family
+        parameterSize:
+          type: string
+          description: LLM parameter size
+        quantizationLevel:
+          type: string
+          description: LLM quantization level
+    LLMConfig:
+      type: object
+      properties: 
+        name:
+          type: string
+          description: LLM name
+        modifiedAt:
+          type: string
+          format: datetime
+          description: date of the most recent update
+        size:
+          type: number
+          description: memory size of LLM in bytes
+        digest:
+          type: string
+          description: commit id of the most recent update
+        url:
+          type: string
+          format: url
+          description: url to page on Ollama website with info about LLM
+        details:
+          $ref: "#/components/schemas/LLMDetails"
+    LLMSettings:
+      type: object
+      properties:
+        name:
+          type: string
+          description: LLM name
+        parameterSize:
+          type: string
+          description: LLM parameter size
+        prompt: 
+          type: string
+          description: prompt for LLM to summarize record text
+        summaryStructure:
+          type: string
+          format: json,
+          description: stringified json structure of summary item to return by LLM
+    STTConfig:
+      type: object
+      properties:
+        encode:
+          type: boolean
+          description: encode audio first through ffmpeg
+        language:
+          type: string
+          description: language of text to return
+        initialPrompt:
+          type: string
+          description: prompt for STT model
+        wordTimestamps:
+          type: boolean
+          description: word level timestamps
+        output:
+          type: string
+          description: return format (txt, vtt, srt, tsv, json)
+          

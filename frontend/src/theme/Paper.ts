@@ -7,7 +7,8 @@ declare module '@mui/material/Paper' {
     elevationSmall: true,
     elevationInside: true,
     elevationDashed: true,
-    elevationInput: true
+    elevationInput: true,
+    elevationDarker: true
   }
 }
 
@@ -34,11 +35,7 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: UIColors.background,
             borderRadius: 10,
-            padding: PAPER_SMALL_PADDING,
-            ':hover a': {
-              color: TextColors.highlight,
-              transition: 'color 0.15s'
-            }
+            padding: PAPER_SMALL_PADDING
           }
         },
         {
@@ -71,6 +68,23 @@ const Paper: Components['MuiPaper'] = {
             borderRadius: 10,
             padding: '0.5em 1em',
             paddingLeft: '1.5em'
+          }
+        },
+        {
+          props: {
+            variant: 'elevationDarker'
+          },
+          style: {
+            backgroundColor: UIColors.quaternary,
+            borderRadius: 5,
+            padding: '0.6em 0.8em',
+            ':hover': {
+              cursor: 'pointer',
+              backgroundColor: UIColors.background
+            },
+            ':hover .title': {
+              color: TextColors.highlight
+            }
           }
         }
       ]

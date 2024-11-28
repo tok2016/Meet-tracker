@@ -7,10 +7,9 @@ import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { postUserData } from '../store/user/userThunks';
-import { UserRaw } from '../types/User';
+import { isUser, UserRaw } from '../types/User';
 import { selectUser } from '../store/user/userSlice';
 import { postNewUser } from '../store/admin/adminThunks';
-import { selectAdminData } from '../store/admin/adminSlice';
 import userSchema from '../schemas/userSchema';
 import { isValidationError } from '../schemas/validationError';
 import { UserValidationError } from '../types/UserValidationError';
@@ -35,14 +34,17 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
 
   const dispatch = useAppDispatch();
   const {user: originalUser} = useAppSelector(selectUser);
-  const {user: anotherUser} = useAppSelector(selectAdminData);
 
   const arePasswordsTheSame = repeatedPassword === userData.password;
-  const disabled = useMemo(() => Object.values(error).every((err) => !err), [error]);
+  const isCorrect = useMemo(() => Object.values(error).every((err) => !err), [error]);
 
   const formUser = (user: UserRaw) => {
     if(isForAdmin) {
-      dispatch(postNewUser(user));
+      dispatch(postNewUser(user)).then((action) => {
+        if(isUser(action.payload)) {
+          navigate(`/account/admin/users/${action.payload.id}`)
+        }
+      });
     } else {
       dispatch(postUserData(user));
     }
@@ -65,16 +67,25 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   };
 
   useEffect(() => {
-    if(isForAdmin) {
-      if(anotherUser.username) {
-        navigate(`/account/admin/users/${anotherUser.id}`);
-      }
-    } else {
-      if(originalUser.username) {
-        navigate('/login');
-      }
+    if(!isForAdmin && originalUser.username) {
+      navigate('/login');
     }
-  }, [originalUser.username, anotherUser.username]);
+  }, [originalUser.username]);
+
+  useEffect(() => {
+    const errors: ReturnType<typeof Object.entries> = [];
+    Object.entries(userData).forEach((entry) => {
+      try {
+        userSchema.validateSyncAt(entry[0], entry[1]);
+      } catch(error) {
+        if(isValidationError(error)) {
+          errors.push([entry[0], error.message]);
+        }
+      }
+    });
+
+    setError(Object.fromEntries(errors) as UserValidationError);
+  }, [])
 
   return (
     <FormHolder isForAdmin={isForAdmin}>
@@ -149,9 +160,9 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
 
           <Button 
             variant='containtedSecondary'
-            disabled={disabled || !arePasswordsTheSame}
+            disabled={!isCorrect || !arePasswordsTheSame}
             onClick={() => formUser(userData)}>
-              Зарегистрироваться
+              {isForAdmin ? 'Зарегистрировать' : 'Зарегистрироваться'}
           </Button>
         </FieldsGroup>
       </div>
