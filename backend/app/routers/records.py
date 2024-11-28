@@ -9,10 +9,6 @@ from faster_whisper import WhisperModel, tokenizer
 import io
 from langchain_ollama import OllamaLLM
 from pydub import AudioSegment
-from app.utils import diarize_text
-from app.hf_token import auth_token_hf
-from pyannote.audio import Pipeline
-from pyannote.core import Segment, Annotation, Timeline
 from pydantic import FilePath
 from uuid import uuid4
 import os
@@ -24,6 +20,37 @@ from zipfile import ZipFile
 from app.email_funcs import send_email
 from pydantic.networks import EmailStr
 from nemo.collections.asr.models.msdd_models import ClusteringDiarizer
+import os
+import wget
+from omegaconf import OmegaConf
+import json
+import shutil
+import torch
+import torchaudio
+from nemo.collections.asr.models.msdd_models import NeuralDiarizer
+from deepmultilingualpunctuation import PunctuationModel
+import re
+import logging
+import nltk
+import faster_whisper
+from ctc_forced_aligner import (
+    load_alignment_model,
+    generate_emissions,
+    preprocess_text,
+    get_alignments,
+    get_spans,
+    postprocess_results,
+)
+
+from app.diarization_funcs import (
+    create_config,
+    get_realigned_ws_mapping_with_punctuation,
+    get_sentences_speaker_mapping,
+    get_speaker_aware_transcript,
+    get_words_speaker_mapping,
+    langs_to_iso,
+    punct_model_langs,
+)
 
 #Whsiper модель
 model_size = "large-v3"
@@ -166,17 +193,10 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     wsm = get_realigned_ws_mapping_with_punctuation(wsm)
     ssm = get_sentences_speaker_mapping(wsm, speaker_ts)
     x = get_speaker_aware_transcript(ssm)
-    pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=auth_token_hf)
-    diarization_results = pipeline(file_name)
-    final_results = diarize_text(segments, diarization_results)
-    lines = ""
-    for seg, spk, sent in final_results:
-        line = f'Start: {seg.start} End: {seg.end} Speaker: {spk} Sentence: {sent}'
-        lines += f"{line}   "
-    summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
+    #summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
     #Расскоментить эту строку если не хочется работать с лламой и виспером
     #summary_common = "content='' additional_kwargs={} response_metadata={} id='run-7a6c305b-38d7-4f81-91bd-5bff5e646b01-0' tool_calls=[{'name': 'summarize_text', 'args': {'topic': 'Conversation between family members', 'text': 'The conversation is about a person who is feeling down and their loved ones trying to comfort them.', 'start': '0.0', 'end': '20.14', 'speakers': 'SPEAKER_02, SPEAKER_00, SPEAKER_03'}, 'id': 'call_6c90d255c518452d800fc54711d70a74', 'type': 'tool_call'}]"
-    db_summary = Summary(text=f"{summary_common}", title = title, user_id = current_user.id, audio_id = audio_id)
+    db_summary = Summary(text=f"{x}", title = title, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
     session.refresh(db_summary)
