@@ -51,6 +51,9 @@ class Summary(SQLModel, table=True):
     creation_date: datetime.datetime = Field(default_factory=datetime.datetime.utcnow, nullable=False)
     text: str
 
+class Stt_settings(SQLModel, table=True):
+    config: str = "llama3.1"
+
 class UserFilter(Filter):
     username__like: Optional[str] = None
     registration_date__gte: Optional[datetime.datetime] = None
