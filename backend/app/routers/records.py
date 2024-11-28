@@ -119,7 +119,7 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
         os.mkdir(audio_dir)
     file_name = audio_dir + "audio.wav"
     audio.export(file_name, format="wav")
-    device = "cuda" if torch.cuda.is_available() else "cpu" #Куда
+    device = "cuda" if torch.cuda.is_available() else "cpu" #Cuda если есть
     #Используем виспер
     whisper_pipeline = faster_whisper.BatchedInferencePipeline(model_whisper) #Пайплайн для виспера
     vocal_target = file_name #Аудио
