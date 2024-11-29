@@ -104,28 +104,44 @@ const speakersObjectToArray = (obj: SpeakerArrayContent): SpeakerContent[] => ob
 
 const singularToDouble = (str: string): string => str.replace(/'/g, '"');
 
+const getTopic = (content: TopicContent): TopicContent => ({
+  ...content,
+  speakers: content.speakers.length !== undefined 
+    ? arraySnakeToCamel<SpeakerContent>(content.speakers)
+    : speakersObjectToArray(snakeToCamel<SpeakerArrayContent>(content.speakers))
+});
+
 const parseSummaryContent = (content: string): TopicContent[] => {
-  const regBoundaryQuotes = /'[^:,]{1,}'/g;
-  const regExtraBoundaryQuotes = /'[^:]{1,}'/g;
+  try {
+    const parsedRawContent = JSON.parse(content) as TopicContent;
 
-  const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'))?.replace(/"/g, '\"');
-  const stringJsonSingular = stringEntry
-    ?.replace(regBoundaryQuotes, singularToDouble)
-    .replace(regExtraBoundaryQuotes, singularToDouble);
+    const topics: TopicContent[] = [];
+    topics.push(getTopic(parsedRawContent));
 
-  if(!stringJsonSingular) {
-    return [];
+    return topics;
+  } catch {
+    const regBoundaryQuotes = /'[^:,]{1,}'/g;
+    const regExtraBoundaryQuotes = /'[^:]{1,}'/g;
+
+    const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'))?.replace(/"/g, '\"');
+    const stringJsonSingular = stringEntry
+      ?.replace(regBoundaryQuotes, singularToDouble)
+      .replace(regExtraBoundaryQuotes, singularToDouble);
+
+    if(!stringJsonSingular) {
+      return [];
+    }
+
+    const parsedRawContent = JSON.parse(stringJsonSingular) as TopicFull[];
+    const topics = parsedRawContent.map((raw) => ({
+      ...raw.args,
+      speakers: raw.args.speakers.length !== undefined 
+        ? arraySnakeToCamel<SpeakerContent>(raw.args.speakers)
+        : speakersObjectToArray(snakeToCamel<SpeakerArrayContent>(raw.args.speakers))
+    }));
+
+    return topics;
   }
-
-  const parsedRawContent = JSON.parse(stringJsonSingular) as TopicFull[];
-  const topics = parsedRawContent.map((raw) => ({
-    ...raw.args,
-    speakers: raw.args.speakers.length !== undefined 
-      ? arraySnakeToCamel<SpeakerContent>(raw.args.speakers)
-      : speakersObjectToArray(snakeToCamel<SpeakerArrayContent>(raw.args.speakers))
-  }));
-
-  return topics;
 };
 
 const getFullSummary = (rawSummary: RawSummary, audio: string = ''): Summary => ({

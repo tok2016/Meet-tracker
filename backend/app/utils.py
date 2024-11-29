@@ -10,7 +10,6 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
-from pyannote.core import Segment, Annotation, Timeline
 import os
 
 ALGORITHM = "HS256"
@@ -58,61 +57,6 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
     return user
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
-
-def get_segments_with_timestamp(transcribe_segments):
-    timestamp_segments = []
-    for segment in transcribe_segments:
-        timestamp_segments.append((Segment(segment.start, segment.end), segment.text))
-    return timestamp_segments
-
-
-def add_speaker_info_to_text(timestamp_segments, ann):
-    spk_text = []
-    for seg, text in timestamp_segments:
-        spk = ann.crop(seg).argmax()
-        spk_text.append((seg, spk, text))
-    return spk_text
-
-
-def merge_cache(text_cache):
-    sentence = ''.join([item[-1] for item in text_cache])
-    spk = text_cache[0][1]
-    start = text_cache[0][0].start
-    end = text_cache[-1][0].end
-    return Segment(start, end), spk, sentence
-
-
-PUNC_SENT_END = ['.', '?', '!']
-
-
-def merge_sentence(spk_text):
-    merged_spk_text = []
-    pre_spk = None
-    text_cache = []
-    for seg, spk, text in spk_text:
-        if spk != pre_spk and pre_spk is not None and len(text_cache) > 0:
-            merged_spk_text.append(merge_cache(text_cache))
-            text_cache = [(seg, spk, text)]
-            pre_spk = spk
-
-        elif text and len(text) > 0 and text[-1] in PUNC_SENT_END:
-            text_cache.append((seg, spk, text))
-            merged_spk_text.append(merge_cache(text_cache))
-            text_cache = []
-            pre_spk = spk
-        else:
-            text_cache.append((seg, spk, text))
-            pre_spk = spk
-    if len(text_cache) > 0:
-        merged_spk_text.append(merge_cache(text_cache))
-    return merged_spk_text
-
-
-def diarize_text(transcribe_res, diarization_result):
-    timestamp_segments = get_segments_with_timestamp(transcribe_res)
-    spk_text = add_speaker_info_to_text(timestamp_segments, diarization_result)
-    res_processed = merge_sentence(spk_text)
-    return res_processed
 
 def upload_picture(id, file):
     #Путь где будет располагаться загруженная картинка

@@ -8,3 +8,6 @@ htmlcov
 .venv
 app/hf_token.py
 .env
+temp_outputs
+nemo_msdd_configs
+app/sounds
