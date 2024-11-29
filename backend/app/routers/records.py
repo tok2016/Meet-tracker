@@ -55,55 +55,22 @@ from app.diarization_funcs import (
 #Whsiper модель
 #model_size = "large-v3"
 #Llama модель
-model = OllamaFunctions(model="llama3.1", format="json", base_url="http://127.0.0.1:11434/")
-model = model.bind_tools(
-    tools=[
-        {
-            "name": "summarize_text",
-            "description": "Summarize text",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "topic": {
-                        "type": "string",
-                        "description": "Topic of the text",
-                    },
-                    "text": {
-                        "type": "string",
-                        "description": "Short summary of the text",
-                    },
-                    "start": {
-                        "type": "string",
-                        "description": "Time when first segment starts",
-                    },
-                    "end": {
-                        "type": "string",
-                        "description": "Time when last segment ends",
-                    },
-                    "speakers": {
-                        "type": "array",
-                        #"description": "Speakers with names and their tasks"
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "speaker_name": {
-                                    "type": "string",
-                                    "description": "Name of the speaker",
-                                },
-                                "speaker_info": {
-                                    "type": "string",
-                                    "description": "Short summary of the speaker's speech",
-                                },
-                            },
-                        },
-                    },
-                },
-                "required": ["topic", "text", "start", "end", "speakers"],
-            },
-        }
+model = OllamaLLM(model="ilyagusev/saiga_llama3", format="json", base_url="http://127.0.0.1:11434/")
+json = """
+{
+  text: "Краткое содержание текста",
+  topic: "Тема текста",
+  start: "Время начала текста",
+  end: "Время конца текста",
+  speakers: 
+    [
+      {
+        speaker_name: "Имя спикера в формате Speaker 0",
+        speaker_info: "Резюме речи спикера",
+      },
     ],
-    function_call={"name": "summarize_text"},
-)
+}
+"""
 
 router = APIRouter()
 
@@ -191,11 +158,11 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
 
     wsm = get_realigned_ws_mapping_with_punctuation(wsm)
     ssm = get_sentences_speaker_mapping(wsm, speaker_ts)
-    x = get_speaker_aware_transcript(ssm)
-    #summary_common = model.invoke(f"Give short summary of the text {lines}. Determine the topic of the text. Determine when it starts and ends. List speakers with names")
+    text = get_speaker_aware_transcript(ssm)
+    summary_common = model.invoke(f"Дай краткое содержание текста - {text}. Определи тему. Определи время начала и конца текста. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json}")
     #Расскоментить эту строку если не хочется работать с лламой и виспером
     #summary_common = "content='' additional_kwargs={} response_metadata={} id='run-7a6c305b-38d7-4f81-91bd-5bff5e646b01-0' tool_calls=[{'name': 'summarize_text', 'args': {'topic': 'Conversation between family members', 'text': 'The conversation is about a person who is feeling down and their loved ones trying to comfort them.', 'start': '0.0', 'end': '20.14', 'speakers': 'SPEAKER_02, SPEAKER_00, SPEAKER_03'}, 'id': 'call_6c90d255c518452d800fc54711d70a74', 'type': 'tool_call'}]"
-    db_summary = Summary(text=f"{x}", title = title, user_id = current_user.id, audio_id = audio_id)
+    db_summary = Summary(text=f"{summary_common}", title = title, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
     session.refresh(db_summary)
