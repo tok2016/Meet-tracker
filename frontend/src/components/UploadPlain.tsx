@@ -70,6 +70,7 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
 
         <TextField
           variant='outlined'
+          autoComplete='off'
           value={title}
           disabled={status === 'pending'}
           label='Название резюме'
