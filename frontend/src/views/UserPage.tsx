@@ -11,6 +11,7 @@ import { patchCurrentUser, postLogout } from '../store/user/userThunks';
 import AvatarUploadInput from '../components/AvatarUploadInput';
 import { selectAdminData } from '../store/admin/adminSlice';
 import { deleteUserById, getUserAvatar, getUserById, patchUserById } from '../store/admin/adminThunks';
+import { getLocaleString } from '../utils/utils';
 
 
 const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
@@ -24,7 +25,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const dispatch = useAppDispatch();
 
   const user = isForAdmin ? anotherUser : originalUser;
-  const userDate = new Date(user.registrationDate).toLocaleDateString();
+  const userDate = getLocaleString((new Date()).toISOString());
 
   const disabled = isForAdmin && user.isAdmin;
 
