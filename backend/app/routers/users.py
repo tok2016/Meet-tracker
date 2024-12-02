@@ -11,6 +11,7 @@ from app.utils import ( get_password_hash, verify_password, create_access_token,
 import os
 import math
 from fastapi_filter import FilterDepends
+from app.settings import settings
 
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
@@ -132,3 +133,26 @@ async def filter_user(session: SessionDep, user_filter: UserFilter = FilterDepen
     result = session.execute(query).scalars().all()
     response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
     return response
+
+@router.get("/settings")
+def get_settings():
+    return {
+        "app_name": settings.app_name,
+        "llm_model": settings.llm_model,
+        "whisper": settings.whisper_model,
+        "whisper_device": settings.whisper_device,
+        "whisper_compute": settings.whisper_compute,
+        "diarize_type": settings.diarize_type
+    }
+
+@router.post("/change_settings")
+def change_settings(value: str):
+    settings.app_name = value
+    return {
+        "app_name": settings.app_name,
+        "llm_model": settings.llm_model,
+        "whisper": settings.whisper_model,
+        "whisper_device": settings.whisper_device,
+        "whisper_compute": settings.whisper_compute,
+        "diarize_type": settings.diarize_type
+    }

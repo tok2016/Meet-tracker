@@ -19,20 +19,19 @@ from fastapi_filter import FilterDepends
 from zipfile import ZipFile
 from app.email_funcs import send_email
 from pydantic.networks import EmailStr
-from nemo.collections.asr.models.msdd_models import ClusteringDiarizer
-import os
 import wget
 from omegaconf import OmegaConf
 import json
 import shutil
 import torch
 import torchaudio
-from nemo.collections.asr.models.msdd_models import NeuralDiarizer
+from nemo.collections.asr.models.msdd_models import NeuralDiarizer, ClusteringDiarizer
 from deepmultilingualpunctuation import PunctuationModel
 import re
 import logging
 import nltk
 import faster_whisper
+
 from ctc_forced_aligner import (
     load_alignment_model,
     generate_emissions,
@@ -52,10 +51,10 @@ from app.diarization_funcs import (
     punct_model_langs,
 )
 
-#Whsiper модель
-#model_size = "large-v3"
+from app.settings import settings
+
 #Llama модель
-model = OllamaLLM(model="ilyagusev/saiga_llama3", format="json", base_url="http://127.0.0.1:11434/")
+model = OllamaLLM(model=settings.llm_model, format="json", base_url="http://127.0.0.1:11434/")
 json = """
 {
   text: "Краткое содержание текста",
@@ -87,7 +86,7 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     audio.export(file_name, format="wav")
     device = "cuda" if torch.cuda.is_available() else "cpu" #Cuda если есть
     #Используем виспер
-    model_whisper = WhisperModel("large-v3", device="cpu", compute_type="int8")
+    model_whisper = WhisperModel(settings.whisper_model, device=settings.whisper_device, compute_type=settings.whisper_compute) #Whsiper модель
     whisper_pipeline = faster_whisper.BatchedInferencePipeline(model_whisper) #Пайплайн для виспера
     vocal_target = file_name #Аудио
     audio_waveform = faster_whisper.decode_audio(vocal_target)
@@ -118,7 +117,10 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     torchaudio.save( os.path.join(temp_path, "mono_file.wav"), audio_waveform.cpu().unsqueeze(0).float(),
         16000, channels_first=True, )
     #Диаризация
-    msdd_model = NeuralDiarizer(cfg=create_config(temp_path))
+    if (settings.diarize_type=="Neural"):
+        msdd_model = NeuralDiarizer(cfg=create_config(temp_path))
+    elif (settings.diarize_type=="Clustering"):
+        msdd_model = ClusteringDiarizer(cfg=create_config(temp_path))
     msdd_model.diarize()
     del msdd_model
     #torch.cuda.empty_cache()
