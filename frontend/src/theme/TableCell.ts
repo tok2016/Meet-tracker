@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import { breakpoints } from './BasicTypography';
 import { LgFontSizes, XlFontSizes } from './FontSizes';
-import { UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 
 const TableCell: Components['MuiTableCell'] = {
   styleOverrides: {

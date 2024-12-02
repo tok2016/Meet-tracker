@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
 import { IconButton, TableCell, TableRow } from '@mui/material';
-import { UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 
 type JSONAddFieldProps = {
   isInner?: boolean,

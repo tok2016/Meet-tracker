@@ -5,7 +5,7 @@ import useMediaMatch from '../hooks/useMediaMacth';
 import TextArea from '../components/TextArea';
 import JSONTable from '../components/JSONTable';
 import LLMPanel from '../components/LLMPanel';
-import { TextColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import LLMSettings from '../types/LLMSettings';
 import { JSONSchema } from '../types/JSONSchema';
 import LLMConfig from '../types/LLMConfig';
@@ -96,7 +96,7 @@ const LLMSettingsPage = () => {
         <Typography variant='h2'>
           Структура JSON-документа резюме
         </Typography>
-        <Typography variant='h3Normal' color={TextColors.error} textAlign='left'>
+        <Typography variant='h3Normal' color={UIColors.error} textAlign='left'>
           Внимание! При изменении структуры документа необходимо срочно проводить работы на стороне клиентской части!
         </Typography>
         <JSONTable jsonSchema={settings.summaryStructure} updateSchema={updateSchema} />

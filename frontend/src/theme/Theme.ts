@@ -18,7 +18,7 @@ import ListItem from './ListItem';
 import ListItemText from './ListItemText';
 import Toolbar from './Toolbar';
 import BasicTypography from './BasicTypography';
-import { TextColors, UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import List from './List';
 import FilledInput from './FilledInput';
 import Menu from './Menu';
@@ -33,19 +33,19 @@ const Theme = createTheme({
       main: UIColors.main,
       light: UIColors.main,
       dark: UIColors.main,
-      contrastText: TextColors.contrast
+      contrastText: UIColors.textContrast
     },
     secondary: {
       main: UIColors.background,
       light: UIColors.background,
       dark: UIColors.background,
-      contrastText: TextColors.main
+      contrastText: UIColors.textMain
     },
     error: {
-      main: TextColors.error,
-      light: TextColors.error,
-      dark: TextColors.error,
-      contrastText: TextColors.contrast
+      main: UIColors.error,
+      light: UIColors.error,
+      dark: UIColors.error,
+      contrastText: UIColors.textContrast
     }
   },
   components: {

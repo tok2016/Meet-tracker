@@ -1,7 +1,7 @@
 import { TurnLeft, TurnRight } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
-import { TextColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { PAPER_SMALL_PADDING } from '../theme/Paper';
 
 const RollDownButton = ({isRolledDown, rollPlain}: {isRolledDown: boolean, rollPlain: () => void}) => (
@@ -20,11 +20,11 @@ const RollDownButton = ({isRolledDown, rollPlain}: {isRolledDown: boolean, rollP
         ? <TurnLeft 
             sx={{
               rotate: '90deg',
-              color: TextColors.main
+              color: UIColors.textMain
             }}/>
         : <TurnRight sx={{
             rotate: '90deg',
-            color: TextColors.main
+            color: UIColors.textMain
           }}/>
       }
   </IconButton>        

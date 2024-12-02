@@ -1,5 +1,5 @@
 import { Components } from '@mui/material';
-import { UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 import { AVATAR_WIDTH } from '../utils/utils';
 

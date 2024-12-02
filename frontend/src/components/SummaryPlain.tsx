@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { SummaryInfo } from '../types/Summary';
-import { TextColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { getLocaleString, statusesTranslations } from '../utils/utils';
 import ItemPlain from './ItemPlain';
 import PlainMenu from './PlainMenu';
@@ -17,7 +17,7 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
   const date = getLocaleString(summary.creationDate);
 
   const iconSx: SxProps<Theme> = {
-    color: TextColors.main, 
+    color: UIColors.textMain, 
     width: '1em', 
     height: '1em'
   };

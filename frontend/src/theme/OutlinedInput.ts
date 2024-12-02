@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { UIColors, TextColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 
 const OutlinedInput: Components['MuiOutlinedInput'] = {
@@ -9,7 +9,7 @@ const OutlinedInput: Components['MuiOutlinedInput'] = {
       border: `solid 1px ${UIColors.tertiary}`,
       borderRadius: 10,
       backgroundColor: UIColors.background,
-      color: TextColors.main,
+      color: UIColors.textMain,
       [breakpoints.up('lg')]: {
         fontSize: 16
       },

@@ -1,7 +1,7 @@
 import { TextareaAutosize } from '@mui/material';
 import { ChangeEvent, CSSProperties } from 'react';
 
-import { TextColors, UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
 import useMediaMatch from '../hooks/useMediaMacth';
 
@@ -17,9 +17,9 @@ type TextAreaProps = {
 };
 
 const ColorsForTextArea = {
-  body1: TextColors.main,
-  body2: TextColors.secondary,
-  body2Highlight: TextColors.main
+  body1: UIColors.textMain,
+  body2: UIColors.textSecondary,
+  body2Highlight: UIColors.textMain
 }
 
 const FontWeightsForTextArea = {

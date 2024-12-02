@@ -1,19 +1,22 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { Button, Paper, TextField, Typography } from '@mui/material';
+import { ReactNode } from 'react';
+import { Button, Paper, Typography } from '@mui/material';
 import { CloudUpload } from '@mui/icons-material';
 
 import useMediaValue from '../hooks/useMediaValue';
 import MediaValue from '../types/MediaValue';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectSummary } from '../store/summary/summarySlice';
-import { postRecordFile } from '../store/summary/summaryThunks';
-import { UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import UploadInput from './UploadInput';
-import { isSummary } from '../types/Summary';
+import { Status } from '../types/Status';
 
-
-
+type UploadPlainProps = {
+  attentionText: string, 
+  children?: ReactNode, 
+  status: Status,
+  file: File | undefined,
+  acceptedFormats: string,
+  setFile: (file: File | undefined) => void,
+  onFileUpload: () => void
+};
 
 const UPLOAD_WIDTH: MediaValue = {
   xs: 20,
@@ -23,27 +26,8 @@ const UPLOAD_WIDTH: MediaValue = {
   xl: 75
 }
 
-const UploadPlain = ({attentionText}: {attentionText: string}) => {
+const UploadPlain = ({attentionText, children, status, file, acceptedFormats, setFile, onFileUpload}: UploadPlainProps) => {
   const uploadWidth = useMediaValue(UPLOAD_WIDTH);
-
-  const navigate = useNavigate();
-
-  const {status} = useAppSelector(selectSummary);
-  const dispatch = useAppDispatch();
-
-  const [file, setFile] = useState<File | undefined>(undefined);
-  const [title, setTitle] = useState<string>('');
-
-  const onFileUpload = () => {
-    if(file) {
-      dispatch(postRecordFile({title, file}))
-        .then((response) => {
-          if(isSummary(response.payload)) {
-            navigate(`/account/summary/${response.payload.id}`);
-          }
-        });
-    }
-  };
 
   return (
     <Paper 
@@ -66,19 +50,10 @@ const UploadPlain = ({attentionText}: {attentionText: string}) => {
         <UploadInput 
           fileName={file ? file.name : ''} 
           setFile={setFile} 
-          disabled={status === 'pending'}/>
-
-        <TextField
-          variant='outlined'
-          autoComplete='off'
-          value={title}
           disabled={status === 'pending'}
-          label='Название резюме'
-          style={{
-            display: file ? 'inherit' : 'none',
-            marginBottom: '10px'
-          }}
-          onChange={(evt) => setTitle(evt.target.value)} />
+          acceptedFormats={acceptedFormats}/>
+
+        {children}
 
         <Button 
           variant='containtedSecondary' 

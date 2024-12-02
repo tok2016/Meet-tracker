@@ -1,10 +1,10 @@
-import UploadPlain from '../components/UploadPlain';
+import RecordUploadPlain from '../components/RecordUploadPlain';
 
 const UploadPage = () => (
   <div style={{
     marginTop: '35vh'
   }}>
-    <UploadPlain attentionText='Загрузите или перетащите видео или аудио файл сюда'/>
+    <RecordUploadPlain />
   </div>
 );
 

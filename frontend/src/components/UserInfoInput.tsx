@@ -3,7 +3,7 @@ import { HTMLInputTypeAttribute, KeyboardEvent, useEffect, useReducer, useState 
 import { Check, Close, Edit } from '@mui/icons-material';
 
 import IconForInput from './IconForInput';
-import { TextColors, UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import CopyButton from './CopyButton';
 import { UserIconSx } from '../theme/UserIcon';
 import userSchema from '../schemas/userSchema';
@@ -124,7 +124,7 @@ const UserInfoInput = ({
               }} />
               <Typography 
                 variant='subtitle1'
-                color={TextColors.error}>
+                color={UIColors.error}>
                   {error}
               </Typography>
         </Stack>

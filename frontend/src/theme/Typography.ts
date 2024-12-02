@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { TextColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 import { LgFontSizes, XlFontSizes } from './FontSizes';
 
@@ -28,7 +28,7 @@ const Typography: Components['MuiTypography'] = {
       subtitle2: 'p'
     },
     fontWeight: 400,
-    color: TextColors.main
+    color: UIColors.textMain
   },
   styleOverrides: {
     h2: {
@@ -43,7 +43,7 @@ const Typography: Components['MuiTypography'] = {
       fontWeight: 700
     },
     body2: {
-      color: TextColors.secondary,
+      color: UIColors.textSecondary,
     },
     subtitle1: {
       fontWeight: 700,
@@ -59,7 +59,7 @@ const Typography: Components['MuiTypography'] = {
         variant: 'h1Highlight',
       },
       style: {
-        color: TextColors.highlight,
+        color: UIColors.textHighlight,
         fontWeight: 700,
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.h1Highlight
@@ -96,7 +96,7 @@ const Typography: Components['MuiTypography'] = {
         [breakpoints.only('xl')]: {
           fontSize: XlFontSizes.h2PromoHighlight
         },
-        color: TextColors.highlight
+        color: UIColors.textHighlight
       }
     },
     {

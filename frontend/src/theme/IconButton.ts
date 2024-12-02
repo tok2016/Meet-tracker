@@ -1,5 +1,5 @@
 import { Components } from '@mui/material';
-import { TextColors, UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 
 const IconButton: Components['MuiIconButton'] = {
   styleOverrides: {
@@ -15,10 +15,10 @@ const IconButton: Components['MuiIconButton'] = {
     colorSecondary: {
       padding: 0,
       '*': {
-        color: TextColors.main
+        color: UIColors.textMain
       },
       ':hover *': {
-        color: TextColors.highlight
+        color: UIColors.textHighlight
       }
     }
   }

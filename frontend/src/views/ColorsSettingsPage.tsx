@@ -1,7 +1,9 @@
-import PageStub from './PageStub';
+import ColorUploadPlain from '../components/ColorUploadPlain';
 
 const ColorsSettingsPage = () => (
-  <PageStub message='Настройки цветов'/>
+  <>
+    <ColorUploadPlain />
+  </>
 );
 
 export default ColorsSettingsPage;

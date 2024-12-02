@@ -1,12 +1,12 @@
 import { Components } from '@mui/material';
 
-import { TextColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 
 const InputLabel: Components['MuiInputLabel'] = {
   styleOverrides: {
     root: {
-      color: TextColors.secondary,
+      color: UIColors.textSecondary,
       [breakpoints.up('lg')]: {
         fontSize: 16,
         top: '-0.5em'

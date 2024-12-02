@@ -2,12 +2,12 @@ import { Typography } from '@mui/material';
 
 import useMediaValue from '../hooks/useMediaValue';
 import { AVATAR_WIDTH } from '../utils/utils';
-import UploadPlain from '../components/UploadPlain';
 import Mouse from '../assets/Mouse.svg';
 import useMediaMatch from '../hooks/useMediaMacth';
 import PromoInfo from '../types/PromoInfo';
 import PromoStub from '../assets/PromoStub.svg';
 import Promo from '../components/Promo';
+import RecordUploadPlain from '../components/RecordUploadPlain';
 
 const PROMOS: PromoInfo[] = [
   {
@@ -57,7 +57,7 @@ const MainPage = () => {
           или отвлекаться во время встречи на составление резюме.
         </Typography>
 
-        <UploadPlain attentionText='Загрузите или перетащите видео или аудио файл сюда'/>
+        <RecordUploadPlain />
 
         <img src={Mouse} alt='' style={{
           display: 'block',

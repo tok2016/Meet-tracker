@@ -1,12 +1,22 @@
-import {UIColorPalette, TextColorPalette} from '../types/ColotPalette';
+import CustomColorPalette from '../types/CustomColorPalette';
+import ColorPalette from '../types/ColotPalette';
 
-const UIColors: UIColorPalette = {
+const CustomColors: CustomColorPalette = {
   main: '#F59D0E',
   secondary: '#F56B00',
   tertiary: '#F5F5F5',
   quaternary: '#E7E7E7',
   disabled: '#8B8B8B',
   background: '#FFFFFF',
+  textMain: '#000000',
+  textSecondary: '#8B8B8B',
+  textHighlight: '#F59D0E',
+  textContrast: '#FFFFFF',
+  error: '#EE1313'
+};
+
+const UIColors: ColorPalette = {
+  ...CustomColors,
   mainGradient() {
     return `linear-gradient(to right, ${this.main}, ${this.secondary})`;
   },
@@ -15,15 +25,13 @@ const UIColors: UIColorPalette = {
   },
   mainHoverGradient() {
     return `linear-gradient(to right, ${this.secondary}, ${this.secondary})`;
+  },
+  updateColors(palette) {
+    Object.entries(palette).forEach((entry) => {
+      this[entry[0] as keyof CustomColorPalette] = entry[1];
+    });
   }
 };
 
-const TextColors: TextColorPalette = {
-  main: '#000000',
-  secondary: '#8B8B8B',
-  highlight: UIColors.main,
-  contrast: '#FFFFFF',
-  error: '#EE1313'
-};
-
-export {UIColors, TextColors};
+export default UIColors;
+export {CustomColors};

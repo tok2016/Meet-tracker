@@ -5,7 +5,7 @@ import { memo, useReducer } from 'react';
 import JSONField, { defaultItemsField } from '../types/JSONSchema';
 import TextArea from './TextArea';
 import JSONTypeField from './JSONTypeField';
-import { UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import JSONAddField from './JSONAddField';
 import { generateKey } from '../utils/utils';
 

@@ -1,21 +1,8 @@
-type HexColor = `#${string}`;
+import CustomColorPalette from './CustomColorPalette';
 
-export interface UIColorPalette {
-  main: HexColor,
-  secondary: HexColor,
-  tertiary: HexColor,
-  quaternary: HexColor,
-  disabled: HexColor,
-  background: HexColor,
+export default interface ColorPalette extends CustomColorPalette {
   mainGradient: () => string,
   secondaryGradient: () => string,
-  mainHoverGradient: () => string
-};
-
-export interface TextColorPalette {
-  main: HexColor,
-  secondary: HexColor,
-  highlight: HexColor,
-  contrast: HexColor,
-  error: HexColor
+  mainHoverGradient: () => string,
+  updateColors: (customPalette: CustomColorPalette) => void
 };

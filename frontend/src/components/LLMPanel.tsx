@@ -2,7 +2,7 @@ import { Paper, Stack, Typography } from '@mui/material';
 import { memo } from 'react';
 
 import OllamaLogo from '../assets/ollamaLogo.svg';
-import { UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import LLMConfig from '../types/LLMConfig';
 import { getLocaleString } from '../utils/utils';
 
