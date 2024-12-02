@@ -1,7 +1,6 @@
-import { Button, IconButton, TextField, Typography } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Button, TextField, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
@@ -13,6 +12,7 @@ import { postNewUser } from '../store/admin/adminThunks';
 import userSchema from '../schemas/userSchema';
 import { isValidationError } from '../schemas/validationError';
 import { UserValidationError } from '../types/UserValidationError';
+import PasswordField from '../components/PasswordField';
 
 const defaultUserData: UserRaw = {
   username: '',
@@ -26,8 +26,6 @@ const defaultUserData: UserRaw = {
 const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const [userData, setUserData] = useState<UserRaw>(defaultUserData);
   const [repeatedPassword, setRepeatedPassword] = useState<string>('');
-
-  const [isVisible, toggleVisibility] = useReducer((value) => !value, false);
   const [error, setError] = useState<UserValidationError>(defaultUserData);
 
   const navigate = useNavigate();
@@ -128,35 +126,16 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
             helperText={error.lastName}
             onChange={(evt) => validateValue({lastName: evt.target.value})}/>
 
-          <TextField 
+          <PasswordField
             value={userData.password}
-            type={isVisible ? 'text' : 'password'}
-            label='Пароль'
-            required
-            helperText={error.password}
-            onChange={(evt) => validateValue({password: evt.target.value})}
-            slotProps={{
-              input: {
-                endAdornment: <IconButton color='secondary' onClick={toggleVisibility}>
-                                {isVisible ? <VisibilityOff /> : <Visibility />}
-                              </IconButton>
-              }
-            }}/>
+            errorMessage={error.password}
+            onChange={(evt) => validateValue({password: evt.target.value})} />
 
-          <TextField 
+          <PasswordField
             value={repeatedPassword}
-            type={isVisible ? 'text' : 'password'}
             label='Повторите пароль'
-            required
-            helperText={arePasswordsTheSame ? '' : 'Пароли не совпадают'}
-            onChange={(evt) => setRepeatedPassword(evt.target.value)}
-            slotProps={{
-              input: {
-                endAdornment: <IconButton color='secondary' onClick={toggleVisibility}>
-                                {isVisible ? <VisibilityOff /> : <Visibility />}
-                              </IconButton>
-              }
-            }}/>
+            errorMessage={arePasswordsTheSame ? undefined : 'Пароли не совпадают'}
+            onChange={(evt) => setRepeatedPassword(evt.target.value)} />
 
           <Button 
             variant='containtedSecondary'

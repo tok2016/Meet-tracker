@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Delete, Logout } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
@@ -12,6 +12,7 @@ import AvatarUploadInput from '../components/AvatarUploadInput';
 import { selectAdminData } from '../store/admin/adminSlice';
 import { deleteUserById, getUserAvatar, getUserById, patchUserById } from '../store/admin/adminThunks';
 import { getLocaleString } from '../utils/utils';
+import PasswordMenu from '../components/PasswordMenu';
 
 
 const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
@@ -24,17 +25,23 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const {user: anotherUser} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
+  const [isOpened, toggleOpen] = useReducer((value) => !value, false);
+
   const user = isForAdmin ? anotherUser : originalUser;
   const userDate = getLocaleString((new Date()).toISOString());
 
   const disabled = isForAdmin && user.isAdmin;
 
-  const sendUpdate = (updatedUser: User) => {
+  const sendUpdate = async (updatedUser: User) => {
     if(isForAdmin) {
       const parsedId = parseInt(id ?? '');
-      dispatch(patchUserById({...updatedUser, id: parsedId})).then(() => navigate('/account/admin/users'));
+      await dispatch(patchUserById({...updatedUser, id: parsedId}));
     } else {
-      dispatch(patchCurrentUser(updatedUser));
+      await dispatch(patchCurrentUser(updatedUser));
+    }
+
+    if(isOpened) {
+      toggleOpen();
     }
   };
 
@@ -43,7 +50,11 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   };
 
   const deleteUser = () => {
-    dispatch(deleteUserById(parsedId));
+    dispatch(deleteUserById(parsedId)).then(() => {
+      if(isForAdmin) {
+        navigate('/account/admin/users')
+      }
+    });
   };
 
   useEffect(() => {
@@ -103,6 +114,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
         </Stack>
 
         <UserInfoInput 
+          path='username'
           type='text' 
           readOnly 
           label='Логин'
@@ -112,6 +124,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
           />
 
         <UserInfoInput
+          path='firstName'
           type='text'
           label='Имя'
           defaultValue={user.firstName}
@@ -119,6 +132,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
           apply={(update) => sendUpdate({...user, firstName: update})} />
 
         <UserInfoInput
+          path='lastName'
           type='text'
           label='Фамилия'
           defaultValue={user.lastName}
@@ -126,6 +140,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
           apply={(update) => sendUpdate({...user, lastName: update})} />
 
         <UserInfoInput
+          path='email'
           type='email'
           label='Электронная почта'
           defaultValue={user.email}
@@ -133,11 +148,18 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
           apply={(update) => sendUpdate({...user, email: update})} />
 
         <UserInfoInput 
+          path='password'
           type='password'
           label='Пароль'
           defaultValue={user.password}
           disabled={disabled}
-          apply={() => {}}/>
+          apply={() => {}}
+          openMenu={toggleOpen}/>
+
+        <PasswordMenu 
+          isOpened={isOpened} 
+          toggleOpen={toggleOpen}
+          updatePassword={(update) => sendUpdate({...user, password: update})} />
       </div>
     </>
   );

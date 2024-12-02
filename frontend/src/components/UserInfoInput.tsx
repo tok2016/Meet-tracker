@@ -3,22 +3,52 @@ import { HTMLInputTypeAttribute, KeyboardEvent, useEffect, useReducer, useState 
 import { Check, Close, Edit } from '@mui/icons-material';
 
 import IconForInput from './IconForInput';
-import { UIColors } from '../utils/Colors';
+import { TextColors, UIColors } from '../utils/Colors';
 import CopyButton from './CopyButton';
 import { UserIconSx } from '../theme/UserIcon';
+import userSchema from '../schemas/userSchema';
+import { User, UserRaw } from '../types/User';
+import { isValidationError } from '../schemas/validationError';
 
 type UserInfoInputProps = {
   label: string,
   defaultValue: string,
   type: HTMLInputTypeAttribute,
+  path: keyof User,
   readOnly?: boolean,
   disabled?: boolean,
-  apply: (update: string) => void
+  apply: (update: string) => void,
+  openMenu?: () => void
 };
 
-const UserInfoInput = ({label, defaultValue, type, readOnly=false, disabled=false, apply}: UserInfoInputProps) => {
-  const [isEditable, toggleEdit] = useReducer((value) => !value, false);
+const UserInfoInput = ({
+  label, 
+  defaultValue, 
+  type, 
+  path, 
+  readOnly=false, 
+  disabled=false, 
+  apply, 
+  openMenu=() => {}
+}: UserInfoInputProps) => {
+  const [isEditable, toggleEdit] = useReducer((value) => (type === 'password' ? value : !value), false);
   const [value, setValue] = useState<string>(defaultValue);
+  const [error, setError] = useState<string | undefined>();
+
+  const validateValue = (update: Partial<UserRaw>) => {
+    const path = Object.keys(update)[0];
+
+    try {
+      const validated = userSchema.validateSyncAt(path, update);
+      setValue(validated);
+      setError(undefined);
+    } catch(err) {
+      if(isValidationError(err)) {
+        setValue(err.value);
+        setError(err.message);
+      }
+    }
+  };
 
   const onApply = () => {
     apply(value);
@@ -27,6 +57,7 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, disabled=fals
 
   const onCancel = () => {
     setValue(defaultValue);
+    setError(undefined);
     toggleEdit();
   }
 
@@ -37,6 +68,11 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, disabled=fals
       onCancel();
     }
   }
+  
+  const onEditClick = () => {
+    toggleEdit();
+    openMenu();
+  };
 
   useEffect(() => {
     if(defaultValue) {
@@ -74,9 +110,9 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, disabled=fals
               disableUnderline 
               type={type} 
               value={value} 
-              readOnly={readOnly || !isEditable}
+              readOnly={readOnly || !isEditable || type === 'password'}
               disabled={disabled} 
-              onChange={(evt) => setValue(evt.target.value)}
+              onChange={(evt) => validateValue({[path]: evt.target.value})}
               onKeyDown={onKeyDown}
               sx={{
                 width: '100%'
@@ -86,6 +122,11 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, disabled=fals
                   padding: '2px 0px'
                 }
               }} />
+              <Typography 
+                variant='subtitle1'
+                color={TextColors.error}>
+                  {error}
+              </Typography>
         </Stack>
       </Stack>
 
@@ -96,15 +137,18 @@ const UserInfoInput = ({label, defaultValue, type, readOnly=false, disabled=fals
               display='flex'
               flexDirection='row'
               gap='10px'>
-                <IconButton color='secondary' onClick={onApply}>
-                  <Check sx={UserIconSx} /> 
+                <IconButton 
+                  disabled={error !== undefined} 
+                  color='secondary' 
+                  onClick={onApply}>
+                    <Check sx={UserIconSx} /> 
                 </IconButton>
 
                 <IconButton color='secondary' onClick={onCancel}>
                   <Close sx={UserIconSx} />
                 </IconButton>
             </Stack>
-          : <IconButton color='secondary' onClick={toggleEdit}>
+          : <IconButton color='secondary' onClick={onEditClick}>
               <Edit sx={UserIconSx} />
             </IconButton>
           )
