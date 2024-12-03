@@ -7,7 +7,7 @@ from app.db import SessionDep
 from typing import Annotated, Optional
 from datetime import timedelta
 from app.utils import ( get_password_hash, verify_password, create_access_token, 
-    authenticate, CurrentUser, get_user_by_email, upload_picture )
+    authenticate, CurrentUser, get_user_by_email, upload_picture, get_current_active_superuser )
 import os
 import math
 from fastapi_filter import FilterDepends
@@ -25,13 +25,13 @@ def create_user(user: UserCreate, session: SessionDep):
     session.refresh(db_user)
     return db_user
 
-@router.get("/users/", response_model=list[UserPublic])
+@router.get("/users/", dependencies=[Depends(get_current_active_superuser)], response_model=list[UserPublic])
 def read_users( session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=100)] = 100, ):
     users = session.exec(select(User).offset(offset).limit(limit)).all()
     return users
 
 
-@router.get("/user/{username}", response_model=UserPublic)
+@router.get("/user/{username}", dependencies=[Depends(get_current_active_superuser)], response_model=UserPublic)
 def read_user(user_username: int, session: SessionDep):
     user = session.get(User, user_username)
     if not user:
