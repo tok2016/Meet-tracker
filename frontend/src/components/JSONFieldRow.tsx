@@ -124,7 +124,7 @@ const JSONFieldRowRaw = ({
     <>
       <TableRow
         sx={{
-          backgroundColor: isInner ? UIColors.quaternary : UIColors.background,
+          backgroundColor: isInner ? UIColors.palette.quaternary : UIColors.palette.background,
         }}>
         <TableCell align='left'>
           <Input

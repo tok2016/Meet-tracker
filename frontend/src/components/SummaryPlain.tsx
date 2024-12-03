@@ -17,7 +17,7 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
   const date = getLocaleString(summary.creationDate);
 
   const iconSx: SxProps<Theme> = {
-    color: UIColors.textMain, 
+    color: UIColors.palette.textMain, 
     width: '1em', 
     height: '1em'
   };

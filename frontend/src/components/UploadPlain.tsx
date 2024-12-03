@@ -41,7 +41,7 @@ const UploadPlain = ({attentionText, children, status, file, acceptedFormats, se
         margin: '0 auto'
       } : {})}>
         <CloudUpload sx={{
-          color: UIColors.disabled,
+          color: UIColors.palette.disabled,
           width: uploadWidth,
           height: uploadWidth,
           marginBottom: '20px'

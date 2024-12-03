@@ -88,7 +88,7 @@ const UserInfoInput = ({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: readOnly ? UIColors.quaternary : UIColors.background,
+        backgroundColor: readOnly ? UIColors.palette.quaternary : UIColors.palette.background,
         marginBottom: '20px'
       } : {})}>
 
@@ -124,7 +124,7 @@ const UserInfoInput = ({
               }} />
               <Typography 
                 variant='subtitle1'
-                color={UIColors.error}>
+                color={UIColors.palette.error}>
                   {error}
               </Typography>
         </Stack>

@@ -6,7 +6,6 @@ import { arraySnakeToCamel, camelToSnake, snakeToCamel } from '../../utils/utils
 import AxiosInstance from '../../utils/Axios';
 import LLMConfig from '../../types/LLMConfig';
 import STTConfig from '../../types/STTConfig';
-import CustomColorPalette from '../../types/CustomColorPalette';
 
 const postLLMSettings = createAsyncThunk<LLMSettings, LLMSettings, AsyncThunkConfig>(
   'settings/postLLMSettings',
@@ -103,34 +102,4 @@ const getSTTConfig = createAsyncThunk<STTConfig, void, AsyncThunkConfig>(
   }
 );
 
-const postColorPalette = createAsyncThunk<CustomColorPalette, CustomColorPalette, AsyncThunkConfig>(
-  'settings/postColorPalette',
-  async (palette, {getState}) => {
-    const {user} = getState();
-    
-    const body = camelToSnake(palette);
-    
-    try {
-      const response = await AxiosInstance.post('/colors', body, {
-        headers: {
-          Authorization: user.auth.token
-        }
-      });
-
-      return response.data as CustomColorPalette;
-    } catch {
-      return palette;
-    }
-  }
-);
-
-const getColorPalette = createAsyncThunk<CustomColorPalette, void, AsyncThunkConfig>(
-  'settings/getColorPalette',
-  async () => {
-    const response = await AxiosInstance.get('/colors');
-    return response.data as CustomColorPalette;
-  }
-);
-
-export {getLLMConfigs, getLLMSettings, getSTTConfig, getColorPalette, 
-  postLLMSettings, postSTTSettings, postColorPalette};
+export {getLLMConfigs, getLLMSettings, getSTTConfig, postLLMSettings, postSTTSettings};

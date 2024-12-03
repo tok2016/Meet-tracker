@@ -1,5 +1,5 @@
+import { ColorPaletteVariables } from '../types/ColorPaletteVariables';
 import CustomColorPalette from '../types/CustomColorPalette';
-import ColorPalette from '../types/ColotPalette';
 
 const CustomColors: CustomColorPalette = {
   main: '#F59D0E',
@@ -15,23 +15,64 @@ const CustomColors: CustomColorPalette = {
   error: '#EE1313'
 };
 
-const UIColors: ColorPalette = {
-  ...CustomColors,
-  mainGradient() {
-    return `linear-gradient(to right, ${this.main}, ${this.secondary})`;
-  },
-  secondaryGradient() {
-    return `linear-gradient(to right, ${this.main}80, transparent)`;
-  },
-  mainHoverGradient() {
-    return `linear-gradient(to right, ${this.secondary}, ${this.secondary})`;
-  },
-  updateColors(palette) {
-    Object.entries(palette).forEach((entry) => {
-      this[entry[0] as keyof CustomColorPalette] = entry[1];
+class Palette {
+  private _palette: CustomColorPalette;
+  private _variables: ColorPaletteVariables = {
+    main: '--main',
+    secondary: '--secondary',
+    tertiary: '--tertiary',
+    quaternary: '--quaternary',
+    disabled: '--disabled',
+    background: '--background',
+    textMain: '--text-main',
+    textSecondary: '--text-secondary',
+    textHighlight: '--text-highlight',
+    textContrast: '--text-contrast',
+    error: '--error'
+  };
+
+  constructor(palette: CustomColorPalette) {
+    this._palette = palette;
+    Object.entries(this._variables).map(([key, variable]) => {
+      document.documentElement.style.setProperty(variable, palette[key as keyof ColorPaletteVariables]);
     });
-  }
+  };
+
+  public get palette(): CustomColorPalette {
+    return this._palette;
+  };
+
+  private set palette(newPalette: CustomColorPalette) {
+    this._palette = newPalette;
+  };
+
+  public get variables(): ColorPaletteVariables {
+    return this._variables;
+  };
+
+  public mainGradient() {
+    return `linear-gradient(to right, var(${this._palette.main}), var(${this._palette.secondary})`;
+  };
+
+  public secondaryGradient() {
+    return `linear-gradient(to right, var(${this._palette.main}), transparent)`;
+  };
+
+  public mainHoverGradient() {
+    return `linear-gradient(to right, var(${this._palette.secondary}), var(${this._palette.secondary}))`;
+  };
+
+  public updatePalette(updatedPalette: CustomColorPalette) {
+    this.palette = updatedPalette;
+    Object.entries(this.variables).map(([key, variable]) => {
+      document.documentElement.style.setProperty(variable, updatedPalette[key as keyof ColorPaletteVariables]);
+    });
+  };
 };
 
+const UIColors = new Palette(CustomColors);
+
+const getCssVariable = (key: keyof ColorPaletteVariables) => `var(${UIColors.variables[key]})`;
+
 export default UIColors;
-export {CustomColors};
+export {CustomColors, getCssVariable};

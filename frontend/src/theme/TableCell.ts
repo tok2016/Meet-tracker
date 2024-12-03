@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import { breakpoints } from './BasicTypography';
 import { LgFontSizes, XlFontSizes } from './FontSizes';
-import UIColors from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 
 const TableCell: Components['MuiTableCell'] = {
   styleOverrides: {
@@ -13,7 +13,7 @@ const TableCell: Components['MuiTableCell'] = {
       [breakpoints.only('xl')]: {
         fontSize: XlFontSizes.table
       },
-      border: `solid 5px ${UIColors.tertiary}`
+      border: `solid 5px ${getCssVariable('tertiary')}`
     }
   },
   variants: [

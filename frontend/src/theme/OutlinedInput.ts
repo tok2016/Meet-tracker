@@ -1,15 +1,15 @@
 import { Components } from '@mui/material';
 
-import UIColors from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 
 const OutlinedInput: Components['MuiOutlinedInput'] = {
   styleOverrides: {
     root: {
-      border: `solid 1px ${UIColors.tertiary}`,
+      border: `solid 1px ${getCssVariable('tertiary')}`,
       borderRadius: 10,
-      backgroundColor: UIColors.background,
-      color: UIColors.textMain,
+      backgroundColor: getCssVariable('background'),
+      color: getCssVariable('textMain'),
       [breakpoints.up('lg')]: {
         fontSize: 16
       },

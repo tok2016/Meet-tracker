@@ -20,11 +20,11 @@ const RollDownButton = ({isRolledDown, rollPlain}: {isRolledDown: boolean, rollP
         ? <TurnLeft 
             sx={{
               rotate: '90deg',
-              color: UIColors.textMain
+              color: UIColors.palette.textMain
             }}/>
         : <TurnRight sx={{
             rotate: '90deg',
-            color: UIColors.textMain
+            color: UIColors.palette.textMain
           }}/>
       }
   </IconButton>        

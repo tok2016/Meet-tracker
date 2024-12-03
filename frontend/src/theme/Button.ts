@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import UIColors from '../utils/Colors';
+import UIColors, {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 import { LgFontSizes, XlFontSizes } from './FontSizes';
 
@@ -55,12 +55,12 @@ const Button: Components['MuiButton'] = {
         width: '13vw',
         lineHeight: 1,
         background: UIColors.mainGradient(),
-        color: UIColors.textContrast,
+        color: getCssVariable('textContrast'),
         minHeight: '3em',
         borderRadius: 10,
         ':hover': {
           background: UIColors.mainHoverGradient(),
-          color: UIColors.textContrast
+          color: getCssVariable('textContrast')
         }
       }
     },
@@ -71,13 +71,13 @@ const Button: Components['MuiButton'] = {
       style: {
         width: '13vw',
         lineHeight: 1,
-        background: UIColors.disabled,
-        color: UIColors.textContrast,
+        background: getCssVariable('disabled'),
+        color: getCssVariable('textContrast'),
         minHeight: '3em',
         borderRadius: 10,
         ':hover': {
           background: UIColors.mainHoverGradient(),
-          color: UIColors.textContrast
+          color: getCssVariable('textContrast')
         }
       }
     },
@@ -87,7 +87,7 @@ const Button: Components['MuiButton'] = {
       },
       style: {
         backgroundColor: 'transparent',
-        color: UIColors.textSecondary
+        color: getCssVariable('textSecondary')
       }
     },
     {
@@ -95,14 +95,14 @@ const Button: Components['MuiButton'] = {
         variant: 'danger'
       },
       style: {
-        color: UIColors.error,
+        color: getCssVariable('error'),
         backgroundColor: 'transparent',
         ':hover': {
-          backgroundColor: UIColors.error,
-          color: UIColors.textContrast
+          backgroundColor: getCssVariable('error'),
+          color: getCssVariable('textContrast')
         },
         ':active': {
-          color: UIColors.textMain,
+          color: getCssVariable('textMain'),
           backgroundColor: 'transparent',
         }
       }
@@ -112,11 +112,11 @@ const Button: Components['MuiButton'] = {
         variant: 'filter'
       },
       style: {
-        color: UIColors.textSecondary,
+        color: getCssVariable('textSecondary'),
         fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: UIColors.textHighlight,
+          color: getCssVariable('textHighlight'),
           backgroundColor: 'transparent',
         },
         ':active': {
@@ -129,11 +129,11 @@ const Button: Components['MuiButton'] = {
         variant: 'filterSelected'
       },
       style: {
-        color: UIColors.textHighlight,
+        color: getCssVariable('textHighlight'),
         fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: UIColors.textHighlight,
+          color: getCssVariable('textHighlight'),
           backgroundColor: 'transparent',
         },
         ':active': {
@@ -146,11 +146,11 @@ const Button: Components['MuiButton'] = {
         variant: 'filterValuable'
       },
       style: {
-        color: UIColors.textMain,
+        color: getCssVariable('textMain'),
         fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: UIColors.textHighlight,
+          color: getCssVariable('textHighlight'),
           backgroundColor: 'transparent',
         },
         ':active': {
@@ -163,7 +163,7 @@ const Button: Components['MuiButton'] = {
         variant: 'filterValue'
       },
       style: {
-        color: UIColors.textMain,
+        color: getCssVariable('textMain'),
         backgroundColor: 'transparent',
         fontWeight: 700,
         [breakpoints.up('lg')]: {
@@ -175,7 +175,7 @@ const Button: Components['MuiButton'] = {
         padding: 0,
         height: '1.1em',
         ':hover': {
-          color: UIColors.error,
+          color: getCssVariable('error'),
           backgroundColor: 'transparent',
         },
         ':active': {

@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { prominent } from 'color.js';
 
 import UploadPlain from './UploadPlain';
@@ -11,7 +11,7 @@ import MediaValue from '../types/MediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSettings } from '../store/settings/settingsSlice'; 
 import { HexColor } from '../types/HexColor';
-import { postColorPalette } from '../store/settings/settingsThunks';
+import { postColorPalette } from '../store/palette/paletteThunks';
 
 const COLORS_GRID_COLUMNS: MediaValue = {
   xs: '1fr',
@@ -26,12 +26,10 @@ const ColorUploadPlain = () => {
 
   const [file, setFile] = useState<File | undefined>();
   const [url, setUrl] = useState<string>('');
-  const [palette, setPalette] = useState<CustomColorPalette>(UIColors);
+  const [palette, setPalette] = useState<CustomColorPalette>({...UIColors.palette});
 
-  const colors = useMemo(() => {
-    const colorsSet = new Set<HexColor>(Object.values(palette).filter((value) => typeof value !== 'function'));
-    return Array.from(colorsSet.values());
-  }, [palette]);
+  const colorsSet = new Set<HexColor>(Object.values(palette));
+  const colors = Array.from(colorsSet.values());
 
   const {status} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
@@ -49,24 +47,26 @@ const ColorUploadPlain = () => {
       newPalette[key as keyof CustomColorPalette] = newColors[i % count] as HexColor;
     });
 
+    document.documentElement.style.setProperty('--main', newColors[0] as HexColor);
+
     setPalette(newPalette);
   };
 
-  const setFileImage = (image: File | undefined) => {
-    setFile(image);
-
+  const setFileImage = async (image: File | undefined) => {
     if(url) {
       URL.revokeObjectURL(url);
     }
 
     if(image) {
       const newUrl = URL.createObjectURL(image);
+      await extractColors(newUrl);
       setUrl(newUrl);
-      extractColors(newUrl);
     } else {
       setUrl('');
-      setPalette(UIColors);
+      setPalette({...UIColors.palette});
     }
+
+    setFile(image);
   };
 
   const selectColor = (role: keyof CustomColorPalette) => (color: HexColor) => {
@@ -74,7 +74,7 @@ const ColorUploadPlain = () => {
   };
 
   const onPaletteUpload = () => {
-    dispatch(postColorPalette(palette));
+    dispatch(postColorPalette(palette)).then(() => setFile(undefined)).then(() => setUrl(''));
   };
 
   return (
@@ -99,7 +99,7 @@ const ColorUploadPlain = () => {
         gridTemplateColumns: columns,
         justifyContent: 'space-between'
       }}>
-        {Object.entries(CustomColors).map((entry) => (
+        {Object.entries(palette).map((entry) => (
           <ColorBlock 
             key={entry[0]}
             role={entry[0] as keyof CustomColorPalette} 

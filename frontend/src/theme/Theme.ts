@@ -18,7 +18,6 @@ import ListItem from './ListItem';
 import ListItemText from './ListItemText';
 import Toolbar from './Toolbar';
 import BasicTypography from './BasicTypography';
-import UIColors from '../utils/Colors';
 import List from './List';
 import FilledInput from './FilledInput';
 import Menu from './Menu';
@@ -28,26 +27,6 @@ import TableCell from './TableCell';
 
 const Theme = createTheme({
   typography: BasicTypography,
-  palette: {
-    primary: {
-      main: UIColors.main,
-      light: UIColors.main,
-      dark: UIColors.main,
-      contrastText: UIColors.textContrast
-    },
-    secondary: {
-      main: UIColors.background,
-      light: UIColors.background,
-      dark: UIColors.background,
-      contrastText: UIColors.textMain
-    },
-    error: {
-      main: UIColors.error,
-      light: UIColors.error,
-      dark: UIColors.error,
-      contrastText: UIColors.textContrast
-    }
-  },
   components: {
     MuiTypography: Typography,
     MuiButton: Button,

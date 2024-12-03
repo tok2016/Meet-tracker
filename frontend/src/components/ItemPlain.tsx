@@ -16,7 +16,7 @@ const ItemPlain = ({children}: {children: ReactNode}) => (
         alignItems: 'center',
         width: `calc(100% - 2 * ${PAPER_SMALL_PADDING})`,
         ':hover a': {
-          color: UIColors.textHighlight,
+          color: UIColors.palette.textHighlight,
           transition: 'color 0.15s'
         }
       } : {})}>

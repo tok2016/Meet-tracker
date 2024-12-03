@@ -96,7 +96,7 @@ const LLMSettingsPage = () => {
         <Typography variant='h2'>
           Структура JSON-документа резюме
         </Typography>
-        <Typography variant='h3Normal' color={UIColors.error} textAlign='left'>
+        <Typography variant='h3Normal' color={UIColors.palette.error} textAlign='left'>
           Внимание! При изменении структуры документа необходимо срочно проводить работы на стороне клиентской части!
         </Typography>
         <JSONTable jsonSchema={settings.summaryStructure} updateSchema={updateSchema} />

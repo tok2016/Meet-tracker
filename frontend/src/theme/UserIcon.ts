@@ -1,11 +1,11 @@
 import { SxProps, Theme } from '@mui/material';
 
-import UIColors from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 import { INPUT_ICON_WIDTH } from '../utils/utils';
 import { breakpoints } from './BasicTypography';
 
 const UserIconSx: SxProps<Theme> = {
-  color: UIColors.textMain, 
+  color: getCssVariable('textMain'), 
   width: INPUT_ICON_WIDTH, 
   height: INPUT_ICON_WIDTH,
   [breakpoints.up('lg')]: {
