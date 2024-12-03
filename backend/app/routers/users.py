@@ -144,3 +144,15 @@ def reset_password_admin(session: SessionDep, body: NewPassword, user_username: 
     session.add(user)
     session.commit()
     return {"result": "Password updated successfully"}
+
+@router.post("/current-user/reset-password")
+def reset_password_admin(session: SessionDep, current_user: CurrentUser, body: NewPassword):
+    """
+    Обновление пароля для обычных пользователей
+    """
+    hashed_password = get_password_hash(password=body.new_password)
+    current_user.password = hashed_password
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+    return {"result": "Password updated successfully"}
