@@ -54,6 +54,9 @@ class Token(SQLModel):
 class TokenPayload(SQLModel):
     sub: str | None = None
 
+class NewPassword(SQLModel):
+    new_password: str = Field(min_length=8, max_length=40)
+
 class Summary(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     title: str
