@@ -11,3 +11,4 @@ app/hf_token.py
 temp_outputs
 nemo_msdd_configs
 app/sounds
+meet_tracker.db
