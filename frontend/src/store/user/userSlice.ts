@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import UserState from '../../types/UserState';
-import { getCurrentUser, postLogin, postLogout, postUserData, patchCurrentUser, getCurrentUserAvatar, postCurrentUserAvatar } from './userThunks';
+import { getCurrentUser, postLogin, postLogout, postUserData, patchCurrentUser, getCurrentUserAvatar, postCurrentUserAvatar, postNewPassword } from './userThunks';
 import { isActionWithError } from '../../types/ActionWithError';
 import Token from '../../types/Token';
 import { RootState } from '../store';
@@ -99,6 +99,9 @@ const userSlice = createSlice({
       })
       .addCase(patchCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.status = 'success';
+      })
+      .addCase(postNewPassword.fulfilled, (state) => {
         state.status = 'success';
       })
       .addDefaultCase((state, action) => {

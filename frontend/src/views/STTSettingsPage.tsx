@@ -1,14 +1,16 @@
-import { Button, MenuItem, Select, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-import { Language, MappedLanguages } from '../types/Language';
-import { STTOutput, STTOutputFormats } from '../types/STTOutput';
+import { STTDevices } from '../types/STTOutput';
 import TextArea from '../components/TextArea';
 import STTConfig, { defaultSTTConfig } from '../types/STTConfig';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSettings } from '../store/settings/settingsSlice';
 import { getSTTConfig, postSTTSettings } from '../store/settings/settingsThunks';
-import { STTSize, STTSizes } from '../types/STTSize';
+import { STTModels } from '../types/STTSize';
+import { STTComputeModels } from '../types/STTCompute';
+import STTSettingSelect from '../components/STTSettingSelect';
+import { DiarizeTypes } from '../types/DiarizeType';
 
 const STTSettingsPage = () => {
   const [sttConfig, setSTTConfig] = useState<STTConfig>(defaultSTTConfig);
@@ -41,47 +43,29 @@ const STTSettingsPage = () => {
         Конфигурация speech-to-text модели
       </Typography>
 
-      <Stack alignSelf='flex-start'>
-        <Typography variant='h3' textAlign='left'>
-          Язык возвращаемого текста
-        </Typography>
+      <STTSettingSelect
+        label='Тип диаризации'
+        value={sttConfig.diarizeType}
+        values={[...DiarizeTypes]}
+        select={(value) => changeSTTConfig({diarizeType: value})} />
 
-        <Select 
-          value={sttConfig.language}
-          onChange={(evt) => changeSTTConfig({language: evt.target.value as Language})}>
-            {Object.entries(MappedLanguages).map((entry) => (
-              <MenuItem key={entry[0]} value={entry[0]}>{entry[1]}</MenuItem>
-            ))}
-        </Select>
-      </Stack>
+      <STTSettingSelect
+        label='Модель Whisper'
+        value={sttConfig.whisperModel}
+        values={[...STTModels]}
+        select={(value) => changeSTTConfig({whisperModel: value})} />
 
-      <Stack alignSelf='flex-start'>
-        <Typography variant='h3' textAlign='left'>
-          Формат возвращаемого текста
-        </Typography>
+      <STTSettingSelect
+        label='Устройство для работы Whisper'
+        value={sttConfig.whisperDevice}
+        values={[...STTDevices]}
+        select={(value) => changeSTTConfig({whisperDevice: value})} />
 
-        <Select 
-          value={sttConfig.output}
-          onChange={(evt) => changeSTTConfig({output: evt.target.value as STTOutput})}>
-            {STTOutputFormats.map((format) => (
-              <MenuItem key={format} value={format}>{format}</MenuItem>
-            ))}
-        </Select>
-      </Stack>
-
-      <Stack alignSelf='flex-start'>
-        <Typography variant='h3' textAlign='left'>
-          Размер модели
-        </Typography>
-
-        <Select 
-          value={sttConfig.modelSize}
-          onChange={(evt) => changeSTTConfig({modelSize: evt.target.value as STTSize})}>
-            {STTSizes.map((size) => (
-              <MenuItem key={size} value={size}>{size}</MenuItem>
-            ))}
-        </Select>
-      </Stack>
+      <STTSettingSelect
+        label='Модель вычислений для Whisper'
+        value={sttConfig.whisperCompute}
+        values={[...STTComputeModels]}
+        select={(value) => changeSTTConfig({whisperCompute: value})} />
 
       <Stack alignSelf='flex-start' width='100%'>
         <Typography variant='h3' textAlign='left'>

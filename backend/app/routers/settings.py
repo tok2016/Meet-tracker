@@ -13,7 +13,7 @@ def get_settings(session: SessionDep):
     return {
         "app_name": settings.app_name,
         "llm_model": settings.llm_model,
-        "whisper": settings.whisper_model,
+        "whisper_model": settings.whisper_model,
         "whisper_device": settings.whisper_device,
         "whisper_compute": settings.whisper_compute,
         "diarize_type": settings.diarize_type
@@ -25,7 +25,7 @@ def change_settings(value: str):
     return {
         "app_name": settings.app_name,
         "llm_model": settings.llm_model,
-        "whisper": settings.whisper_model,
+        "whisper_model": settings.whisper_model,
         "whisper_device": settings.whisper_device,
         "whisper_compute": settings.whisper_compute,
         "diarize_type": settings.diarize_type

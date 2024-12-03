@@ -11,7 +11,7 @@ const ListItem: Components['MuiListItem'] = {
         color: getCssVariable('textMain')
       },
       '& .MuiListItemButton-root.Mui-selected:hover': {
-        background: getCssVariable('main'),
+        background: getCssVariable('semiTransparent'),
         color: getCssVariable('textMain')
       }
     }

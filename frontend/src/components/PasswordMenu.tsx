@@ -6,17 +6,26 @@ import { KeyboardBackspace } from '@mui/icons-material';
 import { INPUT_ICON_WIDTH } from '../utils/utils';
 import userSchema from '../schemas/userSchema';
 import { isValidationError } from '../schemas/validationError';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { postNewPasswordById } from '../store/admin/adminThunks';
+import { postNewPassword } from '../store/user/userThunks';
+import { UserPassword } from '../types/User';
+import { Status } from '../types/Status';
 
 type PasswordMenuProps = {
+  userId: number,
+  isForAdmin: boolean,
   isOpened: boolean,
-  toggleOpen: () => void,
-  updatePassword: (password: string) => void
+  status: Status,
+  toggleOpen: () => void
 };
 
-const PasswordMenu = ({isOpened, toggleOpen, updatePassword}: PasswordMenuProps) => {
+const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: PasswordMenuProps) => {
   const [password, setPassword] = useState<string>('');
   const [repeatedPassword, setRepeatedPassword] = useState<string>('');
   const [error, setError] = useState<string | undefined>();
+
+  const dispatch = useAppDispatch();
 
   const arePasswordsTheSame = password === repeatedPassword;
 
@@ -33,11 +42,27 @@ const PasswordMenu = ({isOpened, toggleOpen, updatePassword}: PasswordMenuProps)
     }
   };
 
-  const onClose = () => {
-    setPassword('');
-    setRepeatedPassword('');
-    setError(undefined);
-    toggleOpen();
+  const close = (currentStatus: Status) => {
+    if(currentStatus !== 'pending') {
+      setPassword('');
+      setRepeatedPassword('');
+      setError(undefined);
+      toggleOpen();
+    }
+  };
+
+  const resetPassword = async ({id, password}: UserPassword) => {
+    try {
+      if(isForAdmin) {
+        await dispatch(postNewPasswordById({id, password}));
+      } else {
+        await dispatch(postNewPassword(password));
+      }
+
+      toggleOpen();
+    } catch {
+
+    }
   };
 
   useEffect(() => {
@@ -49,7 +74,7 @@ const PasswordMenu = ({isOpened, toggleOpen, updatePassword}: PasswordMenuProps)
       open={isOpened}
       maxWidth='xs'
       fullWidth
-      onClose={onClose}
+      onClose={close}
       PaperProps={{
         variant: 'elevation'
       }}>
@@ -62,7 +87,7 @@ const PasswordMenu = ({isOpened, toggleOpen, updatePassword}: PasswordMenuProps)
             <Stack width='100%' position='relative'>
               <IconButton 
                 color='secondary'
-                onClick={onClose}
+                onClick={() => close(status)}
                 style={{
                   position: 'absolute',
                   left: 0
@@ -98,7 +123,7 @@ const PasswordMenu = ({isOpened, toggleOpen, updatePassword}: PasswordMenuProps)
             <Button
               variant='containtedSecondary'
               disabled={error !== undefined || !arePasswordsTheSame}
-              onClick={() => updatePassword(password)}>
+              onClick={async () => await resetPassword({id: userId, password})}>
                 Подтвердить
             </Button>
         </Stack>

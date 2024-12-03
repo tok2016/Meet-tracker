@@ -28,14 +28,16 @@ class Palette {
     textSecondary: '--text-secondary',
     textHighlight: '--text-highlight',
     textContrast: '--text-contrast',
-    error: '--error'
+    error: '--error',
+    semiTransparent: '--semi-transparent'
   };
 
   constructor(palette: CustomColorPalette) {
     this._palette = palette;
-    Object.entries(this._variables).map(([key, variable]) => {
-      document.documentElement.style.setProperty(variable, palette[key as keyof ColorPaletteVariables]);
+    /*Object.entries(this._variables).map(([key, variable]) => {
+      document.documentElement.style.setProperty(variable, palette[key as keyof CustomColorPalette]);
     });
+    document.documentElement.style.setProperty(this._variables.semiTransparent, `${palette.main}80`);*/
   };
 
   public get palette(): CustomColorPalette {
@@ -51,22 +53,23 @@ class Palette {
   };
 
   public mainGradient() {
-    return `linear-gradient(to right, var(${this._palette.main}), var(${this._palette.secondary})`;
+    return `linear-gradient(to right, var(${this.variables.main}), var(${this.variables.secondary}))`;
   };
 
   public secondaryGradient() {
-    return `linear-gradient(to right, var(${this._palette.main}), transparent)`;
+    return `linear-gradient(to right, var(${this.variables.semiTransparent}), transparent)`;
   };
 
   public mainHoverGradient() {
-    return `linear-gradient(to right, var(${this._palette.secondary}), var(${this._palette.secondary}))`;
+    return `linear-gradient(to right, var(${this.variables.secondary}), var(${this.variables.secondary}))`;
   };
 
   public updatePalette(updatedPalette: CustomColorPalette) {
     this.palette = updatedPalette;
     Object.entries(this.variables).map(([key, variable]) => {
-      document.documentElement.style.setProperty(variable, updatedPalette[key as keyof ColorPaletteVariables]);
+      document.documentElement.style.setProperty(variable, updatedPalette[key as keyof CustomColorPalette]);
     });
+    document.documentElement.style.setProperty(this.variables.semiTransparent, `${updatedPalette.main}80`);
   };
 };
 

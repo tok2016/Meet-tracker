@@ -21,8 +21,8 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
 
   const navigate = useNavigate();
 
-  const {user: originalUser} = useAppSelector(selectUser);
-  const {user: anotherUser} = useAppSelector(selectAdminData);
+  const {user: originalUser, status: originalStatus} = useAppSelector(selectUser);
+  const {user: anotherUser, status: anotherStatus} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
   const [isOpened, toggleOpen] = useReducer((value) => !value, false);
@@ -34,7 +34,6 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
 
   const sendUpdate = async (updatedUser: User) => {
     if(isForAdmin) {
-      const parsedId = parseInt(id ?? '');
       await dispatch(patchUserById({...updatedUser, id: parsedId}));
     } else {
       await dispatch(patchCurrentUser(updatedUser));
@@ -157,9 +156,11 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
           openMenu={toggleOpen}/>
 
         <PasswordMenu 
+          userId={parsedId}
+          isForAdmin={isForAdmin}
           isOpened={isOpened} 
-          toggleOpen={toggleOpen}
-          updatePassword={(update) => sendUpdate({...user, password: update})} />
+          status={isForAdmin ? anotherStatus : originalStatus}
+          toggleOpen={toggleOpen} />
       </div>
     </>
   );

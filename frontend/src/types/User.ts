@@ -18,6 +18,8 @@ export type UserRawWithError = UserRaw & {error: UserValidationError};
 
 export type UserLogin = Pick<User, 'email' | 'password'>;
 
+export type UserPassword = Pick<User, 'id' | 'password'>;
+
 export type UsersRaw = {
   users: User[],
   total: number

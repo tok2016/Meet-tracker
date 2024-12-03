@@ -1,16 +1,16 @@
 import { Components } from '@mui/material';
-import {getCssVariable} from '../utils/Colors';
+import UIColors, {getCssVariable} from '../utils/Colors';
 
 const ListItemButton: Components['MuiListItemButton'] = {
   styleOverrides: {
     root: {
-      backgroundColor: 'transparent',
+      background: 'transparent',
       color: getCssVariable('textMain'),
       height: '4em',
       paddingLeft: '2.5vw',
       ':hover': {
-        backgroundColor: getCssVariable('main'),
-        color: getCssVariable('textContrast')
+        background: UIColors.secondaryGradient(),
+        color: getCssVariable('textMain')
       }
     }
   }

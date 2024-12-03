@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import AdminState from '../../types/AdminState';
 import { archiveRecordById, deleteRecordById, deleteSummaryById, deleteUserById, getAllSummaries, getUserAvatar, 
-  getUserById, getUsers, patchUserById, postNewUser, postUserAvatar} from './adminThunks';
+  getUserById, getUsers, patchUserById, postNewPasswordById, postNewUser, postUserAvatar} from './adminThunks';
 import { isActionWithError } from '../../types/ActionWithError';
 import { defaultUser } from '../../types/User';
 import { defaultSummary } from '../../types/Summary';
@@ -55,6 +55,9 @@ const adminSlice = createSlice({
       .addCase(getUserAvatar.fulfilled, (state, action) => {
         state.status = 'success';
         state.user.avatar = action.payload;
+      })
+      .addCase(postNewPasswordById.fulfilled, (state) => {
+        state.status = 'success';
       })
       .addCase(getAllSummaries.fulfilled, (state, action) => {
         state.status = 'success';

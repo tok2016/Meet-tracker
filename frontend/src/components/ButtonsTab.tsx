@@ -1,7 +1,7 @@
 import { Button, Stack } from '@mui/material';
 import Page from '../types/Page';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const ButtonsTab = ({pages, hidden=false}: {pages: Page[], hidden?: boolean}) => {
   const {pathname} = useLocation();
@@ -13,6 +13,10 @@ const ButtonsTab = ({pages, hidden=false}: {pages: Page[], hidden?: boolean}) =>
     navigate(pagePath);
     setPath(pagePath);
   };
+
+  useEffect(() => {
+    setPath(pathname);
+  }, [pathname])
 
   return (
     <Stack
@@ -29,7 +33,7 @@ const ButtonsTab = ({pages, hidden=false}: {pages: Page[], hidden?: boolean}) =>
         return (
           <Button
             key={page.path}
-            variant={page.path === pagePath || page.highlight ? 'containtedTabSelected' : 'containtedTab'}
+            variant={pagePath.includes(page.path) || page.highlight ? 'containtedTabSelected' : 'containtedTab'}
             onClick={() => onButtonPageClick(page.path)}>
               {page.name}
           </Button>
