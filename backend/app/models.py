@@ -35,6 +35,17 @@ class UserUpdateMe(SQLModel):
     first_name: str | None = Field(default=None)
     last_name: str | None = Field(default=None)
 
+class LlmSettings(SQLModel):
+    llm_model: str | None = Field(default="ilyagusev/saiga_llama3")
+
+class WhisperSettings(SQLModel):
+    whisper_model: str | None = Field(default="large-v3")
+    whisper_device: str | None = Field(default="cpu")
+    whisper_compute: str | None = Field(default="int8")
+
+class DiarizeSettings(SQLModel):
+    diarize_type: str | None = Field(default="Neural")
+
 # JSON payload containing access token
 class Token(SQLModel):
     access_token: str
