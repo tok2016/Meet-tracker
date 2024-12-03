@@ -1,5 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException, Query
-from .routers import users, records
+from .routers import users, records, settings
 from app.db import create_db_and_tables
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -25,6 +25,7 @@ app.add_middleware(
 
 app.include_router(users.router, tags=["user"])
 app.include_router(records.router, tags=["record"])
+app.include_router(settings.router, tags=["settings"])
 
 @app.on_event("startup")
 def on_startup():

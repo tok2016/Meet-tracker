@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, UploadFile, File
 from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe, UserFilter
+from app.models import User, UserPublic, UserCreate, UserUpdate, Token, UserUpdateMe, UserFilter, NewPassword
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.db import SessionDep
 from typing import Annotated, Optional
 from datetime import timedelta
 from app.utils import ( get_password_hash, verify_password, create_access_token, 
-    authenticate, CurrentUser, get_user_by_email, upload_picture )
+    authenticate, CurrentUser, get_user_by_email, upload_picture, get_current_active_superuser )
 import os
 import math
 from fastapi_filter import FilterDepends
@@ -25,13 +25,13 @@ def create_user(user: UserCreate, session: SessionDep):
     session.refresh(db_user)
     return db_user
 
-@router.get("/users/", response_model=list[UserPublic])
+@router.get("/users/", dependencies=[Depends(get_current_active_superuser)], response_model=list[UserPublic])
 def read_users( session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=100)] = 100, ):
     users = session.exec(select(User).offset(offset).limit(limit)).all()
     return users
 
 
-@router.get("/user/{username}", response_model=UserPublic)
+@router.get("/user/{username}", dependencies=[Depends(get_current_active_superuser)], response_model=UserPublic)
 def read_user(user_username: int, session: SessionDep):
     user = session.get(User, user_username)
     if not user:
@@ -132,3 +132,27 @@ async def filter_user(session: SessionDep, user_filter: UserFilter = FilterDepen
     result = session.execute(query).scalars().all()
     response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
     return response
+
+@router.post("/reset-password/{username}", dependencies=[Depends(get_current_active_superuser)])
+def reset_password_admin(session: SessionDep, body: NewPassword, user_username: int):
+    """
+    Обновление пароля для админов
+    """
+    user = session.get(User, user_username)
+    hashed_password = get_password_hash(password=body.new_password)
+    user.password = hashed_password
+    session.add(user)
+    session.commit()
+    return {"result": "Password updated successfully"}
+
+@router.post("/current-user/reset-password")
+def reset_password_admin(session: SessionDep, current_user: CurrentUser, body: NewPassword):
+    """
+    Обновление пароля для обычных пользователей
+    """
+    hashed_password = get_password_hash(password=body.new_password)
+    current_user.password = hashed_password
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+    return {"result": "Password updated successfully"}
