@@ -56,7 +56,7 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
         <Typography variant='h3' color={summary.status === 'error' ? 'error' : 'textPrimary'}>
           {statusesTranslations[summary.status]}
         </Typography>
-        {summary.audio ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
+        {summary.audioId ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
         {summary.hasText ? <Description sx={iconSx}/> : <InsertDriveFile sx={iconSx}/>}
         <Typography variant='h3Normal'>
           {date}
