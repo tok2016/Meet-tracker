@@ -1,24 +1,24 @@
 import { Components } from '@mui/material';
-import { TextColors, UIColors } from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 
 const IconButton: Components['MuiIconButton'] = {
   styleOverrides: {
     colorPrimary: {
       padding: 0,
       '*': {
-        color: UIColors.main,
+        color: getCssVariable('main'),
       },
       ':hover *': {
-        color: UIColors.secondary
+        color: getCssVariable('secondary')
       }
     },
     colorSecondary: {
       padding: 0,
       '*': {
-        color: TextColors.main
+        color: getCssVariable('textMain')
       },
       ':hover *': {
-        color: TextColors.highlight
+        color: getCssVariable('textHighlight')
       }
     }
   }

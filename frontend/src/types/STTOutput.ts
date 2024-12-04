@@ -1,3 +1,3 @@
-export const STTOutputFormats = ['txt', 'json', 'vtt', 'srt', 'tsv'] as const;
+export const STTDevices = ['cpu', 'cuda'] as const;
 
-export type STTOutput = typeof STTOutputFormats[number];
+export type STTDevice = typeof STTDevices[number];

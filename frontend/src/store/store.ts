@@ -6,6 +6,7 @@ import AdminReducers from './admin/adminSlice';
 import TimeCodeReducers from './timeCodeSlice';
 import PageReducer from './pageSlice';
 import SettingsReducer from './settings/settingsSlice';
+import PaletteReducer from './palette/paletteSlice';
 
 const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
     admin: AdminReducers,
     timeCode: TimeCodeReducers,
     page: PageReducer,
-    settings: SettingsReducer
+    settings: SettingsReducer,
+    palette: PaletteReducer
   }
 });
 

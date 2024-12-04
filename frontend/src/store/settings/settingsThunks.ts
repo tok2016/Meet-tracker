@@ -1,23 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import LLMSettings, { LLMSettingsRaw } from '../../types/LLMSettings';
+import LLMSettings from '../../types/LLMSettings';
 import { AsyncThunkConfig } from '../store';
 import { arraySnakeToCamel, camelToSnake, snakeToCamel } from '../../utils/utils';
 import AxiosInstance from '../../utils/Axios';
 import LLMConfig from '../../types/LLMConfig';
 import STTConfig from '../../types/STTConfig';
-//import LLMs from '../../utils/defaultLLMs.json'
 
 const postLLMSettings = createAsyncThunk<LLMSettings, LLMSettings, AsyncThunkConfig>(
   'settings/postLLMSettings',
   async (llmSettings, {getState}) => {
     const {user} = getState();
 
-    const finalSettings: LLMSettingsRaw = {
-      ...llmSettings, 
-      summaryStructure: JSON.stringify(llmSettings.summaryStructure)
-    };
-    const body = camelToSnake(finalSettings);
+    const body = camelToSnake(llmSettings);
 
     const response = await AxiosInstance.post('/llmSettings', body, {
       headers: {
@@ -25,13 +20,7 @@ const postLLMSettings = createAsyncThunk<LLMSettings, LLMSettings, AsyncThunkCon
       }
     });
 
-    const validatedSettingsRaw = snakeToCamel<LLMSettingsRaw>(response.data);
-    const validatedSettings: LLMSettings = {
-      ...validatedSettingsRaw, 
-      summaryStructure: JSON.parse(validatedSettingsRaw.summaryStructure)
-    };
-
-    return validatedSettings;
+    return snakeToCamel<LLMSettings>(response.data);
   }
 );
 
@@ -46,13 +35,7 @@ const getLLMSettings = createAsyncThunk<LLMSettings, void, AsyncThunkConfig>(
       }
     });
 
-    const validatedSettingsRaw = snakeToCamel<LLMSettingsRaw>(response.data);
-    const validatedSettings: LLMSettings = {
-      ...validatedSettingsRaw, 
-      summaryStructure: JSON.parse(validatedSettingsRaw.summaryStructure)
-    };
-
-    return validatedSettings;
+    return snakeToCamel<LLMSettings>(response.data);
   }
 );
 
@@ -78,13 +61,21 @@ const postSTTSettings = createAsyncThunk<STTConfig, STTConfig, AsyncThunkConfig>
 
     const body = camelToSnake(sttConfig);
 
-    const response = await AxiosInstance.post('/sttConfig', body, {
+    const sttResponse = await AxiosInstance.post('/sttSettings', body, {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return snakeToCamel<STTConfig>(response.data);
+    const diarizeResponse = await AxiosInstance.post('/diarizeSettings', body, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
+
+    const response = {...sttResponse.data, ...diarizeResponse.data};
+
+    return snakeToCamel<STTConfig>(response);
   }
 );
 
@@ -93,7 +84,7 @@ const getSTTConfig = createAsyncThunk<STTConfig, void, AsyncThunkConfig>(
   async (_, {getState}) => {
     const {user} = getState();
 
-    const response = await AxiosInstance.get('/sttConfig', {
+    const response = await AxiosInstance.get('/settings', {
       headers: {
         Authorization: user.auth.token
       }
@@ -102,6 +93,5 @@ const getSTTConfig = createAsyncThunk<STTConfig, void, AsyncThunkConfig>(
     return snakeToCamel<STTConfig>(response.data); 
   }
 );
-
 
 export {getLLMConfigs, getLLMSettings, getSTTConfig, postLLMSettings, postSTTSettings};

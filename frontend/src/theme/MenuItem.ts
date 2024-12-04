@@ -1,15 +1,15 @@
 import { Components } from '@mui/material';
 
-import { TextColors, UIColors } from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 import { LgFontSizes, XlFontSizes } from './FontSizes';
 
 const MenuItem: Components['MuiMenuItem'] = {
   styleOverrides: {
     root: {
-      backgroundColor: UIColors.background,
+      backgroundColor: getCssVariable('background'),
       borderRadius: 50,
-      color: TextColors.main,
+      color: getCssVariable('textMain'),
       [breakpoints.up('lg')]: {
         fontSize: LgFontSizes.menuItem
       },

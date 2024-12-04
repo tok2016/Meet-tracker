@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
-import { User, UserRaw, UsersRaw } from '../../types/User';
+import { User, UserPassword, UserRaw, UsersRaw } from '../../types/User';
 import AxiosInstance from '../../utils/Axios';
 import { arraySnakeToCamel, camelToSnake, getFilterWithDates, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
 import { RawSummary, SummariesRaw } from '../../types/Summary';
@@ -146,6 +146,20 @@ const getUserAvatar = createAsyncThunk<string, number, AsyncThunkConfig>(
   }
 );
 
+const postNewPasswordById = createAsyncThunk<void, UserPassword, AsyncThunkConfig>(
+  'admin/postNewPasswordById',
+  async ({id, password}, {getState}) => {
+    const {user} = getState();
+    const body = {'new_password': password};
+
+    await AxiosInstance.post(`/reset-password/${id}?user_username=${id}`, body, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
+  }
+);
+
 const getAllSummaries = createAsyncThunk<SummariesRaw, CollectionParams, AsyncThunkConfig>(
   'admin/getSummaries',
   async ({page, filter=defaultFilter}, {getState}) => {
@@ -219,5 +233,5 @@ const deleteRecordById = createAsyncThunk<void, number, AsyncThunkConfig>(
 );
 
 export {getUsers, getUserById, getUserAvatar, getAllSummaries, 
-  postNewUser, patchUserById, postUserAvatar,
+  postNewUser, patchUserById, postUserAvatar, postNewPasswordById,
   deleteUserById, deleteSummaryById, deleteRecordById, archiveRecordById};

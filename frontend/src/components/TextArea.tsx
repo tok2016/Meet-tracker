@@ -1,7 +1,7 @@
 import { TextareaAutosize } from '@mui/material';
 import { ChangeEvent, CSSProperties } from 'react';
 
-import { TextColors, UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
 import useMediaMatch from '../hooks/useMediaMacth';
 
@@ -17,9 +17,9 @@ type TextAreaProps = {
 };
 
 const ColorsForTextArea = {
-  body1: TextColors.main,
-  body2: TextColors.secondary,
-  body2Highlight: TextColors.main
+  body1: UIColors.palette.textMain,
+  body2: UIColors.palette.textSecondary,
+  body2Highlight: UIColors.palette.textMain
 }
 
 const FontWeightsForTextArea = {
@@ -54,7 +54,7 @@ const TextArea = ({value, variant, hidden, readOnly, className, onChange, onKeyD
       style={className === 'outlined'
         ? {
             ...styles,
-            border: `solid 3px ${UIColors.main}`,
+            border: `solid 3px ${UIColors.palette.main}`,
             borderRadius: 15,
             padding: '0.5em'
           }

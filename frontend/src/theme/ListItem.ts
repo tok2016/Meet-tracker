@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { TextColors, UIColors } from '../utils/Colors';
+import UIColors, {getCssVariable} from '../utils/Colors';
 
 const ListItem: Components['MuiListItem'] = {
   styleOverrides: {
@@ -8,11 +8,11 @@ const ListItem: Components['MuiListItem'] = {
       padding: 0,
       '& .MuiListItemButton-root.Mui-selected': {
         background: UIColors.secondaryGradient(),
-        color: TextColors.main
+        color: getCssVariable('textMain')
       },
       '& .MuiListItemButton-root.Mui-selected:hover': {
-        background: `${UIColors.main}80`,
-        color: TextColors.main
+        background: getCssVariable('semiTransparent'),
+        color: getCssVariable('textMain')
       }
     }
   }

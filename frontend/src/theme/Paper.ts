@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { TextColors, UIColors } from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
@@ -23,7 +23,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevation'
           },
           style: {
-            backgroundColor: UIColors.background,
+            backgroundColor: getCssVariable('background'),
             borderRadius: 10,
             padding: '2vw 2vw',
           }
@@ -33,7 +33,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationSmall'
           },
           style: {
-            backgroundColor: UIColors.background,
+            backgroundColor: getCssVariable('background'),
             borderRadius: 10,
             padding: PAPER_SMALL_PADDING
           }
@@ -43,7 +43,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationInside'
           },
           style: {
-            backgroundColor: UIColors.tertiary,
+            backgroundColor: getCssVariable('tertiary'),
             borderRadius: 10,
             padding: PAPER_SMALL_PADDING
           }
@@ -53,8 +53,8 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationDashed'
           },
           style: {
-            backgroundColor: UIColors.background,
-            border: `1px dashed ${UIColors.disabled}`,
+            backgroundColor: getCssVariable('background'),
+            border: `1px dashed ${getCssVariable('disabled')}`,
             borderRadius: 15,
             padding: 'calc(10px + 1vh) calc(50px + 5vh)'
           }
@@ -64,7 +64,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationInput'
           },
           style: {
-            backgroundColor: UIColors.background,
+            backgroundColor: getCssVariable('background'),
             borderRadius: 10,
             padding: '0.5em 1em',
             paddingLeft: '1.5em'
@@ -75,15 +75,15 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationDarker'
           },
           style: {
-            backgroundColor: UIColors.quaternary,
+            backgroundColor: getCssVariable('quaternary'),
             borderRadius: 5,
             padding: '0.6em 0.8em',
             ':hover': {
               cursor: 'pointer',
-              backgroundColor: UIColors.background
+              backgroundColor: getCssVariable('background')
             },
             ':hover .title': {
-              color: TextColors.highlight
+              color: getCssVariable('textHighlight')
             }
           }
         }

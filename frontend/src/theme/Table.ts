@@ -1,10 +1,10 @@
 import { Components } from '@mui/material';
-import { UIColors } from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 
 const Table: Components['MuiTable'] = {
   styleOverrides: {
     root: {
-      backgroundColor: UIColors.background
+      backgroundColor: getCssVariable('background')
     }
   }
 };

@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 
-import { TextColors, UIColors } from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 
 const FilledInput: Components['MuiFilledInput'] = {
@@ -8,8 +8,8 @@ const FilledInput: Components['MuiFilledInput'] = {
     root: {
       border: 'none',
       borderRadius: 10,
-      backgroundColor: UIColors.background,
-      color: TextColors.main,
+      backgroundColor: getCssVariable('background'),
+      color: getCssVariable('textMain'),
       [breakpoints.up('lg')]: {
         fontSize: 16
       },

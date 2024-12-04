@@ -7,11 +7,13 @@ import { selectUser } from '../store/user/userSlice';
 
 type UploadProps = {
   fileName: string, 
-  setFile: React.Dispatch<React.SetStateAction<File | undefined>>,
-  disabled: boolean
+  setFile: (file: File | undefined) => void,
+  disabled: boolean,
+  acceptedFormats: string,
+  inputId: string
 };
 
-const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
+const UploadInput = ({fileName, setFile, disabled, acceptedFormats, inputId}: UploadProps) => {
   const navigate = useNavigate();
   const {user} = useAppSelector(selectUser);
 
@@ -32,13 +34,13 @@ const UploadInput = ({fileName, setFile, disabled}: UploadProps) => {
       gap='10px'
       marginBottom='20px'>
       <input 
-        id='file' 
+        id={inputId}
         type='file' 
-        accept='audio/*,video/*' 
+        accept={acceptedFormats}
         disabled={disabled} 
         onChange={onFileChoice} />
       <Button variant='contained' disabled={disabled}>
-        <label htmlFor='file'>Загрузить</label>
+        <label htmlFor={inputId}>Загрузить</label>
       </Button>
       <Typography variant='subtitle1'>{fileName}</Typography>
     </Stack>

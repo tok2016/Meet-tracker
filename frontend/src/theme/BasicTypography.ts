@@ -1,7 +1,7 @@
 import { BreakpointsOptions, createTheme } from '@mui/material';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 
-import { TextColors, UIColors } from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 import { LgFontSizes, XlFontSizes } from './FontSizes';
 
 const Breakpoints: BreakpointsOptions = {
@@ -29,14 +29,14 @@ const BasicTypography: TypographyOptions = {
     fontWeight: 400,
     textTransform: 'none',
     padding: 0,
-    color: TextColors.contrast,
-    backgroundColor: UIColors.main,
+    color: getCssVariable('textContrast'),
+    backgroundColor: getCssVariable('main'),
     ':disabled': {
-      backgroundColor: UIColors.tertiary,
+      backgroundColor: getCssVariable('tertiary'),
     },
     ':hover': {
-      backgroundColor: UIColors.background,
-      color: TextColors.highlight,
+      backgroundColor: getCssVariable('background'),
+      color: getCssVariable('textHighlight'),
     }
   },
   h1: {

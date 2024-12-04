@@ -1,5 +1,5 @@
 import { Components } from '@mui/material';
-import { UIColors } from '../utils/Colors';
+import { getCssVariable } from '../utils/Colors';
 
 const AppBar: Components['MuiAppBar'] = {
   defaultProps: {
@@ -8,7 +8,7 @@ const AppBar: Components['MuiAppBar'] = {
   },
   styleOverrides: {
     root: {
-      backgroundColor: UIColors.background,
+      backgroundColor: getCssVariable('background'),
       padding: '2vh 2.5vw',
       borderRadius: 0,
       zIndex: 2,

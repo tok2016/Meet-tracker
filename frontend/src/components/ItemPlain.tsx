@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { PAPER_SMALL_PADDING } from '../theme/Paper';
-import { TextColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 
 const ItemPlain = ({children}: {children: ReactNode}) => (
   <Paper 
@@ -16,7 +16,7 @@ const ItemPlain = ({children}: {children: ReactNode}) => (
         alignItems: 'center',
         width: `calc(100% - 2 * ${PAPER_SMALL_PADDING})`,
         ':hover a': {
-          color: TextColors.highlight,
+          color: UIColors.palette.textHighlight,
           transition: 'color 0.15s'
         }
       } : {})}>

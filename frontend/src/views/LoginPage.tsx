@@ -1,7 +1,6 @@
-import { Button, IconButton, TextField, Typography } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Button, TextField, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
@@ -9,11 +8,11 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { UserLogin } from '../types/User';
 import { getCurrentUser, getCurrentUserAvatar, postLogin } from '../store/user/userThunks';
+import PasswordField from '../components/PasswordField';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [isVisible, toggleVisibility] = useReducer((value) => !value, false);
 
   const dispatch = useAppDispatch();
   const {auth, user, status} = useAppSelector(selectUser);
@@ -49,19 +48,10 @@ const LoginPage = () => {
           required
           onChange={(evt) => setEmail(evt.target.value)}/>
 
-        <TextField 
+        <PasswordField
           value={password}
-          type={isVisible ? 'text' : 'password'}
-          label='Пароль'
-          required
-          onChange={(evt) => setPassword(evt.target.value)}
-          slotProps={{
-            input: {
-              endAdornment: <IconButton color='secondary' onClick={toggleVisibility}>
-                              {isVisible ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-            }
-          }}/>
+          errorMessage=''
+          onChange={(evt) => setPassword(evt.target.value)} />
 
         <Button
           onClick={authorize} 

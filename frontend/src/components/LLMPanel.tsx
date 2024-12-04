@@ -2,7 +2,7 @@ import { Paper, Stack, Typography } from '@mui/material';
 import { memo } from 'react';
 
 import OllamaLogo from '../assets/ollamaLogo.svg';
-import { UIColors } from '../utils/Colors';
+import UIColors from '../utils/Colors';
 import LLMConfig from '../types/LLMConfig';
 import { getLocaleString } from '../utils/utils';
 
@@ -32,8 +32,8 @@ const LLMPanelRaw = ({llmConfig, selected, onClick}: LLMPanelProps) => {
         flexDirection: 'column',
         gap: '5px',
         width: '100%',
-        backgroundColor: selected ? UIColors.background : UIColors.quaternary,
-        border: selected ? `solid 3px ${UIColors.main}` : 'none'
+        backgroundColor: selected ? UIColors.palette.background : UIColors.palette.quaternary,
+        border: selected ? `solid 3px ${UIColors.palette.main}` : 'none'
       } : {})}>
         <Stack
           display='flex'
@@ -41,7 +41,7 @@ const LLMPanelRaw = ({llmConfig, selected, onClick}: LLMPanelProps) => {
           gap='calc(10px + 1vw)'>
             <img src={OllamaLogo} style={{
               width: '50px',
-              backgroundColor: UIColors.background,
+              backgroundColor: UIColors.palette.background,
               padding: '1em',
               borderRadius: '1em'
             }}/>

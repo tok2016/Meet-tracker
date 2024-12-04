@@ -1,5 +1,5 @@
 import { Components } from '@mui/material';
-import { UIColors } from '../utils/Colors';
+import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 import { AVATAR_WIDTH } from '../utils/utils';
 
@@ -14,7 +14,7 @@ const Drawer: Components['MuiDrawer'] = {
   styleOverrides: {
     paper: {
       width: DRAWER_WIDTH,
-      backgroundColor: UIColors.background,
+      backgroundColor: getCssVariable('background'),
       padding: 0,
       [breakpoints.up('lg')]: {
         paddingTop: `calc(${AVATAR_WIDTH.lg}px + 8vh)`

@@ -138,5 +138,19 @@ const getCurrentUserAvatar = createAsyncThunk<string, void, AsyncThunkConfig>(
   }
 );
 
-export {getCurrentUser, getCurrentUserAvatar, 
-  postLogin, postLogout, postUserData, postCurrentUserAvatar, patchCurrentUser};
+const postNewPassword = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'user/postNewPassword',
+  async (password, {getState}) => {
+    const {user} = getState();
+    const body = {'new_password': password};
+
+    await AxiosInstance.post('/current-user/reset-password', body, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
+  }
+);
+
+export {getCurrentUser, getCurrentUserAvatar, postLogin, postLogout, 
+  postUserData, postCurrentUserAvatar, postNewPassword, patchCurrentUser};

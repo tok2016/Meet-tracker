@@ -1,5 +1,5 @@
 import { Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Page from '../types/Page';
 import { useAppSelector } from '../hooks/useAppDispatch';
@@ -43,6 +43,10 @@ const Sidebar = () => {
     setPath(pagePath);
   };
 
+  useEffect(() => {
+    setPath(pathname)
+  }, [pathname]);
+
   return (
     <Drawer variant='permanent'>
       <List>
@@ -50,7 +54,7 @@ const Sidebar = () => {
             <ListItem key={page.path}>
               <ListItemButton
                 hidden={!user.isAdmin && page.forAdmin} 
-                selected={path === page.path}
+                selected={path === page.path || page.forAdmin && path.includes('admin')}
                 onClick={() => onButtonPageClick(page.path)}>
                 <ListItemText>
                   {page.name}

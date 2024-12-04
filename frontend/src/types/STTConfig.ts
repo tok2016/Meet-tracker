@@ -1,17 +1,20 @@
-import { Language } from './Language';
-import { STTOutput } from './STTOutput';
-import { STTSize } from './STTSize';
+import { DiarizeType } from './DiarizeType';
+import { STTCompute } from './STTCompute';
+import { STTDevice } from './STTOutput';
+import { STTModel } from './STTSize';
 
 export default interface STTConfig {
-  language: Language,
   initialPrompt: string,
-  output: STTOutput,
-  modelSize: STTSize
+  whisperModel: STTModel,
+  whisperDevice: STTDevice,
+  whisperCompute: STTCompute,
+  diarizeType: DiarizeType
 };
 
 export const defaultSTTConfig: STTConfig = {
-  language: 'en',
   initialPrompt: '',
-  output: 'txt',
-  modelSize: 'large-v3'
-}
+  whisperModel: 'large-v3',
+  whisperDevice: 'cpu',
+  whisperCompute: 'int8',
+  diarizeType: 'Neural'
+};
