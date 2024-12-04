@@ -5,6 +5,8 @@ import { AsyncThunkConfig } from '../store';
 import { camelToSnake, snakeToCamel } from '../../utils/utils';
 import AxiosInstance from '../../utils/Axios';
 import { CustomColors } from '../../utils/Colors';
+import LogoQuery from '../../theme/LogoQuery';
+import Logo from '../../assets/Logo.png';
 
 const postColorPalette = createAsyncThunk<CustomColorPalette, CustomColorPalette, AsyncThunkConfig>(
   'palette/postColorPalette',
@@ -27,16 +29,54 @@ const postColorPalette = createAsyncThunk<CustomColorPalette, CustomColorPalette
   }
 );
 
-const getColorPalette = createAsyncThunk<CustomColorPalette, void, AsyncThunkConfig>(
+const getColorPalette = createAsyncThunk<[CustomColorPalette, string], void, AsyncThunkConfig>(
   'palette/getColorPalette',
-  async () => {
+  async (_, {getState}) => {
+    const {palette: paletteState} = getState();
+
     try {
-      const response = await AxiosInstance.get('/colors');
-      return snakeToCamel<CustomColorPalette>(response.data);
+      const paletteResponse = await AxiosInstance.get('/colors');
+      const palette = snakeToCamel<CustomColorPalette>(paletteResponse.data);
+
+      const logoResponse = await AxiosInstance.get('/logo', {
+        responseType: 'blob'
+      });
+
+      if(paletteState.logo) {
+        URL.revokeObjectURL(paletteState.logo);
+      }
+
+      const logo = URL.createObjectURL(logoResponse.data);
+
+      return [palette, logo];
     } catch {
-      return CustomColors;
+      return [CustomColors, Logo];
     }
   }
 );
 
-export {getColorPalette, postColorPalette};
+const postLogo = createAsyncThunk<string, LogoQuery, AsyncThunkConfig>(
+  'palette/postLogo',
+  async (logo, {getState}) => {
+    const {user, palette} = getState();
+
+    try {
+      const formData = new FormData();
+      formData.append('file', logo.file);
+
+      await AxiosInstance.post('/logo', formData, {
+        headers: {
+          Authorization: user.auth.token
+        }
+      });
+
+      if(palette.logo) {
+        URL.revokeObjectURL(palette.logo);
+      }
+    } finally {
+      return logo.url;
+    }
+  }
+);
+
+export {getColorPalette, postColorPalette, postLogo};

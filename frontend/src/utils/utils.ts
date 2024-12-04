@@ -15,11 +15,11 @@ const FILTER_DATE_OFFSET = 1000 * 60 * 24 * 2;
 const INPUT_ICON_WIDTH = '1.5em';
 
 const LOGO_WIDTH: MediaValue = {
-  xs: 20,
-  sm: 40,
-  md: 80,
-  lg: 120,
-  xl: 200
+  xs: 18,
+  sm: 30,
+  md: 50,
+  lg: 60,
+  xl: 80
 };
 
 const AVATAR_WIDTH: MediaValue = {

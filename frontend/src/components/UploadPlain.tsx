@@ -14,6 +14,8 @@ type UploadPlainProps = {
   status: Status,
   file: File | undefined,
   acceptedFormats: string,
+  inputId: string,
+  hideSubmitButton?: boolean,
   setFile: (file: File | undefined) => void,
   onFileUpload: () => void
 };
@@ -26,7 +28,17 @@ const UPLOAD_WIDTH: MediaValue = {
   xl: 75
 }
 
-const UploadPlain = ({attentionText, children, status, file, acceptedFormats, setFile, onFileUpload}: UploadPlainProps) => {
+const UploadPlain = ({
+  attentionText, 
+  children, 
+  status, 
+  file, 
+  acceptedFormats,
+  inputId, 
+  hideSubmitButton=false, 
+  setFile, 
+  onFileUpload
+}: UploadPlainProps) => {
   const uploadWidth = useMediaValue(UPLOAD_WIDTH);
 
   return (
@@ -48,6 +60,7 @@ const UploadPlain = ({attentionText, children, status, file, acceptedFormats, se
         }}/>
 
         <UploadInput 
+          inputId={inputId}
           fileName={file ? file.name : ''} 
           setFile={setFile} 
           disabled={status === 'pending'}
@@ -59,7 +72,7 @@ const UploadPlain = ({attentionText, children, status, file, acceptedFormats, se
           variant='containtedSecondary' 
           disabled={status === 'pending'}
           style={{
-            display: file ? 'inherit' : 'none',
+            display: !hideSubmitButton && file ? 'inherit' : 'none',
             marginBottom: '20px'
           }}
           onClick={onFileUpload}>

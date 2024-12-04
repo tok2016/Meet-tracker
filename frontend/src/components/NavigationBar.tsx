@@ -2,12 +2,12 @@ import { AppBar, Avatar, Button, IconButton, Stack, Toolbar } from '@mui/materia
 import { AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-import Logo from '../assets/Logo.png';
 import useMediaValue from '../hooks/useMediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { postLogout } from '../store/user/userThunks';
 import { LOGO_WIDTH, AVATAR_WIDTH } from '../utils/utils';
+import { selectPalette } from '../store/palette/paletteSlice';
 
 const NavigationBar = () => {
   const logoWidth = useMediaValue(LOGO_WIDTH);
@@ -16,6 +16,7 @@ const NavigationBar = () => {
 
   const dispatch = useAppDispatch();
   const {user} = useAppSelector(selectUser);
+  const {logo} = useAppSelector(selectPalette);
 
   const logout = () => {
     dispatch(postLogout())
@@ -27,9 +28,9 @@ const NavigationBar = () => {
       <Toolbar>
         <img 
           className='logo'
-          src={Logo} 
+          src={logo} 
           alt='Brify' 
-          width={logoWidth} 
+          height={logoWidth} 
           onClick={() => navigate('/')}/>
         
         <Stack

@@ -9,10 +9,11 @@ type UploadProps = {
   fileName: string, 
   setFile: (file: File | undefined) => void,
   disabled: boolean,
-  acceptedFormats: string
+  acceptedFormats: string,
+  inputId: string
 };
 
-const UploadInput = ({fileName, setFile, disabled, acceptedFormats}: UploadProps) => {
+const UploadInput = ({fileName, setFile, disabled, acceptedFormats, inputId}: UploadProps) => {
   const navigate = useNavigate();
   const {user} = useAppSelector(selectUser);
 
@@ -33,13 +34,13 @@ const UploadInput = ({fileName, setFile, disabled, acceptedFormats}: UploadProps
       gap='10px'
       marginBottom='20px'>
       <input 
-        id='file' 
+        id={inputId}
         type='file' 
         accept={acceptedFormats}
         disabled={disabled} 
         onChange={onFileChoice} />
       <Button variant='contained' disabled={disabled}>
-        <label htmlFor='file'>Загрузить</label>
+        <label htmlFor={inputId}>Загрузить</label>
       </Button>
       <Typography variant='subtitle1'>{fileName}</Typography>
     </Stack>

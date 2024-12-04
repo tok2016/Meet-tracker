@@ -33,6 +33,7 @@ const RecordUploadPlain = () => {
       file={file}
       attentionText='Загрузите или перетащите видео или аудио файл сюда'
       status={status}
+      inputId='record'
       acceptedFormats='audio/*,video/*'
       setFile={setFile}
       onFileUpload={onFileUpload}>

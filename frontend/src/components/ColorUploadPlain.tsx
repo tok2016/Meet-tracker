@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material';
-import { useState } from 'react';
+import { Button, Stack, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { prominent } from 'color.js';
 
 import UploadPlain from './UploadPlain';
@@ -9,11 +9,12 @@ import CustomColorPalette from '../types/CustomColorPalette';
 import useMediaValue from '../hooks/useMediaValue';
 import MediaValue from '../types/MediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectSettings } from '../store/settings/settingsSlice'; 
 import { HexColor } from '../types/HexColor';
 import { postColorPalette } from '../store/palette/paletteThunks';
+import { selectPalette } from '../store/palette/paletteSlice';
+import ColorRoleBlock from './ColorRoleBlock';
 
-const COLORS_GRID_COLUMNS: MediaValue = {
+const ROLE_GRID_COLUMNS: MediaValue = {
   xs: '1fr',
   sm: '1fr',
   md: '1fr 1fr',
@@ -21,18 +22,29 @@ const COLORS_GRID_COLUMNS: MediaValue = {
   xl: '1fr 1fr 1fr'
 };
 
+const COLOR_GRID_COLUMNS: MediaValue = {
+  xs: '1fr 1fr',
+  sm: '1fr 1fr',
+  md: '1fr 1fr 1fr',
+  lg: '1fr 1fr 1fr 1fr',
+  xl: '1fr 1fr 1fr 1fr'
+};
+
 const ColorUploadPlain = () => {
-  const columns = useMediaValue(COLORS_GRID_COLUMNS);
+  const roleColumns = useMediaValue(ROLE_GRID_COLUMNS);
+  const colorColumns = useMediaValue(COLOR_GRID_COLUMNS);
 
   const [file, setFile] = useState<File | undefined>();
   const [url, setUrl] = useState<string>('');
   const [palette, setPalette] = useState<CustomColorPalette>({...UIColors.palette});
 
+  const {status, palette: defaultPalette} = useAppSelector(selectPalette);
+  const dispatch = useAppDispatch();
+
   const colorsSet = new Set<HexColor>(Object.values(palette));
   const colors = Array.from(colorsSet.values());
 
-  const {status} = useAppSelector(selectSettings);
-  const dispatch = useAppDispatch();
+  const disabled = useMemo(() => JSON.stringify(defaultPalette) === JSON.stringify(palette), [palette, defaultPalette]);
 
   const extractColors = async (url: string) => {
     const newColors = await prominent(url, {
@@ -46,8 +58,6 @@ const ColorUploadPlain = () => {
     Object.keys(palette).forEach((key, i) => {
       newPalette[key as keyof CustomColorPalette] = newColors[i % count] as HexColor;
     });
-
-    document.documentElement.style.setProperty('--main', newColors[0] as HexColor);
 
     setPalette(newPalette);
   };
@@ -73,42 +83,70 @@ const ColorUploadPlain = () => {
     setPalette((prev) => ({...prev, [role]: color}));
   };
 
-  const onPaletteUpload = () => {
-    dispatch(postColorPalette(palette)).then(() => setFile(undefined)).then(() => setUrl(''));
+  const onPaletteUpload = async () => {
+    try {
+      await dispatch(postColorPalette(palette));
+      setFile(undefined);
+      setUrl('');
+    } catch {}
   };
 
   return (
-    <div>
-      <Typography variant='h2'>
-        Цветовая гамма
-      </Typography>
+    <Stack 
+      display='flex' 
+      flexDirection='column' 
+      gap='20px' 
+      alignItems='center'>
+        <Typography variant='h2'>
+          Цветовая гамма
+        </Typography>
 
-      <UploadPlain
-        file={file}
-        attentionText='Внимание! Поддерживается только формат SVG!'
-        status={status}
-        acceptedFormats='.svg'
-        setFile={setFileImage}
-        onFileUpload={onPaletteUpload}>
-          <img src={url} style={{ width: '20vw', margin: 'calc(2vh + 10px)' }} />
-      </UploadPlain>
+        <UploadPlain
+          file={file}
+          attentionText='Внимание! Поддерживается только формат SVG!'
+          status={status}
+          acceptedFormats='.svg'
+          inputId='palette'
+          hideSubmitButton
+          setFile={setFileImage}
+          onFileUpload={onPaletteUpload}>
+            <img src={url} style={{ width: '20vw', margin: 'calc(2vh + 10px)' }} />
+        </UploadPlain>
 
-      <div style={{
-        width: '100%',
-        display: 'grid',
-        gridTemplateColumns: columns,
-        justifyContent: 'space-between'
-      }}>
-        {Object.entries(palette).map((entry) => (
-          <ColorBlock 
-            key={entry[0]}
-            role={entry[0] as keyof CustomColorPalette} 
-            color={palette[entry[0] as keyof CustomColorPalette]} 
-            colors={colors}
-            selectColor={selectColor(entry[0] as keyof CustomColorPalette)} />
-        ))}
-      </div>
-    </div>
+        <div style={{
+          width: '100%',
+          display: 'grid',
+          gridTemplateColumns: colorColumns,
+          justifyContent: 'space-between'
+        }}>
+          {colors.map((color) => 
+            <ColorBlock key={color} color={color} />
+          )}
+        </div>
+
+        <div style={{
+          width: '100%',
+          display: 'grid',
+          gridTemplateColumns: roleColumns,
+          justifyContent: 'space-between'
+        }}>
+          {Object.entries(palette).map((entry) => (
+            <ColorRoleBlock 
+              key={entry[0]}
+              role={entry[0] as keyof CustomColorPalette} 
+              color={palette[entry[0] as keyof CustomColorPalette]} 
+              colors={colors}
+              selectColor={selectColor(entry[0] as keyof CustomColorPalette)} />
+          ))}
+        </div>
+
+        <Button
+          variant='containtedSecondary'
+          disabled={disabled}
+          onClick={onPaletteUpload}>
+            Отрпавить
+        </Button>
+    </Stack>
   );
 };
 
