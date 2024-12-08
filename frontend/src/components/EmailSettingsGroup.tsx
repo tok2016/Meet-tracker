@@ -1,22 +1,27 @@
-import { Typography } from '@mui/material';
-import { useState } from 'react';
+import { Button, Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
 
 import SettingSelect from './SettingSelect';
-import EmailSettings, { defaultEmailSettings } from '../types/EmailSettings';
+import EmailSettings from '../types/EmailSettings';
 import { EmailProtocols } from '../types/EmailProtocol';
 import UploadPlain from './UploadPlain';
-import { useAppSelector } from '../hooks/useAppDispatch';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSettings } from '../store/settings/settingsSlice';
 import TextArea from './TextArea';
 import UIColors from '../utils/Colors';
 import SettingTextArea from './SettingTextArea';
+import { getEmailSettings, postEmailSettings } from '../store/settings/settingsThunks';
+import { areObjectsEqual } from '../utils/utils';
 
 const EmailSettingsGroup = () => {
-  const {status} = useAppSelector(selectSettings);
+  const {email, status} = useAppSelector(selectSettings);
+  const dispatch = useAppDispatch();
 
   const [file, setFile] = useState<File | undefined>();
-  const [emailSettings, setEmailSettings] = useState<EmailSettings>(defaultEmailSettings);
+  const [emailSettings, setEmailSettings] = useState<EmailSettings>(email);
   const [error, setError] = useState<string | undefined>();
+
+  const disabled = useMemo(() => areObjectsEqual(email, emailSettings) || status === 'pending', [email, emailSettings]);
 
   const updateSettings = (update: Partial<EmailSettings>) => {
     setEmailSettings((prev) => ({...prev, ...update}));
@@ -37,6 +42,14 @@ const EmailSettingsGroup = () => {
       setFile(markupFile);
     }
   };
+
+  const sendEmailSettings = (settings: EmailSettings) => {
+    dispatch(postEmailSettings(settings));
+  }
+
+  useEffect(() => {
+    dispatch(getEmailSettings());
+  }, [])
 
   return (
     <>
@@ -80,6 +93,13 @@ const EmailSettingsGroup = () => {
         label='Текст письма'
         value={emailSettings.text}
         onChange={(evt) => updateSettings({text: evt.target.value})} />
+
+      <Button
+        variant='containtedSecondary'
+        disabled={disabled}
+        onClick={() => sendEmailSettings(emailSettings)}>
+          Сохранить
+      </Button>
     </>
   );
 };

@@ -1,0 +1,304 @@
+openapi: 3.0.3
+info:
+  title: Color palette, other settings, file download - OpenAPI 3.0
+  description: It's about LLM & STT configuration sending from frontend
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+tags:
+  - name: palette
+    description: color palette
+  - name: logo
+    description: logo image
+  - name: email
+    description: email settings
+  - name: database
+    description: database settings
+  - name: file
+    description: summary file
+paths:
+  /palette:
+    post:
+      tags:
+        - palette
+      summary: Color palette to save
+      description: Replace previous color palette with the sent one. Admin only
+      operationId: setColorPalette
+      requestBody:
+        description: Color palette object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Palette"
+      responses:
+        '200':
+          description: Color palette is successfully updated
+        '400': 
+          description: Color palette values are invalid
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - palette
+      summary: Return color palette
+      description: Return color palette. Available for everyone
+      operationId: getColorPalette
+      responses:
+        '200':
+          description: Color palette is found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Palette"
+        '404':
+          description: Color palette is not found
+  /logo:
+    post:
+      tags:
+        - logo
+      summary: Logo image to save
+      description: Replace previous logo with the sent one. Admin only
+      operationId: setLogo
+      requestBody:
+        description: Logo image
+        content:
+          multipart/fromData:
+            schema:
+              $ref: "#/components/schemas/Logo"
+      responses:
+        '200':
+          description: Logo is successfully updated
+        '400': 
+          description: Color palette values are invalid
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - logo
+      summary: Return logo image
+      description: Return logo image. Available for everyone
+      operationId: getLogo
+      responses:
+        '200':
+          description: Logo is found
+          content: 
+            image/*:
+              schema:
+                type: string
+                format: binary
+  /email:
+    post:
+      tags:
+        - email
+      summary: Update email settings
+      description: Update email settings. Admin only
+      operationId: setEmailSettings
+      requestBody:
+        description: Email settings
+        content:
+          multipart/fromData:
+            schema:
+              $ref: "#/components/schemas/EmailSettings"
+            encoding:
+              markup:
+                contentType: 'text/html'
+      responses:
+        '200':
+          description: Email settings are successfully updated
+        '400':
+          description: Email settings are invalid
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - email
+      summary: Return email settings
+      description: Return email settings. Admin only
+      operationId: getEmailSettings
+      responses:
+        '200':
+          description: Email settings are found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailSettings"
+        '403':
+          description: Forbidden
+        '404':
+          description: Settings are not found
+  /database:
+    post:
+      tags:
+        - database
+      summary: Update TTL for database entries
+      description: Update TTL for database entries. Admin only
+      operationId: setDatabaseSettings
+      requestBody:
+        description: Database settings
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatbaseSettings"
+      responses:
+        '200':
+          description: Database settings are successfully updated
+        '400':
+          description: Database settings are invalid
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - database
+      summary: Return database settings
+      description: Return database settings. Admin only
+      operationId: getDatabaseSettings
+      responses:
+        '200':
+          description: Database settings are found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatbaseSettings"
+        '403':
+          description: Forbidden
+        '404':
+          description: Settings are not found
+  /txtFile/{summaryId}:
+    get:
+      tags:
+        - file
+      summary: Return summary file in .txt format
+      description: Return summary file in .txt format. It shouldn't save created file anywhere. Available only for the owner of summary and admin
+      operationId: getTxtFile
+      parameters:
+        - name: summaryId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: File is successfully created and returned
+          content:
+            text/plain:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized action
+        '404':
+          description: Summary is not found
+  /pdfFile/{summaryId}:
+    get:
+      tags:
+        - file
+      summary: Return summary file in .pdf format
+      description: Return summary file in .pdf format. It shouldn't save created file anywhere. Available only for the owner of summary and admin
+      operationId: getPdfFile
+      parameters:
+        - name: summaryId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: File is successfully created and returned
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized action
+        '404':
+          description: Summary is not found
+  /docFile/{summaryId}:
+    get:
+      tags:
+        - file
+      summary: Return summary file in .doc format
+      description: Return summary file in .doc format. It shouldn't save created file anywhere. Available only for the owner of summary and admin
+      operationId: getDocFile
+      parameters:
+        - name: summaryId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: File is successfully created and returned
+          content:
+            application/msword:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized action
+        '404':
+          description: Summary is not found
+components:
+  schemas:
+    Palette:
+      type: object
+      properties:
+        main:
+          type: string
+          format: hex
+        secondary: 
+          type: string
+          format: hex
+        tertiary: 
+          type: string
+          format: hex
+        quaternary: 
+          type: string
+          format: hex
+        disabled: 
+          type: string
+          format: hex
+        background: 
+          type: string
+          format: hex
+        textMain: 
+          type: string
+          format: hex
+        textSecondary: 
+          type: string
+          format: hex
+        textHighlight: 
+          type: string
+          format: hex
+        textContrast: 
+          type: string
+          format: hex
+        error: 
+          type: string
+          format: hex
+    Logo:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+    DatbaseSettings:
+      type: object
+      properties:
+        ttl:
+          type: number
+          description: time to live in days
+    EmailSettings:
+      type: object
+      properties:
+        protocol:
+          type: string
+          description: email protocol
+          enum: [imap, pop3]
+        markup:
+          type: string
+          format: html
+          description: email markup
+        text:
+          type: string
+          description: backup text

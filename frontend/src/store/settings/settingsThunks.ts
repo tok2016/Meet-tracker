@@ -6,38 +6,23 @@ import { arraySnakeToCamel, camelToSnake, snakeToCamel } from '../../utils/utils
 import AxiosInstance from '../../utils/Axios';
 import LLMConfig from '../../types/LLMConfig';
 import STTConfig from '../../types/STTConfig';
+import EmailSettings from '../../types/EmailSettings';
+import DatabaseSettings, { DatabaseSettingsRaw } from '../../types/DatabaseSettings';
+import { TTLUnit, TTLUnitsDays } from '../../types/TTLUnit';
 
-const postLLMSettings = createAsyncThunk<LLMSettings, LLMSettings, AsyncThunkConfig>(
-  'settings/postLLMSettings',
-  async (llmSettings, {getState}) => {
-    const {user} = getState();
+const daysToTTLUnit = (valueInDays: number): DatabaseSettings => {
+  let ttlValue = valueInDays;
+  let ttlUnit: TTLUnit = 'day';
 
-    const body = camelToSnake(llmSettings);
+  Object.entries(TTLUnitsDays).forEach(([unit, daysPerUnit]) => {
+    if(ttlValue % daysPerUnit === 0) {
+      ttlValue /= daysPerUnit;
+      ttlUnit = unit as TTLUnit;
+    }
+  });
 
-    const response = await AxiosInstance.post('/llmSettings', body, {
-      headers: {
-        Authorization: user.auth.token
-      }
-    });
-
-    return snakeToCamel<LLMSettings>(response.data);
-  }
-);
-
-const getLLMSettings = createAsyncThunk<LLMSettings, void, AsyncThunkConfig>(
-  'settings/getLLMSettings',
-  async (_, {getState}) => {
-    const {user} = getState();
-
-    const response = await AxiosInstance.get('/llmSettings', {
-      headers: {
-        Authorization: user.auth.token
-      }
-    });
-
-    return snakeToCamel<LLMSettings>(response.data);
-  }
-);
+  return {ttlValue, ttlUnit};
+};
 
 const getLLMConfigs = createAsyncThunk<LLMConfig[], void, AsyncThunkConfig>(
   'settings/getLLMConfigs',
@@ -79,19 +64,77 @@ const postSTTSettings = createAsyncThunk<STTConfig, STTConfig, AsyncThunkConfig>
   }
 );
 
-const getSTTConfig = createAsyncThunk<STTConfig, void, AsyncThunkConfig>(
-  'settings/getSTTConfig',
+const postDatabaseSettings = createAsyncThunk<void, DatabaseSettings, AsyncThunkConfig>(
+  'settings/postDatabaseSettings',
+  async (settings, {getState}) => {
+    const {user} = getState();
+
+    const body: DatabaseSettingsRaw = {
+      ttl: settings.ttlValue * TTLUnitsDays[settings.ttlUnit]
+    };
+
+    await AxiosInstance.post('/database', body, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
+  }
+);
+
+const getDatabaseSettings = createAsyncThunk<DatabaseSettings, void, AsyncThunkConfig>(
+  'settings/getDatabaseSettings',
   async (_, {getState}) => {
     const {user} = getState();
 
-    const response = await AxiosInstance.get('/settings', {
+    const response = await AxiosInstance.get('/database', {
       headers: {
         Authorization: user.auth.token
       }
     });
 
-    return snakeToCamel<STTConfig>(response.data); 
+    const settingsRaw = snakeToCamel<DatabaseSettingsRaw>(response.data);
+    const settings = daysToTTLUnit(settingsRaw.ttl);
+
+    return settings as DatabaseSettings;
   }
 );
 
-export {getLLMConfigs, getLLMSettings, getSTTConfig, postLLMSettings, postSTTSettings};
+const postSettings = <SettingsType extends object, >(path: string, actionType: string) => createAsyncThunk<void, SettingsType, AsyncThunkConfig>(
+  `settings/${actionType}`,
+  async (settings, {getState}) => {
+    const {user} = getState();
+    const body = camelToSnake(settings);
+
+    await AxiosInstance.post(path, body, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    })
+  }
+);
+
+const getSettings = <SettingsType extends object, >(path: string, actionType: string) => createAsyncThunk<SettingsType, void, AsyncThunkConfig>(
+  `settings/${actionType}`,
+  async (_, {getState}) => {
+    const {user} = getState();
+
+    const response = await AxiosInstance.get(path, {
+      headers: {
+        Authorization: user.auth.token
+      }
+    });
+
+    return snakeToCamel<SettingsType>(response.data);
+  }
+);
+
+const postLLMSettings = postSettings<LLMSettings>('/llmSettings', 'postLLMSettings');
+const getLLMSettings = getSettings<LLMSettings>('/llmSettings', 'getLLMSettings');
+
+const getSTTConfig = getSettings<STTConfig>('/settings', 'getSTTConfig');
+
+const postEmailSettings = postSettings<EmailSettings>('/email', 'postEmailSettings');
+const getEmailSettings = getSettings<EmailSettings>('/email', 'getEmailSettings');
+
+export {getLLMConfigs, getLLMSettings, getSTTConfig, getEmailSettings, getDatabaseSettings, 
+  postLLMSettings, postSTTSettings, postEmailSettings, postDatabaseSettings};

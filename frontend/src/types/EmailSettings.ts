@@ -11,3 +11,5 @@ export const defaultEmailSettings: EmailSettings = {
   markup: '',
   text: ''
 };
+
+export const isEmailSettings = (settings: unknown): settings is EmailSettings => (settings as EmailSettings).markup !== undefined;

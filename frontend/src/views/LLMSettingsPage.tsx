@@ -12,10 +12,12 @@ import { getLLMConfigs, getLLMSettings, postLLMSettings } from '../store/setting
 const LLMSettingsPage = () => {
   const {small} = useMediaMatch();
 
-  const {llm, llms} = useAppSelector(selectSettings);
+  const {llm, llms, status} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
   const [settings, setSettings] = useState<LLMSettings>(llm);
+
+  const disabled = llm.llmModel === settings.llmModel || status === 'pending';
 
   const chooseLLM = (llmConfig: LLMConfig) => {
     setSettings((prev) => ({...prev, llmModel: llmConfig.name}));
@@ -61,7 +63,7 @@ const LLMSettingsPage = () => {
 
       <Button 
         variant='contained'
-        disabled={settings.llmModel === llm.llmModel}
+        disabled={disabled}
         onClick={() => submitSettings(settings)}>
           Сохранить
       </Button>

@@ -11,14 +11,15 @@ import { STTComputeModels } from '../types/STTCompute';
 import SettingSelect from '../components/SettingSelect';
 import { DiarizeTypes } from '../types/DiarizeType';
 import SettingTextArea from '../components/SettingTextArea';
+import { areObjectsEqual } from '../utils/utils';
 
 const STTSettingsPage = () => {
   const [sttConfig, setSTTConfig] = useState<STTConfig>(defaultSTTConfig);
   
-  const {stt} = useAppSelector(selectSettings);
+  const {stt, status} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
-  const disabled = useMemo(() => JSON.stringify(sttConfig) === JSON.stringify(stt), [sttConfig, stt]);
+  const disabled = useMemo(() => areObjectsEqual(sttConfig, stt) || status === 'pending', [sttConfig, stt]);
 
   const changeSTTConfig = (update: Partial<STTConfig>) => {
     setSTTConfig((prev) => ({
