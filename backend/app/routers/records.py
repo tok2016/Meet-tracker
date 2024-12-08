@@ -17,6 +17,7 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 import math
 from fastapi_filter import FilterDepends
 from zipfile import ZipFile
+from fpdf import FPDF
 from app.email_funcs import send_email
 from pydantic.networks import EmailStr
 import wget
@@ -276,7 +277,7 @@ async def send_email_req(email_to: EmailStr):
     send_email(email_to)
     return {"result": "something?"}
 
-@router.get("/summary_download")
+@router.get("/summary_download_txt")
 async def create_txt_summary(session: SessionDep, summary_id: int):
     """
     Get summary as .txt file. Получение резюме в формате .txt файла.
@@ -287,3 +288,18 @@ async def create_txt_summary(session: SessionDep, summary_id: int):
     f.write(summary_db.text)
     f.close()
     return FileResponse(path=filename, filename="summary.txt", media_type='multipart/form-data')
+
+@router.get("/summary_download_pdf")
+async def create_pdf_summary(session: SessionDep, summary_id: int):
+    """
+    Get summary as pdf file. Получение резюме в формате pdf файла.
+    """
+    summary_db = session.get(Summary, summary_id)
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.add_font('DejaVuSans', '', 'app/fonts/DejaVuSans.ttf')
+    pdf.set_font('DejaVuSans', size=14)
+    pdf.write(text=summary_db.text)
+    filename_pdf = f"app/texts/summary_{summary_db.id}.pdf"
+    pdf.output(filename_pdf)
+    return FileResponse(path=filename_pdf, filename="summary.pdf", media_type='multipart/form-data')
