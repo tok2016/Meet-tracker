@@ -66,8 +66,10 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
   };
 
   useEffect(() => {
-    validatePassword(password);
-  }, [])
+    if(isOpened) {
+      validatePassword(password);
+    }
+  }, [isOpened])
 
   return (
     <Dialog

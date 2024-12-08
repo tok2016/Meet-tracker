@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { STTDevices } from '../types/STTOutput';
 import TextArea from '../components/TextArea';
@@ -17,6 +17,8 @@ const STTSettingsPage = () => {
   
   const {stt} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
+
+  const disabled = useMemo(() => JSON.stringify(sttConfig) === JSON.stringify(stt), [sttConfig, stt]);
 
   const changeSTTConfig = (update: Partial<STTConfig>) => {
     setSTTConfig((prev) => ({
@@ -86,6 +88,7 @@ const STTSettingsPage = () => {
 
       <Button
         variant='contained'
+        disabled={disabled}
         onClick={() => subminSettings(sttConfig)}>
           Сохранить
       </Button>

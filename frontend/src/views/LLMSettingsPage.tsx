@@ -61,6 +61,7 @@ const LLMSettingsPage = () => {
 
       <Button 
         variant='contained'
+        disabled={settings.llmModel === llm.llmModel}
         onClick={() => submitSettings(settings)}>
           Сохранить
       </Button>
