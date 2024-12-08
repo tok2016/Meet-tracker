@@ -18,6 +18,7 @@ import math
 from fastapi_filter import FilterDepends
 from zipfile import ZipFile
 from fpdf import FPDF
+from docx import Document
 from app.email_funcs import send_email
 from pydantic.networks import EmailStr
 import wget
@@ -303,3 +304,15 @@ async def create_pdf_summary(session: SessionDep, summary_id: int):
     filename_pdf = f"app/texts/summary_{summary_db.id}.pdf"
     pdf.output(filename_pdf)
     return FileResponse(path=filename_pdf, filename="summary.pdf", media_type='multipart/form-data')
+
+@router.get("/summary_download_docx")
+async def create_docx_summary(session:SessionDep, summary_id:int):
+    """
+    Get summary as docx file. Получение резюме в формате docx файла.
+    """
+    summary_db = session.get(Summary, summary_id)
+    document = Document()
+    document.add_paragraph(text=summary_db.text)
+    filename_docx = f"app/texts/summary_{summary_db.id}.docx"
+    document.save(filename_docx)
+    return FileResponse(path=filename_docx, filename="summary.docx", media_type='multipart/form-data')
