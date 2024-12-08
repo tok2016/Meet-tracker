@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import SummaryState from '../../types/SummaryState';
-import { postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, getAudioById } from './summaryThunks';
+import { postRecordFile, getSummary, putSummaryChanges, deleteSummary, getSummaries, getAudioById, getSummaryFile } from './summaryThunks';
 import { isActionWithError } from '../../types/ActionWithError';
 import { defaultSummary } from '../../types/Summary';
 import { RootState } from '../store';
@@ -46,6 +46,9 @@ const summarySlide = createSlice({
       .addCase(getAudioById.fulfilled, (state, action) => {
         state.status = 'success';
         state.summary.audio = action.payload;
+      })
+      .addCase(getSummaryFile.fulfilled, (state) => {
+        state.status = 'success';
       })
       .addDefaultCase((state, action) => {
         const endpoint = action.type.split('/').pop();

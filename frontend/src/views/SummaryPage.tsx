@@ -9,6 +9,7 @@ import { getAudioById, getSummary, putSummaryChanges } from '../store/summary/su
 import { SummaryUpdate } from '../types/Summary';
 import TopicContent from '../types/TopicContent';
 import AudioPlayer from '../components/AudioPlayer';
+import DownloadButton from '../components/DownloadButton';
 
 const SummaryPage = () => {
   const {id} = useParams();
@@ -50,7 +51,19 @@ const SummaryPage = () => {
       display='flex'
       flexDirection='column'
       alignItems='center'>
-      <Typography variant='h2' marginBottom='25px'>{summary.title}</Typography>
+
+      <Stack width='100%' position='relative'>
+        <Typography variant='h2' marginBottom='25px' width='70%'>{summary.title}</Typography>
+
+        <div style={{
+          position: 'absolute',
+          right: 0,
+          top: 0
+        }}>
+          <DownloadButton summaryId={parsedId} summaryTitle={summary.title} />
+        </div>
+      </Stack>
+
       {summary.id === parsedId && summary.audio 
         ? <AudioPlayer audioUrl={summary.audio} />
         : <></>}

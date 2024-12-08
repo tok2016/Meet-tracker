@@ -1,13 +1,13 @@
 import { MenuItem, Select, Stack, Typography } from '@mui/material';
 
-interface STTSettingSelectProps<ValueType extends string> {
+interface SettingSelectProps<ValueType extends string> {
   label: string,
   value: ValueType,
   values: ValueType[],
   select: (value: ValueType) => void
 };
 
-const STTSettingSelect = <ValueType extends string, >({label, value, values, select}: STTSettingSelectProps<ValueType>) => (
+const SettingSelect = <ValueType extends string, >({label, value, values, select}: SettingSelectProps<ValueType>) => (
   <Stack alignSelf='flex-start'>
     <Typography variant='h3' textAlign='left'>
       {label}
@@ -23,4 +23,4 @@ const STTSettingSelect = <ValueType extends string, >({label, value, values, sel
   </Stack>
 );
 
-export default STTSettingSelect;
+export default SettingSelect;

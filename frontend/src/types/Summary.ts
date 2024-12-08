@@ -1,3 +1,4 @@
+import { FileFormat } from './FileFormat';
 import { Status } from './Status';
 import TopicContent from './TopicContent';
 
@@ -24,6 +25,8 @@ export type SummariesRaw = {
 export type RawSummary = Omit<Summary, 'text' | 'status'> & {text: string};
 
 export type SummaryInput = Pick<Summary, 'title' | 'text'>;
+
+export type SummaryFile = Pick<Summary, 'id'> & {format: FileFormat};
 
 export const isSummary = (summary: unknown): summary is Summary => (summary as Summary).text !== undefined;
 

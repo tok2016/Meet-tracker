@@ -1,16 +1,16 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import { STTDevices } from '../types/STTOutput';
-import TextArea from '../components/TextArea';
 import STTConfig, { defaultSTTConfig } from '../types/STTConfig';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSettings } from '../store/settings/settingsSlice';
 import { getSTTConfig, postSTTSettings } from '../store/settings/settingsThunks';
 import { STTModels } from '../types/STTSize';
 import { STTComputeModels } from '../types/STTCompute';
-import STTSettingSelect from '../components/STTSettingSelect';
+import SettingSelect from '../components/SettingSelect';
 import { DiarizeTypes } from '../types/DiarizeType';
+import SettingTextArea from '../components/SettingTextArea';
 
 const STTSettingsPage = () => {
   const [sttConfig, setSTTConfig] = useState<STTConfig>(defaultSTTConfig);
@@ -45,46 +45,34 @@ const STTSettingsPage = () => {
         Конфигурация speech-to-text модели
       </Typography>
 
-      <STTSettingSelect
+      <SettingSelect
         label='Тип диаризации'
         value={sttConfig.diarizeType}
         values={[...DiarizeTypes]}
         select={(value) => changeSTTConfig({diarizeType: value})} />
 
-      <STTSettingSelect
+      <SettingSelect
         label='Модель Whisper'
         value={sttConfig.whisperModel}
         values={[...STTModels]}
         select={(value) => changeSTTConfig({whisperModel: value})} />
 
-      <STTSettingSelect
+      <SettingSelect
         label='Устройство для работы Whisper'
         value={sttConfig.whisperDevice}
         values={[...STTDevices]}
         select={(value) => changeSTTConfig({whisperDevice: value})} />
 
-      <STTSettingSelect
+      <SettingSelect
         label='Модель вычислений для Whisper'
         value={sttConfig.whisperCompute}
         values={[...STTComputeModels]}
         select={(value) => changeSTTConfig({whisperCompute: value})} />
 
-      <Stack alignSelf='flex-start' width='100%'>
-        <Typography variant='h3' textAlign='left'>
-          Промпт
-        </Typography>
-
-        <TextArea 
-          className='outlined'
-          value={sttConfig.initialPrompt} 
-          variant='body1' 
-          hidden={false} 
-          readOnly={false} 
-          onChange={(evt) => changeSTTConfig({initialPrompt: evt.target.value})} 
-          onKeyUp={() => {}} 
-          onKeyDown={() => {}}>
-        </TextArea>
-      </Stack>
+      <SettingTextArea 
+        label='Промпт' 
+        value={sttConfig.initialPrompt} 
+        onChange={(evt) => changeSTTConfig({initialPrompt: evt.target.value})} />
 
       <Button
         variant='contained'

@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
 import { arraySnakeToCamel, getCollectionQuery, getFilterWithDates, getFullSummaries, getFullSummary, getLocaleString, snakeToCamel } from '../../utils/utils';
-import Summary, { SummariesRaw, SummaryUpdate, RawSummary } from '../../types/Summary';
+import Summary, { SummariesRaw, SummaryUpdate, RawSummary, SummaryFile } from '../../types/Summary';
 import CollectionData from '../../types/CollectionData';
 import Filter, { defaultFilter } from '../../types/Filter';
 import CollectionParams from '../../types/CollectionParams';
@@ -146,4 +146,35 @@ const getAudioById = createAsyncThunk<string, string | number, AsyncThunkConfig>
   }
 );
 
-export {postRecordFile, getSummary, getSummaries, getAudioById, putSummaryChanges, deleteSummary};
+const getSummaryFile = createAsyncThunk<string, SummaryFile, AsyncThunkConfig>(
+  'summary/getSummaryFile',
+  async ({id, format}, {getState}) => {
+    const {user} = getState();
+
+    let path = '';
+
+    switch(format) {
+      case 'txt':
+        path = '/summary_download_txt';
+        break;
+      case 'pdf':
+        path = '/summary_download_pdf';
+        break;
+      case 'doc':
+        path = '/summary_download_docx';
+        break;
+    }
+
+    const response = await AxiosInstance.get(`${path}?summary_id=${id}`, {
+      headers: {
+        Authorization: user.auth.token
+      },
+      responseType: 'blob'
+    });
+
+    const url = URL.createObjectURL(response.data);
+    return url;
+  }
+);
+
+export {postRecordFile, getSummary, getSummaries, getAudioById, getSummaryFile, putSummaryChanges, deleteSummary};
