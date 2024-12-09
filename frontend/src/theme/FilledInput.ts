@@ -2,6 +2,7 @@ import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
+import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 const FilledInput: Components['MuiFilledInput'] = {
   styleOverrides: {
@@ -10,11 +11,17 @@ const FilledInput: Components['MuiFilledInput'] = {
       borderRadius: 10,
       backgroundColor: getCssVariable('background'),
       color: getCssVariable('textMain'),
+      [breakpoints.down('sm')]: {
+        fontSize: XsFontSizes.input
+      },
+      [breakpoints.up('sm')]: {
+        fontSize: SmFontSizes.input
+      },
       [breakpoints.up('lg')]: {
-        fontSize: 16
+        fontSize: LgFontSizes.input
       },
       [breakpoints.only('xl')]: {
-        fontSize: 24
+        fontSize: XlFontSizes.input
       },
       height: '2.5em'
     },

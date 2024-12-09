@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import UIColors, {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { LgFontSizes, XlFontSizes } from './FontSizes';
+import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
@@ -34,11 +34,17 @@ const Button: Components['MuiButton'] = {
       style: {
         borderRadius: 10,
         height: '2.5em',
+        [breakpoints.down('sm')]: {
+          fontSize: XsFontSizes.input
+        },
+        [breakpoints.up('sm')]: {
+          fontSize: SmFontSizes.input
+        },
         [breakpoints.up('lg')]: {
-          fontSize: 16
+          fontSize: LgFontSizes.input
         },
         [breakpoints.only('xl')]: {
-          fontSize: 24
+          fontSize: XlFontSizes.input
         },
         fontWeight: 700,
         boxShadow: '0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);',
@@ -58,6 +64,12 @@ const Button: Components['MuiButton'] = {
         color: getCssVariable('textContrast'),
         minHeight: '3em',
         borderRadius: 10,
+        [breakpoints.down('sm')]: {
+          fontSize: XsFontSizes.subtitle1
+        },
+        [breakpoints.up('sm')]: {
+          fontSize: SmFontSizes.subtitle1
+        },
         ':hover': {
           background: UIColors.mainHoverGradient(),
           color: getCssVariable('textContrast')
@@ -75,6 +87,12 @@ const Button: Components['MuiButton'] = {
         color: getCssVariable('textContrast'),
         minHeight: '3em',
         borderRadius: 10,
+        [breakpoints.down('sm')]: {
+          fontSize: XsFontSizes.subtitle1
+        },
+        [breakpoints.up('sm')]: {
+          fontSize: SmFontSizes.subtitle1
+        },
         ':hover': {
           background: UIColors.mainHoverGradient(),
           color: getCssVariable('textContrast')
@@ -166,6 +184,12 @@ const Button: Components['MuiButton'] = {
         color: getCssVariable('textMain'),
         backgroundColor: 'transparent',
         fontWeight: 700,
+        [breakpoints.down('sm')]: {
+          fontSize: XsFontSizes.subtitle1
+        },
+        [breakpoints.up('sm')]: {
+          fontSize: SmFontSizes.subtitle1
+        },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.subtitle1
         },

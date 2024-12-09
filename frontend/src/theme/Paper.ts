@@ -1,6 +1,7 @@
 import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
+import { breakpoints } from './BasicTypography';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
@@ -56,7 +57,12 @@ const Paper: Components['MuiPaper'] = {
             backgroundColor: getCssVariable('background'),
             border: `1px dashed ${getCssVariable('disabled')}`,
             borderRadius: 15,
-            padding: 'calc(10px + 1vh) calc(50px + 5vh)'
+            [breakpoints.down('lg')]: {
+              padding: '1vh calc(20px + 4.5vw)'
+            },
+            [breakpoints.up('lg')]: {
+              padding: 'calc(10px + 1vh) calc(50px + 5vw)'
+            }
           }
         },
         {

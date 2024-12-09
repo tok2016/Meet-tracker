@@ -22,8 +22,6 @@ import List from './List';
 import FilledInput from './FilledInput';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
-import Table from './Table';
-import TableCell from './TableCell';
 
 const Theme = createTheme({
   typography: BasicTypography,
@@ -44,9 +42,7 @@ const Theme = createTheme({
     MuiToolbar: Toolbar,
     MuiList: List,
     MuiMenu: Menu,
-    MuiMenuItem: MenuItem,
-    MuiTable: Table,
-    MuiTableCell: TableCell
+    MuiMenuItem: MenuItem
   },
 });
 

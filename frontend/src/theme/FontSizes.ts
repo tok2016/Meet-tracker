@@ -1,4 +1,61 @@
-const LgFontSizes = {
+interface FontSize {
+  h1: number,
+  h2: number,
+  h3: number,
+  h4: number,
+  body1: number,
+  body2: number,
+  subtitle1: number,
+  subtitle2: number,
+  h1Highlight: number,
+  h2Promo: number,
+  h2PromoHighlight: number,
+  h3Promo: number,
+  body2Highlight: number,
+  menuItem: number,
+  sidebar: number,
+  input: number
+};
+
+const XsFontSizes: FontSize = {
+  h1: 24,
+  h2: 24,
+  h3: 18,
+  h4: 18,
+  body1: 14,
+  body2: 14,
+  subtitle1: 14,
+  subtitle2: 14,
+  h1Highlight: 24,
+  h2Promo: 28,
+  h2PromoHighlight: 28,
+  h3Promo: 20,
+  body2Highlight: 12,
+  menuItem: 18,
+  sidebar: 24,
+  input: 16
+}
+
+const SmFontSizes: FontSize = {
+  h1: 24,
+  h2: 36,
+  h3: 20,
+  h4: 20,
+  body1: 16,
+  body2: 16,
+  subtitle1: 16,
+  subtitle2: 16,
+  h1Highlight: 24,
+  h2Promo: 32,
+  h2PromoHighlight: 32,
+  h3Promo: 24,
+  body2Highlight: 12,
+  menuItem: 20,
+  sidebar: 28,
+  input: 16
+};
+
+const LgFontSizes: FontSize = {
   h1: 40,
   h2: 36,
   h3: 20,
@@ -11,13 +68,13 @@ const LgFontSizes = {
   h2Promo: 48,
   h2PromoHighlight: 48,
   h3Promo: 28,
-  body2Highlight: 16,
-  h3Normal: 18,
+  body2Highlight: 18,
   menuItem: 16,
-  table: 16
+  sidebar: 24,
+  input: 16
 };
 
-const XlFontSizes = {
+const XlFontSizes: FontSize = {
   h1: 64,
   h2: 40,
   h3: 32,
@@ -30,10 +87,10 @@ const XlFontSizes = {
   h2Promo: 96,
   h2PromoHighlight: 96,
   h3Promo: 48,
-  body2Highlight: 24,
-  h3Normal: 32,
+  body2Highlight: 32,
   menuItem: 28,
-  table: 20
+  sidebar: 32,
+  input: 24
 };
 
-export {LgFontSizes, XlFontSizes};
+export {XsFontSizes, SmFontSizes, LgFontSizes, XlFontSizes};

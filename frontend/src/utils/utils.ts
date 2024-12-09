@@ -15,11 +15,11 @@ const FILTER_DATE_OFFSET = 1000 * 60 * 24 * 2;
 const INPUT_ICON_WIDTH = '1.5em';
 
 const LOGO_WIDTH: MediaValue = {
-  xs: 18,
-  sm: 30,
+  xs: 30,
+  sm: 40,
   md: 50,
   lg: 60,
-  xl: 80
+  xl: 85
 };
 
 const AVATAR_WIDTH: MediaValue = {
@@ -36,6 +36,14 @@ const AVATAR_EDITOR_WIDTH: MediaValue = {
   md: 200,
   lg: 350,
   xl: 500
+};
+
+const NAV_BAR_MARGIN_BOTTOM: MediaValue = {
+  xs: '12.5vh',
+  sm: '12.5vh',
+  md: '10vh',
+  lg: '10vh',
+  xl: '10vh'
 };
 
 const statusesTranslations = {
@@ -179,5 +187,5 @@ const areObjectsEqual = (a: object, b: object) => JSON.stringify(a) === JSON.str
 
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual,
-  LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, statusesTranslations, jsonTypes,
+  LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, NAV_BAR_MARGIN_BOTTOM, statusesTranslations, jsonTypes,
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};

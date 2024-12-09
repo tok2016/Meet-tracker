@@ -5,7 +5,7 @@ import { AsyncThunkConfig } from '../store';
 import { camelToSnake, snakeToCamel } from '../../utils/utils';
 import AxiosInstance from '../../utils/Axios';
 import { CustomColors } from '../../utils/Colors';
-import LogoQuery from '../../theme/LogoQuery';
+import LogoQuery from '../../types/LogoQuery';
 import Logo from '../../assets/Logo.png';
 
 const postColorPalette = createAsyncThunk<CustomColorPalette, CustomColorPalette, AsyncThunkConfig>(

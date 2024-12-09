@@ -1,11 +1,28 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 
 import useMediaValue from '../hooks/useMediaValue';
-import { AVATAR_WIDTH } from '../utils/utils';
+import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../utils/utils';
+import useMediaMatch from '../hooks/useMediaMacth';
 
 const FormHolder = ({children, isForAdmin=false}: {children: ReactNode, isForAdmin?: boolean}) => {
   const marginTop = useMediaValue(AVATAR_WIDTH);
+  const navBarPaddingBottom = useMediaValue(NAV_BAR_MARGIN_BOTTOM);
+  const {medium} = useMediaMatch();
+
+  if(medium) {
+    return (
+      <Stack
+        display='flex'
+        flexDirection='column'
+        justifyContent='space-between'
+        margin='0 7vw'
+        marginTop={isForAdmin ? 0 : `calc(${marginTop}px + ${navBarPaddingBottom})`}
+        height={`calc(95vh - ${marginTop}px - ${navBarPaddingBottom})`}>
+          {children}
+      </Stack>
+    );
+  }
 
   return (
     <Paper 

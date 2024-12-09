@@ -1,9 +1,16 @@
-import { Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Drawer, IconButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { useEffect, useReducer, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Menu } from '@mui/icons-material';
+
 import Page from '../types/Page';
 import { useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
+import { breakpoints } from '../theme/BasicTypography';
+import useMediaMatch from '../hooks/useMediaMacth';
+import useMediaValue from '../hooks/useMediaValue';
+import { AVATAR_WIDTH } from '../utils/utils';
+import MediaValue from '../types/MediaValue';
 
 const sidebarPages: Page[] = [
   {
@@ -28,19 +35,36 @@ const sidebarPages: Page[] = [
   }
 ];
 
+const SIDEBAR_BUTTON_WIDTH: MediaValue = {
+  xs: 40,
+  sm: 48,
+  md: 60,
+  lg: 0,
+  xl: 0
+}
+
 const Sidebar = () => {
   const navigate = useNavigate();
   const {pathname} = useLocation();
 
   const [path, setPath] = useState<string>(pathname);
+  const [isOpened, toggleOpen] = useReducer((value) => !value, false);
 
   const {user} = useAppSelector(selectUser);
+
+  const {medium} = useMediaMatch();
+  const marginTop = useMediaValue(AVATAR_WIDTH);
+  const sidebarButtonWidth = useMediaValue(SIDEBAR_BUTTON_WIDTH);
 
   const pages = sidebarPages.filter((page) => user.isAdmin || !page.forAdmin);
 
   const onButtonPageClick = (pagePath: string) => {
     navigate(pagePath);
     setPath(pagePath);
+    
+    if(isOpened) {
+      toggleOpen();
+    }
   };
 
   useEffect(() => {
@@ -48,23 +72,46 @@ const Sidebar = () => {
   }, [pathname]);
 
   return (
-    <Drawer variant='permanent'>
-      <List>
-        {pages.map((page) => (
-            <ListItem key={page.path}>
-              <ListItemButton
-                hidden={!user.isAdmin && page.forAdmin} 
-                selected={path === page.path || page.forAdmin && path.includes('admin')}
-                onClick={() => onButtonPageClick(page.path)}>
-                <ListItemText>
-                  {page.name}
-                </ListItemText>
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
-      </List>
-    </Drawer>
+    <>
+      <IconButton 
+        color='secondary'
+        onClick={toggleOpen}
+        sx={(theme) => theme.components?.MuiIconButton 
+        ? {
+            ...theme.components.MuiIconButton,
+            zIndex: 2,
+            marginTop: `calc(${marginTop}px + 10vh)`,
+            marginLeft: '7vw',
+            [breakpoints.up('lg')]: {
+              display: 'none',
+              margin: 0
+            }
+          } 
+        : {}}>
+            <Menu sx={{width: sidebarButtonWidth, height: sidebarButtonWidth}} />
+      </IconButton>
+      
+      <Drawer 
+        variant={medium ? 'temporary' : 'permanent'} 
+        open={isOpened || !medium} 
+        onClose={toggleOpen}>
+          <List>
+            {pages.map((page) => (
+                <ListItem key={page.path}>
+                  <ListItemButton
+                    hidden={!user.isAdmin && page.forAdmin} 
+                    selected={path === page.path || page.forAdmin && path.includes('admin')}
+                    onClick={() => onButtonPageClick(page.path)}>
+                    <ListItemText>
+                      {page.name}
+                    </ListItemText>
+                  </ListItemButton>
+                </ListItem>
+              )
+            )}
+          </List>
+      </Drawer>
+    </>
   );
 };
 
