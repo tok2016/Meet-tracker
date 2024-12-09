@@ -18,3 +18,5 @@ export const defaultSTTConfig: STTConfig = {
   whisperCompute: 'int8',
   diarizeType: 'Neural'
 };
+
+export const isSTTConfig = (settings: unknown): settings is STTConfig => (settings as STTConfig).whisperModel !== undefined;

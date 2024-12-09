@@ -34,15 +34,16 @@ const ColorUploadPlain = () => {
   const roleColumns = useMediaValue(ROLE_GRID_COLUMNS);
   const colorColumns = useMediaValue(COLOR_GRID_COLUMNS);
 
-  const [file, setFile] = useState<File | undefined>();
-  const [url, setUrl] = useState<string>('');
-  const [palette, setPalette] = useState<CustomColorPalette>({...UIColors.palette});
-
   const {status, palette: defaultPalette} = useAppSelector(selectPalette);
   const dispatch = useAppDispatch();
 
-  const colorsSet = new Set<HexColor>(Object.values(palette));
-  const colors = Array.from(colorsSet.values());
+  const [file, setFile] = useState<File | undefined>();
+  const [url, setUrl] = useState<string>('');
+  const [palette, setPalette] = useState<CustomColorPalette>({...UIColors.palette});
+  const [colors, setColors] = useState<HexColor[]>(() => {
+    const colorsSet = new Set<HexColor>(Object.values(defaultPalette));
+    return Array.from(colorsSet.values());
+  });
 
   const disabled = useMemo(() => JSON.stringify(defaultPalette) === JSON.stringify(palette), [palette, defaultPalette]);
 
@@ -50,7 +51,9 @@ const ColorUploadPlain = () => {
     const newColors = await prominent(url, {
       amount: Object.keys(CustomColors).length,
       format: 'hex'
-    });
+    }) as HexColor[];
+
+    setColors(newColors);
 
     const count = newColors.length;
 

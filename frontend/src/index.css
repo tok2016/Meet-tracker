@@ -39,6 +39,10 @@ a:hover {
   transition: color 0.15s;
 }
 
+a .no-hover:hover {
+  color: var(--text-main);
+}
+
 ol {
   padding-left: 3em;
 }
