@@ -1,10 +1,10 @@
 import { MenuItem, Select, Stack, Typography } from '@mui/material';
 import { memo } from 'react';
 
-import { HexColor } from '../types/HexColor';
-import CustomColorPalette from '../types/CustomColorPalette';
-import { ColorPaletteVariables } from '../types/ColorPaletteVariables';
-import UIColors from '../utils/Colors';
+import { HexColor } from '../../types/HexColor';
+import CustomColorPalette from '../../types/CustomColorPalette';
+import { ColorPaletteVariables } from '../../types/ColorPaletteVariables';
+import UIColors from '../../utils/Colors';
 
 type ColorRoleBlockProps = {
   color: HexColor, 
@@ -46,7 +46,7 @@ const ColorRoleBlockRaw = ({color, role, colors, selectColor}: ColorRoleBlockPro
     <Typography 
       variant='body1'
       fontWeight={700} 
-      marginBottom={'calc(1vh + 5px)'}>
+      marginBottom={'5px'}>
         {RoleTranslations[role]}
     </Typography>
     

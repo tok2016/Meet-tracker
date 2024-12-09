@@ -2,16 +2,16 @@ import { Button, Stack, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { prominent } from 'color.js';
 
-import UploadPlain from './UploadPlain';
-import UIColors, { CustomColors } from '../utils/Colors';
+import UploadPlain from '../UploadPlain';
+import UIColors, { CustomColors } from '../../utils/Colors';
 import ColorBlock from './ColorBlock';
-import CustomColorPalette from '../types/CustomColorPalette';
-import useMediaValue from '../hooks/useMediaValue';
-import MediaValue from '../types/MediaValue';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { HexColor } from '../types/HexColor';
-import { postColorPalette } from '../store/palette/paletteThunks';
-import { selectPalette } from '../store/palette/paletteSlice';
+import CustomColorPalette from '../../types/CustomColorPalette';
+import useMediaValue from '../../hooks/useMediaValue';
+import MediaValue from '../../types/MediaValue';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { HexColor } from '../../types/HexColor';
+import { postColorPalette } from '../../store/palette/paletteThunks';
+import { selectPalette } from '../../store/palette/paletteSlice';
 import ColorRoleBlock from './ColorRoleBlock';
 
 const ROLE_GRID_COLUMNS: MediaValue = {
@@ -120,6 +120,7 @@ const ColorUploadPlain = () => {
           width: '100%',
           display: 'grid',
           gridTemplateColumns: colorColumns,
+          rowGap: '10px',
           justifyContent: 'space-between'
         }}>
           {colors.map((color) => 
@@ -130,6 +131,7 @@ const ColorUploadPlain = () => {
         <div style={{
           width: '100%',
           display: 'grid',
+          rowGap: '10px',
           gridTemplateColumns: roleColumns,
           justifyContent: 'space-between'
         }}>

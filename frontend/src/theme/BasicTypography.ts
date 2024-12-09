@@ -21,7 +21,7 @@ const BasicTypography: TypographyOptions = {
   fontFamily: 'Inter',
   button: {
     [breakpoints.down('sm')]: {
-      fontSize: XsFontSizes.h3
+      fontSize: XsFontSizes.h3,
     },
     [breakpoints.up('sm')]: {
       fontSize: SmFontSizes.h3
@@ -41,8 +41,7 @@ const BasicTypography: TypographyOptions = {
       backgroundColor: getCssVariable('tertiary'),
     },
     ':hover': {
-      backgroundColor: getCssVariable('background'),
-      color: getCssVariable('textHighlight'),
+      backgroundColor: getCssVariable('secondary')
     }
   },
   h1: {

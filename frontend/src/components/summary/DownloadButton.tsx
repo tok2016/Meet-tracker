@@ -1,10 +1,10 @@
 import { Button, Menu, MenuItem } from '@mui/material';
 import { useRef, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectSummary } from '../store/summary/summarySlice';
-import { getSummaryFile } from '../store/summary/summaryThunks';
-import { FileFormat, FileFormats } from '../types/FileFormat';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { selectSummary } from '../../store/summary/summarySlice';
+import { getSummaryFile } from '../../store/summary/summaryThunks';
+import { FileFormat, FileFormats } from '../../types/FileFormat';
 
 const DownloadButton = ({summaryId, summaryTitle}: {summaryId: number, summaryTitle: string}) => {
   const [anchor, setAnchor] = useState<HTMLElement | undefined>(undefined);
@@ -36,9 +36,10 @@ const DownloadButton = ({summaryId, summaryTitle}: {summaryId: number, summaryTi
   return (
     <>
       <Button 
+        fullWidth
         variant='contained'
         onClick={(evt) => anchor ? setAnchor(undefined) : setAnchor(evt.currentTarget)}>
-          Скачать резюме
+          Скачать
       </Button>
 
       <Menu 

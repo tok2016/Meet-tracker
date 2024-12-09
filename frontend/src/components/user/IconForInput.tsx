@@ -1,8 +1,8 @@
 import { HTMLInputTypeAttribute } from 'react';
 import { Tag, Info, Email, Key } from '@mui/icons-material';
 
-import UIColors from '../utils/Colors';
-import { UserIconSx } from '../theme/UserIcon';
+import UIColors from '../../utils/Colors';
+import { UserIconSx } from '../../theme/UserIcon';
 
 const IconForInput = ({type, readOnly}: {type: HTMLInputTypeAttribute, readOnly: boolean}) => {
   const sx = {...UserIconSx, color: UIColors.palette.textMain };

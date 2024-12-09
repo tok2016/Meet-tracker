@@ -1,7 +1,7 @@
 import { Components } from '@mui/material';
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../utils/utils';
+import { AVATAR_WIDTH } from '../utils/utils';
 import MediaValue from '../types/MediaValue';
 
 const DRAWER_WIDTH: MediaValue = {
@@ -23,11 +23,11 @@ const Drawer: Components['MuiDrawer'] = {
       backgroundColor: getCssVariable('background'),
       padding: 0,
       [breakpoints.down('sm')]: {
-        paddingTop: `calc(${AVATAR_WIDTH.xs}px + ${NAV_BAR_MARGIN_BOTTOM.xs})`,
+        paddingTop: AVATAR_WIDTH.xs,
         width: DRAWER_WIDTH.xs
       },
       [breakpoints.up('sm')]: {
-        paddingTop: `calc(${AVATAR_WIDTH.sm}px + ${NAV_BAR_MARGIN_BOTTOM.sm})`,
+        paddingTop: AVATAR_WIDTH.sm,
         width: DRAWER_WIDTH.sm
       },
       [breakpoints.up('lg')]: {

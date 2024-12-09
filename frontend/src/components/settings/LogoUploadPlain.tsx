@@ -1,10 +1,12 @@
 import { Typography } from '@mui/material';
 import { useState } from 'react';
 
-import UploadPlain from './UploadPlain';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectPalette } from '../store/palette/paletteSlice';
-import { postLogo } from '../store/palette/paletteThunks';
+import UploadPlain from '../UploadPlain';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { selectPalette } from '../../store/palette/paletteSlice';
+import { postLogo } from '../../store/palette/paletteThunks';
+import useMediaValue from '../../hooks/useMediaValue';
+import { LOGO_WIDTH } from '../../utils/utils';
 
 const LogoUploadPlain = () => {
   const {logo, status} = useAppSelector(selectPalette);
@@ -13,6 +15,7 @@ const LogoUploadPlain = () => {
   const [url, setUrl] = useState<string>(logo);
 
   const dispatch = useAppDispatch();
+  const logoHeight = useMediaValue(LOGO_WIDTH);
 
   const setFileLogo = (logo: File | undefined) => {
     if(url) {
@@ -49,7 +52,7 @@ const LogoUploadPlain = () => {
         acceptedFormats='.png, .jpg, .jpeg, .svg, .webp'
         setFile={setFileLogo} 
         onFileUpload={onLogoUpload}>
-          <img src={url} style={{ width: '10vw', margin: 'calc(1.5vh + 10px)' }} />
+          <img src={url} style={{ height: logoHeight, margin: '10px' }} />
       </UploadPlain>
     </div>
   );

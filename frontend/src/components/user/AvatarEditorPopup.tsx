@@ -2,11 +2,11 @@ import { Button, Dialog, Slider, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 
-import useMediaValue from '../hooks/useMediaValue';
-import { AVATAR_EDITOR_WIDTH } from '../utils/utils';
-import { useAppDispatch } from '../hooks/useAppDispatch';
-import { postCurrentUserAvatar } from '../store/user/userThunks';
-import { postUserAvatar } from '../store/admin/adminThunks';
+import useMediaValue from '../../hooks/useMediaValue';
+import { AVATAR_EDITOR_WIDTH } from '../../utils/utils';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { postCurrentUserAvatar } from '../../store/user/userThunks';
+import { postUserAvatar } from '../../store/admin/adminThunks';
 
 type AvatarEditorPopupProps = {
   defaultAvatar: File | undefined, 

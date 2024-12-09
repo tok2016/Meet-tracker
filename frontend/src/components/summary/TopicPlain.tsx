@@ -2,14 +2,15 @@ import { Input, Paper, Stack, Typography } from '@mui/material';
 import { memo, useMemo, useReducer, useState } from 'react';
 
 import SpeakerPlain from './SpeakerPlain';
-import TopicContent from '../types/TopicContent';
-import TextArea from './TextArea';
-import { breakpoints } from '../theme/BasicTypography';
-import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
-import { useAppDispatch } from '../hooks/useAppDispatch';
-import { setTimeCode } from '../store/timeCodeSlice';
+import TopicContent from '../../types/TopicContent';
+import TextArea from '../TextArea';
+import { breakpoints } from '../../theme/BasicTypography';
+import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from '../../theme/FontSizes';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { setTimeCode } from '../../store/timeCodeSlice';
 import RollDownButton from './RollDownButton';
-import { SpeakerWithIndex } from '../types/SpeakerContent';
+import { SpeakerWithIndex } from '../../types/SpeakerContent';
+import useMediaMatch from '../../hooks/useMediaMacth';
 
 const TYPE_TIMEOUT = 2500;
 
@@ -40,6 +41,8 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
   const [customText, setCustomText] = useState<string>(content.text);
 
   const dispatch = useAppDispatch();
+
+  const {medium} = useMediaMatch();
 
   const changeTimeCode = (timeCode: string) => {
     dispatch(setTimeCode(timeStringToSeconds(timeCode)));
@@ -103,6 +106,12 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
               onKeyDown={onKeyDown}
               sx={{
                 fontWeight: 700,
+                [breakpoints.down('sm')]: {
+                  fontSize: XsFontSizes.h4
+                },
+                [breakpoints.up('sm')]: {
+                  fontSize: SmFontSizes.h4
+                },
                 [breakpoints.up('lg')]: {
                   fontSize: LgFontSizes.h3
                 },
@@ -117,7 +126,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
                 }
               }} />
 
-            <div>
+            <div style={{display: !medium ? 'block' : 'none'}}>
               <Typography variant='h3' component='a' onClick={() => changeTimeCode(content.start)}>
                 {content.start}
               </Typography>
@@ -127,6 +136,16 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
               </Typography>
             </div>
           </Stack>
+
+          <div style={{display: isRolledDown && medium ? 'block' : 'none'}}>
+            <Typography variant='h4' component='a' onClick={() => changeTimeCode(content.start)}>
+              {content.start}
+            </Typography>
+            <Typography variant='h4' component='span'> - </Typography>
+            <Typography variant='h4' component='a' onClick={() => changeTimeCode(content.end)}>
+              {content.end}
+            </Typography>
+          </div>
 
           <TextArea 
             readOnly={false}

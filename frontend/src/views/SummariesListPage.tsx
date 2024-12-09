@@ -3,7 +3,7 @@ import { Pagination } from '@mui/material';
 
 import ButtonsTab from '../components/ButtonsTab';
 import Page from '../types/Page';
-import SummaryPlain from '../components/SummaryPlain';
+import SummaryPlain from '../components/summary/SummaryPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getSummaries } from '../store/summary/summaryThunks';
@@ -13,6 +13,7 @@ import { ITEMS_PER_PAGE } from '../utils/utils';
 import { getAllSummaries } from '../store/admin/adminThunks';
 import { selectAdminData } from '../store/admin/adminSlice';
 import CollectionParams from '../types/CollectionParams';
+import useMediaMatch from '../hooks/useMediaMacth';
 
 const RecentSubpages: Page[] = [
   {
@@ -40,6 +41,8 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
   const {summaries: adminSummaries, summariesTotal} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
+  const {medium} = useMediaMatch();
+
   const onPageChange = (_evt: ChangeEvent<unknown>, value: number) => {
     setPage(value);
   }
@@ -66,12 +69,12 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
 
   return (
     <>
-      <ButtonsTab pages={RecentSubpages} hidden={isForAdmin}/>
+      <ButtonsTab pages={RecentSubpages} hidden={isForAdmin || medium}/>
       <FilterMenu 
         defaultFilter={defaultSummaryFilter}
-        hidden={!isForAdmin}
+        hidden={!isForAdmin || medium}
         submit={submit} />
-      <div>
+      <div style={{paddingTop: medium ? '5vh' : 0}}>
         {summaries.map((summary) => (
           <SummaryPlain 
             key={summary.id} 

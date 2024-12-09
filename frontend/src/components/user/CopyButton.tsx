@@ -2,7 +2,7 @@ import { ContentCopy } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useRef } from 'react';
 
-import { UserIconSx } from '../theme/UserIcon';
+import { UserIconSx } from '../../theme/UserIcon';
 
 const CopyButton = ({value, onError}: {value: string, onError: () => void}) => {
   const hiddenRef = useRef<HTMLTextAreaElement>(null);

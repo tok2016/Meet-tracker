@@ -2,6 +2,7 @@ import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
+import { PAPER_SMALL_PADDING } from '../utils/utils';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
@@ -9,11 +10,10 @@ declare module '@mui/material/Paper' {
     elevationInside: true,
     elevationDashed: true,
     elevationInput: true,
-    elevationDarker: true
+    elevationDarker: true,
+    elevationTransparent: true
   }
 }
-
-const PAPER_SMALL_PADDING = '1.5em';
 
 const Paper: Components['MuiPaper'] = {
   styleOverrides: {
@@ -36,7 +36,15 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: getCssVariable('background'),
             borderRadius: 10,
-            padding: PAPER_SMALL_PADDING
+            [breakpoints.down('md')]: {
+              padding: PAPER_SMALL_PADDING.sm
+            },
+            [breakpoints.only('md')]: {
+              padding: PAPER_SMALL_PADDING.md
+            },
+            [breakpoints.up('lg')]: {
+              padding: PAPER_SMALL_PADDING.lg
+            }
           }
         },
         {
@@ -46,7 +54,15 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: getCssVariable('tertiary'),
             borderRadius: 10,
-            padding: PAPER_SMALL_PADDING
+            [breakpoints.down('md')]: {
+              padding: PAPER_SMALL_PADDING.sm
+            },
+            [breakpoints.only('md')]: {
+              padding: PAPER_SMALL_PADDING.md
+            },
+            [breakpoints.up('lg')]: {
+              padding: PAPER_SMALL_PADDING.lg
+            }
           }
         },
         {
@@ -72,8 +88,13 @@ const Paper: Components['MuiPaper'] = {
           style: {
             backgroundColor: getCssVariable('background'),
             borderRadius: 10,
-            padding: '0.5em 1em',
-            paddingLeft: '1.5em'
+            [breakpoints.down('md')]: {
+              padding: '0.5em 1em',
+            },
+            [breakpoints.up('md')]: {
+              padding: '0.5em 1em',
+              paddingLeft: '1.5em'
+            }
           }
         },
         {
@@ -92,6 +113,14 @@ const Paper: Components['MuiPaper'] = {
               color: getCssVariable('textHighlight')
             }
           }
+        },
+        {
+          props: {
+            variant: 'elevationTransparent'
+          },
+          style: {
+            backgroundColor: 'transparent'
+          }
         }
       ]
     }
@@ -99,4 +128,3 @@ const Paper: Components['MuiPaper'] = {
 };
 
 export default Paper;
-export {PAPER_SMALL_PADDING};

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { selectSummary } from '../store/summary/summarySlice';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { postRecordFile } from '../store/summary/summaryThunks';
-import { isSummary } from '../types/Summary';
 import { TextField } from '@mui/material';
-import UploadPlain from './UploadPlain';
+
+import { selectSummary } from '../../store/summary/summarySlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { postRecordFile } from '../../store/summary/summaryThunks';
+import { isSummary } from '../../types/Summary';
+import UploadPlain from '../UploadPlain';
 
 const RecordUploadPlain = () => {
   const navigate = useNavigate();

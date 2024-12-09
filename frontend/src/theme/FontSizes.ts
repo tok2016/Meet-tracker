@@ -21,7 +21,7 @@ const XsFontSizes: FontSize = {
   h1: 24,
   h2: 24,
   h3: 18,
-  h4: 18,
+  h4: 14,
   body1: 14,
   body2: 14,
   subtitle1: 14,
@@ -38,9 +38,9 @@ const XsFontSizes: FontSize = {
 
 const SmFontSizes: FontSize = {
   h1: 24,
-  h2: 36,
+  h2: 30,
   h3: 20,
-  h4: 20,
+  h4: 16,
   body1: 16,
   body2: 16,
   subtitle1: 16,

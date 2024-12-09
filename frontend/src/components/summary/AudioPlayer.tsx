@@ -1,8 +1,10 @@
 import { PauseCircleOutline, PlayCircleOutline } from '@mui/icons-material';
 import { IconButton, Paper, Slider, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectTimeCode, setTimeCode } from '../store/timeCodeSlice';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { selectTimeCode, setTimeCode } from '../../store/timeCodeSlice';
+import { breakpoints } from '../../theme/BasicTypography';
 
 const secondsToTimeString = (timeInSeconds: number): string => {
   const minutes = Math.floor(timeInSeconds / 60);
@@ -57,15 +59,22 @@ const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
     <Paper 
       variant='elevationSmall'
       sx={(theme) => theme.components?.MuiPaper
-        ? ({
-          ...theme.components.MuiPaper.defaultProps?.sx,
-          display: audio.duration ? 'flex' : 'none',
-          flexDirection: 'row',
+      ? ({
+        ...theme.components.MuiPaper.defaultProps?.sx,
+        display: audio.duration ? 'flex' : 'none',
+        flexDirection: 'row',
+        alignItems: 'center',
+        [breakpoints.down('md')]: {
+          width: '100%',
+          marginBottom: '15px',
+          gap: '3vw'
+        },
+        [breakpoints.up('md')]: {
           width: '50%',
           marginBottom: '30px',
-          alignItems: 'center',
           gap: '2vw'
-        }) : {}}>
+        }
+      }) : {}}>
         <IconButton 
           color='secondary'
           onClick={() => setPlaying(value => !value)}>
@@ -79,10 +88,10 @@ const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
           onChangeCommitted={onSliderChange} />
 
         <Typography 
-          width='5em'
           textAlign='left'
-          variant='body2Highlight'>
-          {secondsToTimeString(currentTime)}
+          variant='body2Highlight'
+          width='5em'>
+            {secondsToTimeString(currentTime)}
         </Typography>
     </Paper>
   );

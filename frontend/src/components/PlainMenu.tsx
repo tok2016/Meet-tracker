@@ -1,8 +1,8 @@
-import { Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, MoreVert } from '@mui/icons-material';
 import { IconButton, Menu } from '@mui/material';
 import { ReactNode, useState } from 'react';
 
-const PlainMenu = ({children, hidden=true}: {children: ReactNode, hidden?: boolean}) => {
+const PlainMenu = ({children, downMedium, hidden=true}: {children: ReactNode, downMedium: boolean, hidden?: boolean}) => {
   const [anchor, setAnchor] = useState<HTMLElement | undefined>(undefined);
 
   if(hidden) {
@@ -15,7 +15,7 @@ const PlainMenu = ({children, hidden=true}: {children: ReactNode, hidden?: boole
         color='secondary' 
         sx={{width: '1em', height: '1em'}}
         onClick={(evt) => setAnchor(evt.currentTarget)}>
-          <MenuIcon />
+          {downMedium ? <MoreVert /> : <MenuIcon />}
       </IconButton>
 
       <Menu 

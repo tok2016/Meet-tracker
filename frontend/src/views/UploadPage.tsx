@@ -1,4 +1,4 @@
-import RecordUploadPlain from '../components/RecordUploadPlain';
+import RecordUploadPlain from '../components/summary/RecordUploadPlain';
 
 const UploadPage = () => (
   <div style={{

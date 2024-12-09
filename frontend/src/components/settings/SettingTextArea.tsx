@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 
-import TextArea from './TextArea';
+import TextArea from '../TextArea';
 import { ChangeEvent } from 'react';
 
 type SettingTextAreaProps = {

@@ -8,9 +8,9 @@ import { selectSettings } from '../store/settings/settingsSlice';
 import { getSTTConfig, postSTTSettings } from '../store/settings/settingsThunks';
 import { STTModels } from '../types/STTSize';
 import { STTComputeModels } from '../types/STTCompute';
-import SettingSelect from '../components/SettingSelect';
+import SettingSelect from '../components/settings/SettingSelect';
 import { DiarizeTypes } from '../types/DiarizeType';
-import SettingTextArea from '../components/SettingTextArea';
+import SettingTextArea from '../components/settings/SettingTextArea';
 import { areObjectsEqual } from '../utils/utils';
 
 const STTSettingsPage = () => {

@@ -2,7 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import useMediaMatch from '../hooks/useMediaMacth';
-import LLMPanel from '../components/LLMPanel';
+import LLMPanel from '../components/settings/LLMPanel';
 import LLMSettings from '../types/LLMSettings';
 import LLMConfig from '../types/LLMConfig';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';

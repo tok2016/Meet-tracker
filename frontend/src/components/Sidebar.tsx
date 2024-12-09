@@ -11,6 +11,7 @@ import useMediaMatch from '../hooks/useMediaMacth';
 import useMediaValue from '../hooks/useMediaValue';
 import { AVATAR_WIDTH } from '../utils/utils';
 import MediaValue from '../types/MediaValue';
+import UIColors from '../utils/Colors';
 
 const sidebarPages: Page[] = [
   {
@@ -79,9 +80,14 @@ const Sidebar = () => {
         sx={(theme) => theme.components?.MuiIconButton 
         ? {
             ...theme.components.MuiIconButton,
+            position: 'fixed',
             zIndex: 2,
-            marginTop: `calc(${marginTop}px + 10vh)`,
-            marginLeft: '7vw',
+            left: 0,
+            top: `calc(${marginTop}px + 8vh)`,
+            padding: '4px',
+            backgroundColor: UIColors.palette.background,
+            borderRadius: '0 50% 50% 0',
+            boxShadow: '0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);',
             [breakpoints.up('lg')]: {
               display: 'none',
               margin: 0

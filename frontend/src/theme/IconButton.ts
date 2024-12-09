@@ -18,7 +18,7 @@ const IconButton: Components['MuiIconButton'] = {
         color: getCssVariable('textMain')
       },
       ':hover *': {
-        color: getCssVariable('textHighlight')
+        color: getCssVariable('disabled')
       }
     }
   }

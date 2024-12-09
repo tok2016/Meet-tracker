@@ -1,10 +1,10 @@
 import { Input, Paper } from '@mui/material';
 import { useReducer, useState } from 'react';
 
-import { SpeakerWithIndex } from '../types/SpeakerContent';
-import { breakpoints } from '../theme/BasicTypography';
-import { LgFontSizes, XlFontSizes } from '../theme/FontSizes';
-import TextArea from './TextArea';
+import { SpeakerWithIndex } from '../../types/SpeakerContent';
+import { breakpoints } from '../../theme/BasicTypography';
+import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from '../../theme/FontSizes';
+import TextArea from '../TextArea';
 import RollDownButton from './RollDownButton';
 
 type SpeakerPlainProps = {
@@ -48,6 +48,12 @@ const SpeakerPlain = ({speaker, commitChanges, onKeyDown}: SpeakerPlainProps) =>
           hidden={false}
           sx={{
             fontWeight: 700,
+            [breakpoints.down('sm')]: {
+              fontSize: XsFontSizes.h4
+            },
+            [breakpoints.up('sm')]: {
+              fontSize: SmFontSizes.h4
+            },
             [breakpoints.up('lg')]: {
               fontSize: LgFontSizes.h4
             },

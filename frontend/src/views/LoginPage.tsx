@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { UserLogin } from '../types/User';
 import { getCurrentUser, getCurrentUserAvatar, postLogin } from '../store/user/userThunks';
-import PasswordField from '../components/PasswordField';
+import PasswordField from '../components/user/PasswordField';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');

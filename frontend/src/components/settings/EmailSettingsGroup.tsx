@@ -2,16 +2,16 @@ import { Button, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import SettingSelect from './SettingSelect';
-import EmailSettings from '../types/EmailSettings';
-import { EmailProtocols } from '../types/EmailProtocol';
-import UploadPlain from './UploadPlain';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectSettings } from '../store/settings/settingsSlice';
-import TextArea from './TextArea';
-import UIColors from '../utils/Colors';
+import EmailSettings from '../../types/EmailSettings';
+import { EmailProtocols } from '../../types/EmailProtocol';
+import UploadPlain from '../UploadPlain';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { selectSettings } from '../../store/settings/settingsSlice';
+import TextArea from '../TextArea';
+import UIColors from '../../utils/Colors';
 import SettingTextArea from './SettingTextArea';
-import { getEmailSettings, postEmailSettings } from '../store/settings/settingsThunks';
-import { areObjectsEqual } from '../utils/utils';
+import { getEmailSettings, postEmailSettings } from '../../store/settings/settingsThunks';
+import { areObjectsEqual } from '../../utils/utils';
 
 const EmailSettingsGroup = () => {
   const {email, status} = useAppSelector(selectSettings);

@@ -6,7 +6,7 @@ import Mouse from '../assets/Mouse.svg';
 import useMediaMatch from '../hooks/useMediaMacth';
 import PromoInfo from '../types/PromoInfo';
 import Promo from '../components/Promo';
-import RecordUploadPlain from '../components/RecordUploadPlain';
+import RecordUploadPlain from '../components/summary/RecordUploadPlain';
 import AudioPromo from '../assets/Audio Promo.png';
 import RecordPromo from '../assets/Record Promo.png';
 import SummaryPromo from '../assets/Summary Promo.png';

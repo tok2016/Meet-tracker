@@ -1,12 +1,12 @@
 import { Button, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 
-import DatabaseSettings, { defaultDatabaseSettings } from '../types/DatabaseSettings';
-import { TTLUnit, TTLUnits, TTLUnitTranslation } from '../types/TTLUnit';
-import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { selectSettings } from '../store/settings/settingsSlice';
-import { getDatabaseSettings, postDatabaseSettings } from '../store/settings/settingsThunks';
-import { areObjectsEqual } from '../utils/utils';
+import DatabaseSettings, { defaultDatabaseSettings } from '../../types/DatabaseSettings';
+import { TTLUnit, TTLUnits, TTLUnitTranslation } from '../../types/TTLUnit';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { selectSettings } from '../../store/settings/settingsSlice';
+import { getDatabaseSettings, postDatabaseSettings } from '../../store/settings/settingsThunks';
+import { areObjectsEqual } from '../../utils/utils';
 
 const MIN_TTL_VALUE = 0;
 const MAX_TTL_VALUE = 100;

@@ -3,14 +3,18 @@ import { useEffect, useState } from 'react';
 
 import PasswordField from './PasswordField';
 import { KeyboardBackspace } from '@mui/icons-material';
-import { INPUT_ICON_WIDTH } from '../utils/utils';
-import userSchema from '../schemas/userSchema';
-import { isValidationError } from '../schemas/validationError';
-import { useAppDispatch } from '../hooks/useAppDispatch';
-import { postNewPasswordById } from '../store/admin/adminThunks';
-import { postNewPassword } from '../store/user/userThunks';
-import { UserPassword } from '../types/User';
-import { Status } from '../types/Status';
+import { AVATAR_WIDTH, INPUT_ICON_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../../utils/utils';
+import userSchema from '../../schemas/userSchema';
+import { isValidationError } from '../../schemas/validationError';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { postNewPasswordById } from '../../store/admin/adminThunks';
+import { postNewPassword } from '../../store/user/userThunks';
+import { UserPassword } from '../../types/User';
+import { Status } from '../../types/Status';
+import useMediaMatch from '../../hooks/useMediaMacth';
+import { breakpoints } from '../../theme/BasicTypography';
+import useMediaValue from '../../hooks/useMediaValue';
+import FieldsGroup from '../FieldsGroup';
 
 type PasswordMenuProps = {
   userId: number,
@@ -26,6 +30,10 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
   const [error, setError] = useState<string | undefined>();
 
   const dispatch = useAppDispatch();
+  
+  const {medium} = useMediaMatch();
+  const marginTop = useMediaValue(AVATAR_WIDTH);
+  const navBarPaddingBottom = useMediaValue(NAV_BAR_MARGIN_BOTTOM);
 
   const arePasswordsTheSame = password === repeatedPassword;
 
@@ -74,18 +82,19 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
   return (
     <Dialog
       open={isOpened}
+      fullScreen={medium}
       maxWidth='xs'
       fullWidth
       onClose={close}
+      sx={{
+        [breakpoints.down('md')]: {
+          padding: `calc(95vh - ${marginTop}px - ${navBarPaddingBottom}) 7vw 0`
+        }
+      }}
       PaperProps={{
-        variant: 'elevation'
+        variant: medium ? 'elevationTransparent' : 'elevation'
       }}>
-        <Stack
-          width='100%'
-          display='flex'
-          flexDirection='column'
-          gap='4.5vh'
-          alignItems='center'>
+        <FieldsGroup>
             <Stack width='100%' position='relative'>
               <IconButton 
                 color='secondary'
@@ -128,7 +137,7 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
               onClick={async () => await resetPassword({id: userId, password})}>
                 Подтвердить
             </Button>
-        </Stack>
+        </FieldsGroup>
     </Dialog>
   );
 };

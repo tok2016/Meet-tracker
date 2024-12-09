@@ -12,7 +12,7 @@ import { postNewUser } from '../store/admin/adminThunks';
 import userSchema from '../schemas/userSchema';
 import { isValidationError } from '../schemas/validationError';
 import { UserValidationError } from '../types/UserValidationError';
-import PasswordField from '../components/PasswordField';
+import PasswordField from '../components/user/PasswordField';
 
 const defaultUserData: UserRaw = {
   username: '',

@@ -67,12 +67,12 @@ const Button: Components['MuiButton'] = {
         [breakpoints.down('sm')]: {
           fontSize: XsFontSizes.subtitle1
         },
-        [breakpoints.up('sm')]: {
+        [breakpoints.only('sm')]: {
           fontSize: SmFontSizes.subtitle1
         },
         ':hover': {
-          background: UIColors.mainHoverGradient(),
-          color: getCssVariable('textContrast')
+          filter: 'brightness(1.5)',
+          opacity: 0.75
         }
       }
     },
@@ -90,12 +90,13 @@ const Button: Components['MuiButton'] = {
         [breakpoints.down('sm')]: {
           fontSize: XsFontSizes.subtitle1
         },
-        [breakpoints.up('sm')]: {
+        [breakpoints.only('sm')]: {
           fontSize: SmFontSizes.subtitle1
         },
         ':hover': {
-          background: UIColors.mainHoverGradient(),
-          color: getCssVariable('textContrast')
+          background: UIColors.mainGradient(),
+          filter: 'brightness(1.5)',
+          opacity: 0.75
         }
       }
     },
@@ -105,7 +106,10 @@ const Button: Components['MuiButton'] = {
       },
       style: {
         backgroundColor: 'transparent',
-        color: getCssVariable('textSecondary')
+        color: getCssVariable('textSecondary'),
+        ':hover': {
+          color: getCssVariable('textContrast')
+        }
       }
     },
     {

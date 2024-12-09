@@ -3,12 +3,12 @@ import { HTMLInputTypeAttribute, KeyboardEvent, useEffect, useReducer, useState 
 import { Check, Close, Edit } from '@mui/icons-material';
 
 import IconForInput from './IconForInput';
-import UIColors from '../utils/Colors';
+import UIColors from '../../utils/Colors';
 import CopyButton from './CopyButton';
-import { UserIconSx } from '../theme/UserIcon';
-import userSchema from '../schemas/userSchema';
-import { User, UserRaw } from '../types/User';
-import { isValidationError } from '../schemas/validationError';
+import { UserIconSx } from '../../theme/UserIcon';
+import userSchema from '../../schemas/userSchema';
+import { User, UserRaw } from '../../types/User';
+import { isValidationError } from '../../schemas/validationError';
 
 type UserInfoInputProps = {
   label: string,
