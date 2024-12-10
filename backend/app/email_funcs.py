@@ -3,8 +3,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import ssl
 import os
+from .settings import email_settings
 
-def send_email(email_to: str):
+def send_email(email_to: str, summary_id: int):
     sender_email = os.environ.get("SENDER_EMAIL")
     password = os.environ.get("SENDER_PASSWORD")
     message = MIMEMultipart("alternative")
@@ -18,7 +19,7 @@ def send_email(email_to: str):
     html = """\
         <html>
             <body>
-            <p>Greetings, here is your link to the thing (link should be here). Thank you for using our service.</p>
+            <p>Greetings, here is your link to the thing http://127.0.0.1:5173/account/summary/""" + str(summary_id) + """ Thank you for using our service.</p>
             <p>I don't know why this is need, but ok. More text more text</p>
             </body>
         </html>

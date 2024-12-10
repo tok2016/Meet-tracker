@@ -165,13 +165,11 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     ssm = get_sentences_speaker_mapping(wsm, speaker_ts)
     text = get_speaker_aware_transcript(ssm)
     summary_common = model.invoke(f"Дай краткое содержание текста - {text}. Определи тему. Определи время начала и конца текста. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json}")
-    #Расскоментить эту строку если не хочется работать с лламой и виспером
-    #summary_common = "content='' additional_kwargs={} response_metadata={} id='run-7a6c305b-38d7-4f81-91bd-5bff5e646b01-0' tool_calls=[{'name': 'summarize_text', 'args': {'topic': 'Conversation between family members', 'text': 'The conversation is about a person who is feeling down and their loved ones trying to comfort them.', 'start': '0.0', 'end': '20.14', 'speakers': 'SPEAKER_02, SPEAKER_00, SPEAKER_03'}, 'id': 'call_6c90d255c518452d800fc54711d70a74', 'type': 'tool_call'}]"
     db_summary = Summary(text=f"{summary_common}", title = title, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
     session.refresh(db_summary)
-
+    send_email(current_user.email, db_summary.id)
     return db_summary
 
 @router.get("/records")
@@ -274,10 +272,10 @@ async def get_audio(audio_id: str):
     path_audio_dir = "app/sounds/" + audio_id + "/audio.wav"
     return FileResponse(path_audio_dir)
 
-@router.post("/email")
-async def send_email_req(email_to: EmailStr):
-    send_email(email_to)
-    return {"result": "something?"}
+#@router.post("/email")
+#async def send_email_req(email_to: EmailStr):
+#    send_email(email_to)
+#    return {"result": "something?"}
 
 @router.get("/summary_download_txt")
 async def create_txt_summary(session: SessionDep, summary_id: int, background_tasks: BackgroundTasks):
