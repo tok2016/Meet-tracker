@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, Upl
 from .ollama_functions import OllamaFunctions
 from fastapi.responses import FileResponse
 from app.models import Summary, SummaryFilter
-from app.utils import CurrentUser
+from app.utils import CurrentUser, cleanup_file
 from typing import Annotated
 from app.db import SessionDep
 from faster_whisper import WhisperModel, tokenizer
@@ -21,6 +21,7 @@ from fpdf import FPDF
 from docx import Document
 from app.email_funcs import send_email
 from pydantic.networks import EmailStr
+from starlette.background import BackgroundTask, BackgroundTasks
 import wget
 from omegaconf import OmegaConf
 import json
@@ -279,7 +280,7 @@ async def send_email_req(email_to: EmailStr):
     return {"result": "something?"}
 
 @router.get("/summary_download_txt")
-async def create_txt_summary(session: SessionDep, summary_id: int):
+async def create_txt_summary(session: SessionDep, summary_id: int, background_tasks: BackgroundTasks):
     """
     Get summary as .txt file. Получение резюме в формате .txt файла.
     """
@@ -288,10 +289,11 @@ async def create_txt_summary(session: SessionDep, summary_id: int):
     f = open(filename, "w")
     f.write(summary_db.text)
     f.close()
+    background_tasks.add_task(os.remove, filename)
     return FileResponse(path=filename, filename="summary.txt", media_type='multipart/form-data')
 
 @router.get("/summary_download_pdf")
-async def create_pdf_summary(session: SessionDep, summary_id: int):
+async def create_pdf_summary(session: SessionDep, summary_id: int, background_tasks: BackgroundTasks):
     """
     Get summary as pdf file. Получение резюме в формате pdf файла.
     """
@@ -303,16 +305,19 @@ async def create_pdf_summary(session: SessionDep, summary_id: int):
     pdf.write(text=summary_db.text)
     filename_pdf = f"app/texts/summary_{summary_db.id}.pdf"
     pdf.output(filename_pdf)
+    background_tasks.add_task(os.remove, filename_pdf)
     return FileResponse(path=filename_pdf, filename="summary.pdf", media_type='multipart/form-data')
 
 @router.get("/summary_download_docx")
-async def create_docx_summary(session:SessionDep, summary_id:int):
+async def create_docx_summary(session:SessionDep, summary_id:int, background_tasks: BackgroundTasks):
     """
     Get summary as docx file. Получение резюме в формате docx файла.
     """
+    #background=BackgroundTask(os.remove(filename_docx))
     summary_db = session.get(Summary, summary_id)
     document = Document()
     document.add_paragraph(text=summary_db.text)
     filename_docx = f"app/texts/summary_{summary_db.id}.docx"
     document.save(filename_docx)
+    background_tasks.add_task(os.remove, filename_docx)
     return FileResponse(path=filename_docx, filename="summary.docx", media_type='multipart/form-data')
