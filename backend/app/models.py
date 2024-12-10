@@ -46,6 +46,19 @@ class WhisperSettings(SQLModel):
 class DiarizeSettings(SQLModel):
     diarize_type: str | None = Field(default="Neural")
 
+class ColorSettings(SQLModel):
+    main_color: str | None = Field(default='#F59D0E')
+    secondary_color: str | None = Field(default='#F56B00')
+    tertiary_color: str | None = Field(default='#F5F5F5')
+    quaternary_color: str | None = Field(default='#E7E7E7')
+    disabled_color: str | None = Field(default= '#8B8B8B')
+    background_color: str | None = Field(default= '#FFFFFF')
+    text_main_color: str | None = Field(default= '#000000')
+    text_secondary_color: str | None = Field(default= '#8B8B8B')
+    text_highlight_color: str | None = Field(default= '#F59D0E')
+    text_contrast_color: str | None = Field(default= '#FFFFFF')
+    error_color: str | None = Field(default= '#EE1313')
+
 # JSON payload containing access token
 class Token(SQLModel):
     access_token: str
