@@ -9,7 +9,7 @@ def send_email(email_to: str, summary_id: int):
     sender_email = os.environ.get("SENDER_EMAIL")
     password = os.environ.get("SENDER_PASSWORD")
     message = MIMEMultipart("alternative")
-    message["Subject"] = "Brify record link"
+    message["Subject"] = "Brify - ссылка на резюме"
     message["From"] = sender_email
     message["To"] = email_to
     #message = "Добрый день, ваша ссылка на транскрибированную запись встречи: (тут должна быть ссылка). Спасибо за использование нашего сервиса. Неизвестно почему не нравится это сообщение, но ладно. Напишем ещё текста. Вот ещё архивированная запись."
@@ -19,8 +19,8 @@ def send_email(email_to: str, summary_id: int):
     html = """\
         <html>
             <body>
-            <p>Greetings, here is your link to the thing http://127.0.0.1:5173/account/summary/""" + str(summary_id) + """ Thank you for using our service.</p>
-            <p>I don't know why this is need, but ok. More text more text</p>
+            <p>Добрый день, ваша ссылка на резюме - http://127.0.0.1:5173/account/summary/""" + str(summary_id) + """ Спасибо, что пользуетесь нашим сервисом.</p>
+            <p>Brify, команда Fun Fusion.</p>
             </body>
         </html>
         """
