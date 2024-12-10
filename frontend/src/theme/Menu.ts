@@ -4,7 +4,7 @@ import {getCssVariable} from '../utils/Colors';
 const Menu:Components['MuiMenu'] = {
   styleOverrides: {
     paper: {
-      backgroundColor: getCssVariable('quaternary'),
+      backgroundColor: getCssVariable('quaternaryColor'),
       padding: '10px'
     }
   }

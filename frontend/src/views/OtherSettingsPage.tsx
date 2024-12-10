@@ -1,5 +1,5 @@
-import DatabaseSettingsGroup from '../components/DatabaseSettingsGroup';
-import EmailSettingsGroup from '../components/EmailSettingsGroup';
+import DatabaseSettingsGroup from '../components/settings/DatabaseSettingsGroup';
+import EmailSettingsGroup from '../components/settings/EmailSettingsGroup';
 
 const OtherSettingsPage = () => (
   <>

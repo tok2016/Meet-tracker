@@ -10,7 +10,7 @@ import SummaryPage from './SummaryPage';
 import UsersListPage from './UsersListPage';
 import SettingsPage from './SettingsPage';
 import UploadPage from './UploadPage';
-import PageTemplate from './PageTemplate';
+import AccountTemplate from './AccountTemplate';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import AdminTemplate from './AdminTemplate';
@@ -50,7 +50,7 @@ const Router = () => {
       <Route 
         path='/account' 
         element={isAvailable 
-          ? <PageTemplate /> 
+          ? <AccountTemplate /> 
           : <Navigate to='/login' />}>
               <Route path='upload' element={<UploadPage />} />
 

@@ -8,7 +8,7 @@ const AppBar: Components['MuiAppBar'] = {
   },
   styleOverrides: {
     root: {
-      backgroundColor: getCssVariable('background'),
+      backgroundColor: getCssVariable('backgroundColor'),
       padding: '2vh 2.5vw',
       borderRadius: 0,
       zIndex: 2,

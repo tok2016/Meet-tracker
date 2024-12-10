@@ -8,6 +8,7 @@ import { selectUser } from '../store/user/userSlice';
 import { postLogout } from '../store/user/userThunks';
 import { LOGO_WIDTH, AVATAR_WIDTH } from '../utils/utils';
 import { selectPalette } from '../store/palette/paletteSlice';
+import { breakpoints } from '../theme/BasicTypography';
 
 const NavigationBar = () => {
   const logoWidth = useMediaValue(LOGO_WIDTH);
@@ -35,37 +36,44 @@ const NavigationBar = () => {
         
         <Stack
           display='flex'
-          gap='30px'
           flexDirection='row'
-          alignItems='center'>
-          <Button 
-            style={{
-              display: user.username ? 'none' : 'inherit'
-            }}
-            variant='contained' 
-            onClick={() => navigate('/login')}>
-              Войти
-          </Button>
+          alignItems='center'
+          sx={{
+            [breakpoints.down('md')]: {
+              gap: '15px'
+            },
+            [breakpoints.up('md')]: {
+              gap: '30px'
+            }
+          }}>
+            <Button 
+              style={{
+                display: user.username ? 'none' : 'inherit'
+              }}
+              variant='contained' 
+              onClick={() => navigate('/login')}>
+                Войти
+            </Button>
 
-          <Button
-            style={{
-              display: user.username ? 'inherit' : 'none'
-            }}
-            variant='transparent'
-            onClick={logout} >
-            Выйти
-          </Button>
-          
-          <IconButton 
-            style={{
-              display: user.username ? 'inherit' : 'none'
-            }}
-            color='primary'
-            onClick={() => navigate('/account')} >
-              {user.avatar 
-                ? <Avatar src={user.avatar} sx={ {width: avatarWidth, height: avatarWidth} }/> 
-                : <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />}
-          </IconButton>
+            <Button
+              style={{
+                display: user.username ? 'inherit' : 'none'
+              }}
+              variant='transparent'
+              onClick={logout} >
+              Выйти
+            </Button>
+            
+            <IconButton 
+              style={{
+                display: user.username ? 'inherit' : 'none'
+              }}
+              color='secondary'
+              onClick={() => navigate('/account')} >
+                {user.avatar 
+                  ? <Avatar src={user.avatar} sx={ {width: avatarWidth, height: avatarWidth} }/> 
+                  : <AccountCircle sx={ {width: avatarWidth, height: avatarWidth} } />}
+            </IconButton>
         </Stack>
       </Toolbar>
     </AppBar>

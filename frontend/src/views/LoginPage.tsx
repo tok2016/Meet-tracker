@@ -8,14 +8,14 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { UserLogin } from '../types/User';
 import { getCurrentUser, getCurrentUserAvatar, postLogin } from '../store/user/userThunks';
-import PasswordField from '../components/PasswordField';
+import PasswordField from '../components/user/PasswordField';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const dispatch = useAppDispatch();
-  const {auth, user, status} = useAppSelector(selectUser);
+  const {auth, user} = useAppSelector(selectUser);
 
   const authorize = () => {
     const login: UserLogin = {
@@ -27,13 +27,13 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    if(auth.token && status !== 'error') {
+    if(auth.token) {
       if(!user.username) {
         dispatch(getCurrentUser());
         dispatch(getCurrentUserAvatar());
       }
     }
-  });
+  }, [auth.token, user.username]);
 
   return (
     <FormHolder>

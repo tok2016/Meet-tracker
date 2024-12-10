@@ -1,6 +1,8 @@
 import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
+import { breakpoints } from './BasicTypography';
+import { PAPER_SMALL_PADDING } from '../utils/utils';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
@@ -8,11 +10,10 @@ declare module '@mui/material/Paper' {
     elevationInside: true,
     elevationDashed: true,
     elevationInput: true,
-    elevationDarker: true
+    elevationDarker: true,
+    elevationTransparent: true
   }
 }
-
-const PAPER_SMALL_PADDING = '1.5em';
 
 const Paper: Components['MuiPaper'] = {
   styleOverrides: {
@@ -23,7 +24,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevation'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
+            backgroundColor: getCssVariable('backgroundColor'),
             borderRadius: 10,
             padding: '2vw 2vw',
           }
@@ -33,9 +34,17 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationSmall'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
+            backgroundColor: getCssVariable('backgroundColor'),
             borderRadius: 10,
-            padding: PAPER_SMALL_PADDING
+            [breakpoints.down('md')]: {
+              padding: PAPER_SMALL_PADDING.sm
+            },
+            [breakpoints.only('md')]: {
+              padding: PAPER_SMALL_PADDING.md
+            },
+            [breakpoints.up('lg')]: {
+              padding: PAPER_SMALL_PADDING.lg
+            }
           }
         },
         {
@@ -43,9 +52,17 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationInside'
           },
           style: {
-            backgroundColor: getCssVariable('tertiary'),
+            backgroundColor: getCssVariable('tertiaryColor'),
             borderRadius: 10,
-            padding: PAPER_SMALL_PADDING
+            [breakpoints.down('md')]: {
+              padding: PAPER_SMALL_PADDING.sm
+            },
+            [breakpoints.only('md')]: {
+              padding: PAPER_SMALL_PADDING.md
+            },
+            [breakpoints.up('lg')]: {
+              padding: PAPER_SMALL_PADDING.lg
+            }
           }
         },
         {
@@ -53,10 +70,15 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationDashed'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
-            border: `1px dashed ${getCssVariable('disabled')}`,
+            backgroundColor: getCssVariable('backgroundColor'),
+            border: `1px dashed ${getCssVariable('disabledColor')}`,
             borderRadius: 15,
-            padding: 'calc(10px + 1vh) calc(50px + 5vh)'
+            [breakpoints.down('lg')]: {
+              padding: '1vh calc(20px + 4.5vw)'
+            },
+            [breakpoints.up('lg')]: {
+              padding: 'calc(10px + 1vh) calc(50px + 5vw)'
+            }
           }
         },
         {
@@ -64,10 +86,15 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationInput'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
+            backgroundColor: getCssVariable('backgroundColor'),
             borderRadius: 10,
-            padding: '0.5em 1em',
-            paddingLeft: '1.5em'
+            [breakpoints.down('md')]: {
+              padding: '0.5em 1em',
+            },
+            [breakpoints.up('md')]: {
+              padding: '0.5em 1em',
+              paddingLeft: '1.5em'
+            }
           }
         },
         {
@@ -75,16 +102,24 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationDarker'
           },
           style: {
-            backgroundColor: getCssVariable('quaternary'),
+            backgroundColor: getCssVariable('quaternaryColor'),
             borderRadius: 5,
             padding: '0.6em 0.8em',
             ':hover': {
               cursor: 'pointer',
-              backgroundColor: getCssVariable('background')
+              backgroundColor: getCssVariable('backgroundColor')
             },
             ':hover .title': {
-              color: getCssVariable('textHighlight')
+              color: getCssVariable('textHighlightColor')
             }
+          }
+        },
+        {
+          props: {
+            variant: 'elevationTransparent'
+          },
+          style: {
+            backgroundColor: 'transparent'
           }
         }
       ]
@@ -93,4 +128,3 @@ const Paper: Components['MuiPaper'] = {
 };
 
 export default Paper;
-export {PAPER_SMALL_PADDING};

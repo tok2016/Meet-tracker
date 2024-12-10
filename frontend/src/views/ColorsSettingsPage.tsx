@@ -1,5 +1,5 @@
-import ColorUploadPlain from '../components/ColorUploadPlain';
-import LogoUploadPlain from '../components/LogoUploadPlain';
+import ColorUploadPlain from '../components/settings/ColorUploadPlain';
+import LogoUploadPlain from '../components/settings/LogoUploadPlain';
 
 const ColorsSettingsPage = () => (
   <>

@@ -2,12 +2,12 @@ import { BreakpointsOptions, createTheme } from '@mui/material';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 
 import {getCssVariable} from '../utils/Colors';
-import { LgFontSizes, XlFontSizes } from './FontSizes';
+import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 const Breakpoints: BreakpointsOptions = {
   values: {
     xs: 0,
-    sm: 600,
+    sm: 300,
     md: 900,
     lg: 1200,
     xl: 1600
@@ -20,6 +20,12 @@ export const { breakpoints } = defaultTheme;
 const BasicTypography: TypographyOptions = {
   fontFamily: 'Inter',
   button: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.h3,
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.h3
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.h3
     },
@@ -29,17 +35,22 @@ const BasicTypography: TypographyOptions = {
     fontWeight: 400,
     textTransform: 'none',
     padding: 0,
-    color: getCssVariable('textContrast'),
-    backgroundColor: getCssVariable('main'),
+    color: getCssVariable('textContrastColor'),
+    backgroundColor: getCssVariable('mainColor'),
     ':disabled': {
-      backgroundColor: getCssVariable('tertiary'),
+      backgroundColor: getCssVariable('tertiaryColor'),
     },
     ':hover': {
-      backgroundColor: getCssVariable('background'),
-      color: getCssVariable('textHighlight'),
+      backgroundColor: getCssVariable('secondaryColor')
     }
   },
   h1: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.h1
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.h1
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.h1
     },
@@ -48,6 +59,12 @@ const BasicTypography: TypographyOptions = {
     }
   },
   h2: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.h2
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.h2
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.h2
     },
@@ -56,6 +73,12 @@ const BasicTypography: TypographyOptions = {
     }
   },
   h3: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.h3
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.h3
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.h3
     },
@@ -64,6 +87,12 @@ const BasicTypography: TypographyOptions = {
     }
   },
   h4: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.h4
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.h4
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.h4
     },
@@ -72,6 +101,12 @@ const BasicTypography: TypographyOptions = {
     }
   },
   body1: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.body1
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.body1
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.body1
     },
@@ -80,6 +115,12 @@ const BasicTypography: TypographyOptions = {
     }
   },
   body2: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.body2
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.body2
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.body2
     },
@@ -88,6 +129,12 @@ const BasicTypography: TypographyOptions = {
     }
   },
   subtitle1: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.subtitle1
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.subtitle1
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.subtitle1
     },
@@ -96,6 +143,12 @@ const BasicTypography: TypographyOptions = {
     }
   },
   subtitle2: {
+    [breakpoints.down('sm')]: {
+      fontSize: XsFontSizes.subtitle2
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: SmFontSizes.subtitle2
+    },
     [breakpoints.up('lg')]: {
       fontSize: LgFontSizes.subtitle2
     },

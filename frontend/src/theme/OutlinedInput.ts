@@ -2,19 +2,26 @@ import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
+import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 const OutlinedInput: Components['MuiOutlinedInput'] = {
   styleOverrides: {
     root: {
-      border: `solid 1px ${getCssVariable('tertiary')}`,
+      border: `solid 1px ${getCssVariable('tertiaryColor')}`,
       borderRadius: 10,
-      backgroundColor: getCssVariable('background'),
-      color: getCssVariable('textMain'),
+      backgroundColor: getCssVariable('backgroundColor'),
+      color: getCssVariable('textMainColor'),
+      [breakpoints.down('sm')]: {
+        fontSize: XsFontSizes.input
+      },
+      [breakpoints.up('sm')]: {
+        fontSize: SmFontSizes.input
+      },
       [breakpoints.up('lg')]: {
-        fontSize: 16
+        fontSize: LgFontSizes.input
       },
       [breakpoints.only('xl')]: {
-        fontSize: 24
+        fontSize: XlFontSizes.input
       },
       height: '2.5em'
     }

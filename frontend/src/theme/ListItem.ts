@@ -8,11 +8,11 @@ const ListItem: Components['MuiListItem'] = {
       padding: 0,
       '& .MuiListItemButton-root.Mui-selected': {
         background: UIColors.secondaryGradient(),
-        color: getCssVariable('textMain')
+        color: getCssVariable('textMainColor')
       },
       '& .MuiListItemButton-root.Mui-selected:hover': {
-        background: getCssVariable('semiTransparent'),
-        color: getCssVariable('textMain')
+        background: getCssVariable('semiTransparentColor'),
+        color: getCssVariable('textMainColor')
       }
     }
   }

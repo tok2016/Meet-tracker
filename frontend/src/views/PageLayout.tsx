@@ -49,22 +49,22 @@ const PageLayout = () => {
     if(paletteStatus === 'success') {
       const palette: PaletteOptions = {
         primary: {
-          main: UIColors.palette.main,
-          light: UIColors.palette.main,
-          dark: UIColors.palette.main,
-          contrastText: UIColors.palette.textContrast
+          main: UIColors.palette.mainColor,
+          light: UIColors.palette.mainColor,
+          dark: UIColors.palette.mainColor,
+          contrastText: UIColors.palette.textContrastColor
         },
         secondary: {
-          main: UIColors.palette.background,
-          light: UIColors.palette.background,
-          dark: UIColors.palette.background,
-          contrastText: UIColors.palette.textMain
+          main: UIColors.palette.backgroundColor,
+          light: UIColors.palette.backgroundColor,
+          dark: UIColors.palette.backgroundColor,
+          contrastText: UIColors.palette.textMainColor
         },
         error: {
-          main: UIColors.palette.error,
-          light: UIColors.palette.error,
-          dark: UIColors.palette.error,
-          contrastText: UIColors.palette.textContrast
+          main: UIColors.palette.errorColor,
+          light: UIColors.palette.errorColor,
+          dark: UIColors.palette.errorColor,
+          contrastText: UIColors.palette.textContrastColor
         }
       };
 

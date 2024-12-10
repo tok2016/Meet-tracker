@@ -2,7 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import useMediaMatch from '../hooks/useMediaMacth';
-import LLMPanel from '../components/LLMPanel';
+import LLMPanel from '../components/settings/LLMPanel';
 import LLMSettings from '../types/LLMSettings';
 import LLMConfig from '../types/LLMConfig';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
@@ -10,7 +10,7 @@ import { selectSettings } from '../store/settings/settingsSlice';
 import { getLLMConfigs, getLLMSettings, postLLMSettings } from '../store/settings/settingsThunks';
 
 const LLMSettingsPage = () => {
-  const {small} = useMediaMatch();
+  const {medium} = useMediaMatch();
 
   const {llm, llms, status} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
@@ -47,9 +47,10 @@ const LLMSettingsPage = () => {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: small ? '1fr' : '1fr 1fr',
+          gridTemplateColumns: medium ? '1fr' : '1fr 1fr',
           columnGap: '4vw',
-          rowGap: '3.3vh'
+          rowGap: '3.3vh',
+          width: '100%'
         }}>
           {llms.map((llm) => (
             <LLMPanel 

@@ -7,6 +7,7 @@ import MediaValue from '../types/MediaValue';
 import UIColors from '../utils/Colors';
 import UploadInput from './UploadInput';
 import { Status } from '../types/Status';
+import { breakpoints } from '../theme/BasicTypography';
 
 type UploadPlainProps = {
   attentionText: string, 
@@ -21,12 +22,20 @@ type UploadPlainProps = {
 };
 
 const UPLOAD_WIDTH: MediaValue = {
-  xs: 20,
+  xs: 30,
   sm: 35,
   md: 50,
   lg: 60,
   xl: 75
-}
+};
+
+const UPLOAD_ITEMS_MARGIN_BOTTOM: MediaValue = {
+  xs: 10,
+  sm: 10,
+  md: 15,
+  lg: 20,
+  xl: 20
+};
 
 const UploadPlain = ({
   attentionText, 
@@ -40,23 +49,26 @@ const UploadPlain = ({
   onFileUpload
 }: UploadPlainProps) => {
   const uploadWidth = useMediaValue(UPLOAD_WIDTH);
+  const itemsMarginBottom = useMediaValue(UPLOAD_ITEMS_MARGIN_BOTTOM);
 
   return (
     <Paper 
       variant='elevationDashed'
       sx={(theme) => (theme.components?.MuiPaper ? {
         ...theme.components.MuiPaper?.defaultProps?.sx,
-        width: '25vw',
+        [breakpoints.up('lg')]: {
+          width: '25vw',
+          margin: '0 auto'
+        },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        margin: '0 auto'
       } : {})}>
         <CloudUpload sx={{
-          color: UIColors.palette.disabled,
+          color: UIColors.palette.disabledColor,
           width: uploadWidth,
           height: uploadWidth,
-          marginBottom: '20px'
+          marginBottom: `${itemsMarginBottom}px`
         }}/>
 
         <UploadInput 
@@ -73,7 +85,7 @@ const UploadPlain = ({
           disabled={status === 'pending'}
           style={{
             display: !hideSubmitButton && file ? 'inherit' : 'none',
-            marginBottom: '20px'
+            marginBottom: `${itemsMarginBottom}px`
           }}
           onClick={onFileUpload}>
             Отправить
