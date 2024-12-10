@@ -1,6 +1,8 @@
 import { Menu as MenuIcon, MoreVert } from '@mui/icons-material';
-import { IconButton, Menu } from '@mui/material';
+import { IconButton, Menu, Stack } from '@mui/material';
 import { ReactNode, useState } from 'react';
+import { breakpoints } from '../theme/BasicTypography';
+import { PAPER_SMALL_PADDING } from '../utils/utils';
 
 const PlainMenu = ({children, downMedium, hidden=true}: {children: ReactNode, downMedium: boolean, hidden?: boolean}) => {
   const [anchor, setAnchor] = useState<HTMLElement | undefined>(undefined);
@@ -10,7 +12,12 @@ const PlainMenu = ({children, downMedium, hidden=true}: {children: ReactNode, do
   }
 
   return (
-    <>
+    <Stack sx={{
+      [breakpoints.down('md')]: {
+        position: 'absolute',
+        right: `calc(-2.5 * ${PAPER_SMALL_PADDING.sm})`
+      }
+    }}>
       <IconButton 
         color='secondary' 
         sx={{width: '1em', height: '1em'}}
@@ -24,7 +31,7 @@ const PlainMenu = ({children, downMedium, hidden=true}: {children: ReactNode, do
         onClose={() => setAnchor(undefined)}>
           {children}
       </Menu>
-    </>
+    </Stack>
   );
 };
 

@@ -132,6 +132,7 @@ const ColorUploadPlain = () => {
           width: '100%',
           display: 'grid',
           rowGap: '10px',
+          columnGap: '5px',
           gridTemplateColumns: roleColumns,
           justifyContent: 'space-between'
         }}>

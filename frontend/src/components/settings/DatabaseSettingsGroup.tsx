@@ -49,28 +49,34 @@ const DatabaseSettingsGroup = () => {
         Настройка базы данных
       </Typography>
 
-      <Stack
-        display='flex'
-        flexDirection='row'
-        gap='calc(5px + 1vw)'
-        justifyContent='space-between'>
-          <TextField
-            variant='outlined'
-            type='number'
-            fullWidth
-            value={dbSettings.ttlValue}
-            placeholder='Срок хранение данных'
-            onChange={onTTLValueChange} />
-          
-          <Select
-            fullWidth
-            value={dbSettings.ttlUnit}
-            onChange={(evt) => updateSettings({ttlUnit: evt.target.value as TTLUnit})}>
-              {TTLUnits.map((unit) => (
-                <MenuItem key={unit} value={unit}>{TTLUnitTranslation[unit]}</MenuItem>
-              ))}
-          </Select>
-      </Stack>
+      <div>
+        <Typography variant='h3' marginBottom='5px'>
+          Срок хранения данных
+        </Typography>
+
+        <Stack
+          display='flex'
+          flexDirection='row'
+          gap='calc(5px + 1vw)'
+          justifyContent='space-between'>
+            <TextField
+              variant='outlined'
+              type='number'
+              fullWidth
+              value={dbSettings.ttlValue}
+              placeholder='Срок хранение данных'
+              onChange={onTTLValueChange} />
+            
+            <Select
+              fullWidth
+              value={dbSettings.ttlUnit}
+              onChange={(evt) => updateSettings({ttlUnit: evt.target.value as TTLUnit})}>
+                {TTLUnits.map((unit) => (
+                  <MenuItem key={unit} value={unit}>{TTLUnitTranslation[unit]}</MenuItem>
+                ))}
+            </Select>
+        </Stack>
+      </div>
 
       <Button
         variant='containtedSecondary'

@@ -48,7 +48,7 @@ const ButtonsTab = ({pages, hidden=false}: {pages: Page[], hidden?: boolean}) =>
             variant={pagePath.includes(page.path) || page.highlight ? 'containtedTabSelected' : 'containtedTab'}
             onClick={() => onButtonPageClick(page.path)}
             style={{
-              width: medium ? '100%' : 'inherit'
+              width: medium ? '100%' : '13vw'
             }}>
               {page.name}
           </Button>

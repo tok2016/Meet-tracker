@@ -6,7 +6,6 @@ import { User } from '../../types/User';
 import ItemPlain from '../ItemPlain';
 import { getLocaleString } from '../../utils/utils';
 import useMediaMatch from '../../hooks/useMediaMacth';
-import UserPlainMenu from './UserPlainMenu';
 import UserPlainDescription from './UserPlainDescription';
 import { breakpoints } from '../../theme/BasicTypography';
 
@@ -22,7 +21,7 @@ const RawUserPlain = ({user, onDelete}: {user: User, onDelete: () => void}) => {
   };*/
 
   return (
-    <ItemPlain downMedium={medium} menu={<UserPlainMenu user={user} downMedium={medium} onDelete={onDelete} />}>
+    <ItemPlain downMedium={medium}>
       <Stack sx={{
         width: '100%',
         [breakpoints.down('md')]: {

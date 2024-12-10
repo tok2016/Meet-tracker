@@ -1,7 +1,6 @@
-import { TurnLeft, TurnRight } from '@mui/icons-material';
+import { KeyboardDoubleArrowDown, KeyboardDoubleArrowUp } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
-import UIColors from '../../utils/Colors';
 import { PAPER_SMALL_PADDING } from '../../utils/utils';
 import { breakpoints } from '../../theme/BasicTypography';
 
@@ -29,17 +28,7 @@ const RollDownButton = ({isRolledDown, rollPlain}: {isRolledDown: boolean, rollP
     } : {}}
     color='secondary'
     onClick={rollPlain}>
-      {isRolledDown 
-        ? <TurnLeft 
-            sx={{
-              rotate: '90deg',
-              color: UIColors.palette.textMain
-            }}/>
-        : <TurnRight sx={{
-            rotate: '90deg',
-            color: UIColors.palette.textMain
-          }}/>
-      }
+      {isRolledDown ? <KeyboardDoubleArrowUp/> : <KeyboardDoubleArrowDown />}
   </IconButton>        
 );
 

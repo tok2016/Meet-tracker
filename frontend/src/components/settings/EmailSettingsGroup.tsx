@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import SettingSelect from './SettingSelect';
@@ -57,41 +57,50 @@ const EmailSettingsGroup = () => {
         Настройки интеграции с электронной почтой
       </Typography>
       
-      <SettingSelect 
-        label='Протокол для доступа к электронной почте' 
-        value={emailSettings.protocol} 
-        values={[...EmailProtocols]} 
-        select={(value) => updateSettings({protocol: value})} />
+      <Stack alignSelf='center'>
+        <SettingSelect 
+          label='Протокол для доступа к электронной почте' 
+          value={emailSettings.protocol} 
+          values={[...EmailProtocols]} 
+          select={(value) => updateSettings({protocol: value})} />
+      </Stack>
 
-      <UploadPlain
-        hideSubmitButton 
-        attentionText='Формат файла - HTML' 
-        status={status} 
-        file={file} 
-        acceptedFormats='.html' 
-        inputId='markup' 
-        setFile={setMarkupFile} 
-        onFileUpload={() => {}}>
-          {error
-            ? <Typography 
-                variant='body2Highlight' 
-                color={UIColors.palette.error}>
-                  {error}
-                </Typography>
-            : <TextArea 
-                className='outlined'
-                value={emailSettings.markup} 
-                variant='body1' 
-                hidden={!emailSettings.markup} 
-                readOnly 
-                onKeyUp={() => {}} 
-                onKeyDown={() => {}}>
-              </TextArea>}
-      </UploadPlain>
+      <Stack>
+        <Typography variant='h3' textAlign='center' marginBottom='5px'>
+          Загрузка вёрстки письма
+        </Typography>
+
+        <UploadPlain
+          hideSubmitButton 
+          attentionText='Формат файла - HTML' 
+          status={status} 
+          file={file} 
+          acceptedFormats='.html' 
+          inputId='markup' 
+          setFile={setMarkupFile} 
+          onFileUpload={() => {}}>
+            {error
+              ? <Typography 
+                  variant='body2Highlight' 
+                  color={UIColors.palette.error}>
+                    {error}
+                  </Typography>
+              : <TextArea 
+                  className='outlined'
+                  value={emailSettings.markup} 
+                  variant='body1' 
+                  hidden={!emailSettings.markup} 
+                  readOnly 
+                  onKeyUp={() => {}} 
+                  onKeyDown={() => {}}>
+                </TextArea>}
+        </UploadPlain>
+      </Stack>
 
       <SettingTextArea
         label='Текст письма'
         value={emailSettings.text}
+        textAlign='center'
         onChange={(evt) => updateSettings({text: evt.target.value})} />
 
       <Button

@@ -28,11 +28,20 @@ const UserPlainDescription = ({user, date, downMedium, onDelete}: UserPlainDescP
         </Typography>
       </div>
 
-      <Link to={`/account/admin/users/${user.id}`} style={{ overflow: 'hidden' }}>
-        <Typography variant='h4' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis'>
-          {user.username}
-        </Typography>
-      </Link>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        position: 'relative'
+      }}>
+        <Link to={`/account/admin/users/${user.id}`} style={{ overflow: 'hidden' }}>
+          <Typography variant='h4' whiteSpace='nowrap' overflow='hidden' textOverflow='ellipsis'>
+            {user.username}
+          </Typography>
+        </Link>
+        
+        <UserPlainMenu user={user} downMedium={downMedium} onDelete={onDelete} />
+      </div>
 
       <div style={{
         width: '100%',

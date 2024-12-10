@@ -1,7 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material';
 
 import { HexColor } from '../../types/HexColor';
-import UIColors from '../../utils/Colors';
 import MediaValue from '../../types/MediaValue';
 import { breakpoints } from '../../theme/BasicTypography';
 
@@ -17,7 +16,7 @@ const ColorBlock = ({color}: {color: HexColor}) => (
   <Stack display='block'>
     <Box sx={{
       backgroundColor: color,
-      border: `solid 3px ${UIColors.palette.main}`,
+      border: `solid 1px #00000070`,
       borderRadius: 50,
       margin: '0 auto',
       [breakpoints.down('md')]: {

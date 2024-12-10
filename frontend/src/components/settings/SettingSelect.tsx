@@ -9,7 +9,7 @@ interface SettingSelectProps<ValueType extends string> {
 
 const SettingSelect = <ValueType extends string, >({label, value, values, select}: SettingSelectProps<ValueType>) => (
   <Stack alignSelf='flex-start'>
-    <Typography variant='h3' textAlign='left'>
+    <Typography variant='h3' textAlign='left' marginBottom='5px'>
       {label}
     </Typography>
 

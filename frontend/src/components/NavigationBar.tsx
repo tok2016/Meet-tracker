@@ -68,7 +68,7 @@ const NavigationBar = () => {
               style={{
                 display: user.username ? 'inherit' : 'none'
               }}
-              color='primary'
+              color='secondary'
               onClick={() => navigate('/account')} >
                 {user.avatar 
                   ? <Avatar src={user.avatar} sx={ {width: avatarWidth, height: avatarWidth} }/> 

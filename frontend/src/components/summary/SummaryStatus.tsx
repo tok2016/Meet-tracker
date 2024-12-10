@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { Description, InsertDriveFile, VolumeOff, VolumeUp } from '@mui/icons-material';
+import { Close, InsertDriveFile, VolumeOff, VolumeUp } from '@mui/icons-material';
 
 import SummaryMenu from './SummaryMenu';
 import { statusesTranslations } from '../../utils/utils';
@@ -19,7 +19,7 @@ type SummaryStatusProps = {
 
 const SummaryStatus = ({id, status, audioId, hasText, date, isForAdmin, downMedium, onDelete}: SummaryStatusProps) => (
   downMedium
-  ? <Stack sx={{...subPlainsStyle, width: '40%'}}>
+  ? <Stack sx={{...subPlainsStyle, width: '40%', position: 'relative'}}>
       <Stack sx={{...innerSubPlainStyle, width: '100%', alignItems: 'flex-end'}}>
         <Typography variant='h3' color={status === 'error' ? 'error' : 'textPrimary'} textAlign='right'>
           {statusesTranslations[status]}
@@ -27,9 +27,11 @@ const SummaryStatus = ({id, status, audioId, hasText, date, isForAdmin, downMedi
 
         <Stack sx={subPlainsStyle}>
           {audioId ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
-          {hasText ? <Description sx={iconSx}/> : <InsertDriveFile sx={iconSx}/>}
+          {hasText ? <InsertDriveFile sx={iconSx}/> : <Close sx={iconSx}/>}
         </Stack>
       </Stack>
+
+      <SummaryMenu id={id} isForAdmin={isForAdmin} downMedium={downMedium} onDelete={onDelete} />
     </Stack>
   : <Stack sx={subPlainsStyle}>
       <Typography variant='h3' color={status === 'error' ? 'error' : 'textPrimary'}>
@@ -37,7 +39,7 @@ const SummaryStatus = ({id, status, audioId, hasText, date, isForAdmin, downMedi
       </Typography>
 
       {audioId ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
-      {hasText ? <Description sx={iconSx}/> : <InsertDriveFile sx={iconSx}/>}
+      {hasText ? <InsertDriveFile sx={iconSx}/> : <Close sx={iconSx}/>}
 
       <Typography variant='h3Normal'>
         {date}

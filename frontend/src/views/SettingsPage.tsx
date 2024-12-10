@@ -3,6 +3,7 @@ import { Stack } from '@mui/material';
 
 import ButtonsTab from '../components/ButtonsTab';
 import Page from '../types/Page';
+import { breakpoints } from '../theme/BasicTypography';
 
 const SettingsPages: Page[] = [
   {
@@ -35,11 +36,16 @@ const SettingsPage = () => (
       flexDirection='column'
       gap='40px'
       alignItems='center'
-      width='80%'
-      margin='0 auto'
       sx={{
         'h2': {
           marginBottom: '20px'
+        },
+        [breakpoints.down('md')]: {
+          width: '100%'
+        },
+        [breakpoints.up('md')]: {
+          width: '80%',
+          margin: '0 auto'
         }
       }}>
         <Outlet />

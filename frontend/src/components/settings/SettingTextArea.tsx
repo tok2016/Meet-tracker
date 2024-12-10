@@ -6,12 +6,13 @@ import { ChangeEvent } from 'react';
 type SettingTextAreaProps = {
   label: string,
   value: string,
+  textAlign: 'left' | 'center' | 'right',
   onChange: (evt: ChangeEvent<HTMLTextAreaElement>) => void
 };
 
-const SettingTextArea = ({label, value, onChange}: SettingTextAreaProps) => (
+const SettingTextArea = ({label, value, textAlign, onChange}: SettingTextAreaProps) => (
   <Stack alignSelf='flex-start' width='100%'>
-    <Typography variant='h3' textAlign='left'>
+    <Typography variant='h3' textAlign={textAlign} marginBottom='5px'>
       {label}
     </Typography>
 

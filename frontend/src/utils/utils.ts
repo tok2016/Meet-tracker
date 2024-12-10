@@ -31,9 +31,9 @@ const AVATAR_WIDTH: MediaValue = {
 };
 
 const AVATAR_EDITOR_WIDTH: MediaValue = {
-  xs: 50,
-  sm: 100,
-  md: 200,
+  xs: 150,
+  sm: 200,
+  md: 300,
   lg: 350,
   xl: 500
 };

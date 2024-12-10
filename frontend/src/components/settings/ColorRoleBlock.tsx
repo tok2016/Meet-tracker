@@ -46,7 +46,8 @@ const ColorRoleBlockRaw = ({color, role, colors, selectColor}: ColorRoleBlockPro
     <Typography 
       variant='body1'
       fontWeight={700} 
-      marginBottom={'5px'}>
+      marginBottom={'5px'}
+      >
         {RoleTranslations[role]}
     </Typography>
     
