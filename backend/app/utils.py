@@ -80,3 +80,6 @@ def upload_picture(id, file):
         f.flush()
         f.close()
     return full_image_path
+
+def cleanup_file(temp_file):
+    os.remove(temp_file)
