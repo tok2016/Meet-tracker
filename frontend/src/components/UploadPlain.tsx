@@ -65,7 +65,7 @@ const UploadPlain = ({
         alignItems: 'center',
       } : {})}>
         <CloudUpload sx={{
-          color: UIColors.palette.disabled,
+          color: UIColors.palette.disabledColor,
           width: uploadWidth,
           height: uploadWidth,
           marginBottom: `${itemsMarginBottom}px`

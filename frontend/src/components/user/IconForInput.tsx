@@ -5,7 +5,7 @@ import UIColors from '../../utils/Colors';
 import { UserIconSx } from '../../theme/UserIcon';
 
 const IconForInput = ({type, readOnly}: {type: HTMLInputTypeAttribute, readOnly: boolean}) => {
-  const sx = {...UserIconSx, color: UIColors.palette.textMain };
+  const sx = {...UserIconSx, color: UIColors.palette.textMainColor };
 
   switch(type) {
     case 'email':

@@ -53,15 +53,15 @@ const LLMPanelRaw = ({llmConfig, selected, onClick}: LLMPanelProps) => {
         flexDirection: 'column',
         gap: '5px',
         maxWidth: '100%',
-        backgroundColor: selected ? UIColors.palette.background : UIColors.palette.quaternary,
-        border: selected ? `solid 3px ${UIColors.palette.main}` : 'none'
+        backgroundColor: selected ? UIColors.palette.backgroundColor : UIColors.palette.quaternaryColor,
+        border: selected ? `solid 3px ${UIColors.palette.mainColor}` : 'none'
       } : {})}>
         <Stack
           display='flex'
           flexDirection='row'
           gap='calc(10px + 1vw)'>
             <img src={OllamaLogo} width={iconWidth} style={{
-              backgroundColor: UIColors.palette.background,
+              backgroundColor: UIColors.palette.backgroundColor,
               padding: iconPadding,
               borderRadius: '1em'
             }}/>

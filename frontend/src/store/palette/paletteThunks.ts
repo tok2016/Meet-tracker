@@ -4,7 +4,6 @@ import CustomColorPalette from '../../types/CustomColorPalette';
 import { AsyncThunkConfig } from '../store';
 import { camelToSnake, snakeToCamel } from '../../utils/utils';
 import AxiosInstance from '../../utils/Axios';
-import { CustomColors } from '../../utils/Colors';
 import LogoQuery from '../../types/LogoQuery';
 import Logo from '../../assets/Logo.png';
 
@@ -16,7 +15,7 @@ const postColorPalette = createAsyncThunk<CustomColorPalette, CustomColorPalette
     try {
       const body = camelToSnake(palette);
 
-      const response = await AxiosInstance.post('/colors', body, {
+      const response = await AxiosInstance.post('/color_settings', body, {
         headers: {
           Authorization: user.auth.token
         }
@@ -34,10 +33,12 @@ const getColorPalette = createAsyncThunk<[CustomColorPalette, string], void, Asy
   async (_, {getState}) => {
     const {palette: paletteState} = getState();
 
-    try {
-      const paletteResponse = await AxiosInstance.get('/colors');
-      const palette = snakeToCamel<CustomColorPalette>(paletteResponse.data);
+    const paletteResponse = await AxiosInstance.get('/color_settings');
+    const palette = snakeToCamel<CustomColorPalette>(paletteResponse.data);
 
+    console.log(palette);
+
+    try {
       const logoResponse = await AxiosInstance.get('/logo', {
         responseType: 'blob'
       });
@@ -50,7 +51,7 @@ const getColorPalette = createAsyncThunk<[CustomColorPalette, string], void, Asy
 
       return [palette, logo];
     } catch {
-      return [CustomColors, Logo];
+      return [palette, Logo];
     }
   }
 );

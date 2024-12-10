@@ -7,7 +7,7 @@ import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes'
 const InputLabel: Components['MuiInputLabel'] = {
   styleOverrides: {
     root: {
-      color: getCssVariable('textSecondary'),
+      color: getCssVariable('textSecondaryColor'),
       [breakpoints.down('sm')]: {
         fontSize: XsFontSizes.input,
         top: '-0.5em'

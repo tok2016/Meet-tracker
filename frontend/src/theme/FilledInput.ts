@@ -9,8 +9,8 @@ const FilledInput: Components['MuiFilledInput'] = {
     root: {
       border: 'none',
       borderRadius: 10,
-      backgroundColor: getCssVariable('background'),
-      color: getCssVariable('textMain'),
+      backgroundColor: getCssVariable('backgroundColor'),
+      color: getCssVariable('textMainColor'),
       [breakpoints.down('sm')]: {
         fontSize: XsFontSizes.input
       },

@@ -14,18 +14,18 @@ type ColorRoleBlockProps = {
 };
 
 const RoleTranslations: ColorPaletteVariables = {
-  main: 'Первичный',
-  secondary: 'Вторичный',
-  tertiary: 'Третичный',
-  quaternary: 'Четвертичный',
-  disabled: 'Отлкючённый',
-  background: 'Фоновый',
-  textMain: 'Основной текст',
-  textSecondary: 'Второстепенный цвет',
-  textHighlight: 'Выделенный текст',
-  textContrast: 'Контрастный текст',
-  error: 'Ошибочный',
-  semiTransparent: 'Полупрозрачный'
+  mainColor: 'Первичный',
+  secondaryColor: 'Вторичный',
+  tertiaryColor: 'Третичный',
+  quaternaryColor: 'Четвертичный',
+  disabledColor: 'Отлкючённый',
+  backgroundColor: 'Фоновый',
+  textMainColor: 'Основной текст',
+  textSecondaryColor: 'Второстепенный цвет',
+  textHighlightColor: 'Выделенный текст',
+  textContrastColor: 'Контрастный текст',
+  errorColor: 'Ошибочный',
+  semiTransparentColor: 'Полупрозрачный'
 };
 
 const getContrastTextColor = (color: HexColor): HexColor => {
@@ -35,10 +35,10 @@ const getContrastTextColor = (color: HexColor): HexColor => {
     const decimals = hexes.map((hex) => parseInt(hex, 16));
     const decimalsSum = decimals.reduce((prev, next) => prev + next, 0);
 
-    return decimalsSum >= 400 ? UIColors.palette.textMain : UIColors.palette.textContrast;
+    return decimalsSum >= 400 ? UIColors.palette.textMainColor : UIColors.palette.textContrastColor;
   }
 
-  return UIColors.palette.textMain;
+  return UIColors.palette.textMainColor;
 }; 
 
 const ColorRoleBlockRaw = ({color, role, colors, selectColor}: ColorRoleBlockProps) => (

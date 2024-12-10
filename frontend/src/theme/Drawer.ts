@@ -20,7 +20,7 @@ const Drawer: Components['MuiDrawer'] = {
   },
   styleOverrides: {
     paper: {
-      backgroundColor: getCssVariable('background'),
+      backgroundColor: getCssVariable('backgroundColor'),
       padding: 0,
       [breakpoints.down('sm')]: {
         paddingTop: AVATAR_WIDTH.xs,

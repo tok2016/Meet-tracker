@@ -3,7 +3,7 @@ import { SxProps, Theme } from '@mui/material';
 import UIColors from '../../utils/Colors';
 
 const iconSx: SxProps<Theme> = {
-  color: UIColors.palette.textMain, 
+  color: UIColors.palette.textMainColor, 
   width: '1em', 
   height: '1em'
 };

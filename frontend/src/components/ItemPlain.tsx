@@ -16,7 +16,7 @@ const ItemPlain = ({downMedium, children}: {downMedium: boolean, children: React
       alignItems: 'center',
       width: downMedium ? `calc(95% - 2 * ${PAPER_SMALL_PADDING.sm})` : `calc(100% - 2 * ${PAPER_SMALL_PADDING.lg})`,
       ':hover a': {
-        color: UIColors.palette.textHighlight,
+        color: UIColors.palette.textHighlightColor,
         transition: 'color 0.15s'
       }
     } : {})}>

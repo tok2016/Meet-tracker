@@ -17,7 +17,7 @@ const RawUserPlain = ({user, onDelete}: {user: User, onDelete: () => void}) => {
   /*const avatarSx: SxProps<Theme> = {
     width: '1.2em',
     height: '1.2em',
-    color: UIColors.palette.main
+    color: UIColors.palette.mainColor
   };*/
 
   return (

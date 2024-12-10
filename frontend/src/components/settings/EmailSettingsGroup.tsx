@@ -82,7 +82,7 @@ const EmailSettingsGroup = () => {
             {error
               ? <Typography 
                   variant='body2Highlight' 
-                  color={UIColors.palette.error}>
+                  color={UIColors.palette.errorColor}>
                     {error}
                   </Typography>
               : <TextArea 

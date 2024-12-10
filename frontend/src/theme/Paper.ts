@@ -24,7 +24,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevation'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
+            backgroundColor: getCssVariable('backgroundColor'),
             borderRadius: 10,
             padding: '2vw 2vw',
           }
@@ -34,7 +34,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationSmall'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
+            backgroundColor: getCssVariable('backgroundColor'),
             borderRadius: 10,
             [breakpoints.down('md')]: {
               padding: PAPER_SMALL_PADDING.sm
@@ -52,7 +52,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationInside'
           },
           style: {
-            backgroundColor: getCssVariable('tertiary'),
+            backgroundColor: getCssVariable('tertiaryColor'),
             borderRadius: 10,
             [breakpoints.down('md')]: {
               padding: PAPER_SMALL_PADDING.sm
@@ -70,8 +70,8 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationDashed'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
-            border: `1px dashed ${getCssVariable('disabled')}`,
+            backgroundColor: getCssVariable('backgroundColor'),
+            border: `1px dashed ${getCssVariable('disabledColor')}`,
             borderRadius: 15,
             [breakpoints.down('lg')]: {
               padding: '1vh calc(20px + 4.5vw)'
@@ -86,7 +86,7 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationInput'
           },
           style: {
-            backgroundColor: getCssVariable('background'),
+            backgroundColor: getCssVariable('backgroundColor'),
             borderRadius: 10,
             [breakpoints.down('md')]: {
               padding: '0.5em 1em',
@@ -102,15 +102,15 @@ const Paper: Components['MuiPaper'] = {
             variant: 'elevationDarker'
           },
           style: {
-            backgroundColor: getCssVariable('quaternary'),
+            backgroundColor: getCssVariable('quaternaryColor'),
             borderRadius: 5,
             padding: '0.6em 0.8em',
             ':hover': {
               cursor: 'pointer',
-              backgroundColor: getCssVariable('background')
+              backgroundColor: getCssVariable('backgroundColor')
             },
             ':hover .title': {
-              color: getCssVariable('textHighlight')
+              color: getCssVariable('textHighlightColor')
             }
           }
         },

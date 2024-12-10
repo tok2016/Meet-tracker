@@ -15,7 +15,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState<string>('');
 
   const dispatch = useAppDispatch();
-  const {auth, user, status} = useAppSelector(selectUser);
+  const {auth, user} = useAppSelector(selectUser);
 
   const authorize = () => {
     const login: UserLogin = {
@@ -27,13 +27,13 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    if(auth.token && status !== 'error') {
+    if(auth.token) {
       if(!user.username) {
         dispatch(getCurrentUser());
         dispatch(getCurrentUserAvatar());
       }
     }
-  });
+  }, [auth.token, user.username]);
 
   return (
     <FormHolder>

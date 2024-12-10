@@ -17,9 +17,9 @@ type TextAreaProps = {
 };
 
 const ColorsForTextArea = {
-  body1: UIColors.palette.textMain,
-  body2: UIColors.palette.textSecondary,
-  body2Highlight: UIColors.palette.textMain
+  body1: UIColors.palette.textMainColor,
+  body2: UIColors.palette.textSecondaryColor,
+  body2Highlight: UIColors.palette.textMainColor
 }
 
 const FontWeightsForTextArea = {
@@ -54,7 +54,7 @@ const TextArea = ({value, variant, hidden, readOnly, className, onChange, onKeyD
       style={className === 'outlined'
         ? {
             ...styles,
-            border: `solid 3px ${UIColors.palette.main}`,
+            border: `solid 3px ${UIColors.palette.mainColor}`,
             borderRadius: 15,
             padding: '0.5em'
           }

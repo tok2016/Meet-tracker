@@ -28,7 +28,7 @@ const Typography: Components['MuiTypography'] = {
       subtitle2: 'p'
     },
     fontWeight: 400,
-    color: getCssVariable('textMain')
+    color: getCssVariable('textMainColor')
   },
   styleOverrides: {
     h2: {
@@ -43,7 +43,7 @@ const Typography: Components['MuiTypography'] = {
       fontWeight: 700
     },
     body2: {
-      color: getCssVariable('textSecondary'),
+      color: getCssVariable('textSecondaryColor'),
     },
     subtitle1: {
       fontWeight: 700,
@@ -59,7 +59,7 @@ const Typography: Components['MuiTypography'] = {
         variant: 'h1Highlight',
       },
       style: {
-        color: getCssVariable('textHighlight'),
+        color: getCssVariable('textHighlightColor'),
         fontWeight: 700,
         [breakpoints.down('sm')]: {
           fontSize: XsFontSizes.h1Highlight
@@ -114,7 +114,7 @@ const Typography: Components['MuiTypography'] = {
         [breakpoints.only('xl')]: {
           fontSize: XlFontSizes.h2PromoHighlight
         },
-        color: getCssVariable('textHighlight')
+        color: getCssVariable('textHighlightColor')
       }
     },
     {

@@ -61,7 +61,7 @@ const Button: Components['MuiButton'] = {
         width: '13vw',
         lineHeight: 1,
         background: UIColors.mainGradient(),
-        color: getCssVariable('textContrast'),
+        color: getCssVariable('textContrastColor'),
         minHeight: '3em',
         borderRadius: 10,
         [breakpoints.down('sm')]: {
@@ -83,8 +83,8 @@ const Button: Components['MuiButton'] = {
       style: {
         width: '13vw',
         lineHeight: 1,
-        background: getCssVariable('disabled'),
-        color: getCssVariable('textContrast'),
+        background: getCssVariable('disabledColor'),
+        color: getCssVariable('textContrastColor'),
         minHeight: '3em',
         borderRadius: 10,
         [breakpoints.down('sm')]: {
@@ -106,9 +106,9 @@ const Button: Components['MuiButton'] = {
       },
       style: {
         backgroundColor: 'transparent',
-        color: getCssVariable('textSecondary'),
+        color: getCssVariable('textSecondaryColor'),
         ':hover': {
-          color: getCssVariable('textContrast')
+          color: getCssVariable('textContrastColor')
         }
       }
     },
@@ -117,14 +117,14 @@ const Button: Components['MuiButton'] = {
         variant: 'danger'
       },
       style: {
-        color: getCssVariable('error'),
+        color: getCssVariable('errorColor'),
         backgroundColor: 'transparent',
         ':hover': {
-          backgroundColor: getCssVariable('error'),
-          color: getCssVariable('textContrast')
+          backgroundColor: getCssVariable('errorColor'),
+          color: getCssVariable('textContrastColor')
         },
         ':active': {
-          color: getCssVariable('textMain'),
+          color: getCssVariable('textMainColor'),
           backgroundColor: 'transparent',
         }
       }
@@ -134,11 +134,11 @@ const Button: Components['MuiButton'] = {
         variant: 'filter'
       },
       style: {
-        color: getCssVariable('textSecondary'),
+        color: getCssVariable('textSecondaryColor'),
         fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: getCssVariable('textHighlight'),
+          color: getCssVariable('textHighlightColor'),
           backgroundColor: 'transparent',
         },
         ':active': {
@@ -151,11 +151,11 @@ const Button: Components['MuiButton'] = {
         variant: 'filterSelected'
       },
       style: {
-        color: getCssVariable('textHighlight'),
+        color: getCssVariable('textHighlightColor'),
         fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: getCssVariable('textHighlight'),
+          color: getCssVariable('textHighlightColor'),
           backgroundColor: 'transparent',
         },
         ':active': {
@@ -168,11 +168,11 @@ const Button: Components['MuiButton'] = {
         variant: 'filterValuable'
       },
       style: {
-        color: getCssVariable('textMain'),
+        color: getCssVariable('textMainColor'),
         fontWeight: 700,
         backgroundColor: 'transparent',
         ':hover': {
-          color: getCssVariable('textHighlight'),
+          color: getCssVariable('textHighlightColor'),
           backgroundColor: 'transparent',
         },
         ':active': {
@@ -185,7 +185,7 @@ const Button: Components['MuiButton'] = {
         variant: 'filterValue'
       },
       style: {
-        color: getCssVariable('textMain'),
+        color: getCssVariable('textMainColor'),
         backgroundColor: 'transparent',
         fontWeight: 700,
         [breakpoints.down('sm')]: {
@@ -203,7 +203,7 @@ const Button: Components['MuiButton'] = {
         padding: 0,
         height: '1.1em',
         ':hover': {
-          color: getCssVariable('error'),
+          color: getCssVariable('errorColor'),
           backgroundColor: 'transparent',
         },
         ':active': {

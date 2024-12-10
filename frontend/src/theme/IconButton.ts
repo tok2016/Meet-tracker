@@ -6,19 +6,19 @@ const IconButton: Components['MuiIconButton'] = {
     colorPrimary: {
       padding: 0,
       '*': {
-        color: getCssVariable('main'),
+        color: getCssVariable('mainColor'),
       },
       ':hover *': {
-        color: getCssVariable('secondary')
+        color: getCssVariable('secondaryColor')
       }
     },
     colorSecondary: {
       padding: 0,
       '*': {
-        color: getCssVariable('textMain')
+        color: getCssVariable('textMainColor')
       },
       ':hover *': {
-        color: getCssVariable('disabled')
+        color: getCssVariable('disabledColor')
       }
     }
   }

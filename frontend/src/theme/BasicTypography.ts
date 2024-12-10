@@ -35,13 +35,13 @@ const BasicTypography: TypographyOptions = {
     fontWeight: 400,
     textTransform: 'none',
     padding: 0,
-    color: getCssVariable('textContrast'),
-    backgroundColor: getCssVariable('main'),
+    color: getCssVariable('textContrastColor'),
+    backgroundColor: getCssVariable('mainColor'),
     ':disabled': {
-      backgroundColor: getCssVariable('tertiary'),
+      backgroundColor: getCssVariable('tertiaryColor'),
     },
     ':hover': {
-      backgroundColor: getCssVariable('secondary')
+      backgroundColor: getCssVariable('secondaryColor')
     }
   },
   h1: {

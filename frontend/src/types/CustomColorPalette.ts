@@ -1,15 +1,15 @@
 import { HexColor } from './HexColor'
 
 export default interface CustomColorPalette {
-  main: HexColor,
-  secondary: HexColor,
-  tertiary: HexColor,
-  quaternary: HexColor,
-  disabled: HexColor,
-  background: HexColor,
-  textMain: HexColor,
-  textSecondary: HexColor,
-  textHighlight: HexColor,
-  textContrast: HexColor,
-  error: HexColor
+  mainColor: HexColor,
+  secondaryColor: HexColor,
+  tertiaryColor: HexColor,
+  quaternaryColor: HexColor,
+  disabledColor: HexColor,
+  backgroundColor: HexColor,
+  textMainColor: HexColor,
+  textSecondaryColor: HexColor,
+  textHighlightColor: HexColor,
+  textContrastColor: HexColor,
+  errorColor: HexColor
 };

@@ -7,10 +7,10 @@ import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes'
 const OutlinedInput: Components['MuiOutlinedInput'] = {
   styleOverrides: {
     root: {
-      border: `solid 1px ${getCssVariable('tertiary')}`,
+      border: `solid 1px ${getCssVariable('tertiaryColor')}`,
       borderRadius: 10,
-      backgroundColor: getCssVariable('background'),
-      color: getCssVariable('textMain'),
+      backgroundColor: getCssVariable('backgroundColor'),
+      color: getCssVariable('textMainColor'),
       [breakpoints.down('sm')]: {
         fontSize: XsFontSizes.input
       },

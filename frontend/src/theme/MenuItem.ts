@@ -7,9 +7,9 @@ import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes'
 const MenuItem: Components['MuiMenuItem'] = {
   styleOverrides: {
     root: {
-      backgroundColor: getCssVariable('background'),
+      backgroundColor: getCssVariable('backgroundColor'),
       borderRadius: 50,
-      color: getCssVariable('textMain'),
+      color: getCssVariable('textMainColor'),
       [breakpoints.down('sm')]: {
         fontSize: XsFontSizes.menuItem
       },

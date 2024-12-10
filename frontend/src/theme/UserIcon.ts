@@ -6,7 +6,7 @@ import { breakpoints } from './BasicTypography';
 import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 const UserIconSx: SxProps<Theme> = {
-  color: getCssVariable('textMain'), 
+  color: getCssVariable('textMainColor'), 
   width: INPUT_ICON_WIDTH, 
   height: INPUT_ICON_WIDTH,
   [breakpoints.down('sm')]: {
