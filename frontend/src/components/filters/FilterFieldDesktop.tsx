@@ -1,6 +1,6 @@
 import { ArrowDownward, ArrowUpward, Clear } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
-import { breakpoints } from '../theme/BasicTypography';
+import { breakpoints } from '../../theme/BasicTypography';
 
 type FilterFieldProps = {
   name: string, 
@@ -12,7 +12,7 @@ type FilterFieldProps = {
   onCancel: () => void
 };
 
-const FilterField = ({name, value, direction=1, hidden=false, selected=false, onChoice, onCancel}: FilterFieldProps) => {
+const FilterFieldDesktop = ({name, value, direction=1, hidden=false, selected=false, onChoice, onCancel}: FilterFieldProps) => {
   const variant = selected ? 'filterSelected' : (value ? 'filterValuable' : 'filter');
 
   return (
@@ -62,4 +62,4 @@ const FilterField = ({name, value, direction=1, hidden=false, selected=false, on
   );
 };
 
-export default FilterField;
+export default FilterFieldDesktop;

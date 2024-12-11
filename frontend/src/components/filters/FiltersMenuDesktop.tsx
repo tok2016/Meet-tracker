@@ -1,17 +1,12 @@
 import { FilterAlt, Search as SearchIcon } from '@mui/icons-material';
 import { Button, IconButton, Stack, Typography } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 
-import FilterField from './FilterField';
-import Search from './Search';
-import Filter, { FilterSortType } from '../types/Filter';
+import FilterFieldDesktop from './FilterFieldDesktop';
 import DateRange from './DateRange';
-
-type FilterMenuProps = {
-  defaultFilter: Filter, 
-  hidden?: boolean,
-  submit: (filter: Filter) => void
-};
+import Search from './Search';
+import Filter, { FilterSortType } from '../../types/Filter';
+import { FiltersMenuDeviceProps } from '../../types/FiltersMenuDeviceProps';
 
 const getSearchWord = (field: FilterSortType, filter: Filter) => {
   switch(field) {
@@ -24,75 +19,25 @@ const getSearchWord = (field: FilterSortType, filter: Filter) => {
   }
 };
 
-const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
-  const [filter, setFilter] = useState<Filter>(defaultFilter);
-
+const FiltersMenuDesktop = ({filter, updateFilter, chooseField, onFromChange, onToChange, onSubmit}: FiltersMenuDeviceProps) => {
   const searchWord = getSearchWord(filter.sort, filter);
 
   const onSearchChange = (evt: ChangeEvent<HTMLInputElement>) => {
     switch(filter.sort) {
       case 'title': 
-        setFilter((prev) => ({...prev, title: evt.target.value}));
+        updateFilter({title: evt.target.value});
         break;
       case 'first_name':
-        setFilter((prev) => ({...prev, name: evt.target.value}));
+        updateFilter({name: evt.target.value});
         break;
       default:
-        setFilter((prev) => ({...prev, username: evt.target.value}));
+        updateFilter({username: evt.target.value});
     }
-  };
-
-  const chooseField = (selectedField: FilterSortType) => {
-    if(selectedField === filter.sort) {
-      setFilter((prev) => ({...prev, direction: -prev.direction}));
-    } else {
-      setFilter((prev) => ({...prev, direction: 1, sort: selectedField}))
-    }
-  };
-
-  const onFromChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const start = new Date(evt.target.value);
-    const end = new Date(filter.to);
-
-    if(start > end) {
-      setFilter((prev) => ({
-        ...prev,
-        from: prev.to,
-        to: evt.target.value
-      }))
-    } else {
-      setFilter((prev) => ({
-        ...prev,
-        from: evt.target.value
-      }))
-    }
-  };
-
-  const onToChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const start = new Date(filter.from);
-    const end = new Date(evt.target.value);
-
-    if(start > end) {
-      setFilter((prev) => ({
-        ...prev,
-        to: prev.from,
-        from: evt.target.value
-      }))
-    } else {
-      setFilter((prev) => ({
-        ...prev,
-        to: evt.target.value
-      }))
-    }
-  };
-
-  const onFilterSubmit = () => {
-    submit(filter);
   };
 
   return (
     <Stack 
-      display={hidden ? 'none' : 'flex'}
+      display='flex'
       flexDirection='row'
       justifyContent='space-between'
       marginBottom='15px'>
@@ -105,46 +50,46 @@ const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
               <Typography variant='h3'>Сортировка: </Typography>
             </Stack>
 
-            <FilterField 
+            <FilterFieldDesktop 
               name='Название'
               hidden={typeof filter.title === 'undefined'}
               selected={filter.sort === 'title'}
               value={filter.title ?? ''}
               direction={filter.direction}
               onChoice={() => chooseField('title')}
-              onCancel={() => setFilter((prev) => ({...prev, title: ''}))} />
+              onCancel={() => updateFilter({title: ''})} />
 
-            <FilterField 
+            <FilterFieldDesktop 
               name='Имя'
               hidden={typeof filter.name === 'undefined'}
               selected={filter.sort === 'first_name'}
               value={filter.name ?? ''}
               direction={filter.direction}
               onChoice={() => chooseField('first_name')}
-              onCancel={() => setFilter((prev) => ({...prev, name: ''}))} />
+              onCancel={() => updateFilter({name: ''})} />
 
-            <FilterField 
+            <FilterFieldDesktop 
               name='Дата'
               selected={filter.sort === 'date'}
               value={filter.from ? `${filter.from} - ${filter.to}` : ''}
               direction={filter.direction}
               onChoice={() => chooseField('date')}
-              onCancel={() => setFilter((prev) => ({...prev, from: '', to: ''}))} />
+              onCancel={() => updateFilter({from: '', to: ''})} />
 
-            <FilterField 
+            <FilterFieldDesktop 
               name='Логин'
               selected={filter.sort === 'username'}
               value={filter.username}
               direction={filter.direction}
               onChoice={() => chooseField('username')}
-              onCancel={() => setFilter((prev) => ({...prev, username: ''}))} />
+              onCancel={() => updateFilter({username: ''})} />
 
             <Button 
               variant={filter.archived ? 'filterValuable' : 'filter'}
               style={{
                 display: typeof filter.archived === 'undefined' ? 'none' : 'inherit'
               }}
-              onClick={() => setFilter((prev) => ({...prev, archived: !prev.archived}))}>
+              onClick={() => updateFilter({archived: !filter.archived})}>
                 Архив
             </Button>
 
@@ -153,7 +98,7 @@ const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
               style={{
                 display: typeof filter.admin === 'undefined' ? 'none' : 'inherit'
               }}
-              onClick={() => setFilter((prev) => ({...prev, admin: !prev.admin}))}>
+              onClick={() => updateFilter({admin: !filter.admin})}>
                 Администратор
             </Button>
         </Stack>
@@ -171,11 +116,11 @@ const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
               : <Search 
                   word={searchWord}
                   onChange={onSearchChange}
-                  onSubmit={onFilterSubmit} />}
+                  onSubmit={onSubmit} />}
 
             <IconButton
               color='secondary'
-              onClick={onFilterSubmit}>
+              onClick={onSubmit}>
               <SearchIcon />
             </IconButton>
         </Stack>
@@ -183,4 +128,4 @@ const FilterMenu = ({defaultFilter, hidden=true, submit}: FilterMenuProps) => {
   );
 };
 
-export default FilterMenu;
+export default FiltersMenuDesktop;
