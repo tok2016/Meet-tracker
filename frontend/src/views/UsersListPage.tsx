@@ -1,6 +1,6 @@
 import { Pagination } from '@mui/material';
 
-import FilterMenu from '../components/FiltersMenu';
+import FilterMenu from '../components/filters/FiltersMenu';
 import UserPlain from '../components/user/UserPlain';
 import Filter from '../types/Filter';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -8,7 +8,6 @@ import { ITEMS_PER_PAGE } from '../utils/utils';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectAdminData } from '../store/admin/adminSlice';
 import { getUsers } from '../store/admin/adminThunks';
-import useMediaMatch from '../hooks/useMediaMacth';
 
 const defaultUserFilter: Filter = {
   sort: 'username',
@@ -25,8 +24,6 @@ const UsersListPage = () => {
 
   const {users, usersTotal} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
-
-  const {medium} = useMediaMatch();
 
   const onPageChange = (_evt: ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -47,7 +44,7 @@ const UsersListPage = () => {
   return (
     <>
       <FilterMenu
-        hidden={medium}
+        hidden={false}
         defaultFilter={defaultUserFilter}
         submit={submit} />
       <div>

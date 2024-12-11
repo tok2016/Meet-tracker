@@ -7,7 +7,7 @@ import SummaryPlain from '../components/summary/SummaryPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getSummaries } from '../store/summary/summaryThunks';
-import FilterMenu from '../components/FiltersMenu';
+import FilterMenu from '../components/filters/FiltersMenu';
 import Filter from '../types/Filter';
 import { ITEMS_PER_PAGE } from '../utils/utils';
 import { getAllSummaries } from '../store/admin/adminThunks';
@@ -72,7 +72,7 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
       <ButtonsTab pages={RecentSubpages} hidden={isForAdmin || medium}/>
       <FilterMenu 
         defaultFilter={defaultSummaryFilter}
-        hidden={!isForAdmin || medium}
+        hidden={!isForAdmin}
         submit={submit} />
       <div style={{paddingTop: medium ? '5vh' : 0}}>
         {summaries.map((summary) => (

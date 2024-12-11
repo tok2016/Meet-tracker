@@ -30,7 +30,8 @@ const ButtonsTab = ({pages, hidden=false}: {pages: Page[], hidden?: boolean}) =>
           gridTemplateColumns: '1fr 1fr',
           columnGap: '5vw',
           rowGap: '2vh',
-          marginBottom: '30px'
+          marginBottom: '30px',
+          paddingTop: '10px'
         },
         [breakpoints.up('md')]: {
           display: hidden ? 'none' : 'flex',
