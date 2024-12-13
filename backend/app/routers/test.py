@@ -1,4 +1,3 @@
-#from .ollama_functions import OllamaFunctions
 #from langchain_ollama import OllamaLLM
 
 #Whsiper модель
@@ -57,31 +56,20 @@ text3 = """
 """
 text1 = '"text": "{\n  \"text\": \"Краткое содержание текста: Дискуссия о правильности изменения структуры JSON. Один из участников утверждает, что это не стоит делать, так как реализация на TypeScript может быть сложной. Другой спикер предлагает временное решение с использованием большого красного текста.\",\n  \"topic\": \"Изменение структуры JSON\",\n  \"start\": \"00:00:00\",\n  \"end\": \"00:00:26,680\",\n  \"speakers\":\n    [\n      {\n        \"speaker_name\": \"Speaker 1\",\n        \"speaker_info\": \"Утверждает, что изменять структуру JSON не стоит от слова совсем, так как это может быть сложно реализовать с TypeScript.\"\n      },\n      {\n        \"speaker_name\": \"Speaker 0\",\n        \"speaker_info\": \"Предлагает временное решение с использованием большого красного текста.\"\n      }\n    ]\n}" '
 import json
-#print(json.dumps(text, ensure_ascii=True, sort_keys=True, indent=4, separators=(',', ': ')) )
-dictData = json.loads(text)
-#print(dictData["topic"])
-string_desc = ''
-string_desc = string_desc + "Тема: " + f"{dictData["topic"]}" +"\n"
-string_desc = string_desc + "Начало: " + f"{dictData["start"]}," +"\n"
-string_desc = string_desc + "Конец: " + f"{dictData["end"]}." +"\n"
-string_desc = string_desc + f"{dictData["text"]}" +"\n"
-#string_desc = string_desc + "Спикеры: " + f"{dictData["end"]}." +"\n"
-#print(string_desc)
-speakers_dict = dictData["speakers"]
-for i in speakers_dict:
-  string_desc = string_desc + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
-#print(string_desc)
+#dictData = json.loads(text3)
+#new_text_desc = "Greetings"
+#print(dictData["text"])
+#dictData["text"] = "Greetings"
+#print(dictData["speakers"][0])
+#print(dictData["text"])
+#json_data = json.dumps(dictData, ensure_ascii=False)
+#print(type(json_data))
+def edit_speaker(speaker_id, new_name, new_info):
+  dictData = json.loads(text3)
+  speaker = dictData["speakers"][speaker_id]
+  speaker["speaker_name"] = new_name
+  speaker["speaker_info"] = new_info
+  json_data = json.dumps(dictData, ensure_ascii=False)
+  return json_data
 
-def parse_summaryjson(json_text, string_text):
-  dict_data = json.loads(json_text)
-  string_text = string_text + "Тема: " + f"{dictData["topic"]}" +"\n"
-  string_text = string_text + "Начало: " + f"{dictData["start"]}," +"\n"
-  string_text = string_text + "Конец: " + f"{dictData["end"]}." +"\n"
-  string_text = string_text + f"{dictData["text"]}" +"\n"
-  speakers_dict = dict_data["speakers"]
-  for i in speakers_dict:
-    string_text = string_text + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
-  return string_text
-
-string_text1 = ''
-print(parse_summaryjson(text3, string_text1))
+print(edit_speaker(1, "Meesa2", "Something?2"))
