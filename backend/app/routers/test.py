@@ -31,17 +31,57 @@ text = """
         "speaker_info": "Приветствовал идею проекта и представил себя как дизайнера. Участник команды Паши."
       }
     ]
+    }
+"""
+text3 = """
+{
+"text": "Обсуждение процесса создания и оптимизации резюме на русском языке с использованием моделей распознавания речи, а также настройка процессов в системе.",
+"topic": "Оптимизация резюме",
+"start": "00:00:03",
+"end": "00:07:43",
+"speakers": [
+{
+"speaker_name": "Speaker 0",
+"speaker_info": "Обсуждает общее состояние работы и задачи."
+},
+{
+"speaker_name": "Speaker 1",
+"speaker_info": "Рассказывает о проблемах в работе с моделями распознавания речи, обновлении тега, использовании пользовательской ламы и оптимизации процесса."
+},
+{
+"speaker_name": "Speaker 2",
+"speaker_info": "Поддерживает диалог, уточняет детали и предлагает идеи по ускорению процессов."
+}
+]
 }
 """
-#x = model.invoke(f"Дай краткое содержание текста - {text}. Определи тему. Определи время начала и конца текста. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени), резюме речи каждого и их последующие задачи (без повторений).  Ответь ТОЛЬКО в формате json: {json}")
+text1 = '"text": "{\n  \"text\": \"Краткое содержание текста: Дискуссия о правильности изменения структуры JSON. Один из участников утверждает, что это не стоит делать, так как реализация на TypeScript может быть сложной. Другой спикер предлагает временное решение с использованием большого красного текста.\",\n  \"topic\": \"Изменение структуры JSON\",\n  \"start\": \"00:00:00\",\n  \"end\": \"00:00:26,680\",\n  \"speakers\":\n    [\n      {\n        \"speaker_name\": \"Speaker 1\",\n        \"speaker_info\": \"Утверждает, что изменять структуру JSON не стоит от слова совсем, так как это может быть сложно реализовать с TypeScript.\"\n      },\n      {\n        \"speaker_name\": \"Speaker 0\",\n        \"speaker_info\": \"Предлагает временное решение с использованием большого красного текста.\"\n      }\n    ]\n}" '
+import json
+#print(json.dumps(text, ensure_ascii=True, sort_keys=True, indent=4, separators=(',', ': ')) )
+dictData = json.loads(text)
+#print(dictData["topic"])
+string_desc = ''
+string_desc = string_desc + "Тема: " + f"{dictData["topic"]}" +"\n"
+string_desc = string_desc + "Начало: " + f"{dictData["start"]}," +"\n"
+string_desc = string_desc + "Конец: " + f"{dictData["end"]}." +"\n"
+string_desc = string_desc + f"{dictData["text"]}" +"\n"
+#string_desc = string_desc + "Спикеры: " + f"{dictData["end"]}." +"\n"
+#print(string_desc)
+speakers_dict = dictData["speakers"]
+for i in speakers_dict:
+  string_desc = string_desc + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
+#print(string_desc)
 
-#print(x)
+def parse_summaryjson(json_text, string_text):
+  dict_data = json.loads(json_text)
+  string_text = string_text + "Тема: " + f"{dictData["topic"]}" +"\n"
+  string_text = string_text + "Начало: " + f"{dictData["start"]}," +"\n"
+  string_text = string_text + "Конец: " + f"{dictData["end"]}." +"\n"
+  string_text = string_text + f"{dictData["text"]}" +"\n"
+  speakers_dict = dict_data["speakers"]
+  for i in speakers_dict:
+    string_text = string_text + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
+  return string_text
 
-from fpdf import FPDF
-
-pdf = FPDF()
-pdf.add_page()
-pdf.add_font('DejaVuSans', '', 'backend/app/fonts/DejaVuSans.ttf')
-pdf.set_font('DejaVuSans', size=14)
-pdf.write(text=text)
-x = pdf.output("backend/app/texts/summary.pdf")
+string_text1 = ''
+print(parse_summaryjson(text3, string_text1))

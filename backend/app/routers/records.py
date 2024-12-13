@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, Upl
 from .ollama_functions import OllamaFunctions
 from fastapi.responses import FileResponse
 from app.models import Summary, SummaryFilter
-from app.utils import CurrentUser, cleanup_file
+from app.utils import CurrentUser, cleanup_file, parse_summaryjson
 from typing import Annotated
 from app.db import SessionDep
 from faster_whisper import WhisperModel, tokenizer
@@ -283,9 +283,11 @@ async def create_txt_summary(session: SessionDep, summary_id: int, background_ta
     Get summary as .txt file. Получение резюме в формате .txt файла.
     """
     summary_db = session.get(Summary, summary_id)
+    new_text = f"{summary_db.title}" + "\n" + "\n"
+    new_text = parse_summaryjson(summary_db.text, new_text)
     filename = f"app/texts/summary_{summary_db.id}.txt"
     f = open(filename, "w")
-    f.write(summary_db.text)
+    f.write(new_text)
     f.close()
     background_tasks.add_task(os.remove, filename)
     return FileResponse(path=filename, filename="summary.txt", media_type='multipart/form-data')
@@ -296,11 +298,13 @@ async def create_pdf_summary(session: SessionDep, summary_id: int, background_ta
     Get summary as pdf file. Получение резюме в формате pdf файла.
     """
     summary_db = session.get(Summary, summary_id)
+    new_text = f"{summary_db.title}" + "\n" + "\n"
+    new_text = parse_summaryjson(summary_db.text, new_text)
     pdf = FPDF()
     pdf.add_page()
     pdf.add_font('DejaVuSans', '', 'app/fonts/DejaVuSans.ttf')
     pdf.set_font('DejaVuSans', size=14)
-    pdf.write(text=summary_db.text)
+    pdf.write(text=new_text)
     filename_pdf = f"app/texts/summary_{summary_db.id}.pdf"
     pdf.output(filename_pdf)
     background_tasks.add_task(os.remove, filename_pdf)
@@ -313,8 +317,10 @@ async def create_docx_summary(session:SessionDep, summary_id:int, background_tas
     """
     #background=BackgroundTask(os.remove(filename_docx))
     summary_db = session.get(Summary, summary_id)
+    new_text = f"{summary_db.title}" + "\n" + "\n"
+    new_text = parse_summaryjson(summary_db.text, new_text)
     document = Document()
-    document.add_paragraph(text=summary_db.text)
+    document.add_paragraph(text=new_text)
     filename_docx = f"app/texts/summary_{summary_db.id}.docx"
     document.save(filename_docx)
     background_tasks.add_task(os.remove, filename_docx)

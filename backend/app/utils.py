@@ -11,6 +11,7 @@ from fastapi import Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
 import os
+import json
 
 ALGORITHM = "HS256"
 SECRET_KEY = secrets.token_urlsafe(32)
@@ -83,3 +84,14 @@ def upload_picture(id, file):
 
 def cleanup_file(temp_file):
     os.remove(temp_file)
+
+def parse_summaryjson(json_text, string_text):
+  dict_data = json.loads(json_text)
+  string_text = string_text + "Тема: " + f"{dict_data["topic"]}" +"\n"
+  string_text = string_text + "Начало: " + f"{dict_data["start"]}," +"\n"
+  string_text = string_text + "Конец: " + f"{dict_data["end"]}." +"\n"
+  string_text = string_text + f"{dict_data["text"]}" +"\n"
+  speakers_dict = dict_data["speakers"]
+  for i in speakers_dict:
+    string_text = string_text + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
+  return string_text
