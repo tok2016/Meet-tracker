@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, UploadFile, Form
-from .ollama_functions import OllamaFunctions
 from fastapi.responses import FileResponse
 from app.models import Summary, SummaryFilter
 from app.utils import CurrentUser, cleanup_file, parse_summaryjson
@@ -58,7 +57,7 @@ from app.settings import settings
 
 #Llama модель
 model = OllamaLLM(model=settings.llm_model, format="json", base_url="http://127.0.0.1:11434/")
-json = """
+json_response = """
 {
   text: "Краткое содержание текста",
   topic: "Тема текста",
@@ -164,7 +163,7 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     wsm = get_realigned_ws_mapping_with_punctuation(wsm)
     ssm = get_sentences_speaker_mapping(wsm, speaker_ts)
     text = get_speaker_aware_transcript(ssm)
-    summary_common = model.invoke(f"Дай краткое содержание текста - {text}. Определи тему. Определи время начала и конца текста. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json}")
+    summary_common = model.invoke(f"Дай краткое содержание текста - {text}. Определи тему. Определи время начала и конца текста. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json_response}")
     db_summary = Summary(text=f"{summary_common}", title = title, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
@@ -217,20 +216,29 @@ async def delete_audio(session: SessionDep, summary_id: int):
     return HTTPException(status_code=204, detail="Audio record is deleted")
 
 @router.put("/summary/edit")
-async def edit_summary_text(session: SessionDep, text_input: str, summary_id: int):
+async def edit_summary_text(session: SessionDep, text_input: str, topic_input: str, summary_id: int):
     """
     Function to edit text of summary. Функция для редактирования только текста в резюме.
     """
     summary_db = session.get(Summary, summary_id)
     old_data = summary_db.text
-    #new_data = re.sub(r"'text': '(.*?)', 'start'", old_data, "new_text")
-    new_text = re.sub(r"(?<='text': ').+?(?=', 'start')", text_input, old_data)
-    summary_db.text = new_text
+    dict_data = json.loads(old_data)
+    dict_data["text"] = text_input
+    dict_data["topic"] = topic_input
+    summary_db.text = json.dumps(dict_data, ensure_ascii=False)
     session.add(summary_db)
     session.commit()
     session.refresh(summary_db)
     return summary_db
 
+@router.put("summary/edit_full")
+async def edit_full(session: SessionDep, summary_id: int, new_json_text: str):
+    summary_db = session.get(Summary, summary_id)
+    summary_db.text = new_json_text
+    session.add(summary_db)
+    session.commit()
+    session.refresh(summary_db)
+    return summary_db
 
 @router.get("/summary_filter/")
 async def filter_summary(session: SessionDep, summary_filter: SummaryFilter = FilterDepends(SummaryFilter), 
