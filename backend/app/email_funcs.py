@@ -3,7 +3,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import ssl
 import os
-from .settings import email_settings
 
 def send_email(email_to: str, summary_id: int):
     sender_email = os.environ.get("SENDER_EMAIL")
