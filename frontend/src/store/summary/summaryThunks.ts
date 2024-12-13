@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, getCollectionQuery, getFilterWithDates, getFullSummaries, getFullSummary, getLocaleString, snakeToCamel } from '../../utils/utils';
+import { arraySnakeToCamel, camelToSnake, getCollectionQuery, getFilterWithDates, getFullSummaries, getFullSummary, getLocaleString, snakeToCamel } from '../../utils/utils';
 import Summary, { SummariesRaw, RawSummary, SummaryFile } from '../../types/Summary';
 import CollectionData from '../../types/CollectionData';
 import Filter, { defaultFilter } from '../../types/Filter';
@@ -66,7 +66,8 @@ const putSummaryChanges = createAsyncThunk<Summary, Summary, AsyncThunkConfig>(
   async (summary, {getState}) => {
     const {user} = getState();
 
-    const query = `summary_id=${summary.id}&new_json_text=${JSON.stringify(summary.text[0])}`;
+    const body = camelToSnake(summary.text[0]);
+    const query = `summary_id=${summary.id}&new_json_text=${JSON.stringify(body)}`;
 
     const response = await AxiosInstance.put(`summary/edit_full?${query}`, undefined, {
       headers: {
@@ -77,7 +78,7 @@ const putSummaryChanges = createAsyncThunk<Summary, Summary, AsyncThunkConfig>(
     const rawSummary = snakeToCamel<RawSummary>(response.data);
     const resultSummary = getFullSummary(rawSummary, summary.audio);
 
-    return resultSummary;
+    return resultSummary as Summary;
   }
 );
 

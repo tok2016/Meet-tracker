@@ -72,14 +72,25 @@ const jsonTypes = {
 };
 
 const camelToSnake = (obj: object) => {
-  const result = obj;
+  const result = {...obj};
 
   for (const key in obj) {
-    const snake = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+    const typedKey = key as keyof typeof obj;
+    const snake = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`) as keyof typeof obj;
+
+    const value = obj[typedKey] as any;
+
+    if(value.map !== undefined) {
+      result[typedKey] = value.map((subObj: object) => camelToSnake(subObj)) as never;
+    } else if(typeof value === 'object') {
+      result[typedKey] = camelToSnake(value) as never;
+    } else {
+      result[typedKey] = obj[typedKey];
+    }
 
     if(snake !== key) {
-      result[snake as keyof typeof obj] = obj[key as keyof typeof obj];
-      delete result[key as keyof typeof obj];
+      result[snake] = result[typedKey];
+      delete result[typedKey];
     }
   }
 

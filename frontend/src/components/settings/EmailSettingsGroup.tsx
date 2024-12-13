@@ -91,6 +91,7 @@ const EmailSettingsGroup = () => {
                   variant='body1' 
                   hidden={!emailSettings.markup} 
                   readOnly 
+                  onChange={(evt) => updateSettings({markup: evt.target.value})}
                   onKeyUp={() => {}} 
                   onKeyDown={() => {}}>
                 </TextArea>}
