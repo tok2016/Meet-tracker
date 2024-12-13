@@ -215,24 +215,11 @@ async def delete_audio(session: SessionDep, summary_id: int):
     os.remove("app/sounds/" + audio_id + "/audio.wav")
     return HTTPException(status_code=204, detail="Audio record is deleted")
 
-@router.put("/summary/edit")
-async def edit_summary_text(session: SessionDep, text_input: str, topic_input: str, summary_id: int):
-    """
-    Function to edit text of summary. Функция для редактирования только текста в резюме.
-    """
-    summary_db = session.get(Summary, summary_id)
-    old_data = summary_db.text
-    dict_data = json.loads(old_data)
-    dict_data["text"] = text_input
-    dict_data["topic"] = topic_input
-    summary_db.text = json.dumps(dict_data, ensure_ascii=False)
-    session.add(summary_db)
-    session.commit()
-    session.refresh(summary_db)
-    return summary_db
-
 @router.put("/summary/edit_full")
 async def edit_full(session: SessionDep, summary_id: int, new_json_text: str):
+    """
+    Function to edit summary. Функция для редактирования резюме.
+    """
     summary_db = session.get(Summary, summary_id)
     summary_db.text = new_json_text
     session.add(summary_db)
@@ -279,11 +266,6 @@ async def get_audio(audio_id: str):
     """
     path_audio_dir = "app/sounds/" + audio_id + "/audio.wav"
     return FileResponse(path_audio_dir)
-
-#@router.post("/email")
-#async def send_email_req(email_to: EmailStr):
-#    send_email(email_to)
-#    return {"result": "something?"}
 
 @router.get("/summary_download_txt")
 async def create_txt_summary(session: SessionDep, summary_id: int, background_tasks: BackgroundTasks):
