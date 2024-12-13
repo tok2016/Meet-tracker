@@ -72,7 +72,8 @@ const STTSettingsPage = () => {
 
       <SettingTextArea 
         label='Промпт' 
-        value={sttConfig.initialPrompt} 
+        value={sttConfig.initialPrompt}
+        textAlign='left'
         onChange={(evt) => changeSTTConfig({initialPrompt: evt.target.value})} />
 
       <Button

@@ -36,8 +36,6 @@ const getColorPalette = createAsyncThunk<[CustomColorPalette, string], void, Asy
     const paletteResponse = await AxiosInstance.get('/color_settings');
     const palette = snakeToCamel<CustomColorPalette>(paletteResponse.data);
 
-    console.log(palette);
-
     try {
       const logoResponse = await AxiosInstance.get('/logo', {
         responseType: 'blob'

@@ -6,12 +6,12 @@ import TopicPlain from '../components/summary/TopicPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getAudioById, getSummary, putSummaryChanges } from '../store/summary/summaryThunks';
-import { SummaryUpdate } from '../types/Summary';
 import TopicContent from '../types/TopicContent';
 import AudioPlayer from '../components/summary/AudioPlayer';
 import DownloadButton from '../components/summary/DownloadButton';
 import { areObjectsEqual } from '../utils/utils';
 import { breakpoints } from '../theme/BasicTypography';
+import Summary from '../types/Summary';
 
 const SummaryPage = () => {
   const {id} = useParams();
@@ -21,18 +21,14 @@ const SummaryPage = () => {
   const dispatch = useAppDispatch();
 
   const [text, setText] = useState<TopicContent[]>(summary.text);
-  const disabled = useMemo(() => areObjectsEqual(summary.text[0], text[0]), [summary.text, text]);
+  const disabled = useMemo(() => !text.length || areObjectsEqual(summary.text[0], text[0]), [summary.text, text]);
 
-  const updateSummary = (index: number, updatedContent: TopicContent) => {
-    setText((value) => value.map((content, i) => i === index ? updatedContent : content));
+  const updateSummary = (index: number, updatedContent: Partial<TopicContent>) => {
+    setText((value) => value.map((content, i) => i === index ? {...content, ...updatedContent} : content));
   };
 
   const sendUpdates = () => {
-    const update: SummaryUpdate = {
-      id: summary.id,
-      title: summary.title,
-      text
-    }
+    const update: Summary = {...summary, text};
     dispatch(putSummaryChanges(update));
   };
 
@@ -47,6 +43,10 @@ const SummaryPage = () => {
       dispatch(getAudioById(summary.audioId));
     }
   }, [summary.audioId]);
+
+  useEffect(() => {
+    setText(summary.text);
+  }, [summary.text]);
 
   return (
     <Stack
@@ -63,7 +63,7 @@ const SummaryPage = () => {
 
         <Stack width='100%'>
           {        
-            summary.text.map((content, i) => (
+            text.map((content, i) => (
               <TopicPlain 
                 key={content.topic} 
                 index={i} 

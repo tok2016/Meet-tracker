@@ -27,7 +27,7 @@ const timeStringToSeconds = (timeString: string, delimiter: string = ':'): numbe
 type TopicPlainProps = {
   index: number,
   content: TopicContent, 
-  updateSummary: (index: number, updatedContent: TopicContent) => void,
+  updateSummary: (index: number, updatedContent: Partial<TopicContent>) => void,
 };
 
 const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
@@ -50,21 +50,22 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
 
   let timer: number | undefined = undefined;
 
-  const commitChanges = (speaker?: SpeakerWithIndex) => {
+  const commitChanges = (topic: string, text: string) => {
     timer = setTimeout(() => {
-      if(!speaker) {
-        updateSummary(index, {...content, topic: customTitle, text: customText});
-      } else {
-        updateSummary(index, {
-          ...content, 
-          speakers: [...content.speakers.slice(0, speaker.index), speaker, ...content.speakers.slice(speaker.index + 1)]
-        });
-      }
+      updateSummary(index, {topic, text});
+    }, TYPE_TIMEOUT);
+  };
+
+  const commitSpeakerChanges = (speaker: SpeakerWithIndex) => {
+    timer = setTimeout(() => {
+      updateSummary(index, {
+        speakers: [...content.speakers.slice(0, speaker.index), speaker, ...content.speakers.slice(speaker.index + 1)]
+      });
     }, TYPE_TIMEOUT);
   };
 
   const onKeyUp = () => {
-    commitChanges();
+    commitChanges(customTitle, customText);
   };
 
   const onKeyDown = () => {
@@ -167,7 +168,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
                 key={speaker.index} 
                 speaker={speaker} 
                 onKeyDown={onKeyDown} 
-                commitChanges={commitChanges}/>
+                commitChanges={commitSpeakerChanges}/>
             ))}
           </Paper>
 

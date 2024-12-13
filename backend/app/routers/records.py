@@ -231,7 +231,7 @@ async def edit_summary_text(session: SessionDep, text_input: str, topic_input: s
     session.refresh(summary_db)
     return summary_db
 
-@router.put("summary/edit_full")
+@router.put("/summary/edit_full")
 async def edit_full(session: SessionDep, summary_id: int, new_json_text: str):
     summary_db = session.get(Summary, summary_id)
     summary_db.text = new_json_text
