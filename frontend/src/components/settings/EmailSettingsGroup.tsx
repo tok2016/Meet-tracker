@@ -90,7 +90,7 @@ const EmailSettingsGroup = () => {
                   value={emailSettings.markup} 
                   variant='body1' 
                   hidden={!emailSettings.markup} 
-                  readOnly 
+                  readOnly={false} 
                   onChange={(evt) => updateSettings({markup: evt.target.value})}
                   onKeyUp={() => {}} 
                   onKeyDown={() => {}}>

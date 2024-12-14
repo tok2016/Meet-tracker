@@ -99,7 +99,7 @@ const getDatabaseSettings = createAsyncThunk<DatabaseSettings, void, AsyncThunkC
   }
 );
 
-const postSettings = <SettingsType extends object, >(path: string, actionType: string) => createAsyncThunk<void, SettingsType, AsyncThunkConfig>(
+const postSettings = <SettingsType extends object, >(path: string, actionType: string) => createAsyncThunk<SettingsType, SettingsType, AsyncThunkConfig>(
   `settings/${actionType}`,
   async (settings, {getState}) => {
     const {user} = getState();
@@ -110,6 +110,8 @@ const postSettings = <SettingsType extends object, >(path: string, actionType: s
         Authorization: user.auth.token
       }
     })
+
+    return settings;
   }
 );
 

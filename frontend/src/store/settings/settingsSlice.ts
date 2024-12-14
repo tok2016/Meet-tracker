@@ -28,8 +28,9 @@ const settingsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(postLLMSettings.fulfilled, (state) => {
+      .addCase(postLLMSettings.fulfilled, (state, action) => {
         state.status = 'success';
+        state.llm = action.payload;
       })
       .addCase(getLLMSettings.fulfilled, (state, action) => {
         state.status = 'success';
@@ -47,8 +48,9 @@ const settingsSlice = createSlice({
         state.status = 'success';
         state.stt = action.payload;
       })
-      .addCase(postEmailSettings.fulfilled, (state) => {
+      .addCase(postEmailSettings.fulfilled, (state, action) => {
         state.status = 'success';
+        state.email = action.payload;
       })
       .addCase(getEmailSettings.fulfilled, (state, action) => {
         state.status = 'success';
