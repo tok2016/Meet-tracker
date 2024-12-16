@@ -9,8 +9,7 @@ import { selectUser } from '../store/user/userSlice';
 import { breakpoints } from '../theme/BasicTypography';
 import useMediaMatch from '../hooks/useMediaMacth';
 import useMediaValue from '../hooks/useMediaValue';
-import { AVATAR_WIDTH } from '../utils/utils';
-import MediaValue from '../types/MediaValue';
+import { AVATAR_WIDTH, SIDEBAR_BUTTON_WIDTH } from '../utils/utils';
 import UIColors from '../utils/Colors';
 
 const sidebarPages: Page[] = [
@@ -35,14 +34,6 @@ const sidebarPages: Page[] = [
     forAdmin: true
   }
 ];
-
-const SIDEBAR_BUTTON_WIDTH: MediaValue = {
-  xs: 40,
-  sm: 48,
-  md: 60,
-  lg: 0,
-  xl: 0
-}
 
 const Sidebar = () => {
   const navigate = useNavigate();

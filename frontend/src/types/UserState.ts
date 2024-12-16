@@ -5,5 +5,7 @@ import DefaultState from './DefaultState';
 export default interface UserState extends DefaultState {
   user: User,
   auth: Token,
-  wasLoggedOut: boolean
+  wasLoggedOut: boolean,
+  passwordError: string | undefined,
+  avatarError: string | undefined
 };

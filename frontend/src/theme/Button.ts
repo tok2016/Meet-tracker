@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import UIColors, {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
+import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
@@ -40,6 +40,9 @@ const Button: Components['MuiButton'] = {
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.input
         },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.input
+        },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.input
         },
@@ -70,6 +73,9 @@ const Button: Components['MuiButton'] = {
         [breakpoints.only('sm')]: {
           fontSize: SmFontSizes.subtitle1
         },
+        [breakpoints.only('md')]: {
+          fontSize: MdFontSizes.body1
+        },
         ':hover': {
           filter: 'brightness(1.5)',
           opacity: 0.75
@@ -92,6 +98,9 @@ const Button: Components['MuiButton'] = {
         },
         [breakpoints.only('sm')]: {
           fontSize: SmFontSizes.subtitle1
+        },
+        [breakpoints.only('md')]: {
+          fontSize: MdFontSizes.body1
         },
         ':hover': {
           background: UIColors.mainGradient(),
@@ -193,6 +202,9 @@ const Button: Components['MuiButton'] = {
         },
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.subtitle1
+        },
+        [breakpoints.only('md')]: {
+          fontSize: MdFontSizes.subtitle1
         },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.subtitle1

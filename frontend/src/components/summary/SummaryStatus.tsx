@@ -34,14 +34,14 @@ const SummaryStatus = ({id, status, audioId, hasText, date, isForAdmin, downMedi
       <SummaryMenu id={id} isForAdmin={isForAdmin} downMedium={downMedium} onDelete={onDelete} />
     </Stack>
   : <Stack sx={subPlainsStyle}>
-      <Typography variant='h3' color={status === 'error' ? 'error' : 'textPrimary'}>
+      <Typography variant='h4' color={status === 'error' ? 'error' : 'textPrimary'}>
         {statusesTranslations[status]}
       </Typography>
 
       {audioId ? <VolumeUp sx={iconSx}/> : <VolumeOff sx={iconSx}/>}
       {hasText ? <InsertDriveFile sx={iconSx}/> : <Close sx={iconSx}/>}
 
-      <Typography variant='h3Normal'>
+      <Typography variant='h4' fontWeight={400}>
         {date}
       </Typography>
       <SummaryMenu id={id} isForAdmin={isForAdmin} downMedium={downMedium} onDelete={onDelete} />

@@ -4,15 +4,16 @@ import PlainMenu from '../PlainMenu';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { deleteUserById, patchUserById } from '../../store/admin/adminThunks';
 import { User } from '../../types/User';
+import useMediaMatch from '../../hooks/useMediaMacth';
 
 type UserPlainMenuProps = {
   user: User
-  downMedium: boolean,
   onDelete: () => void
 };
 
-const UserPlainMenu = ({user, downMedium, onDelete}: UserPlainMenuProps) => {
+const UserPlainMenu = ({user, onDelete}: UserPlainMenuProps) => {
   const dispatch = useAppDispatch();
+  const {small} = useMediaMatch();
 
   const deleteUser = () => {
     dispatch(deleteUserById(user.id)).then(onDelete);
@@ -23,7 +24,7 @@ const UserPlainMenu = ({user, downMedium, onDelete}: UserPlainMenuProps) => {
   };
 
   return (
-    <PlainMenu hidden={false} downMedium={downMedium}>
+    <PlainMenu hidden={false} downMedium={small}>
       <MenuItem 
         sx={{
           display: user.isAdmin ? 'none' : 'inherit'

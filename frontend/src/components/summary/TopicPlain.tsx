@@ -1,16 +1,17 @@
-import { Input, Paper, Stack, Typography } from '@mui/material';
+import { Input, Paper, Stack } from '@mui/material';
 import { memo, useMemo, useReducer, useState } from 'react';
 
 import SpeakerPlain from './SpeakerPlain';
 import TopicContent from '../../types/TopicContent';
 import TextArea from '../TextArea';
 import { breakpoints } from '../../theme/BasicTypography';
-import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from '../../theme/FontSizes';
+import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from '../../theme/FontSizes';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setTimeCode } from '../../store/timeCodeSlice';
 import RollDownButton from './RollDownButton';
 import { SpeakerWithIndex } from '../../types/SpeakerContent';
 import useMediaMatch from '../../hooks/useMediaMacth';
+import TopicTimeCodes from './TopicTimeCodes';
 
 const TYPE_TIMEOUT = 2500;
 
@@ -113,6 +114,9 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
                 [breakpoints.up('sm')]: {
                   fontSize: SmFontSizes.h4
                 },
+                [breakpoints.up('sm')]: {
+                  fontSize: MdFontSizes.h4
+                },
                 [breakpoints.up('lg')]: {
                   fontSize: LgFontSizes.h3
                 },
@@ -127,26 +131,10 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
                 }
               }} />
 
-            <div style={{display: !medium ? 'block' : 'none'}}>
-              <Typography variant='h3' component='a' onClick={() => changeTimeCode(content.start)}>
-                {content.start}
-              </Typography>
-              <Typography variant='h3' component='span'> - </Typography>
-              <Typography variant='h3' component='a' onClick={() => changeTimeCode(content.end)}>
-                {content.end}
-              </Typography>
-            </div>
+            <TopicTimeCodes start={content.start} end={content.end} hidden={medium} changeTimeCode={changeTimeCode} />
           </Stack>
 
-          <div style={{display: isRolledDown && medium ? 'block' : 'none'}}>
-            <Typography variant='h4' component='a' onClick={() => changeTimeCode(content.start)}>
-              {content.start}
-            </Typography>
-            <Typography variant='h4' component='span'> - </Typography>
-            <Typography variant='h4' component='a' onClick={() => changeTimeCode(content.end)}>
-              {content.end}
-            </Typography>
-          </div>
+          <TopicTimeCodes start={content.start} end={content.end} hidden={!medium || !isRolledDown} changeTimeCode={changeTimeCode} />
 
           <TextArea 
             readOnly={false}

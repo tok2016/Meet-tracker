@@ -55,6 +55,25 @@ const SmFontSizes: FontSize = {
   input: 16
 };
 
+const MdFontSizes: FontSize = {
+  h1: 40,
+  h2: 36,
+  h3: 24,
+  h4: 20,
+  body1: 18,
+  body2: 18,
+  subtitle1: 16,
+  subtitle2: 16,
+  h1Highlight: 40,
+  h2Promo: 32,
+  h2PromoHighlight: 32,
+  h3Promo: 24,
+  body2Highlight: 16,
+  menuItem: 20,
+  sidebar: 32,
+  input: 24
+};
+
 const LgFontSizes: FontSize = {
   h1: 40,
   h2: 36,
@@ -93,4 +112,4 @@ const XlFontSizes: FontSize = {
   input: 24
 };
 
-export {XsFontSizes, SmFontSizes, LgFontSizes, XlFontSizes};
+export {XsFontSizes, SmFontSizes, MdFontSizes, LgFontSizes, XlFontSizes};

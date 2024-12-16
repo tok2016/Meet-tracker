@@ -13,6 +13,7 @@ import { HexColor } from '../../types/HexColor';
 import { postColorPalette } from '../../store/palette/paletteThunks';
 import { selectPalette } from '../../store/palette/paletteSlice';
 import ColorRoleBlock from './ColorRoleBlock';
+import useMediaMatch from '../../hooks/useMediaMacth';
 
 const ROLE_GRID_COLUMNS: MediaValue = {
   xs: '1fr',
@@ -36,6 +37,8 @@ const ColorUploadPlain = () => {
 
   const {status, palette: defaultPalette} = useAppSelector(selectPalette);
   const dispatch = useAppDispatch();
+
+  const {small, medium} = useMediaMatch();
 
   const [file, setFile] = useState<File | undefined>();
   const [url, setUrl] = useState<string>('');
@@ -139,6 +142,7 @@ const ColorUploadPlain = () => {
           {Object.entries(palette).map((entry) => (
             <ColorRoleBlock 
               key={entry[0]}
+              onlyMedium={medium && !small}
               role={entry[0] as keyof CustomColorPalette} 
               color={palette[entry[0] as keyof CustomColorPalette]} 
               colors={colors}

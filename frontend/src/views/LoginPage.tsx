@@ -9,13 +9,14 @@ import { selectUser } from '../store/user/userSlice';
 import { UserLogin } from '../types/User';
 import { getCurrentUser, getCurrentUserAvatar, postLogin } from '../store/user/userThunks';
 import PasswordField from '../components/user/PasswordField';
+import ButtonContent from '../components/ButtonContent';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const dispatch = useAppDispatch();
-  const {auth, user} = useAppSelector(selectUser);
+  const {auth, user, status, error} = useAppSelector(selectUser);
 
   const authorize = () => {
     const login: UserLogin = {
@@ -57,8 +58,10 @@ const LoginPage = () => {
           onClick={authorize} 
           disabled={!email || !password}
           variant='containtedSecondary'>
-            Войти
+            <ButtonContent content='Войти' status={status} />
         </Button>
+
+        <Typography variant='error'>{error}</Typography>
       </FieldsGroup>
 
       <div>
