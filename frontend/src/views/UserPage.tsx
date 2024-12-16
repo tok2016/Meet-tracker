@@ -8,6 +8,7 @@ import DeleteUserButton from '../components/user/DeleteButton';
 import { useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { selectAdminData } from '../store/admin/adminSlice';
+import ErrorMessagePanel from '../components/ErrorMessagePanel';
 
 const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const {small, medium} = useMediaMatch();
@@ -15,11 +16,18 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const {id} = useParams();
   const parsedId = parseInt(id ?? '');
 
-  const {user: originalUser} = useAppSelector(selectUser);
-  const {user: anotherUser} = useAppSelector(selectAdminData);
+  const {user: originalUser, status: originalStatus, error: originalError} = useAppSelector(selectUser);
+  const {user: anotherUser, status: anotherStatus, error: anotherError} = useAppSelector(selectAdminData);
 
   const user = isForAdmin ? anotherUser : originalUser;
+  const status = isForAdmin ? anotherStatus : originalStatus;
+  const error = isForAdmin ? anotherError : originalError;
+
   const disabled = isForAdmin && user.isAdmin;
+
+  if(status === 'error' && !user.username) {
+    return <ErrorMessagePanel error={error} errorIconType='user' />
+  }
 
   if(small) {
     return (
@@ -39,7 +47,9 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
             isForAdmin={isForAdmin} 
             user={user} 
             disabled={disabled} 
-            id={parsedId} />
+            id={parsedId}
+            status={status}
+            error={error} />
         </Stack>
 
         <DeleteUserButton 
@@ -62,7 +72,9 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
               isForAdmin={isForAdmin} 
               user={user} 
               disabled={disabled} 
-              id={parsedId} />
+              id={parsedId}
+              status={status}
+              error={error} />
         </Stack>
       </Stack>
     );
@@ -78,7 +90,9 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
             isForAdmin={isForAdmin} 
             user={user} 
             disabled={disabled} 
-            id={parsedId} />
+            id={parsedId}
+            status={status}
+            error={error} />
       </Stack>
     </>
   );

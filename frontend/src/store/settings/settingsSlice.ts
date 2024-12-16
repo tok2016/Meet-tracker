@@ -9,6 +9,7 @@ import { isActionWithError } from '../../types/ActionWithError';
 import defaultLLMConfigs from '../../utils/defaultLLMs.json';
 import { defaultEmailSettings } from '../../types/EmailSettings';
 import { defaultDatabaseSettings } from '../../types/DatabaseSettings';
+import { DefaultErrors } from '../../utils/Error';
 
 const selectSettings = (state: RootState) => state.settings;
 
@@ -68,7 +69,7 @@ const settingsSlice = createSlice({
 
         if(isActionWithError(action)) {
           state.status = 'error';
-          state.error = action.error;
+          state.error = DefaultErrors['ERR_INTERNET_SERVER_ERROR'];
         } else {
           state.status = endpoint === 'pending' ? 'pending' : 'idle';
           state.error = undefined;

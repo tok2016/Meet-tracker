@@ -13,6 +13,7 @@ import userSchema from '../schemas/userSchema';
 import { isValidationError } from '../schemas/validationError';
 import { UserValidationError } from '../types/UserValidationError';
 import PasswordField from '../components/user/PasswordField';
+import ButtonContent from '../components/ButtonContent';
 
 const defaultUserData: UserRaw = {
   username: '',
@@ -31,7 +32,7 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const {user: originalUser} = useAppSelector(selectUser);
+  const {user: originalUser, error: userError, status} = useAppSelector(selectUser);
 
   const arePasswordsTheSame = repeatedPassword === userData.password;
   const isCorrect = useMemo(() => Object.values(error).every((err) => !err), [error]);
@@ -141,8 +142,10 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
             variant='containtedSecondary'
             disabled={!isCorrect || !arePasswordsTheSame}
             onClick={() => formUser(userData)}>
-              {isForAdmin ? 'Зарегистрировать' : 'Зарегистрироваться'}
+              <ButtonContent content={isForAdmin ? 'Зарегистрировать' : 'Зарегистрироваться'} status={status} />
           </Button>
+
+          <Typography variant='error'>{userError}</Typography>
         </FieldsGroup>
       </div>
 

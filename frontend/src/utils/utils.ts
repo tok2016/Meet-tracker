@@ -62,6 +62,14 @@ const SIDEBAR_BUTTON_WIDTH: MediaValue = {
   xl: 0
 };
 
+const ERROR_ICON_WIDTH: MediaValue = {
+  xs: 55,
+  sm: 70,
+  md: 100,
+  lg: 100,
+  xl: 120
+};
+
 const statusesTranslations = {
   ['idle']: 'Генерация',
   ['pending']: 'Генерация',
@@ -215,4 +223,4 @@ const areObjectsEqual = (a: object, b: object) => JSON.stringify(a) === JSON.str
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, NAV_BAR_MARGIN_BOTTOM, PAPER_SMALL_PADDING, statusesTranslations, jsonTypes,
-  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE, SIDEBAR_BUTTON_WIDTH};
+  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE, SIDEBAR_BUTTON_WIDTH, ERROR_ICON_WIDTH};

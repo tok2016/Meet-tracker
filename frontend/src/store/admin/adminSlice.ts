@@ -7,6 +7,7 @@ import { isActionWithError } from '../../types/ActionWithError';
 import { defaultUser } from '../../types/User';
 import { defaultSummary } from '../../types/Summary';
 import { RootState } from '../store';
+import { DefaultErrors } from '../../utils/Error';
 
 const initialState: AdminState = {
   users: [],
@@ -80,7 +81,7 @@ const adminSlice = createSlice({
 
         if(isActionWithError(action)) {
           state.status = 'error';
-          state.error = action.error;
+          state.error = DefaultErrors['ERR_INTERNET_SERVER_ERROR'];
         } else {
           state.status = endpoint === 'pending' ? 'pending' : 'idle';
           state.error = undefined;

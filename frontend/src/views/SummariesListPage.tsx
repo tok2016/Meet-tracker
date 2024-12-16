@@ -14,6 +14,8 @@ import { getAllSummaries } from '../store/admin/adminThunks';
 import { selectAdminData } from '../store/admin/adminSlice';
 import CollectionParams from '../types/CollectionParams';
 import useMediaMatch from '../hooks/useMediaMacth';
+import ErrorMessagePanel from '../components/ErrorMessagePanel';
+import LocalProgress from '../components/LocalProgress';
 
 const RecentSubpages: Page[] = [
   {
@@ -37,8 +39,8 @@ const defaultSummaryFilter: Filter = {
 const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
   const [page, setPage] = useState<number>(1);
 
-  const {summaries: userSummaries, total} = useAppSelector(selectSummary);
-  const {summaries: adminSummaries, summariesTotal} = useAppSelector(selectAdminData);
+  const {summaries: userSummaries, total: userTotal, error: userError, status: userStatus} = useAppSelector(selectSummary);
+  const {summaries: adminSummaries, summariesTotal: adminTotal, error: adminError, status: adminStatus} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
   const {medium} = useMediaMatch();
@@ -48,7 +50,9 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
   }
 
   const summaries = isForAdmin ? adminSummaries : userSummaries;
-  const totalCount = isForAdmin ? summariesTotal : total;
+  const totalCount = isForAdmin ? adminTotal : userTotal;
+  const error = isForAdmin ? adminError : userError;
+  const status = isForAdmin ? adminStatus : userStatus;
 
   const updateSummariesList = (currentPage: number, filter: Filter = defaultSummaryFilter) => {
     const query: CollectionParams = {
@@ -67,13 +71,21 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
     updateSummariesList(page);
   }, [page, dispatch]);
 
+  if(status === 'pending') {
+    return <LocalProgress />
+  } else if(!totalCount) {
+    return <ErrorMessagePanel error={error} errorIconType='summary' />
+  }
+
   return (
     <>
       <ButtonsTab pages={RecentSubpages} hidden={isForAdmin || medium}/>
+
       <FilterMenu 
         defaultFilter={defaultSummaryFilter}
         hidden={!isForAdmin}
         submit={submit} />
+
       <div style={{paddingTop: medium && !isForAdmin ? '5vh' : 0, width: '100%'}}>
         {summaries.map((summary) => (
           <SummaryPlain 
@@ -83,8 +95,10 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
             onDelete={() => updateSummariesList(page)}/>
         ))}
       </div>
+
       <Pagination 
         count={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+        hidden={!totalCount}
         defaultPage={1}
         shape='rounded' 
         color='primary'

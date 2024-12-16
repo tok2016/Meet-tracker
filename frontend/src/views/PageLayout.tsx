@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CircularProgress, createTheme, PaletteOptions, THEME_ID, ThemeProvider, Theme } from '@mui/material';
+import { createTheme, PaletteOptions, THEME_ID, ThemeProvider, Theme } from '@mui/material';
 
 import NavigationBar from '../components/NavigationBar';
 import Router from './Router';
@@ -10,6 +10,7 @@ import { getColorPalette } from '../store/palette/paletteThunks';
 import { selectPalette } from '../store/palette/paletteSlice';
 import DefaultTheme from '../theme/Theme';
 import UIColors from '../utils/Colors';
+import FullScreenProgress from '../components/FullScreenProgress';
 
 const PageLayout = () => {
   const {user, auth, status} = useAppSelector(selectUser);
@@ -73,7 +74,7 @@ const PageLayout = () => {
   }, [paletteStatus])
 
   if(paletteStatus === 'idle' || paletteStatus === 'pending') {
-    return <CircularProgress />
+    return <FullScreenProgress />
   }
 
   return (

@@ -8,19 +8,21 @@ const InputLabel: Components['MuiInputLabel'] = {
   styleOverrides: {
     root: {
       color: getCssVariable('textSecondaryColor'),
-      top: '-0.5em',
       [breakpoints.down('sm')]: {
-        fontSize: XsFontSizes.input
+        fontSize: XsFontSizes.input,
+        top: '-0.5em'
       },
       [breakpoints.up('sm')]: {
-        fontSize: SmFontSizes.input
+        fontSize: SmFontSizes.input,
+        top: '-0.5em'
       },
       [breakpoints.up('md')]: {
         fontSize: MdFontSizes.input,
         top: '-0.15em',
       },
       [breakpoints.up('lg')]: {
-        fontSize: LgFontSizes.input
+        fontSize: LgFontSizes.input,
+        top: '-0.5em'
       },
       [breakpoints.only('xl')]: {
         fontSize: XlFontSizes.input,

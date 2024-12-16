@@ -11,7 +11,8 @@ declare module '@mui/material/Typography' {
     h2PromoHighlight: true,
     h3Promo: true,
     body2Highlight: true,
-    h3Normal: true
+    h3Normal: true,
+    error: true
   }
 }
 
@@ -194,6 +195,30 @@ const Typography: Components['MuiTypography'] = {
         [breakpoints.only('xl')]: {
           fontSize: XlFontSizes.h3
         }
+      }
+    },
+    {
+      props: {
+        variant: 'error'
+      },
+      style: {
+        color: getCssVariable('errorColor'),
+        fontWeight: 700,
+        [breakpoints.down('sm')]: {
+          fontSize: XsFontSizes.subtitle1
+        },
+        [breakpoints.up('sm')]: {
+          fontSize: SmFontSizes.subtitle1
+        },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.subtitle1
+        },
+        [breakpoints.up('lg')]: {
+          fontSize: LgFontSizes.subtitle1
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: XlFontSizes.subtitle1
+        },
       }
     }
   ]
