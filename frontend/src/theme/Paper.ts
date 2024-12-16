@@ -11,7 +11,8 @@ declare module '@mui/material/Paper' {
     elevationDashed: true,
     elevationInput: true,
     elevationDarker: true,
-    elevationTransparent: true
+    elevationTransparent: true,
+    elevationFullScreen: true
   }
 }
 
@@ -120,6 +121,15 @@ const Paper: Components['MuiPaper'] = {
           },
           style: {
             backgroundColor: 'transparent'
+          }
+        },
+        {
+          props: {
+            variant: 'elevationFullScreen'
+          },
+          style: {
+            backgroundColor: getCssVariable('tertiaryColor'),
+            padding: '12vh 7vw 0'
           }
         }
       ]

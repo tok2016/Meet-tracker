@@ -31,7 +31,7 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
 
   const dispatch = useAppDispatch();
   
-  const {medium} = useMediaMatch();
+  const {small} = useMediaMatch();
   const marginTop = useMediaValue(AVATAR_WIDTH);
   const navBarPaddingBottom = useMediaValue(NAV_BAR_MARGIN_BOTTOM);
 
@@ -82,17 +82,17 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
   return (
     <Dialog
       open={isOpened}
-      fullScreen={medium}
+      fullScreen={small}
       maxWidth='xs'
       fullWidth
       onClose={close}
       sx={{
         [breakpoints.down('md')]: {
-          padding: `calc(95vh - ${marginTop}px - ${navBarPaddingBottom}) 7vw 0`
+          padding: `calc(${marginTop}px - ${navBarPaddingBottom}) 0 0`
         }
       }}
       PaperProps={{
-        variant: medium ? 'elevationTransparent' : 'elevation'
+        variant: small ? 'elevationFullScreen' : 'elevation'
       }}>
         <FieldsGroup>
             <Stack width='100%' position='relative'>

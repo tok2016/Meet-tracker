@@ -10,7 +10,7 @@ import { selectUser } from '../store/user/userSlice';
 import { selectAdminData } from '../store/admin/adminSlice';
 
 const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
-  const {medium} = useMediaMatch();
+  const {small, medium} = useMediaMatch();
 
   const {id} = useParams();
   const parsedId = parseInt(id ?? '');
@@ -21,7 +21,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const user = isForAdmin ? anotherUser : originalUser;
   const disabled = isForAdmin && user.isAdmin;
 
-  if(medium) {
+  if(small) {
     return (
       <FormHolder isInner>
         <Typography variant='h2' marginBottom='15px'>
@@ -48,6 +48,23 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
           isUserAdmin={user.isAdmin} 
           hidden={false} />
       </FormHolder>
+    );
+  } else if(medium) {
+    return (
+      <Stack
+        width='100%'
+        marginTop='4vh'>
+        <Typography variant='h2' marginBottom='15px'>Настройки</Typography>
+
+        <Stack
+          width='100%'>
+            <UserProfileForm 
+              isForAdmin={isForAdmin} 
+              user={user} 
+              disabled={disabled} 
+              id={parsedId} />
+        </Stack>
+      </Stack>
     );
   }
   return (

@@ -3,7 +3,7 @@ import { SxProps, Theme } from '@mui/material';
 import {getCssVariable} from '../utils/Colors';
 import { INPUT_ICON_WIDTH } from '../utils/utils';
 import { breakpoints } from './BasicTypography';
-import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
+import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 const UserIconSx: SxProps<Theme> = {
   color: getCssVariable('textMainColor'), 
@@ -14,6 +14,9 @@ const UserIconSx: SxProps<Theme> = {
   },
   [breakpoints.up('sm')]: {
     fontSize: SmFontSizes.h3
+  },
+  [breakpoints.up('md')]: {
+    fontSize: MdFontSizes.h3
   },
   [breakpoints.up('lg')]: {
     fontSize: LgFontSizes.h3

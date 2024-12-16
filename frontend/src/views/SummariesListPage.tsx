@@ -74,7 +74,7 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
         defaultFilter={defaultSummaryFilter}
         hidden={!isForAdmin}
         submit={submit} />
-      <div style={{paddingTop: medium ? '5vh' : 0}}>
+      <div style={{paddingTop: medium && !isForAdmin ? '5vh' : 0, width: '100%'}}>
         {summaries.map((summary) => (
           <SummaryPlain 
             key={summary.id} 

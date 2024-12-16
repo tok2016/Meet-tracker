@@ -8,9 +8,9 @@ import useMediaMatch from '../hooks/useMediaMacth';
 const FormHolder = ({children, isForAdmin=false, isInner=false}: {children: ReactNode, isForAdmin?: boolean, isInner?: boolean}) => {
   const marginTop = useMediaValue(AVATAR_WIDTH);
   const navBarPaddingBottom = useMediaValue(NAV_BAR_MARGIN_BOTTOM);
-  const {medium} = useMediaMatch();
+  const {small, medium} = useMediaMatch();
 
-  if(medium) {
+  if(small) {
     return (
       <Stack
         display='flex'
@@ -21,6 +21,24 @@ const FormHolder = ({children, isForAdmin=false, isInner=false}: {children: Reac
         height={`calc(95vh - ${marginTop}px - ${navBarPaddingBottom})`}>
           {children}
       </Stack>
+    );
+  } else if(medium) {
+    return (
+      <Paper 
+        sx={(theme) => (theme.components?.MuiPaper ? {
+          ...theme.components.MuiPaper?.defaultProps?.sx,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          height: isForAdmin ? `calc(50vh - ${marginTop}px - ${navBarPaddingBottom})` : `calc(85vh - ${marginTop}px - ${navBarPaddingBottom})`,
+          width: isForAdmin ? '60vw' : '75vw',
+          minHeight: 'fit-content',
+          margin: '0 auto',
+          marginTop: isForAdmin ? 0 : `calc(${marginTop}px + ${navBarPaddingBottom})`,
+          padding: '4vh 7vw'
+        } : {})}>
+        {children}
+    </Paper>
     );
   }
 

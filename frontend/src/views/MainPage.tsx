@@ -39,7 +39,7 @@ const PROMOS: PromoInfo[] = [
 const MainPage = () => {
   const marginTop = useMediaValue(AVATAR_WIDTH);
   const paddingTop = useMediaValue(NAV_BAR_MARGIN_BOTTOM);
-  const {medium} = useMediaMatch();
+  const {small, medium} = useMediaMatch();
 
   return (
     <Stack 
@@ -76,7 +76,7 @@ const MainPage = () => {
             textAlign='left' 
             width='70%'
             sx={{
-              display: medium ? 'none' : 'box'
+              display: small ? 'none' : 'box'
             }}>
               С помощью Brify вам не придётся пересматривать запись 
               или отвлекаться во время встречи на составление резюме.
@@ -98,9 +98,9 @@ const MainPage = () => {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: medium ? '1fr' : '1fr 1fr',
-          columnGap: '15vw',
-          rowGap: '8vh'
+          gridTemplateColumns: small ? '1fr' : '1fr 1fr',
+          columnGap: medium ? '8vw' : '15vw',
+          rowGap: medium ? '5vh' : '8vh'
         }}>
           {PROMOS.map((promo) => (
             <Promo promoInfo={promo} key={promo.id} />

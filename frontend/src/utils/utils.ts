@@ -33,7 +33,7 @@ const AVATAR_WIDTH: MediaValue = {
 const AVATAR_EDITOR_WIDTH: MediaValue = {
   xs: 150,
   sm: 200,
-  md: 300,
+  md: 350,
   lg: 350,
   xl: 500
 };
@@ -52,6 +52,14 @@ const PAPER_SMALL_PADDING: MediaValue = {
   md: '1em',
   lg: '1.5em',
   xl: '1.5em'
+};
+
+const SIDEBAR_BUTTON_WIDTH: MediaValue = {
+  xs: 30,
+  sm: 40,
+  md: 50,
+  lg: 0,
+  xl: 0
 };
 
 const statusesTranslations = {
@@ -207,4 +215,4 @@ const areObjectsEqual = (a: object, b: object) => JSON.stringify(a) === JSON.str
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, NAV_BAR_MARGIN_BOTTOM, PAPER_SMALL_PADDING, statusesTranslations, jsonTypes,
-  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};
+  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE, SIDEBAR_BUTTON_WIDTH};

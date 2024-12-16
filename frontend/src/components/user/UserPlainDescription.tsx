@@ -1,17 +1,19 @@
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { User } from '../../types/User';
+
 import UserPlainMenu from './UserPlainMenu';
+import { User } from '../../types/User';
 
 type UserPlainDescProps = {
   user: User,
   date: string,
   downMedium: boolean,
+  medium: boolean,
   onDelete: () => void
 };
 
-const UserPlainDescription = ({user, date, downMedium, onDelete}: UserPlainDescProps) => (
-  downMedium 
+const UserPlainDescription = ({user, date, downMedium, medium, onDelete}: UserPlainDescProps) => (
+  medium 
   ? <>
       <div style={{
         width: '100%',
@@ -40,7 +42,9 @@ const UserPlainDescription = ({user, date, downMedium, onDelete}: UserPlainDescP
           </Typography>
         </Link>
         
-        <UserPlainMenu user={user} downMedium={downMedium} onDelete={onDelete} />
+        {downMedium
+          ? <UserPlainMenu user={user} onDelete={onDelete} />
+          : <></>}
       </div>
 
       <div style={{
@@ -81,7 +85,7 @@ const UserPlainDescription = ({user, date, downMedium, onDelete}: UserPlainDescP
         {user.isAdmin ? 'Администратор' : 'Пользователь'}
       </Typography>
 
-      <UserPlainMenu user={user} downMedium={downMedium} onDelete={onDelete} />
+      <UserPlainMenu user={user} onDelete={onDelete} />
     </>
 );
 

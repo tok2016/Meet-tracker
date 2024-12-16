@@ -69,7 +69,12 @@ const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
           marginBottom: '15px',
           gap: '3vw'
         },
-        [breakpoints.up('md')]: {
+        [breakpoints.only('md')]: {
+          width: '70%',
+          marginBottom: '20px',
+          gap: '3vw'
+        },
+        [breakpoints.up('lg')]: {
           width: '50%',
           marginBottom: '30px',
           gap: '2vw'
