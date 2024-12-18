@@ -86,12 +86,15 @@ def cleanup_file(temp_file):
     os.remove(temp_file)
 
 def parse_summaryjson(json_text, string_text):
-  dict_data = json.loads(json_text)
-  string_text = string_text + "Тема: " + f"{dict_data["topic"]}" +"\n"
-  string_text = string_text + "Начало: " + f"{dict_data["start"]}," +"\n"
-  string_text = string_text + "Конец: " + f"{dict_data["end"]}." +"\n"
-  string_text = string_text + f"{dict_data["text"]}" +"\n"
-  speakers_dict = dict_data["speakers"]
-  for i in speakers_dict:
-    string_text = string_text + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
-  return string_text
+    dict_data = json.loads(json_text)
+    dict_data_seg = dict_data["segments"]
+    for segment in dict_data_seg:
+        string_text += "Тема: " + f"{segment["topic"]}" +"\n"
+        string_text = string_text + "Начало: " + f"{segment["start"]}," +"\n"
+        string_text = string_text + "Конец: " + f"{segment["end"]}." +"\n"
+        string_text = string_text + f"{segment["text"]}" +"\n"
+        speakers_dict = segment["speakers"]
+        for i in speakers_dict:
+            string_text = string_text + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
+        string_text += "\n"
+    return string_text

@@ -58,19 +58,22 @@ from app.settings import settings
 #Llama модель
 model = OllamaLLM(model=settings.llm_model, format="json", base_url="http://127.0.0.1:11434/")
 json_response = """
-{
-  text: "Краткое содержание текста",
-  topic: "Тема текста",
-  start: "Время начала текста",
-  end: "Время конца текста",
-  speakers: 
-    [
-      {
-        speaker_name: "Имя спикера в формате Speaker 0",
-        speaker_info: "Резюме речи спикера",
-      },
-    ],
-}
+  "segments":
+  [
+    {
+      text: "Краткое содержание отрывка",
+      topic: "Тема отрывка",
+      start: "Время начала отрывка",
+      end: "Время конца отрывка",
+      speakers: 
+        [
+          {
+            speaker_name: "Имя спикера в формате Speaker 0",
+            speaker_info: "Резюме речи спикера",
+          },
+        ],
+    }
+  ]
 """
 
 router = APIRouter()
@@ -163,7 +166,7 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     wsm = get_realigned_ws_mapping_with_punctuation(wsm)
     ssm = get_sentences_speaker_mapping(wsm, speaker_ts)
     text = get_speaker_aware_transcript(ssm)
-    summary_common = model.invoke(f"Дай краткое содержание текста - {text}. Определи тему. Определи время начала и конца текста. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json_response}")
+    summary_common = model.invoke(f"Определи важные темы и отрывки в тексте: '{text}'. Дай краткое содержание каждого отрывка. Определи тему отрывка. Определи время начала и конца отрывка. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json_response}")
     db_summary = Summary(text=f"{summary_common}", title = title, user_id = current_user.id, audio_id = audio_id)
     session.add(db_summary)
     session.commit()
