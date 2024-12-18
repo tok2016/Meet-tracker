@@ -38,6 +38,7 @@ const summarySlide = createSlice({
       })
       .addCase(getSummary.rejected, (state, action) => {
         state.status = 'error';
+        state.summary = defaultSummary;
         state.error = getErrorMessage(SUMMRY_GET_ERRORS, action.error.code);
       })
       .addCase(putSummaryChanges.fulfilled, (state, action) => {
@@ -64,7 +65,7 @@ const summarySlide = createSlice({
       .addCase(getSummaries.rejected, (state, action) => {
         state.status = 'error';
         state.error = getErrorMessage(SUMMARY_LIST_ERRORS, action.error.code);
-        state.total = 0;
+        state.summaries = [];
       })
       .addCase(getAudioById.fulfilled, (state, action) => {
         state.status = 'success';
@@ -72,6 +73,12 @@ const summarySlide = createSlice({
       })
       .addCase(getAudioById.rejected, (state, action) => {
         state.status = 'error';
+
+        if(state.summary.audio) {
+          URL.revokeObjectURL(state.summary.audio);
+        }
+        state.summary.audio = '';
+
         state.error = getErrorMessage(SUMMARY_AUDIO_ERRORS, action.error.code);
       })
       .addCase(getSummaryFile.fulfilled, (state) => {

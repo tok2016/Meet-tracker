@@ -71,10 +71,12 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
     updateSummariesList(page);
   }, [page, dispatch]);
 
-  if(status === 'pending') {
-    return <LocalProgress />
-  } else if(!totalCount) {
-    return <ErrorMessagePanel error={error} errorIconType='summary' />
+  if(!summaries.length) {
+    if(status === 'pending') {
+      return <LocalProgress />
+    } else {
+      return <ErrorMessagePanel error={error} errorIconType='summary' />
+    }
   }
 
   return (

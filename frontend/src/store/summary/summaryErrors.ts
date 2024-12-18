@@ -14,7 +14,6 @@ const SUMMRY_GET_ERRORS: ErrorMessage = {
 
 const SUMMRY_PUT_ERRORS: ErrorMessage = {
   ...DefaultErrors,
-  'ERR_BAD_REQUEST': 'Не удалось обновить резюме',
   'ERR_NOT_FOUND': 'Резюме не найдено'
 };
 

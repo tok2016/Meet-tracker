@@ -6,24 +6,12 @@ import TopicContent from '../../types/TopicContent';
 import TextArea from '../TextArea';
 import { breakpoints } from '../../theme/BasicTypography';
 import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from '../../theme/FontSizes';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { setTimeCode } from '../../store/timeCodeSlice';
 import RollDownButton from './RollDownButton';
 import { SpeakerWithIndex } from '../../types/SpeakerContent';
 import useMediaMatch from '../../hooks/useMediaMacth';
 import TopicTimeCodes from './TopicTimeCodes';
 
 const TYPE_TIMEOUT = 2500;
-
-const timeStringToSeconds = (timeString: string, delimiter: string = ':'): number => {
-  const values = timeString.split(delimiter).map((str) => parseFloat(str));
-  const seconds = values.reduceRight((prev, curr, i) => {
-    const normalizedCurr = Math.ceil(curr) * Math.pow(60, i);
-    return Math.ceil(prev) + normalizedCurr;
-  }, 0);
-
-  return seconds;
-};
 
 type TopicPlainProps = {
   index: number,
@@ -41,13 +29,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
   const [customTitle, setCustomTitle] = useState<string>(content.topic);
   const [customText, setCustomText] = useState<string>(content.text);
 
-  const dispatch = useAppDispatch();
-
   const {medium} = useMediaMatch();
-
-  const changeTimeCode = (timeCode: string) => {
-    dispatch(setTimeCode(timeStringToSeconds(timeCode)));
-  };
 
   let timer: number | undefined = undefined;
 
@@ -131,10 +113,10 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
                 }
               }} />
 
-            <TopicTimeCodes start={content.start} end={content.end} hidden={medium} changeTimeCode={changeTimeCode} />
+            <TopicTimeCodes start={content.start} end={content.end} hidden={medium} />
           </Stack>
 
-          <TopicTimeCodes start={content.start} end={content.end} hidden={!medium || !isRolledDown} changeTimeCode={changeTimeCode} />
+          <TopicTimeCodes start={content.start} end={content.end} hidden={!medium || !isRolledDown} />
 
           <TextArea 
             readOnly={false}

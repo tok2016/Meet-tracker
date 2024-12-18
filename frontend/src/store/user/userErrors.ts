@@ -3,13 +3,11 @@ import { DefaultErrors } from '../../utils/Error';
 
 const LOGIN_ERRORS: ErrorMessage = {
   ...DefaultErrors,
-  'ERR_BAD_REQUEST': 'Данные заполнены неверно',
   'ERR_UNAUTHORIZED': 'Неправильная электронная почта или пароль'
 };
 
 const REGISTER_ERRORS: ErrorMessage = {
   ...DefaultErrors,
-  'ERR_BAD_REQUEST': 'Данные заполнены неверно',
   'ERR_UNAUTHORIZED': 'На данный момент Вы не можете создать новую учётную запись',
   'ERR_NOT_FOUND': 'Не удалось найти некоторые данные'
 };

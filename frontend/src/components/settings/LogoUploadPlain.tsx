@@ -9,7 +9,7 @@ import useMediaValue from '../../hooks/useMediaValue';
 import { LOGO_WIDTH } from '../../utils/utils';
 
 const LogoUploadPlain = () => {
-  const {logo, status} = useAppSelector(selectPalette);
+  const {logo, status, error} = useAppSelector(selectPalette);
 
   const [file, setFile] = useState<File | undefined>();
   const [url, setUrl] = useState<string>(logo);
@@ -50,6 +50,7 @@ const LogoUploadPlain = () => {
         file={file}
         inputId='logo' 
         acceptedFormats='.png, .jpg, .jpeg, .svg, .webp'
+        error={error}
         setFile={setFileLogo} 
         onFileUpload={onLogoUpload}>
           <img src={url} style={{ height: logoHeight, margin: '10px' }} />

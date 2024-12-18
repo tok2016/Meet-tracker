@@ -71,7 +71,7 @@ const userSlice = createSlice({
       })
       .addCase(postLogin.rejected, (state, action) => {
         state.status = 'error';
-        console.log(action.error);
+        state.auth = defaultAuth;
         state.error = getErrorMessage(LOGIN_ERRORS, action.error.code);
       })
       .addCase(postLogout.fulfilled, (state) => {
@@ -120,6 +120,11 @@ const userSlice = createSlice({
       })
       .addCase(getCurrentUserAvatar.rejected, (state, action) => {
         state.status = 'error';
+
+        if(state.user.avatar) {
+          URL.revokeObjectURL(state.user.avatar);
+        }
+
         state.avatarError = getErrorMessage(AVATAR_GET_ERRORS, action.error.code);
       })
       .addCase(patchCurrentUser.fulfilled, (state, action) => {

@@ -2,7 +2,7 @@ import Filter from '../types/Filter';
 import MediaValue from '../types/MediaValue';
 import SpeakerContent, { SpeakerArrayContent } from '../types/SpeakerContent';
 import Summary, { RawSummary, SummaryInfo } from '../types/Summary';
-import TopicContent, { TopicFull } from '../types/TopicContent';
+import TopicContent, { isTopicContent, isTopicRaw } from '../types/TopicContent';
 
 const BASE_URL = 'http://127.0.0.1:8000';
 
@@ -145,8 +145,6 @@ const speakersObjectToArray = (obj: SpeakerArrayContent): SpeakerContent[] => ob
   speakerInfo: obj.speakerInfo[i]
 }));
 
-const singularToDouble = (str: string): string => str.replace(/'/g, '"');
-
 const getTopic = (content: TopicContent): TopicContent => ({
   ...content,
   speakers: content.speakers.length !== undefined 
@@ -155,36 +153,18 @@ const getTopic = (content: TopicContent): TopicContent => ({
 });
 
 const parseSummaryContent = (content: string): TopicContent[] => {
-  try {
-    const parsedRawContent = JSON.parse(content) as TopicContent;
+  const parsedRawContent = JSON.parse(content);
+  const topics: TopicContent[] = [];
 
-    const topics: TopicContent[] = [];
+  if(isTopicRaw(parsedRawContent)) {
+    parsedRawContent.segments.forEach((raw) => {
+      topics.push(getTopic(raw));
+    });
+  } else if(isTopicContent(parsedRawContent)) {
     topics.push(getTopic(parsedRawContent));
-
-    return topics;
-  } catch {
-    const regBoundaryQuotes = /'[^:,]{1,}'/g;
-    const regExtraBoundaryQuotes = /'[^:]{1,}'/g;
-
-    const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'))?.replace(/"/g, '\"');
-    const stringJsonSingular = stringEntry
-      ?.replace(regBoundaryQuotes, singularToDouble)
-      .replace(regExtraBoundaryQuotes, singularToDouble);
-
-    if(!stringJsonSingular) {
-      return [];
-    }
-
-    const parsedRawContent = JSON.parse(stringJsonSingular) as TopicFull[];
-    const topics = parsedRawContent.map((raw) => ({
-      ...raw.args,
-      speakers: raw.args.speakers.length !== undefined 
-        ? arraySnakeToCamel<SpeakerContent>(raw.args.speakers)
-        : speakersObjectToArray(snakeToCamel<SpeakerArrayContent>(raw.args.speakers))
-    }));
-
-    return topics;
   }
+
+  return topics;
 };
 
 const getFullSummary = (rawSummary: RawSummary, audio: string = ''): Summary => ({

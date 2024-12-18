@@ -35,7 +35,7 @@ const ColorUploadPlain = () => {
   const roleColumns = useMediaValue(ROLE_GRID_COLUMNS);
   const colorColumns = useMediaValue(COLOR_GRID_COLUMNS);
 
-  const {status, palette: defaultPalette} = useAppSelector(selectPalette);
+  const {status, palette: defaultPalette, error} = useAppSelector(selectPalette);
   const dispatch = useAppDispatch();
 
   const {small, medium} = useMediaMatch();
@@ -114,6 +114,7 @@ const ColorUploadPlain = () => {
           acceptedFormats='.svg'
           inputId='palette'
           hideSubmitButton
+          error={error}
           setFile={setFileImage}
           onFileUpload={onPaletteUpload}>
             <img src={url} style={{ width: '20vw', margin: 'calc(2vh + 10px)' }} />
