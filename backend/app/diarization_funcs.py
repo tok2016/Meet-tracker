@@ -460,23 +460,27 @@ def get_sentences_speaker_mapping(word_speaker_mapping, spk_ts):
 
 def get_speaker_aware_transcript(sentences_speaker_mapping):
     x = ""
-    time_start = sentences_speaker_mapping[0]["start_time"]
-    time_end = sentences_speaker_mapping[-1]["end_time"]
-    x = x + f"Start: {format_timestamp(time_start, always_include_hours=True, decimal_marker=',')} - End: {format_timestamp(time_end, always_include_hours=True, decimal_marker=',')}\n"
-    previous_speaker = sentences_speaker_mapping[0]["speaker"]
-    x+=f"{previous_speaker}:" 
+    for i, segment in enumerate(sentences_speaker_mapping, start=1):
+        x+=f"{format_timestamp(segment['start_time'], always_include_hours=True, decimal_marker=',')} - {format_timestamp(segment['end_time'], always_include_hours=True, decimal_marker=',')} "
+        x+=f"{segment['speaker']}: {segment['text'].strip().replace('-->', '->')}\n\n"
+    #OLD VERSION WHERE SPEAKERS WERE MERGED
+    #time_start = sentences_speaker_mapping[0]["start_time"]
+    #time_end = sentences_speaker_mapping[-1]["end_time"]
+    #x = x + f"Start: {format_timestamp(time_start, always_include_hours=True, decimal_marker=',')} - End: {format_timestamp(time_end, always_include_hours=True, decimal_marker=',')}\n"
+    #previous_speaker = sentences_speaker_mapping[0]["speaker"]
+    #x+=f"{previous_speaker}:" 
 
-    for sentence_dict in sentences_speaker_mapping:
-        speaker = sentence_dict["speaker"]
-        sentence = sentence_dict["text"]
+    #for sentence_dict in sentences_speaker_mapping:
+        #speaker = sentence_dict["speaker"]
+        #sentence = sentence_dict["text"]
 
         # If this speaker doesn't match the previous one, start a new paragraph
-        if speaker != previous_speaker:
-            x+=f"\n\n{speaker}: "
-            previous_speaker = speaker
+        #if speaker != previous_speaker:
+        #    x+=f"\n\n{speaker}: "
+        #    previous_speaker = speaker
 
         # No matter what, write the current sentence
-        x = x + sentence + " "
+        #x = x + sentence + " "
     return x
 
 
