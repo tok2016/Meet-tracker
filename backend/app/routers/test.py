@@ -198,5 +198,16 @@ json_text = """
 #summary_common = model.invoke(f"Дай краткое содержание текста - {text}. Определи тему. Определи время начала и конца текста. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json_response}")
 #summary_common = model.invoke(f"Определи важные темы и отрывки в тексте: '{text3}'. Дай краткое содержание каждого отрывка. Определи тему отрывка. Определи время начала и конца отрывка. Зафиксируй разных спикеров (в формате Speaker 0 без определения настоящего имени) и резюме речи каждого (без повторений).  Ответь ТОЛЬКО в формате json: {json_response}")
 #print(summary_common)
+string_text = ""
 dict_data = json.loads(json_text)
-print(dict_data["segments"][0]["text"])
+dict_data_seg = dict_data["segments"]
+for segment in dict_data_seg:
+  string_text += "Тема: " + f"{segment["topic"]}" +"\n"
+  string_text = string_text + "Начало: " + f"{segment["start"]}," +"\n"
+  string_text = string_text + "Конец: " + f"{segment["end"]}." +"\n"
+  string_text = string_text + f"{segment["text"]}" +"\n"
+  speakers_dict = segment["speakers"]
+  for i in speakers_dict:
+    string_text = string_text + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
+  string_text += "\n"
+print(string_text)
