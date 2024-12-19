@@ -6,6 +6,7 @@ import { RootState } from '../store';
 import { getColorPalette, postColorPalette, postLogo } from './paletteThunks';
 import { isActionWithError } from '../../types/ActionWithError';
 import Logo from '../../assets/Logo.png';
+import { DefaultErrors } from '../../utils/Error';
 
 const selectPalette = (state: RootState) => state.palette;
 
@@ -55,7 +56,7 @@ const paletteSlice = createSlice({
       .addDefaultCase((state, action) => {
         if(isActionWithError(action)) {
           state.status = 'error';
-          state.error = action.error;
+          state.error = DefaultErrors['ERR_INTERNET_SERVER_ERROR'];
         }
       })
   }

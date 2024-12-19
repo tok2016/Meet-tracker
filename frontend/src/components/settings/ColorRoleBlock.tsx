@@ -10,6 +10,7 @@ type ColorRoleBlockProps = {
   color: HexColor, 
   role: keyof CustomColorPalette, 
   colors: HexColor[],
+  onlyMedium: boolean,
   selectColor: (color: HexColor) => void
 };
 
@@ -41,10 +42,10 @@ const getContrastTextColor = (color: HexColor): HexColor => {
   return UIColors.palette.textMainColor;
 }; 
 
-const ColorRoleBlockRaw = ({color, role, colors, selectColor}: ColorRoleBlockProps) => (
+const ColorRoleBlockRaw = ({color, role, colors, onlyMedium, selectColor}: ColorRoleBlockProps) => (
   <Stack display='block'>
     <Typography 
-      variant='body1'
+      variant={onlyMedium ? 'h4' : 'body1'}
       fontWeight={700} 
       marginBottom={'5px'}
       >

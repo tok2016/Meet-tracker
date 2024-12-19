@@ -1,9 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
-import SettingSelect from './SettingSelect';
 import EmailSettings from '../../types/EmailSettings';
-import { EmailProtocols } from '../../types/EmailProtocol';
 import UploadPlain from '../UploadPlain';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { selectSettings } from '../../store/settings/settingsSlice';
@@ -14,7 +12,7 @@ import { getEmailSettings, postEmailSettings } from '../../store/settings/settin
 import { areObjectsEqual } from '../../utils/utils';
 
 const EmailSettingsGroup = () => {
-  const {email, status} = useAppSelector(selectSettings);
+  const {email, status, error: emailError} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
   const [file, setFile] = useState<File | undefined>();
@@ -56,14 +54,6 @@ const EmailSettingsGroup = () => {
       <Typography variant='h2'>
         Настройки интеграции с электронной почтой
       </Typography>
-      
-      <Stack alignSelf='center'>
-        <SettingSelect 
-          label='Протокол для доступа к электронной почте' 
-          value={emailSettings.protocol} 
-          values={[...EmailProtocols]} 
-          select={(value) => updateSettings({protocol: value})} />
-      </Stack>
 
       <Stack>
         <Typography variant='h3' textAlign='center' marginBottom='5px'>
@@ -77,6 +67,7 @@ const EmailSettingsGroup = () => {
           file={file} 
           acceptedFormats='.html' 
           inputId='markup' 
+          error={emailError}
           setFile={setMarkupFile} 
           onFileUpload={() => {}}>
             {error

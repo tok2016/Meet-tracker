@@ -8,6 +8,7 @@ import UIColors from '../utils/Colors';
 import UploadInput from './UploadInput';
 import { Status } from '../types/Status';
 import { breakpoints } from '../theme/BasicTypography';
+import ButtonContent from './ButtonContent';
 
 type UploadPlainProps = {
   attentionText: string, 
@@ -17,6 +18,7 @@ type UploadPlainProps = {
   acceptedFormats: string,
   inputId: string,
   hideSubmitButton?: boolean,
+  error: string | undefined,
   setFile: (file: File | undefined) => void,
   onFileUpload: () => void
 };
@@ -44,12 +46,15 @@ const UploadPlain = ({
   file, 
   acceptedFormats,
   inputId, 
-  hideSubmitButton=false, 
+  hideSubmitButton=false,
+  error, 
   setFile, 
   onFileUpload
 }: UploadPlainProps) => {
   const uploadWidth = useMediaValue(UPLOAD_WIDTH);
   const itemsMarginBottom = useMediaValue(UPLOAD_ITEMS_MARGIN_BOTTOM);
+
+  const buttonContent = 'Отправить';
 
   return (
     <Paper 
@@ -84,12 +89,15 @@ const UploadPlain = ({
           variant='containtedSecondary' 
           disabled={status === 'pending'}
           style={{
-            display: !hideSubmitButton && file ? 'inherit' : 'none',
+            display: !hideSubmitButton && file ? 'block' : 'none',
+            width: `${buttonContent.length}em`,
             marginBottom: `${itemsMarginBottom}px`
           }}
           onClick={onFileUpload}>
-            Отправить
+            <ButtonContent content={buttonContent} status={status} />
         </Button>
+
+        <Typography variant='error'>{error}</Typography>
 
         <Typography variant='body2' textAlign='center' whiteSpace='preserve-breaks'>
           {attentionText}

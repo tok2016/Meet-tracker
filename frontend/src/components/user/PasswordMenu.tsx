@@ -6,7 +6,7 @@ import { KeyboardBackspace } from '@mui/icons-material';
 import { AVATAR_WIDTH, INPUT_ICON_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../../utils/utils';
 import userSchema from '../../schemas/userSchema';
 import { isValidationError } from '../../schemas/validationError';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { postNewPasswordById } from '../../store/admin/adminThunks';
 import { postNewPassword } from '../../store/user/userThunks';
 import { UserPassword } from '../../types/User';
@@ -15,6 +15,8 @@ import useMediaMatch from '../../hooks/useMediaMacth';
 import { breakpoints } from '../../theme/BasicTypography';
 import useMediaValue from '../../hooks/useMediaValue';
 import FieldsGroup from '../FieldsGroup';
+import ButtonContent from '../ButtonContent';
+import { selectUser } from '../../store/user/userSlice';
 
 type PasswordMenuProps = {
   userId: number,
@@ -29,9 +31,10 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
   const [repeatedPassword, setRepeatedPassword] = useState<string>('');
   const [error, setError] = useState<string | undefined>();
 
+  const {passwordError} = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   
-  const {medium} = useMediaMatch();
+  const {small} = useMediaMatch();
   const marginTop = useMediaValue(AVATAR_WIDTH);
   const navBarPaddingBottom = useMediaValue(NAV_BAR_MARGIN_BOTTOM);
 
@@ -82,17 +85,17 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
   return (
     <Dialog
       open={isOpened}
-      fullScreen={medium}
+      fullScreen={small}
       maxWidth='xs'
       fullWidth
       onClose={close}
       sx={{
         [breakpoints.down('md')]: {
-          padding: `calc(95vh - ${marginTop}px - ${navBarPaddingBottom}) 7vw 0`
+          padding: `calc(${marginTop}px - ${navBarPaddingBottom}) 0 0`
         }
       }}
       PaperProps={{
-        variant: medium ? 'elevationTransparent' : 'elevation'
+        variant: small ? 'elevationFullScreen' : 'elevation'
       }}>
         <FieldsGroup>
             <Stack width='100%' position='relative'>
@@ -135,8 +138,10 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
               variant='containtedSecondary'
               disabled={error !== undefined || !arePasswordsTheSame}
               onClick={async () => await resetPassword({id: userId, password})}>
-                Подтвердить
+                <ButtonContent content='Подтвердить' status={status} />
             </Button>
+
+            <Typography variant='error'>{passwordError}</Typography>
         </FieldsGroup>
     </Dialog>
   );

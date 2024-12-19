@@ -11,10 +11,10 @@ const FieldsGroup = ({children}: {children: ReactNode}) => (
       overflowY: 'auto',
       padding: '0 5px 10px',
       paddingTop: '0.5em',  
-      [breakpoints.down('lg')]: {
+      [breakpoints.down('md')]: {
         gap: '4.5vh'
       },
-      [breakpoints.up('lg')]: {
+      [breakpoints.up('md')]: {
         gap: '3.5vh'
       }
     }}>

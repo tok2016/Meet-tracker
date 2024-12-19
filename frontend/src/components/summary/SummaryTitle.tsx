@@ -22,7 +22,7 @@ const SummaryTitle = ({id, title, date, downMedium}: {id: number, title: string,
   : <Stack sx={subPlainsStyle}>
       <PlayCircleOutline sx={iconSx}/>
       <Link to={`/account/summary/${id}`}>
-        <Typography variant='h3'>
+        <Typography variant='h4'>
           {title}
         </Typography>
       </Link>

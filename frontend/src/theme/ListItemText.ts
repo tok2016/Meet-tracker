@@ -1,6 +1,6 @@
 import { Components } from '@mui/material';
 import { breakpoints } from './BasicTypography';
-import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
+import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 const ListItemText: Components['MuiListItemText'] = {
   styleOverrides: {
@@ -11,6 +11,9 @@ const ListItemText: Components['MuiListItemText'] = {
         },
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.sidebar
+        },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.sidebar
         },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.sidebar,

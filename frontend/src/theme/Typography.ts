@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
+import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
@@ -11,7 +11,8 @@ declare module '@mui/material/Typography' {
     h2PromoHighlight: true,
     h3Promo: true,
     body2Highlight: true,
-    h3Normal: true
+    h3Normal: true,
+    error: true
   }
 }
 
@@ -67,6 +68,9 @@ const Typography: Components['MuiTypography'] = {
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.h1Highlight
         },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.h1Highlight
+        },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.h1Highlight
         },
@@ -85,6 +89,9 @@ const Typography: Components['MuiTypography'] = {
         },
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.h2Promo
+        },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.h2Promo
         },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.h2Promo
@@ -108,6 +115,9 @@ const Typography: Components['MuiTypography'] = {
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.h2PromoHighlight
         },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.h2PromoHighlight
+        },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.h2PromoHighlight
         },
@@ -127,6 +137,9 @@ const Typography: Components['MuiTypography'] = {
         },
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.h3Promo
+        },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.h3Promo
         },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.h3Promo
@@ -149,6 +162,9 @@ const Typography: Components['MuiTypography'] = {
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.body2Highlight
         },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.body2Highlight
+        },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.body2Highlight
         },
@@ -170,12 +186,39 @@ const Typography: Components['MuiTypography'] = {
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.h3
         },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.h3
+        },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.h3
         },
         [breakpoints.only('xl')]: {
           fontSize: XlFontSizes.h3
         }
+      }
+    },
+    {
+      props: {
+        variant: 'error'
+      },
+      style: {
+        color: getCssVariable('errorColor'),
+        fontWeight: 700,
+        [breakpoints.down('sm')]: {
+          fontSize: XsFontSizes.subtitle1
+        },
+        [breakpoints.up('sm')]: {
+          fontSize: SmFontSizes.subtitle1
+        },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.subtitle1
+        },
+        [breakpoints.up('lg')]: {
+          fontSize: LgFontSizes.subtitle1
+        },
+        [breakpoints.only('xl')]: {
+          fontSize: XlFontSizes.subtitle1
+        },
       }
     }
   ]

@@ -4,9 +4,11 @@ import AvatarEditor from 'react-avatar-editor';
 
 import useMediaValue from '../../hooks/useMediaValue';
 import { AVATAR_EDITOR_WIDTH } from '../../utils/utils';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { postCurrentUserAvatar } from '../../store/user/userThunks';
 import { postUserAvatar } from '../../store/admin/adminThunks';
+import { selectUser } from '../../store/user/userSlice';
+import ButtonContent from '../ButtonContent';
 
 type AvatarEditorPopupProps = {
   defaultAvatar: File | undefined, 
@@ -27,6 +29,7 @@ const ROTATION_STEP = 10;
 const AvatarEditorPopup = ({defaultAvatar, open, isForAdmin=false, userId, toggleOpen}: AvatarEditorPopupProps) => {
   const editorWidth = useMediaValue(AVATAR_EDITOR_WIDTH) as number;
 
+  const {status, avatarError} = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
   const avatarRef = useRef<AvatarEditor>(null);
@@ -50,14 +53,18 @@ const AvatarEditorPopup = ({defaultAvatar, open, isForAdmin=false, userId, toggl
 
   const onSubmit = () => {
     if(avatarRef.current) {
-      avatarRef.current.getImage().toBlob((blob) => {
-        if(blob) {
-          if(isForAdmin) {
-            dispatch(postUserAvatar({id: userId, file: blob}));
-          } else {
-            dispatch(postCurrentUserAvatar(blob));
+      avatarRef.current.getImage().toBlob(async (blob) => {
+        try {
+          if(blob) {
+            if(isForAdmin) {
+              await dispatch(postUserAvatar({id: userId, file: blob}));
+            } else {
+              await dispatch(postCurrentUserAvatar(blob));
+            }
+            close();
           }
-          close();
+        } catch {
+
         }
       }, 'image/*');
     }
@@ -104,8 +111,10 @@ const AvatarEditorPopup = ({defaultAvatar, open, isForAdmin=false, userId, toggl
         variant='containtedSecondary' 
         disabled={!defaultAvatar} 
         onClick={onSubmit}>
-        Отправить
+          <ButtonContent content='Отправить' status={status} />
       </Button>
+
+      <Typography variant='error'>{avatarError}</Typography>
     </Dialog>
   );
 };

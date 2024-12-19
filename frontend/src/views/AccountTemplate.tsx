@@ -17,10 +17,15 @@ const AccountTemplate = () => {
 
       <Box sx={{
         marginBottom: '50px',
-        [breakpoints.down('lg')]: {
+        [breakpoints.down('md')]: {
           marginTop: `calc(${marginTop}px + ${navBarMargin})`,
           marginRight: '7vw',
           marginLeft: '7vw'
+        },
+        [breakpoints.only('md')]: {
+          marginTop: `calc(${marginTop}px + ${navBarMargin})`,
+          marginRight: '10vw',
+          marginLeft: '10vw'
         },
         [breakpoints.up('lg')]: {
           marginTop: `calc(${marginTop}px + 8vh)`,

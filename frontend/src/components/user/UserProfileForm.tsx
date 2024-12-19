@@ -1,18 +1,16 @@
 import { useEffect, useReducer } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
-import { selectUser } from '../../store/user/userSlice';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 import UserInfoInput from './UserInfoInput';
 import { User } from '../../types/User';
 import { patchCurrentUser } from '../../store/user/userThunks';
-import { selectAdminData } from '../../store/admin/adminSlice';
 import { getUserAvatar, getUserById, patchUserById } from '../../store/admin/adminThunks';
 import PasswordMenu from './PasswordMenu';
 import UserInfo from './UserInfo';
+import { Typography } from '@mui/material';
+import { Status } from '../../types/Status';
 
-const UserProfileForm = ({isForAdmin, user, disabled, id}: {isForAdmin: boolean, user: User, disabled: boolean, id: number}) => {
-  const {status: originalStatus} = useAppSelector(selectUser);
-  const {status: anotherStatus} = useAppSelector(selectAdminData);
+const UserProfileForm = ({isForAdmin, user, disabled, id, status, error}: {isForAdmin: boolean, user: User, disabled: boolean, id: number, status: Status, error?: string}) => {
   const dispatch = useAppDispatch();
 
   const [isOpened, toggleOpen] = useReducer((value) => !value, false);
@@ -44,9 +42,12 @@ const UserProfileForm = ({isForAdmin, user, disabled, id}: {isForAdmin: boolean,
         isForAdmin={isForAdmin} 
         disabled={disabled} />
 
+      <Typography variant='error'>{error}</Typography>
+
       <UserInfoInput 
         path='username'
         type='text' 
+        status={status}
         readOnly 
         label='Логин'
         defaultValue={user.username}
@@ -56,6 +57,7 @@ const UserProfileForm = ({isForAdmin, user, disabled, id}: {isForAdmin: boolean,
       <UserInfoInput
         path='firstName'
         type='text'
+        status={status}
         label='Имя'
         defaultValue={user.firstName}
         disabled={disabled}
@@ -64,6 +66,7 @@ const UserProfileForm = ({isForAdmin, user, disabled, id}: {isForAdmin: boolean,
       <UserInfoInput
         path='lastName'
         type='text'
+        status={status}
         label='Фамилия'
         defaultValue={user.lastName}
         disabled={disabled}
@@ -72,6 +75,7 @@ const UserProfileForm = ({isForAdmin, user, disabled, id}: {isForAdmin: boolean,
       <UserInfoInput
         path='email'
         type='email'
+        status={status}
         label='Электронная почта'
         defaultValue={user.email}
         disabled={disabled}
@@ -80,6 +84,7 @@ const UserProfileForm = ({isForAdmin, user, disabled, id}: {isForAdmin: boolean,
       <UserInfoInput 
         path='password'
         type='password'
+        status={status}
         label='Пароль'
         defaultValue={user.password}
         disabled={disabled}
@@ -90,7 +95,7 @@ const UserProfileForm = ({isForAdmin, user, disabled, id}: {isForAdmin: boolean,
         userId={id}
         isForAdmin={isForAdmin}
         isOpened={isOpened} 
-        status={isForAdmin ? anotherStatus : originalStatus}
+        status={status}
         toggleOpen={toggleOpen} />
     </>
   );
