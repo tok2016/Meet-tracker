@@ -8,16 +8,16 @@ import useMediaMatch from '../../hooks/useMediaMacth';
 import SummaryStatus from './SummaryStatus';
 
 const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: SummaryInfo, isForAdmin: boolean, onDelete: () => void}) => {
-  const {medium} = useMediaMatch();
+  const {small} = useMediaMatch();
   const date = getLocaleString(summary.creationDate);
 
   return (
-    <ItemPlain downMedium={medium}>
+    <ItemPlain downMedium={small} isForAdmin={isForAdmin}>
       <SummaryTitle 
         id={summary.id} 
         title={summary.title} 
         date={date} 
-        downMedium={medium} />
+        downMedium={small} />
 
       <SummaryStatus 
         id={summary.id} 
@@ -25,7 +25,7 @@ const RawSummaryPlain = ({summary, isForAdmin=false, onDelete}: {summary: Summar
         audioId={summary.audioId} 
         hasText={summary.hasText} 
         date={date} 
-        downMedium={medium} 
+        downMedium={small} 
         isForAdmin={isForAdmin} 
         onDelete={onDelete} />
     </ItemPlain>

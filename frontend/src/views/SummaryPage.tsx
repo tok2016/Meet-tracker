@@ -12,16 +12,19 @@ import DownloadButton from '../components/summary/DownloadButton';
 import { areObjectsEqual } from '../utils/utils';
 import { breakpoints } from '../theme/BasicTypography';
 import Summary from '../types/Summary';
+import LocalProgress from '../components/LocalProgress';
+import ErrorMessagePanel from '../components/ErrorMessagePanel';
+import ButtonContent from '../components/ButtonContent';
 
 const SummaryPage = () => {
   const {id} = useParams();
   const parsedId = parseInt(id ?? '');
 
-  const {summary} = useAppSelector(selectSummary);
+  const {summary, status, error} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
   const [text, setText] = useState<TopicContent[]>(summary.text);
-  const disabled = useMemo(() => !text.length || areObjectsEqual(summary.text[0], text[0]), [summary.text, text]);
+  const disabled = useMemo(() => !text.length || areObjectsEqual(summary.text, text), [summary.text, text]);
 
   const updateSummary = (index: number, updatedContent: Partial<TopicContent>) => {
     setText((value) => value.map((content, i) => i === index ? {...content, ...updatedContent} : content));
@@ -48,6 +51,14 @@ const SummaryPage = () => {
     setText(summary.text);
   }, [summary.text]);
 
+  if(!summary.title) {
+    if(status === 'pending') {
+      return <LocalProgress />
+    } else if(status === 'error') {
+      return <ErrorMessagePanel error={error} errorIconType='summary' />
+    }
+  }
+
   return (
     <Stack
       display='flex'
@@ -60,6 +71,8 @@ const SummaryPage = () => {
           : <></>}
           
         <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
+
+        <Typography variant='error' marginBottom='10px'>{error}</Typography>
 
         <Stack width='100%'>
           {        
@@ -97,7 +110,7 @@ const SummaryPage = () => {
                 display: summary.text ? 'inherit' : 'none',
                 alignSelf: 'flex-end'
               }}>
-                Сохранить
+                <ButtonContent content='Сохранить' status={status} />
             </Button>
         </Stack>
     </Stack>

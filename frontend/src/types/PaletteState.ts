@@ -3,5 +3,6 @@ import DefaultState from './DefaultState';
 
 export default interface PaletteState extends DefaultState {
   palette: CustomColorPalette,
-  logo: string
+  logo: string,
+  logoError: string | undefined
 };

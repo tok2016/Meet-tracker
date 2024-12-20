@@ -1,9 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
-import SettingSelect from './SettingSelect';
 import EmailSettings from '../../types/EmailSettings';
-import { EmailProtocols } from '../../types/EmailProtocol';
 import UploadPlain from '../UploadPlain';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { selectSettings } from '../../store/settings/settingsSlice';
@@ -12,9 +10,10 @@ import UIColors from '../../utils/Colors';
 import SettingTextArea from './SettingTextArea';
 import { getEmailSettings, postEmailSettings } from '../../store/settings/settingsThunks';
 import { areObjectsEqual } from '../../utils/utils';
+import ButtonContent from '../ButtonContent';
 
 const EmailSettingsGroup = () => {
-  const {email, status} = useAppSelector(selectSettings);
+  const {email, status, error: emailError} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
   const [file, setFile] = useState<File | undefined>();
@@ -56,14 +55,6 @@ const EmailSettingsGroup = () => {
       <Typography variant='h2'>
         Настройки интеграции с электронной почтой
       </Typography>
-      
-      <Stack alignSelf='center'>
-        <SettingSelect 
-          label='Протокол для доступа к электронной почте' 
-          value={emailSettings.protocol} 
-          values={[...EmailProtocols]} 
-          select={(value) => updateSettings({protocol: value})} />
-      </Stack>
 
       <Stack>
         <Typography variant='h3' textAlign='center' marginBottom='5px'>
@@ -77,6 +68,7 @@ const EmailSettingsGroup = () => {
           file={file} 
           acceptedFormats='.html' 
           inputId='markup' 
+          error={undefined}
           setFile={setMarkupFile} 
           onFileUpload={() => {}}>
             {error
@@ -104,11 +96,13 @@ const EmailSettingsGroup = () => {
         textAlign='center'
         onChange={(evt) => updateSettings({text: evt.target.value})} />
 
+      <Typography variant='error' textAlign='center'>{emailError}</Typography>
+
       <Button
         variant='containtedSecondary'
         disabled={disabled}
         onClick={() => sendEmailSettings(emailSettings)}>
-          Сохранить
+          <ButtonContent content='Сохранить' status={status} />
       </Button>
     </>
   );

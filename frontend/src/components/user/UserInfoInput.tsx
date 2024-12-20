@@ -1,4 +1,4 @@
-import { IconButton, Input, Paper, Stack, Typography } from '@mui/material';
+import { CircularProgress, IconButton, Input, Paper, Stack, Typography } from '@mui/material';
 import { HTMLInputTypeAttribute, KeyboardEvent, useEffect, useReducer, useState } from 'react';
 import { Check, Close, Edit } from '@mui/icons-material';
 
@@ -9,12 +9,14 @@ import { UserIconSx } from '../../theme/UserIcon';
 import userSchema from '../../schemas/userSchema';
 import { User, UserRaw } from '../../types/User';
 import { isValidationError } from '../../schemas/validationError';
+import { Status } from '../../types/Status';
 
 type UserInfoInputProps = {
   label: string,
   defaultValue: string,
   type: HTMLInputTypeAttribute,
   path: keyof User,
+  status: Status,
   readOnly?: boolean,
   disabled?: boolean,
   apply: (update: string) => void,
@@ -26,6 +28,7 @@ const UserInfoInput = ({
   defaultValue, 
   type, 
   path, 
+  status,
   readOnly=false, 
   disabled=false, 
   apply, 
@@ -141,7 +144,7 @@ const UserInfoInput = ({
                   disabled={error !== undefined} 
                   color='secondary' 
                   onClick={onApply}>
-                    <Check sx={UserIconSx} /> 
+                    {status === 'pending' ? <CircularProgress sx={UserIconSx} /> : <Check sx={UserIconSx} /> }
                 </IconButton>
 
                 <IconButton color='secondary' onClick={onCancel}>

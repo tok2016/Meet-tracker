@@ -7,7 +7,7 @@ import { breakpoints } from '../../theme/BasicTypography';
 const COLOR_WIDTH: MediaValue = {
   xs: '8vw',
   sm: '8vw',
-  md: '6vw',
+  md: '8vw',
   lg: '5vw',
   xl: '5vw'
 };

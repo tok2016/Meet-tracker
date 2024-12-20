@@ -5,8 +5,9 @@ import DeleteUserButton from './DeleteButton';
 import { User } from '../../types/User';
 import { getLocaleString } from '../../utils/utils';
 import useMediaMatch from '../../hooks/useMediaMacth';
+import { Status } from '../../types/Status';
 
-const UserInfo = ({user, id, isForAdmin, disabled}: {id: number, user: User, isForAdmin: boolean, disabled: boolean}) => {
+const UserInfo = ({user, id, isForAdmin, disabled, status}: {id: number, user: User, isForAdmin: boolean, disabled: boolean, status: Status}) => {
   const userDate = getLocaleString(user.registrationDate ?? (new Date()).toISOString());
 
   const {medium} = useMediaMatch();
@@ -35,7 +36,7 @@ const UserInfo = ({user, id, isForAdmin, disabled}: {id: number, user: User, isF
             </div>
         </Stack>
 
-        <DeleteUserButton userId={id} isForAdmin={isForAdmin} isUserAdmin={user.isAdmin} hidden={medium} />
+        <DeleteUserButton userId={id} isForAdmin={isForAdmin} status={status} isUserAdmin={user.isAdmin} hidden={medium} />
     </Stack>
   );
 };

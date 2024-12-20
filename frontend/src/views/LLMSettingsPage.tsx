@@ -8,11 +8,12 @@ import LLMConfig from '../types/LLMConfig';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSettings } from '../store/settings/settingsSlice';
 import { getLLMConfigs, getLLMSettings, postLLMSettings } from '../store/settings/settingsThunks';
+import ButtonContent from '../components/ButtonContent';
 
 const LLMSettingsPage = () => {
   const {medium} = useMediaMatch();
 
-  const {llm, llms, status} = useAppSelector(selectSettings);
+  const {llm, llms, status, llmError} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
   const [settings, setSettings] = useState<LLMSettings>(llm);
@@ -62,11 +63,13 @@ const LLMSettingsPage = () => {
         </div>
       </div>
 
+      <Typography variant='error' textAlign='center'>{llmError}</Typography>
+
       <Button 
         variant='contained'
         disabled={disabled}
         onClick={() => submitSettings(settings)}>
-          Сохранить
+          <ButtonContent content='Сохранить' status={status} />
       </Button>
     </>
   );

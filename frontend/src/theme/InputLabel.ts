@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
+import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 const InputLabel: Components['MuiInputLabel'] = {
   styleOverrides: {
@@ -15,6 +15,10 @@ const InputLabel: Components['MuiInputLabel'] = {
       [breakpoints.up('sm')]: {
         fontSize: SmFontSizes.input,
         top: '-0.5em'
+      },
+      [breakpoints.up('md')]: {
+        fontSize: MdFontSizes.input,
+        top: '-0.15em',
       },
       [breakpoints.up('lg')]: {
         fontSize: LgFontSizes.input,
@@ -32,6 +36,9 @@ const InputLabel: Components['MuiInputLabel'] = {
       },
       [breakpoints.up('sm')]: {
         top: '0.1em'
+      },
+      [breakpoints.up('md')]: {
+        top: '-0.1em'
       },
       [breakpoints.up('lg')]: {
         top: '0'

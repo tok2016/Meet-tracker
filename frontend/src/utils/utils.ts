@@ -2,7 +2,7 @@ import Filter from '../types/Filter';
 import MediaValue from '../types/MediaValue';
 import SpeakerContent, { SpeakerArrayContent } from '../types/SpeakerContent';
 import Summary, { RawSummary, SummaryInfo } from '../types/Summary';
-import TopicContent, { TopicFull } from '../types/TopicContent';
+import TopicContent, { isTopicContent, isTopicRaw } from '../types/TopicContent';
 
 const BASE_URL = 'http://127.0.0.1:8000';
 
@@ -33,7 +33,7 @@ const AVATAR_WIDTH: MediaValue = {
 const AVATAR_EDITOR_WIDTH: MediaValue = {
   xs: 150,
   sm: 200,
-  md: 300,
+  md: 350,
   lg: 350,
   xl: 500
 };
@@ -52,6 +52,22 @@ const PAPER_SMALL_PADDING: MediaValue = {
   md: '1em',
   lg: '1.5em',
   xl: '1.5em'
+};
+
+const SIDEBAR_BUTTON_WIDTH: MediaValue = {
+  xs: 30,
+  sm: 40,
+  md: 50,
+  lg: 0,
+  xl: 0
+};
+
+const ERROR_ICON_WIDTH: MediaValue = {
+  xs: 55,
+  sm: 70,
+  md: 100,
+  lg: 100,
+  xl: 120
 };
 
 const statusesTranslations = {
@@ -113,6 +129,8 @@ const snakeToCamel = <Type, >(obj: object): Type => {
   return result as Type;
 };
 
+const arrayCamelToSnake = (arr: object[]) => arr.map((obj) => camelToSnake(obj));
+
 const arraySnakeToCamel = <Type, >(arr: object[]) => arr.map((obj) => snakeToCamel(obj)) as Type[];
 
 const getOffsetQuery = (page: number) => `offset=${(page - 1) * ITEMS_PER_PAGE}&limit=${ITEMS_PER_PAGE}`;
@@ -129,8 +147,6 @@ const speakersObjectToArray = (obj: SpeakerArrayContent): SpeakerContent[] => ob
   speakerInfo: obj.speakerInfo[i]
 }));
 
-const singularToDouble = (str: string): string => str.replace(/'/g, '"');
-
 const getTopic = (content: TopicContent): TopicContent => ({
   ...content,
   speakers: content.speakers.length !== undefined 
@@ -139,36 +155,18 @@ const getTopic = (content: TopicContent): TopicContent => ({
 });
 
 const parseSummaryContent = (content: string): TopicContent[] => {
-  try {
-    const parsedRawContent = JSON.parse(content) as TopicContent;
+  const parsedRawContent = JSON.parse(content);
+  const topics: TopicContent[] = [];
 
-    const topics: TopicContent[] = [];
+  if(isTopicRaw(parsedRawContent)) {
+    parsedRawContent.segments.forEach((raw) => {
+      topics.push(getTopic(raw));
+    });
+  } else if(isTopicContent(parsedRawContent)) {
     topics.push(getTopic(parsedRawContent));
-
-    return topics;
-  } catch {
-    const regBoundaryQuotes = /'[^:,]{1,}'/g;
-    const regExtraBoundaryQuotes = /'[^:]{1,}'/g;
-
-    const stringEntry = content.split(/\w+[a-z][=]/g).find((s) => s.includes('topic'))?.replace(/"/g, '\"');
-    const stringJsonSingular = stringEntry
-      ?.replace(regBoundaryQuotes, singularToDouble)
-      .replace(regExtraBoundaryQuotes, singularToDouble);
-
-    if(!stringJsonSingular) {
-      return [];
-    }
-
-    const parsedRawContent = JSON.parse(stringJsonSingular) as TopicFull[];
-    const topics = parsedRawContent.map((raw) => ({
-      ...raw.args,
-      speakers: raw.args.speakers.length !== undefined 
-        ? arraySnakeToCamel<SpeakerContent>(raw.args.speakers)
-        : speakersObjectToArray(snakeToCamel<SpeakerArrayContent>(raw.args.speakers))
-    }));
-
-    return topics;
   }
+
+  return topics;
 };
 
 const getFullSummary = (rawSummary: RawSummary, audio: string = ''): Summary => ({
@@ -204,7 +202,7 @@ const screenSymbols = (str: string) => str.replace(/[~`!@#$%^&*()_\-+=|:;,.?<>{}
 
 const areObjectsEqual = (a: object, b: object) => JSON.stringify(a) === JSON.stringify(b);
 
-export {camelToSnake, snakeToCamel, arraySnakeToCamel, getOffsetQuery, getLocaleString, screenSymbols,
+export {camelToSnake, snakeToCamel, arraySnakeToCamel, arrayCamelToSnake, getOffsetQuery, getLocaleString, screenSymbols,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, NAV_BAR_MARGIN_BOTTOM, PAPER_SMALL_PADDING, statusesTranslations, jsonTypes,
-  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE};
+  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE, SIDEBAR_BUTTON_WIDTH, ERROR_ICON_WIDTH};

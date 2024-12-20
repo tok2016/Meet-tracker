@@ -13,6 +13,8 @@ import { HexColor } from '../../types/HexColor';
 import { postColorPalette } from '../../store/palette/paletteThunks';
 import { selectPalette } from '../../store/palette/paletteSlice';
 import ColorRoleBlock from './ColorRoleBlock';
+import useMediaMatch from '../../hooks/useMediaMacth';
+import ButtonContent from '../ButtonContent';
 
 const ROLE_GRID_COLUMNS: MediaValue = {
   xs: '1fr',
@@ -34,8 +36,10 @@ const ColorUploadPlain = () => {
   const roleColumns = useMediaValue(ROLE_GRID_COLUMNS);
   const colorColumns = useMediaValue(COLOR_GRID_COLUMNS);
 
-  const {status, palette: defaultPalette} = useAppSelector(selectPalette);
+  const {status, palette: defaultPalette, error} = useAppSelector(selectPalette);
   const dispatch = useAppDispatch();
+
+  const {small, medium} = useMediaMatch();
 
   const [file, setFile] = useState<File | undefined>();
   const [url, setUrl] = useState<string>('');
@@ -111,6 +115,7 @@ const ColorUploadPlain = () => {
           acceptedFormats='.svg'
           inputId='palette'
           hideSubmitButton
+          error={undefined}
           setFile={setFileImage}
           onFileUpload={onPaletteUpload}>
             <img src={url} style={{ width: '20vw', margin: 'calc(2vh + 10px)' }} />
@@ -139,6 +144,7 @@ const ColorUploadPlain = () => {
           {Object.entries(palette).map((entry) => (
             <ColorRoleBlock 
               key={entry[0]}
+              onlyMedium={medium && !small}
               role={entry[0] as keyof CustomColorPalette} 
               color={palette[entry[0] as keyof CustomColorPalette]} 
               colors={colors}
@@ -146,11 +152,13 @@ const ColorUploadPlain = () => {
           ))}
         </div>
 
+        <Typography variant='error' textAlign='center'>{error}</Typography>
+
         <Button
           variant='containtedSecondary'
           disabled={disabled}
           onClick={onPaletteUpload}>
-            Отрпавить
+            <ButtonContent content='Сохранить' status={status} />
         </Button>
     </Stack>
   );

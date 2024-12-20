@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import UIColors, {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
+import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
@@ -29,16 +29,30 @@ const Button: Components['MuiButton'] = {
   variants: [
     {
       props: {
+        variant: 'contained'
+      },
+      style: {
+        ':disabled': {
+          backgroundColor: getCssVariable('disabledColor'),
+          color: getCssVariable('textContrastColor')
+        },
+      }
+    },
+    {
+      props: {
         variant: 'containtedSecondary'
       },
       style: {
         borderRadius: 10,
-        height: '2.5em',
+        height: '2.75em',
         [breakpoints.down('sm')]: {
           fontSize: XsFontSizes.input
         },
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.input
+        },
+        [breakpoints.up('md')]: {
+          fontSize: MdFontSizes.input
         },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.input
@@ -50,6 +64,10 @@ const Button: Components['MuiButton'] = {
         boxShadow: '0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);',
         ':hover': {
           boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);'
+        },
+        ':disabled': {
+          backgroundColor: getCssVariable('disabledColor'),
+          color: getCssVariable('textContrastColor')
         }
       }
     },
@@ -69,6 +87,9 @@ const Button: Components['MuiButton'] = {
         },
         [breakpoints.only('sm')]: {
           fontSize: SmFontSizes.subtitle1
+        },
+        [breakpoints.only('md')]: {
+          fontSize: MdFontSizes.body1
         },
         ':hover': {
           filter: 'brightness(1.5)',
@@ -92,6 +113,9 @@ const Button: Components['MuiButton'] = {
         },
         [breakpoints.only('sm')]: {
           fontSize: SmFontSizes.subtitle1
+        },
+        [breakpoints.only('md')]: {
+          fontSize: MdFontSizes.body1
         },
         ':hover': {
           background: UIColors.mainGradient(),
@@ -193,6 +217,9 @@ const Button: Components['MuiButton'] = {
         },
         [breakpoints.up('sm')]: {
           fontSize: SmFontSizes.subtitle1
+        },
+        [breakpoints.only('md')]: {
+          fontSize: MdFontSizes.subtitle1
         },
         [breakpoints.up('lg')]: {
           fontSize: LgFontSizes.subtitle1

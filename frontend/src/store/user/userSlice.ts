@@ -6,6 +6,8 @@ import { isActionWithError } from '../../types/ActionWithError';
 import Token from '../../types/Token';
 import { RootState } from '../store';
 import { defaultUser, User } from '../../types/User';
+import { DefaultErrors, getErrorMessage } from '../../utils/Error';
+import { AVATAR_GET_ERRORS, AVATAR_POST_ERRORS, GET_USER_ERRORS, LOGIN_ERRORS, PATCH_USER_ERRORS, REGISTER_ERRORS, USER_PASSWORD_ERRORS } from './userErrors';
 
 const defaultAuth: Token = {
   token: undefined,
@@ -17,7 +19,11 @@ const initialState: UserState = {
   auth: defaultAuth,
   wasLoggedOut: false,
   status: 'idle',
-  error: undefined
+  error: undefined,
+  passwordError: undefined,
+  avatarError: undefined,
+  loginError: undefined,
+  registerError: undefined
 };
 
 const selectUser = (state: RootState) => state.user;
@@ -55,11 +61,20 @@ const userSlice = createSlice({
 
         sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
+      .addCase(postUserData.rejected, (state, action) => {
+        state.status = 'error';
+        state.registerError = getErrorMessage(REGISTER_ERRORS, action.error.code);
+      })
       .addCase(postLogin.fulfilled, (state, action) => {
         state.auth = action.payload;
         state.status = 'success';
 
         localStorage.setItem('auth', JSON.stringify(action.payload));
+      })
+      .addCase(postLogin.rejected, (state, action) => {
+        state.status = 'error';
+        state.auth = defaultAuth;
+        state.loginError = getErrorMessage(LOGIN_ERRORS, action.error.code);
       })
       .addCase(postLogout.fulfilled, (state) => {
         state.user = defaultUser;
@@ -87,32 +102,70 @@ const userSlice = createSlice({
         state.user.avatar = action.payload;
         state.status = 'success';
       })
+      .addCase(postCurrentUserAvatar.rejected, (state, action) => {
+        state.status = 'error';
+        state.avatarError = getErrorMessage(AVATAR_POST_ERRORS, action.error.code);
+      })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.status = 'success';
 
         sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = getErrorMessage(GET_USER_ERRORS, action.error.code);
+      })
       .addCase(getCurrentUserAvatar.fulfilled, (state, action) => {
         state.user.avatar = action.payload;
         state.status = 'success';
+      })
+      .addCase(getCurrentUserAvatar.rejected, (state, action) => {
+        state.status = 'error';
+
+        if(state.user.avatar) {
+          URL.revokeObjectURL(state.user.avatar);
+        }
+
+        state.avatarError = getErrorMessage(AVATAR_GET_ERRORS, action.error.code);
       })
       .addCase(patchCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.status = 'success';
       })
+      .addCase(patchCurrentUser.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = getErrorMessage(PATCH_USER_ERRORS, action.error.code);
+      })
       .addCase(postNewPassword.fulfilled, (state) => {
         state.status = 'success';
       })
+      .addCase(postNewPassword.rejected, (state, action) => {
+        state.status = 'error';
+        state.passwordError = getErrorMessage(USER_PASSWORD_ERRORS, action.error.code);
+      })
       .addDefaultCase((state, action) => {
-        const endpoint = action.type.split('/').pop();
+        const endpoints = action.type.split('/');
+        const status = endpoints[endpoints.length - 1];
+        const type = endpoints[endpoints.length - 2];
 
         if(isActionWithError(action)) {
           state.status = 'error';
-          state.error = action.error;
+          state.error = DefaultErrors['ERR_INTERNET_SERVER_ERROR'];
         } else {
-          state.status = endpoint === 'pending' ? 'pending' : 'idle';
-          state.error = undefined;
+          state.status = status === 'pending' ? 'pending' : 'idle';
+
+          if(type === 'postLogin') {
+            state.loginError = undefined;
+          } else if(type === 'postUserData') {
+            state.registerError = undefined;
+          } else if(type?.includes('Avatar')) {
+            state.avatarError = undefined;
+          } else if(type?.includes('Password')) {
+            state.passwordError = undefined;
+          } else {
+            state.error = undefined;
+          }
         }
       })
   }

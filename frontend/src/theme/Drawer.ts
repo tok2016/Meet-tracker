@@ -7,7 +7,7 @@ import MediaValue from '../types/MediaValue';
 const DRAWER_WIDTH: MediaValue = {
   xs: '60vw',
   sm: '60vw',
-  md: '25vw',
+  md: '35vw',
   lg: '15.6vw',
   xl: '15.6vw'
 };
@@ -29,6 +29,10 @@ const Drawer: Components['MuiDrawer'] = {
       [breakpoints.up('sm')]: {
         paddingTop: AVATAR_WIDTH.sm,
         width: DRAWER_WIDTH.sm
+      },
+      [breakpoints.up('md')]: {
+        paddingTop: AVATAR_WIDTH.md,
+        width: DRAWER_WIDTH.md
       },
       [breakpoints.up('lg')]: {
         paddingTop: `calc(${AVATAR_WIDTH.lg}px + 8vh)`,

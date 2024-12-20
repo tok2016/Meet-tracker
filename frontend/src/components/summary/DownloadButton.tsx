@@ -5,17 +5,20 @@ import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { selectSummary } from '../../store/summary/summarySlice';
 import { getSummaryFile } from '../../store/summary/summaryThunks';
 import { FileFormat, FileFormats } from '../../types/FileFormat';
+import ButtonContent from '../ButtonContent';
 
 const DownloadButton = ({summaryId, summaryTitle}: {summaryId: number, summaryTitle: string}) => {
   const [anchor, setAnchor] = useState<HTMLElement | undefined>(undefined);
 
-  const {status} = useAppSelector(selectSummary);
+  const {fileStatus} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
   const linkRef = useRef<HTMLAnchorElement>(null);
 
   const onFormatChoice = async (format: FileFormat) => {
     try {
+      setAnchor(undefined);
+
       const {payload} = await dispatch(getSummaryFile({id: summaryId, format}));
 
       if(typeof payload === 'string' && linkRef.current) {
@@ -39,7 +42,7 @@ const DownloadButton = ({summaryId, summaryTitle}: {summaryId: number, summaryTi
         fullWidth
         variant='contained'
         onClick={(evt) => anchor ? setAnchor(undefined) : setAnchor(evt.currentTarget)}>
-          Скачать
+          <ButtonContent content='Скачать' status={fileStatus} />
       </Button>
 
       <Menu 
