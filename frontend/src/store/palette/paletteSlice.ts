@@ -6,7 +6,8 @@ import { RootState } from '../store';
 import { getColorPalette, postColorPalette, postLogo } from './paletteThunks';
 import { isActionWithError } from '../../types/ActionWithError';
 import Logo from '../../assets/Logo.png';
-import { DefaultErrors } from '../../utils/Error';
+import { DefaultErrors, getErrorMessage } from '../../utils/Error';
+import { POST_LOGO_ERRORS, POST_PALETTE_ERRORS } from './paletteErorrs';
 
 const selectPalette = (state: RootState) => state.palette;
 
@@ -14,7 +15,8 @@ const initialState: PaletteState = {
   palette: UIColors.palette,
   logo: Logo,
   status: 'idle',
-  error: undefined
+  error: undefined,
+  logoError: undefined
 };
 
 const paletteSlice = createSlice({
@@ -32,6 +34,10 @@ const paletteSlice = createSlice({
         state.palette = action.payload;
         UIColors.updatePalette(action.payload);
       })
+      .addCase(postColorPalette.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = getErrorMessage(POST_PALETTE_ERRORS, action.error.code);
+      })
       .addCase(getColorPalette.pending, (state) => {
         state.status = 'pending';
         state.error = undefined;
@@ -47,11 +53,15 @@ const paletteSlice = createSlice({
       })
       .addCase(postLogo.pending, (state) => {
         state.status = 'pending';
-        state.error = undefined;
+        state.logoError = undefined;
       })
       .addCase(postLogo.fulfilled, (state, action) => {
         state.status = 'success';
         state.logo = action.payload;
+      })
+      .addCase(postLogo.rejected, (state, action) => {
+        state.status = 'error';
+        state.logoError = getErrorMessage(POST_LOGO_ERRORS, action.error.code);
       })
       .addDefaultCase((state, action) => {
         if(isActionWithError(action)) {

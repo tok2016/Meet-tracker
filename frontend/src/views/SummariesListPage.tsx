@@ -16,6 +16,7 @@ import CollectionParams from '../types/CollectionParams';
 import useMediaMatch from '../hooks/useMediaMacth';
 import ErrorMessagePanel from '../components/ErrorMessagePanel';
 import LocalProgress from '../components/LocalProgress';
+import ListAlert from '../components/ListAlert';
 
 const RecentSubpages: Page[] = [
   {
@@ -39,7 +40,7 @@ const defaultSummaryFilter: Filter = {
 const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
   const [page, setPage] = useState<number>(1);
 
-  const {summaries: userSummaries, total: userTotal, error: userError, status: userStatus} = useAppSelector(selectSummary);
+  const {summaries: userSummaries, total: userTotal, listError: userError, listStatus: userStatus} = useAppSelector(selectSummary);
   const {summaries: adminSummaries, summariesTotal: adminTotal, error: adminError, status: adminStatus} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
@@ -71,12 +72,10 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
     updateSummariesList(page);
   }, [page, dispatch]);
 
-  if(!summaries.length) {
-    if(status === 'pending') {
-      return <LocalProgress />
-    } else {
-      return <ErrorMessagePanel error={error} errorIconType='summary' />
-    }
+  if(status === 'pending' || status === 'idle') {
+    return <LocalProgress />
+  } else if(!summaries.length) {
+    return <ErrorMessagePanel error={error} errorIconType='summary' />
   }
 
   return (
@@ -108,6 +107,8 @@ const SummariesListPage = ({isForAdmin = false}: {isForAdmin?: boolean}) => {
         showLastButton
         onChange={onPageChange}
         style={{margin: '0 auto'}}/>
+
+      <ListAlert listType='summary' />
     </>
   );
 };

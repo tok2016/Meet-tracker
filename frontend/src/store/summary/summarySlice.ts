@@ -13,7 +13,12 @@ const initialState: SummaryState = {
   summaries: [],
   total: 0,
   status: 'idle',
-  error: undefined
+  error: undefined,
+  recordError: undefined,
+  listStatus: 'idle',
+  listError: undefined,
+  fileStatus: 'idle',
+  audioStatus: 'idle'
 };
 
 const selectSummary = (state: RootState) => state.summary;
@@ -24,13 +29,17 @@ const summarySlide = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(postRecordFile.pending, (state) => {
+        state.status = 'pending';
+        state.recordError = undefined
+      })
       .addCase(postRecordFile.fulfilled, (state, action) => {
         state.status = 'success';
         state.summary = action.payload;
       })
       .addCase(postRecordFile.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(RECORD_ERRORS, action.error.code);
+        state.recordError = getErrorMessage(RECORD_ERRORS, action.error.code);
       })
       .addCase(getSummary.fulfilled, (state, action) => {
         state.status = 'success';
@@ -57,22 +66,30 @@ const summarySlide = createSlice({
         state.status = 'error';
         state.error = getErrorMessage(SUMMARY_DELETE_ERRORS, action.error.code);
       })
+      .addCase(getSummaries.pending, (state) => {
+        state.listStatus = 'pending';
+        state.listError = undefined;
+      })
       .addCase(getSummaries.fulfilled, (state, action) => {
-        state.status = 'success';
+        state.listStatus = 'success';
         state.summaries = action.payload.summaries;
         state.total = action.payload.total;
       })
       .addCase(getSummaries.rejected, (state, action) => {
-        state.status = 'error';
+        state.listStatus = 'error';
         state.error = getErrorMessage(SUMMARY_LIST_ERRORS, action.error.code);
         state.summaries = [];
       })
+      .addCase(getAudioById.pending, (state) => {
+        state.audioStatus = 'pending';
+        state.error = undefined;
+      })
       .addCase(getAudioById.fulfilled, (state, action) => {
-        state.status = 'success';
+        state.audioStatus = 'success';
         state.summary.audio = action.payload;
       })
       .addCase(getAudioById.rejected, (state, action) => {
-        state.status = 'error';
+        state.audioStatus = 'error';
 
         if(state.summary.audio) {
           URL.revokeObjectURL(state.summary.audio);
@@ -81,11 +98,15 @@ const summarySlide = createSlice({
 
         state.error = getErrorMessage(SUMMARY_AUDIO_ERRORS, action.error.code);
       })
+      .addCase(getSummaryFile.pending, (state) => {
+        state.fileStatus = 'pending';
+        state.error = undefined;
+      })
       .addCase(getSummaryFile.fulfilled, (state) => {
-        state.status = 'success';
+        state.fileStatus = 'success';
       })
       .addCase(getSummaryFile.rejected, (state, action) => {
-        state.status = 'error';
+        state.fileStatus = 'error';
         state.error = getErrorMessage(SUMMARY_FILE_ERRORS, action.error.code);
       })
       .addDefaultCase((state, action) => {

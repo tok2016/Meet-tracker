@@ -11,7 +11,7 @@ import UploadPlain from '../UploadPlain';
 const RecordUploadPlain = () => {
   const navigate = useNavigate();
 
-  const {status, error} = useAppSelector(selectSummary);
+  const {status, recordError} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -35,7 +35,7 @@ const RecordUploadPlain = () => {
       status={status}
       inputId='record'
       acceptedFormats='audio/*,video/*'
-      error={error}
+      error={recordError}
       setFile={setFile}
       onFileUpload={onFileUpload}>
         <TextField

@@ -8,6 +8,9 @@ import { ITEMS_PER_PAGE } from '../utils/utils';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectAdminData } from '../store/admin/adminSlice';
 import { getUsers } from '../store/admin/adminThunks';
+import LocalProgress from '../components/LocalProgress';
+import ErrorMessagePanel from '../components/ErrorMessagePanel';
+import ListAlert from '../components/ListAlert';
 
 const defaultUserFilter: Filter = {
   sort: 'username',
@@ -22,7 +25,7 @@ const defaultUserFilter: Filter = {
 const UsersListPage = () => {
   const [page, setPage] = useState<number>(1);
 
-  const {users, usersTotal} = useAppSelector(selectAdminData);
+  const {users, usersTotal, error, status} = useAppSelector(selectAdminData);
   const dispatch = useAppDispatch();
 
   const onPageChange = (_evt: ChangeEvent<unknown>, value: number) => {
@@ -40,6 +43,12 @@ const UsersListPage = () => {
   useEffect(() => {
     updateUsersList(page);
   }, [page, dispatch]);
+
+  if(status === 'pending') {
+    return <LocalProgress />
+  } else if(!users.length) {
+    return <ErrorMessagePanel error={error} errorIconType='user' />
+  }
 
   return (
     <>
@@ -64,6 +73,8 @@ const UsersListPage = () => {
         showLastButton
         onChange={onPageChange}
         style={{margin: '0 auto'}}/>
+
+      <ListAlert listType='user' />
     </>
   );
 };

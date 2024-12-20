@@ -7,5 +7,7 @@ export default interface UserState extends DefaultState {
   auth: Token,
   wasLoggedOut: boolean,
   passwordError: string | undefined,
-  avatarError: string | undefined
+  avatarError: string | undefined,
+  loginError: string | undefined,
+  registerError: string | undefined
 };

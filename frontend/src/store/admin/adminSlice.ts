@@ -20,7 +20,9 @@ const initialState: AdminState = {
   user: defaultUser,
   summary: defaultSummary,
   status: 'idle',
-  error: undefined
+  error: undefined,
+  userError: undefined,
+  summaryError: undefined
 }
 
 const selectAdminData = (state: RootState) => state.admin;
@@ -28,7 +30,13 @@ const selectAdminData = (state: RootState) => state.admin;
 const adminSlice = createSlice({
   name: 'admin',
   initialState,
-  reducers: {},
+  reducers: {
+    hideListError(state) {
+      state.error = undefined;
+      state.userError = undefined;
+      state.summaryError = undefined;
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(getUsers.fulfilled, (state, action) => {
@@ -47,7 +55,7 @@ const adminSlice = createSlice({
       })
       .addCase(postNewUser.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(REGISTER_ERRORS, action.error.code);
+        state.userError = getErrorMessage(REGISTER_ERRORS, action.error.code);
 
         if(state.user.avatar) {
           URL.revokeObjectURL(state.user.avatar);
@@ -60,7 +68,7 @@ const adminSlice = createSlice({
       })
       .addCase(getUserById.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(GET_USER_ERRORS, action.error.code);
+        state.userError = getErrorMessage(GET_USER_ERRORS, action.error.code);
 
         if(state.user.avatar) {
           URL.revokeObjectURL(state.user.avatar);
@@ -73,7 +81,7 @@ const adminSlice = createSlice({
       })
       .addCase(patchUserById.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(PATCH_USER_ERRORS, action.error.code);
+        state.userError = getErrorMessage(PATCH_USER_ERRORS, action.error.code);
       })
       .addCase(deleteUserById.fulfilled, (state) => {
         state.status = 'success';
@@ -81,7 +89,7 @@ const adminSlice = createSlice({
       })
       .addCase(deleteUserById.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(DELETE_USER_ERRORS, action.error.code);
+        state.userError = getErrorMessage(DELETE_USER_ERRORS, action.error.code);
       })
       .addCase(postUserAvatar.fulfilled, (state, action) => {
         state.status = 'success',
@@ -89,7 +97,7 @@ const adminSlice = createSlice({
       })
       .addCase(postUserAvatar.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(AVATAR_POST_ERRORS, action.error.code);
+        state.userError = getErrorMessage(AVATAR_POST_ERRORS, action.error.code);
       })
       .addCase(getUserAvatar.fulfilled, (state, action) => {
         state.status = 'success';
@@ -97,7 +105,7 @@ const adminSlice = createSlice({
       })
       .addCase(getUserAvatar.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(AVATAR_GET_ERRORS, action.error.code);
+        state.userError = getErrorMessage(AVATAR_GET_ERRORS, action.error.code);
 
         if(state.user.avatar) {
           URL.revokeObjectURL(state.user.avatar);
@@ -109,7 +117,7 @@ const adminSlice = createSlice({
       })
       .addCase(postNewPasswordById.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(USER_PASSWORD_ERRORS, action.error.code);
+        state.userError = getErrorMessage(USER_PASSWORD_ERRORS, action.error.code);
       })
       .addCase(getAllSummaries.fulfilled, (state, action) => {
         state.status = 'success';
@@ -127,14 +135,14 @@ const adminSlice = createSlice({
       })
       .addCase(deleteSummaryById.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(SUMMARY_DELETE_ERRORS, action.error.code);
+        state.summaryError = getErrorMessage(SUMMARY_DELETE_ERRORS, action.error.code);
       })
       .addCase(archiveRecordById.fulfilled, (state) => {
         state.status = 'success';
       })
       .addCase(archiveRecordById.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(ARCHIVE_ERRORS, action.error.code);
+        state.summaryError = getErrorMessage(ARCHIVE_ERRORS, action.error.code);
       })
       .addCase(deleteRecordById.fulfilled, (state) => {
         state.status = 'success';
@@ -142,7 +150,7 @@ const adminSlice = createSlice({
       })
       .addCase(deleteRecordById.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(SUMMARY_DELETE_ERRORS, action.error.code);
+        state.summaryError = getErrorMessage(SUMMARY_DELETE_ERRORS, action.error.code);
       })
       .addDefaultCase((state, action) => {
         const endpoint = action.type.split('/').pop();
@@ -159,4 +167,5 @@ const adminSlice = createSlice({
 });
 
 export default adminSlice.reducer;
+export const {hideListError} = adminSlice.actions;
 export {selectAdminData};

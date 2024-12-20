@@ -17,7 +17,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const parsedId = parseInt(id ?? '');
 
   const {user: originalUser, status: originalStatus, error: originalError} = useAppSelector(selectUser);
-  const {user: anotherUser, status: anotherStatus, error: anotherError} = useAppSelector(selectAdminData);
+  const {user: anotherUser, status: anotherStatus, userError: anotherError} = useAppSelector(selectAdminData);
 
   const user = isForAdmin ? anotherUser : originalUser;
   const status = isForAdmin ? anotherStatus : originalStatus;
@@ -53,6 +53,7 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
         </Stack>
 
         <DeleteUserButton 
+          status={status}
           userId={parsedId} 
           isForAdmin={isForAdmin} 
           isUserAdmin={user.isAdmin} 

@@ -8,5 +8,7 @@ export default interface AdminState extends DefaultState {
   usersTotal: number,
   summaries: SummaryInfo[],
   summary: Summary,
-  summariesTotal: number
+  summariesTotal: number,
+  userError: string | undefined,
+  summaryError: string | undefined
 };

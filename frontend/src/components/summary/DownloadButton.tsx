@@ -10,7 +10,7 @@ import ButtonContent from '../ButtonContent';
 const DownloadButton = ({summaryId, summaryTitle}: {summaryId: number, summaryTitle: string}) => {
   const [anchor, setAnchor] = useState<HTMLElement | undefined>(undefined);
 
-  const {status} = useAppSelector(selectSummary);
+  const {fileStatus} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -42,7 +42,7 @@ const DownloadButton = ({summaryId, summaryTitle}: {summaryId: number, summaryTi
         fullWidth
         variant='contained'
         onClick={(evt) => anchor ? setAnchor(undefined) : setAnchor(evt.currentTarget)}>
-          <ButtonContent content='Скачать' status={status} />
+          <ButtonContent content='Скачать' status={fileStatus} />
       </Button>
 
       <Menu 

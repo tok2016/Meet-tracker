@@ -32,7 +32,7 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const {user: originalUser, error: userError, status} = useAppSelector(selectUser);
+  const {user: originalUser, registerError, status} = useAppSelector(selectUser);
 
   const arePasswordsTheSame = repeatedPassword === userData.password;
   const isCorrect = useMemo(() => Object.values(error).every((err) => !err), [error]);
@@ -145,7 +145,7 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
               <ButtonContent content={isForAdmin ? 'Зарегистрировать' : 'Зарегистрироваться'} status={status} />
           </Button>
 
-          <Typography variant='error'>{userError}</Typography>
+          <Typography variant='error'>{registerError}</Typography>
         </FieldsGroup>
       </div>
 

@@ -24,7 +24,7 @@ const SummaryPage = () => {
   const dispatch = useAppDispatch();
 
   const [text, setText] = useState<TopicContent[]>(summary.text);
-  const disabled = useMemo(() => !text.length || areObjectsEqual(summary.text[0], text[0]), [summary.text, text]);
+  const disabled = useMemo(() => !text.length || areObjectsEqual(summary.text, text), [summary.text, text]);
 
   const updateSummary = (index: number, updatedContent: Partial<TopicContent>) => {
     setText((value) => value.map((content, i) => i === index ? {...content, ...updatedContent} : content));

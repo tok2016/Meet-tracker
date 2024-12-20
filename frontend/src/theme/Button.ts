@@ -29,11 +29,22 @@ const Button: Components['MuiButton'] = {
   variants: [
     {
       props: {
+        variant: 'contained'
+      },
+      style: {
+        ':disabled': {
+          backgroundColor: getCssVariable('disabledColor'),
+          color: getCssVariable('textContrastColor')
+        },
+      }
+    },
+    {
+      props: {
         variant: 'containtedSecondary'
       },
       style: {
         borderRadius: 10,
-        height: '2.5em',
+        height: '2.75em',
         [breakpoints.down('sm')]: {
           fontSize: XsFontSizes.input
         },
@@ -53,6 +64,10 @@ const Button: Components['MuiButton'] = {
         boxShadow: '0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);',
         ':hover': {
           boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);'
+        },
+        ':disabled': {
+          backgroundColor: getCssVariable('disabledColor'),
+          color: getCssVariable('textContrastColor')
         }
       }
     },

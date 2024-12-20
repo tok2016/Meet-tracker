@@ -1,10 +1,11 @@
 import { PauseCircleOutline, PlayCircleOutline } from '@mui/icons-material';
-import { IconButton, Paper, Slider, Typography } from '@mui/material';
+import { CircularProgress, IconButton, Paper, Slider, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { selectTimeCode, setTimeCode } from '../../store/timeCodeSlice';
 import { breakpoints } from '../../theme/BasicTypography';
+import { selectSummary } from '../../store/summary/summarySlice';
 
 const secondsToTimeString = (timeInSeconds: number): string => {
   const minutes = Math.floor(timeInSeconds / 60);
@@ -23,6 +24,7 @@ const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
   const [currentTime, setCurretTime] = useState<number>(0);
 
   const {timeCode} = useAppSelector(selectTimeCode);
+  const {audioStatus} = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
   const onSliderChange = (_evt: Event | SyntheticEvent, value: number | number[]) => {
@@ -54,6 +56,14 @@ const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
       audio.pause();
     }
   }, [isPlaying]);
+
+  if(audioStatus === 'pending') {
+    return (
+      <Stack width='100%' display='block'>
+        <CircularProgress color='primary' sx={{margin: '0 auto'}} />
+      </Stack>
+    )
+  }
 
   return (
     <Paper 

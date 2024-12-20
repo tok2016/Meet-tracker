@@ -39,7 +39,8 @@ const UserProfileForm = ({isForAdmin, user, disabled, id, status, error}: {isFor
       <UserInfo 
         id={id} 
         user={user} 
-        isForAdmin={isForAdmin} 
+        isForAdmin={isForAdmin}
+        status={status} 
         disabled={disabled} />
 
       <Typography variant='error'>{error}</Typography>

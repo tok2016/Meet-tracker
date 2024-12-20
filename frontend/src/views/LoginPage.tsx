@@ -16,7 +16,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState<string>('');
 
   const dispatch = useAppDispatch();
-  const {auth, user, status, error} = useAppSelector(selectUser);
+  const {auth, user, status, loginError} = useAppSelector(selectUser);
 
   const authorize = () => {
     const login: UserLogin = {
@@ -61,7 +61,7 @@ const LoginPage = () => {
             <ButtonContent content='Войти' status={status} />
         </Button>
 
-        <Typography variant='error'>{error}</Typography>
+        <Typography variant='error'>{loginError}</Typography>
       </FieldsGroup>
 
       <div>

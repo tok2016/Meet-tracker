@@ -10,6 +10,7 @@ import UIColors from '../../utils/Colors';
 import SettingTextArea from './SettingTextArea';
 import { getEmailSettings, postEmailSettings } from '../../store/settings/settingsThunks';
 import { areObjectsEqual } from '../../utils/utils';
+import ButtonContent from '../ButtonContent';
 
 const EmailSettingsGroup = () => {
   const {email, status, error: emailError} = useAppSelector(selectSettings);
@@ -67,7 +68,7 @@ const EmailSettingsGroup = () => {
           file={file} 
           acceptedFormats='.html' 
           inputId='markup' 
-          error={emailError}
+          error={undefined}
           setFile={setMarkupFile} 
           onFileUpload={() => {}}>
             {error
@@ -95,11 +96,13 @@ const EmailSettingsGroup = () => {
         textAlign='center'
         onChange={(evt) => updateSettings({text: evt.target.value})} />
 
+      <Typography variant='error' textAlign='center'>{emailError}</Typography>
+
       <Button
         variant='containtedSecondary'
         disabled={disabled}
         onClick={() => sendEmailSettings(emailSettings)}>
-          Сохранить
+          <ButtonContent content='Сохранить' status={status} />
       </Button>
     </>
   );

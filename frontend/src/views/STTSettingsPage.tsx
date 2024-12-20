@@ -12,11 +12,12 @@ import SettingSelect from '../components/settings/SettingSelect';
 import { DiarizeTypes } from '../types/DiarizeType';
 import SettingTextArea from '../components/settings/SettingTextArea';
 import { areObjectsEqual } from '../utils/utils';
+import ButtonContent from '../components/ButtonContent';
 
 const STTSettingsPage = () => {
   const [sttConfig, setSTTConfig] = useState<STTConfig>(defaultSTTConfig);
   
-  const {stt, status} = useAppSelector(selectSettings);
+  const {stt, status, sttError} = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
   const disabled = useMemo(() => areObjectsEqual(sttConfig, stt) || status === 'pending', [sttConfig, stt]);
@@ -76,11 +77,13 @@ const STTSettingsPage = () => {
         textAlign='left'
         onChange={(evt) => changeSTTConfig({initialPrompt: evt.target.value})} />
 
+      <Typography variant='error' textAlign='left'>{sttError}</Typography>
+
       <Button
         variant='contained'
         disabled={disabled}
         onClick={() => subminSettings(sttConfig)}>
-          Сохранить
+          <ButtonContent content='Сохранить' status={status} />
       </Button>
     </>
   );

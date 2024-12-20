@@ -10,5 +10,7 @@ export default interface SettingsState extends DefaultState {
   llms: LLMConfig[]
   stt: STTConfig,
   email: EmailSettings,
-  database: DatabaseSettings
+  database: DatabaseSettings,
+  llmError: string | undefined,
+  sttError: string | undefined
 };

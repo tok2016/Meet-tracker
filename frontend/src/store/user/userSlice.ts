@@ -21,7 +21,9 @@ const initialState: UserState = {
   status: 'idle',
   error: undefined,
   passwordError: undefined,
-  avatarError: undefined
+  avatarError: undefined,
+  loginError: undefined,
+  registerError: undefined
 };
 
 const selectUser = (state: RootState) => state.user;
@@ -61,7 +63,7 @@ const userSlice = createSlice({
       })
       .addCase(postUserData.rejected, (state, action) => {
         state.status = 'error';
-        state.error = getErrorMessage(REGISTER_ERRORS, action.error.code);
+        state.registerError = getErrorMessage(REGISTER_ERRORS, action.error.code);
       })
       .addCase(postLogin.fulfilled, (state, action) => {
         state.auth = action.payload;
@@ -72,7 +74,7 @@ const userSlice = createSlice({
       .addCase(postLogin.rejected, (state, action) => {
         state.status = 'error';
         state.auth = defaultAuth;
-        state.error = getErrorMessage(LOGIN_ERRORS, action.error.code);
+        state.loginError = getErrorMessage(LOGIN_ERRORS, action.error.code);
       })
       .addCase(postLogout.fulfilled, (state) => {
         state.user = defaultUser;
@@ -143,14 +145,27 @@ const userSlice = createSlice({
         state.passwordError = getErrorMessage(USER_PASSWORD_ERRORS, action.error.code);
       })
       .addDefaultCase((state, action) => {
-        const endpoint = action.type.split('/').pop();
+        const endpoints = action.type.split('/');
+        const status = endpoints[endpoints.length - 1];
+        const type = endpoints[endpoints.length - 2];
 
         if(isActionWithError(action)) {
           state.status = 'error';
           state.error = DefaultErrors['ERR_INTERNET_SERVER_ERROR'];
         } else {
-          state.status = endpoint === 'pending' ? 'pending' : 'idle';
-          state.error = undefined;
+          state.status = status === 'pending' ? 'pending' : 'idle';
+
+          if(type === 'postLogin') {
+            state.loginError = undefined;
+          } else if(type === 'postUserData') {
+            state.registerError = undefined;
+          } else if(type?.includes('Avatar')) {
+            state.avatarError = undefined;
+          } else if(type?.includes('Password')) {
+            state.passwordError = undefined;
+          } else {
+            state.error = undefined;
+          }
         }
       })
   }

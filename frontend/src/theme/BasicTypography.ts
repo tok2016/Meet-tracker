@@ -40,12 +40,12 @@ const BasicTypography: TypographyOptions = {
     padding: 0,
     color: getCssVariable('textContrastColor'),
     backgroundColor: getCssVariable('mainColor'),
-    ':disabled': {
-      backgroundColor: getCssVariable('tertiaryColor'),
-    },
     ':hover': {
       backgroundColor: getCssVariable('secondaryColor')
-    }
+    },
+    ':disabled': {
+      backgroundColor: getCssVariable('disabledColor')
+    },
   },
   h1: {
     [breakpoints.down('sm')]: {

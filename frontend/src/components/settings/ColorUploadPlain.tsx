@@ -14,6 +14,7 @@ import { postColorPalette } from '../../store/palette/paletteThunks';
 import { selectPalette } from '../../store/palette/paletteSlice';
 import ColorRoleBlock from './ColorRoleBlock';
 import useMediaMatch from '../../hooks/useMediaMacth';
+import ButtonContent from '../ButtonContent';
 
 const ROLE_GRID_COLUMNS: MediaValue = {
   xs: '1fr',
@@ -114,7 +115,7 @@ const ColorUploadPlain = () => {
           acceptedFormats='.svg'
           inputId='palette'
           hideSubmitButton
-          error={error}
+          error={undefined}
           setFile={setFileImage}
           onFileUpload={onPaletteUpload}>
             <img src={url} style={{ width: '20vw', margin: 'calc(2vh + 10px)' }} />
@@ -151,11 +152,13 @@ const ColorUploadPlain = () => {
           ))}
         </div>
 
+        <Typography variant='error' textAlign='center'>{error}</Typography>
+
         <Button
           variant='containtedSecondary'
           disabled={disabled}
           onClick={onPaletteUpload}>
-            Отрпавить
+            <ButtonContent content='Сохранить' status={status} />
         </Button>
     </Stack>
   );
