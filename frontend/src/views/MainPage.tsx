@@ -12,6 +12,8 @@ import RecordPromo from '../assets/Record Promo.png';
 import SummaryPromo from '../assets/Summary Promo.png';
 import UploadPromo from '../assets/Upload Promo.png';
 import { breakpoints } from '../theme/BasicTypography';
+import { useAppSelector } from '../hooks/useAppDispatch';
+import { selectMeeting } from '../store/meetingSlice';
 
 const PROMOS: PromoInfo[] = [
   {
@@ -40,6 +42,10 @@ const MainPage = () => {
   const marginTop = useMediaValue(AVATAR_WIDTH);
   const paddingTop = useMediaValue(NAV_BAR_MARGIN_BOTTOM);
   const {small, medium} = useMediaMatch();
+
+  const {recordUrl} = useAppSelector(selectMeeting);
+
+  console.log(recordUrl);
 
   return (
     <Stack 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { createTheme, PaletteOptions, THEME_ID, ThemeProvider, Theme } from '@mui/material';
+import { Outlet } from 'react-router-dom';
 
 import NavigationBar from '../components/NavigationBar';
-import Router from './Router';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser, setTokenFromStorage, setUserFromStorage } from '../store/user/userSlice';
 import { getCurrentUser, getCurrentUserAvatar } from '../store/user/userThunks';
@@ -80,7 +80,7 @@ const PageLayout = () => {
   return (
     <ThemeProvider theme={{ [THEME_ID]: theme }}>
       <NavigationBar />
-      <Router />
+      <Outlet />
     </ThemeProvider>
   );
 };
