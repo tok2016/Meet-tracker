@@ -39,12 +39,21 @@ def authorize_user(phone_number: str, chat_id: str):
 def get_users_summaries(chat_id):
   cursor, connection = connect_to_db()
   user_id = get_user_id(chat_id=chat_id)
-  query = "SELECT summary.title from public.summary WHERE summary.user_id = %s;"
+  query = "SELECT summary.title, summary.id from public.summary WHERE summary.user_id = %s;"
   cursor.execute(query, (user_id))
   data = cursor.fetchall()
   cursor.close()
   connection.close()
   return data
+
+def get_summary(summary_id):
+    cursor, connection = connect_to_db()
+    query = "SELECT summary.text from public.summary WHERE summary.id = %s;"
+    cursor.execute(query, (summary_id))
+    data = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    return data
 
 def get_user_id(chat_id: int):
     cursor, connection = connect_to_db()
