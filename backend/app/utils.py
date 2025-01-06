@@ -10,6 +10,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
+from aiogram import Bot, Dispatcher, types, F
 import os
 import json
 
@@ -98,3 +99,8 @@ def parse_summaryjson(json_text, string_text):
             string_text = string_text + f"{i["speaker_name"]}: " + f"{i["speaker_info"]}" +"\n"
         string_text += "\n"
     return string_text
+
+async def send_bot_message(chat_id, summary_id):
+    bot = Bot(token="7861682509:AAEOBF8bCbNIdqJ3WzvKHkHZSwOCNFDUf2w")
+    text = f"http://127.0.0.1:5173/account/summary/{summary_id}"
+    await bot.send_message(chat_id=int(chat_id), text=text)
