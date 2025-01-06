@@ -21,21 +21,21 @@ async def cmd_start(message: types.Message):
 
 @dp.message(F.contact)
 async def func_contact(msg: types.Message):
-    await msg.answer(f'Контакт:{msg.contact.phone_number}')
-
-#@dp.callback_query(F.data=="share_contact")
-#async def contacts(callback: types.CallbackQuery):
-  #await callback.answer(
-  #      text="Спасибо, что воспользовались ботом!",
-  #      show_alert=True
-  #  )
-#  user_value = user_data.get(callback.from_user.id, 0)
-#  await callback.answer( text=f"Ваш номер {user_value}")
+  builder = ReplyKeyboardBuilder()
+  phone_number = msg.contact.phone_number
+  msg_answer = ""
+  if (phone_number=="+79126998775"):
+    msg_answer += "Succesfully logged in"
+    builder.add(types.KeyboardButton(text="Просмотреть доступные резюме", callback_data ="available_summaries"))
+    builder.add(types.KeyboardButton(text="Просмотреть резюме", callback_data ="look_at_summary"))
+  else:
+    msg_answer += "Failure"
+  await msg.answer(f'{msg_answer}', reply_markup=builder.as_markup(resize_keyboard=True))
 
 # Хэндлер на команду /test1
-@dp.message(Command("test1"))
+@dp.message(F.text.lower() == "просмотреть доступные резюме")
 async def cmd_test1(message: types.Message):
-    await message.reply("Test 1")
+    await message.reply("Доступные резюме: ")
 
 # Хэндлер на команду /test2
 async def cmd_test2(message: types.Message):
