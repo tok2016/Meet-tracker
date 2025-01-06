@@ -1,12 +1,21 @@
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from fastapi import Depends
 from typing import Annotated
+from app.settings import Settings
+import os
+from dotenv import load_dotenv
 
-sqlite_file_name = "meet_tracker.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+load_dotenv()
 
-connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, connect_args=connect_args)
+POSTGRES_USER = os.environ.get("POSTGRES_USER")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+POSTGRES_SERVER = os.environ.get("POSTGRES_SERVER")
+POSTGRES_PORT = os.environ.get("POSTGRES_PORT")
+POSTGRES_DB = os.environ.get("POSTGRES_DB")
+psql_url = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
+
+#connect_args = {"check_same_thread": False}
+engine = create_engine(psql_url)
 
 
 def create_db_and_tables():

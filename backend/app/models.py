@@ -10,6 +10,8 @@ class UserBase(SQLModel):
     first_name: str = Field(max_length=30)
     last_name: str | None = Field(max_length=30)
     email: EmailStr = Field(unique=True, max_length=50)
+    phone_number: str = Field(unique=True, max_length=12)
+    chat_id: str | None = Field(max_length=100) #Для чата в боте
     is_admin: bool = False
 
 class User(UserBase, table=True):
