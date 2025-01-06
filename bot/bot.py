@@ -4,6 +4,7 @@ import dotenv
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from bot_db import authorize_user, get_users_summaries
 
 # Включаем логирование, чтобы не пропустить важные сообщения
 logging.basicConfig(level=logging.INFO)
@@ -20,22 +21,32 @@ async def cmd_start(message: types.Message):
   await message.answer("Чтобы авторизироваться поделитесь своим контактом:", reply_markup=builder.as_markup(resize_keyboard=True))
 
 @dp.message(F.contact)
-async def func_contact(msg: types.Message):
+async def func_contact(message: types.Message):
   builder = ReplyKeyboardBuilder()
-  phone_number = msg.contact.phone_number
+  phone_number = message.contact.phone_number
+  chat_id = message.chat.id
+  str_chat_id = str(message.chat.id)
+  authorize = authorize_user(phone_number=phone_number, chat_id=str_chat_id)
   msg_answer = ""
-  if (phone_number=="+79126998775"):
-    msg_answer += "Succesfully logged in"
-    builder.add(types.KeyboardButton(text="Просмотреть доступные резюме", callback_data ="available_summaries"))
-    builder.add(types.KeyboardButton(text="Просмотреть резюме", callback_data ="look_at_summary"))
+  if authorize is not None:
+    msg_answer += "Авторизация прошла успешно"
+    builder.add(types.KeyboardButton(text="Просмотреть доступные резюме"))
+    builder.add(types.KeyboardButton(text="Просмотреть резюме"))
   else:
-    msg_answer += "Failure"
-  await msg.answer(f'{msg_answer}', reply_markup=builder.as_markup(resize_keyboard=True))
+    msg_answer += "Не получилось авторизироваться"
+  await message.answer(text=f'{msg_answer}', reply_markup=builder.as_markup(resize_keyboard=True))
 
 # Хэндлер на команду /test1
 @dp.message(F.text.lower() == "просмотреть доступные резюме")
-async def cmd_test1(message: types.Message):
-    await message.reply("Доступные резюме: ")
+async def cmd_get_summaries(message: types.Message):
+  summaries = get_users_summaries(message.chat.id)
+  msg_text = ""
+  if len(summaries) == 0:
+    msg = "У вас нет резюме"
+  else:
+    for summary in summaries:
+      msg_text+= summary[0] + ", "
+  await message.reply(f'Доступные резюме: {msg_text}')
 
 # Хэндлер на команду /test2
 async def cmd_test2(message: types.Message):
