@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+import os
 
 class Settings(BaseSettings):
     llm_model: str = "ilyagusev/saiga_llama3"
