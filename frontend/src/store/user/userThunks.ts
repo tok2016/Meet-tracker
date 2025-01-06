@@ -9,7 +9,8 @@ import { camelToSnake, snakeToCamel, TOKEN_TIME_TO_LIVE } from '../../utils/util
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/postUserData', 
   async (userData) => {
-    const body = camelToSnake(userData);
+    const finalUser = {...userData, chatId: ''};
+    const body = camelToSnake(finalUser);
 
     const response = await AxiosInstance.post('/user', body);
 

@@ -29,7 +29,12 @@ const initialState: SettingsState = {
 const settingsSlice = createSlice({
   name: 'settings',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError(state) {
+      state.error = '';
+      state.llmError = '';
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(postLLMSettings.fulfilled, (state, action) => {
@@ -119,4 +124,5 @@ const settingsSlice = createSlice({
 });
 
 export default settingsSlice.reducer;
+export const {clearError: clearSettingsError} = settingsSlice.actions;
 export {selectSettings};

@@ -64,7 +64,7 @@ const AvatarEditorPopup = ({defaultAvatar, open, isForAdmin=false, userId, toggl
             close();
           }
         } catch {
-
+          console.error(`Couldn't upload avatar`);
         }
       }, 'image/*');
     }

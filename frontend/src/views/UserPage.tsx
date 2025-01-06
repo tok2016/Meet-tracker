@@ -43,13 +43,13 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
           sx={{
             overflowY: 'auto',
           }}>
-          <UserProfileForm 
-            isForAdmin={isForAdmin} 
-            user={user} 
-            disabled={disabled} 
-            id={parsedId}
-            status={status}
-            error={error} />
+            <UserProfileForm 
+              isForAdmin={isForAdmin} 
+              user={user} 
+              disabled={disabled} 
+              id={parsedId}
+              status={status}
+              error={error} />
         </Stack>
 
         <DeleteUserButton 

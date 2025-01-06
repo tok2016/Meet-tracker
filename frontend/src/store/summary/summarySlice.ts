@@ -23,10 +23,16 @@ const initialState: SummaryState = {
 
 const selectSummary = (state: RootState) => state.summary;
 
-const summarySlide = createSlice({
+const summarySlice = createSlice({
   name: 'summary',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError(state) {
+      state.error = '';
+      state.listError = '';
+      state.recordError = '';
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(postRecordFile.pending, (state) => {
@@ -123,5 +129,6 @@ const summarySlide = createSlice({
   }
 });
 
-export default summarySlide.reducer;
+export default summarySlice.reducer;
+export const {clearError: clearSummaryError} = summarySlice.actions;
 export {selectSummary};

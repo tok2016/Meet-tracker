@@ -59,7 +59,6 @@ const postLogo = createAsyncThunk<string, LogoQuery, AsyncThunkConfig>(
   async (logo, {getState}) => {
     const {user, palette} = getState();
 
-    try {
       const formData = new FormData();
       formData.append('file', logo.file);
 
@@ -72,9 +71,8 @@ const postLogo = createAsyncThunk<string, LogoQuery, AsyncThunkConfig>(
       if(palette.logo) {
         URL.revokeObjectURL(palette.logo);
       }
-    } finally {
-      return logo.url;
-    }
+      
+    return logo.url;
   }
 );
 

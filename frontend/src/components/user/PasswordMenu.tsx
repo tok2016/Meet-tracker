@@ -72,7 +72,7 @@ const PasswordMenu = ({userId, isForAdmin, isOpened, status, toggleOpen}: Passwo
 
       toggleOpen();
     } catch {
-
+      console.error(`Couldn't update password`);
     }
   };
 

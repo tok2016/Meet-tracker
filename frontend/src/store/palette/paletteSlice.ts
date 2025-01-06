@@ -22,7 +22,12 @@ const initialState: PaletteState = {
 const paletteSlice = createSlice({
   name: 'palette',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError(state) {
+      state.error = '';
+      state.logoError = '';
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(postColorPalette.pending, (state) => {
@@ -73,4 +78,5 @@ const paletteSlice = createSlice({
 });
 
 export default paletteSlice.reducer;
+export const {clearError: clearPaletteError} = paletteSlice.actions;
 export {selectPalette};

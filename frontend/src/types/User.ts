@@ -10,6 +10,7 @@ export interface User {
   registrationDate: string,
   isAdmin: boolean,
   avatar: string,
+  phoneNumber: string
 };
 
 export type UserRaw = Omit<User, 'id' | 'registrationDate' | 'isAdmin'>;
@@ -31,7 +32,8 @@ export const defaultUserData: UserRaw = {
   firstName: '',
   lastName: '',
   email: '',
-  avatar: ''
+  avatar: '',
+  phoneNumber: ''
 };
 
 export const defaultUser: User = {
@@ -43,7 +45,8 @@ export const defaultUser: User = {
   email: '',
   registrationDate: (new Date()).toString(),
   isAdmin: false,
-  avatar: ''
+  avatar: '',
+  phoneNumber: ''
 }
 
 export const isUser = (user: unknown): user is User => (user as User).username !== undefined;

@@ -35,6 +35,11 @@ const adminSlice = createSlice({
       state.error = undefined;
       state.userError = undefined;
       state.summaryError = undefined;
+    },
+    clearError(state) {
+      state.error = '';
+      state.userError = '';
+      state.summaryError = '';
     }
   },
   extraReducers(builder) {
@@ -167,5 +172,5 @@ const adminSlice = createSlice({
 });
 
 export default adminSlice.reducer;
-export const {hideListError} = adminSlice.actions;
+export const {hideListError, clearError: clearAdminError} = adminSlice.actions;
 export {selectAdminData};
