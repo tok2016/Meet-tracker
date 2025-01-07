@@ -23,9 +23,30 @@ import FilledInput from './FilledInput';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import FormHelperText from './FormHelperText';
+import UIColors from '../utils/Colors';
 
 const Theme = createTheme({
   typography: BasicTypography,
+  palette: {
+    primary: {
+      main: UIColors.palette.mainColor,
+      light: UIColors.palette.mainColor,
+      dark: UIColors.palette.mainColor,
+      contrastText: UIColors.palette.textContrastColor
+    },
+    secondary: {
+      main: UIColors.palette.backgroundColor,
+      light: UIColors.palette.backgroundColor,
+      dark: UIColors.palette.backgroundColor,
+      contrastText: UIColors.palette.textMainColor
+    },
+    error: {
+      main: UIColors.palette.errorColor,
+      light: UIColors.palette.errorColor,
+      dark: UIColors.palette.errorColor,
+      contrastText: UIColors.palette.textContrastColor
+    }
+  },
   components: {
     MuiTypography: Typography,
     MuiButton: Button,
