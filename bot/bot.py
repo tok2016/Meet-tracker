@@ -25,9 +25,8 @@ async def cmd_start(message: types.Message):
 async def func_contact(message: types.Message):
   builder = ReplyKeyboardBuilder()
   phone_number = message.contact.phone_number
-  chat_id = message.chat.id
   str_chat_id = str(message.chat.id)
-  authorize = authorize_user(phone_number=phone_number, chat_id=str_chat_id)
+  authorize = authorize_user(phone_number=phone_number[-10:], chat_id=str_chat_id)
   msg_answer = ""
   if authorize is not None:
     msg_answer += "Авторизация прошла успешно"
