@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
