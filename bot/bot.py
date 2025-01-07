@@ -1,16 +1,18 @@
 import asyncio
 import logging
-import dotenv
+from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from bot_db import authorize_user, get_users_summaries, get_summary
 from utils import parse_summaryjson
 
+load_dotenv()
 # Включаем логирование, чтобы не пропустить важные сообщения
 logging.basicConfig(level=logging.INFO)
 # Объект бота
-bot = Bot(token="7861682509:AAEOBF8bCbNIdqJ3WzvKHkHZSwOCNFDUf2w")
+bot_token = os.environ.get("BOT_TOKEN")
+bot = Bot(token=bot_token)
 # Диспетчер
 dp = Dispatcher()
 user_data = {}
