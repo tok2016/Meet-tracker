@@ -172,7 +172,7 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     session.commit()
     session.refresh(db_summary)
     #send_email(current_user.email, db_summary.id)
-    await send_bot_message(current_user.chat_id, db_summary.id)
+    await send_bot_message(current_user.chat_id, db_summary.id, title)
     return db_summary
 
 @router.get("/records")

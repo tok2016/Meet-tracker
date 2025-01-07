@@ -32,7 +32,7 @@ async def func_contact(message: types.Message):
   authorize = authorize_user(phone_number=phone_number[-10:], chat_id=str_chat_id)
   msg_answer = ""
   if authorize is not None:
-    msg_answer += "Авторизация прошла успешно"
+    msg_answer += "Авторизация прошла успешно. Для просмотра всех доступных вам резюме нажмите на кнопку 'Просмотреть доступные резюме'. Для просмотра текста конкретного резюме нажмите на кнопку 'Просмотреть текст резюме'."
     builder.add(types.KeyboardButton(text="Просмотреть доступные резюме"))
     builder.add(types.KeyboardButton(text="Просмотреть текст резюме"))
   else:
@@ -46,9 +46,11 @@ async def cmd_get_summaries(message: types.Message):
   if len(summaries) == 0:
     msg = "У вас нет резюме"
   else:
+    i = 1
     for summary in summaries:
-      msg_text+= summary[0] + ", "
-  await message.reply(f'Доступные резюме: {msg_text}')
+      msg_text+= f"{i}) " + summary[0] + "\n"
+      i+=1
+  await message.reply(f'Доступные резюме:\n{msg_text}')
 
 @dp.message(F.text.lower() == "просмотреть текст резюме")
 async def cmd_get_summary(message: types.Message):
@@ -59,7 +61,7 @@ async def cmd_get_summary(message: types.Message):
         text=f"{summary[0]}",
         callback_data=f"summary_id_{summary[1]}")
     )
-  await message.reply("Выберите резюме текст которого вы хотите получить", reply_markup=builder.as_markup())
+  await message.reply("Выберите резюме, текст которого вы хотите получить", reply_markup=builder.as_markup())
 
 @dp.callback_query(F.data.startswith("summary_id_"))
 async def callback_get_summary(callback: types.CallbackQuery):
