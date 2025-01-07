@@ -10,6 +10,8 @@ const MAX_PASSWORD_LENGTH = 24;
 const MAX_NAME_LENGTH = 30;
 const MAX_EMAIL_LENGTH = 50;
 
+const MIN_PHONE_NUMBER_LENGTH = 11;
+
 const REQUIRED_MESSAGE = 'Это поле обязательно для заполнения';
 
 const userSchema: ObjectSchema<UserRaw> = object({
@@ -44,6 +46,7 @@ const userSchema: ObjectSchema<UserRaw> = object({
   phoneNumber: string()
     .required(REQUIRED_MESSAGE)
     .trim()
+    .min(MIN_PHONE_NUMBER_LENGTH, `Минимальное число символов - ${MIN_PHONE_NUMBER_LENGTH}`)
     .matches(/^[+0-9]+$/, 'Номер телефона может включать в себя только цифры и символ +')
 });
 
