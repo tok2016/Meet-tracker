@@ -6,7 +6,7 @@ import FormHolder from '../components/FormHolder';
 import FieldsGroup from '../components/FieldsGroup';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { postUserData } from '../store/user/userThunks';
-import { isUser, UserRaw } from '../types/User';
+import { defaultUserData, isUser, UserRaw } from '../types/User';
 import { selectUser } from '../store/user/userSlice';
 import { postNewUser } from '../store/admin/adminThunks';
 import userSchema from '../schemas/userSchema';
@@ -14,15 +14,6 @@ import { isValidationError } from '../schemas/validationError';
 import { UserValidationError } from '../types/UserValidationError';
 import PasswordField from '../components/user/PasswordField';
 import ButtonContent from '../components/ButtonContent';
-
-const defaultUserData: UserRaw = {
-  username: '',
-  password: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  avatar: ''
-};
 
 const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const [userData, setUserData] = useState<UserRaw>(defaultUserData);
@@ -109,6 +100,15 @@ const RegisterPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
             required
             helperText={error.email}
             onChange={(evt) => validateValue({email: evt.target.value})}/>
+
+          <TextField
+            value={userData.phoneNumber}
+            type='tel'
+            label='Номер телефона'
+            autoComplete='off'
+            required
+            helperText={error.phoneNumber}
+            onChange={(evt) => validateValue({phoneNumber: evt.target.value})} />
 
           <TextField 
             value={userData.firstName}

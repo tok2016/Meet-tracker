@@ -6,10 +6,13 @@ import AxiosInstance from '../../utils/Axios';
 import Token, { TokenRaw } from '../../types/Token';
 import { camelToSnake, snakeToCamel, TOKEN_TIME_TO_LIVE } from '../../utils/utils';
 
+const PHONE_NUMBER_LENGTH = 10;
+
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/postUserData', 
   async (userData) => {
-    const body = camelToSnake(userData);
+    const finalUser = {...userData, chatId: '', phoneNumber: userData.phoneNumber.slice(userData.phoneNumber.length - PHONE_NUMBER_LENGTH)};
+    const body = camelToSnake(finalUser);
 
     const response = await AxiosInstance.post('/user', body);
 

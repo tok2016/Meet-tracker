@@ -91,11 +91,9 @@ const ColorUploadPlain = () => {
   };
 
   const onPaletteUpload = async () => {
-    try {
-      await dispatch(postColorPalette(palette));
-      setFile(undefined);
-      setUrl('');
-    } catch {}
+    await dispatch(postColorPalette(palette));
+    setFile(undefined);
+    setUrl('');
   };
 
   return (

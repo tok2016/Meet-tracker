@@ -51,6 +51,13 @@ const userSlice = createSlice({
 
         state.user = savedUser;
       }
+    },
+    clearError(state) {
+      state.error = '';
+      state.loginError = '';
+      state.registerError = '';
+      state.avatarError = '';
+      state.passwordError = '';
     }
   },
   extraReducers(builder) {
@@ -173,4 +180,4 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 export {selectUser};
-export const {setTokenFromStorage, setUserFromStorage} = userSlice.actions;
+export const {setTokenFromStorage, setUserFromStorage, clearError: clearUserError} = userSlice.actions;

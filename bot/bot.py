@@ -1,16 +1,18 @@
 import asyncio
 import logging
-import dotenv
+from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from bot_db import authorize_user, get_users_summaries, get_summary
 from utils import parse_summaryjson
 
+load_dotenv()
 # Включаем логирование, чтобы не пропустить важные сообщения
 logging.basicConfig(level=logging.INFO)
 # Объект бота
-bot = Bot(token="7861682509:AAEOBF8bCbNIdqJ3WzvKHkHZSwOCNFDUf2w")
+bot_token = os.environ.get("BOT_TOKEN")
+bot = Bot(token=bot_token)
 # Диспетчер
 dp = Dispatcher()
 user_data = {}
@@ -25,9 +27,8 @@ async def cmd_start(message: types.Message):
 async def func_contact(message: types.Message):
   builder = ReplyKeyboardBuilder()
   phone_number = message.contact.phone_number
-  chat_id = message.chat.id
   str_chat_id = str(message.chat.id)
-  authorize = authorize_user(phone_number=phone_number, chat_id=str_chat_id)
+  authorize = authorize_user(phone_number=phone_number[-10:], chat_id=str_chat_id)
   msg_answer = ""
   if authorize is not None:
     msg_answer += "Авторизация прошла успешно"

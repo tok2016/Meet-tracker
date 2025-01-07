@@ -82,6 +82,15 @@ const UserProfileForm = ({isForAdmin, user, disabled, id, status, error}: {isFor
         disabled={disabled}
         apply={(update) => sendUpdate({...user, email: update})} />
 
+      <UserInfoInput
+        path='phoneNumber'
+        type='tel'
+        status={status}
+        label='Номер телефона'
+        defaultValue={user.phoneNumber}
+        disabled={disabled}
+        apply={(update) => sendUpdate({...user, phoneNumber: update})} />
+
       <UserInfoInput 
         path='password'
         type='password'

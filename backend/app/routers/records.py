@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query, File, UploadFile, Form
 from fastapi.responses import FileResponse
 from app.models import Summary, SummaryFilter
-from app.utils import CurrentUser, cleanup_file, parse_summaryjson
+from app.utils import CurrentUser, cleanup_file, parse_summaryjson, send_bot_message
 from typing import Annotated
 from app.db import SessionDep
 from faster_whisper import WhisperModel, tokenizer
@@ -171,7 +171,8 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     session.add(db_summary)
     session.commit()
     session.refresh(db_summary)
-    send_email(current_user.email, db_summary.id)
+    #send_email(current_user.email, db_summary.id)
+    await send_bot_message(current_user.chat_id, db_summary.id)
     return db_summary
 
 @router.get("/records")

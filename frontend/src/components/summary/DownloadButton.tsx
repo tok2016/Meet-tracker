@@ -32,7 +32,7 @@ const DownloadButton = ({summaryId, summaryTitle}: {summaryId: number, summaryTi
         linkRef.current.hidden = true;
       }
     } catch {
-
+      setAnchor(undefined);
     }
   };
 

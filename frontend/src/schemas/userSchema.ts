@@ -7,6 +7,11 @@ const MAX_USERNAME_LENGTH = 20;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 24;
 
+const MAX_NAME_LENGTH = 30;
+const MAX_EMAIL_LENGTH = 50;
+
+const MIN_PHONE_NUMBER_LENGTH = 11;
+
 const REQUIRED_MESSAGE = 'Это поле обязательно для заполнения';
 
 const userSchema: ObjectSchema<UserRaw> = object({
@@ -19,14 +24,17 @@ const userSchema: ObjectSchema<UserRaw> = object({
   email: string()
           .required(REQUIRED_MESSAGE)
           .trim()
-          .email('Неверный формат адреса электронной почты'),
+          .email('Неверный формат адреса электронной почты')
+          .max(MAX_EMAIL_LENGTH, `Максимальное число символов - ${MAX_EMAIL_LENGTH}`),
   firstName: string()
               .required(REQUIRED_MESSAGE)
               .trim()
-              .matches(/^[a-zA-Zа-яА-Я]+$/, 'Имя может включать в себя толбко буквы английского и русского алфавитов'),
+              .matches(/^[a-zA-Zа-яА-Я]+$/, 'Имя может включать в себя толбко буквы английского и русского алфавитов')
+              .max(MAX_NAME_LENGTH, `Максимальное число символов - ${MAX_NAME_LENGTH}`),
   lastName: string()
               .trim()
               .matches(/^[a-zA-Zа-яА-Я]*$/, 'Фамилия может включать в себя толбко буквы английского и русского алфавитов')
+              .max(MAX_NAME_LENGTH, `Максимальное число символов - ${MAX_NAME_LENGTH}`)
               .default(''),
   password: string()
               .required(REQUIRED_MESSAGE)
@@ -34,7 +42,12 @@ const userSchema: ObjectSchema<UserRaw> = object({
               .matches(/^[a-zA-Z0-9~!@#$%^&*()_\-+=|:;,.?]+$/, 'Пароль может содержать в себе только буквы английского алфавита, цифры и символы ~!@#$%^&*()_-+=|:;,.?')
               .min(MIN_PASSWORD_LENGTH, `Минимальное число символов - ${MIN_PASSWORD_LENGTH}`)
               .max(MAX_PASSWORD_LENGTH, `Максимальное число символов - ${MAX_PASSWORD_LENGTH}`),
-  avatar: string().url().default('')
+  avatar: string().url().default(''),
+  phoneNumber: string()
+    .required(REQUIRED_MESSAGE)
+    .trim()
+    .min(MIN_PHONE_NUMBER_LENGTH, `Минимальное число символов - ${MIN_PHONE_NUMBER_LENGTH}`)
+    .matches(/^[+0-9]+$/, 'Номер телефона может включать в себя только цифры и символ +')
 });
 
 export default userSchema;
