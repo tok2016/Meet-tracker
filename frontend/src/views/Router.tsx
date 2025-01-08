@@ -23,6 +23,34 @@ import { clearSummaryError } from '../store/summary/summarySlice';
 import { clearAdminError } from '../store/admin/adminSlice';
 import { clearSettingsError } from '../store/settings/settingsSlice';
 import { clearPaletteError } from '../store/palette/paletteSlice';
+import { getPageTitle } from '../utils/utils';
+
+const RoutesTitles = {
+  'login': 'Вход',
+  'register': 'Регистрация',
+  'account': 'Профиль',
+  'upload': 'Загрузка записи',
+  'recent': 'Недавнее',
+  'summaries': 'Резюме',
+  'users': 'Пользователи',
+  'addUser': 'Регистрация пользователя',
+  'colors': 'Настройки интерфейса',
+  'llm': 'Настройки LLM',
+  'stt': 'Настройки STT',
+  'other': 'Другие настройки'
+};
+
+const getRouteTitle = (pathname: string) => {
+  const endpoints = pathname.split('/');
+  const endpoint = endpoints[endpoints.length - 1];
+
+  if(!endpoint) {
+    return 'Brify';
+  }
+
+  const routeTitle = RoutesTitles[endpoint as keyof object];
+  return routeTitle ? getPageTitle(routeTitle) : document.title;
+};
 
 const Router = () => {
   const {user, auth, wasLoggedOut} = useAppSelector(selectUser);
@@ -42,6 +70,8 @@ const Router = () => {
       dispatch(clearSettingsError());
       dispatch(clearPaletteError());
     }
+
+    document.title = getRouteTitle(pathname);
   }, [pathname]);
 
   return (
@@ -93,6 +123,7 @@ const Router = () => {
                       <Route path='addUser' element={<RegisterPage isForAdmin />} />
               </Route>
       </Route>
+      <Route path='*' element={<Navigate to='/' />} />
     </Routes>
   );
 };

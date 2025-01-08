@@ -9,6 +9,8 @@ import { useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { selectAdminData } from '../store/admin/adminSlice';
 import ErrorMessagePanel from '../components/ErrorMessagePanel';
+import { useEffect } from 'react';
+import { getPageTitle } from '../utils/utils';
 
 const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const {small, medium} = useMediaMatch();
@@ -24,6 +26,12 @@ const UserPage = ({isForAdmin=false}: {isForAdmin?: boolean}) => {
   const error = isForAdmin ? anotherError : originalError;
 
   const disabled = isForAdmin && user.isAdmin;
+
+  useEffect(() => {
+    if(isForAdmin) {
+      document.title = getPageTitle(user.username);
+    }
+  }, [user.username, isForAdmin])
 
   if(status === 'error' && !user.username) {
     return <ErrorMessagePanel error={error} errorIconType='user' />

@@ -9,7 +9,7 @@ import { getAudioById, getSummary, putSummaryChanges } from '../store/summary/su
 import TopicContent from '../types/TopicContent';
 import AudioPlayer from '../components/summary/AudioPlayer';
 import DownloadButton from '../components/summary/DownloadButton';
-import { areObjectsEqual } from '../utils/utils';
+import { areObjectsEqual, getPageTitle } from '../utils/utils';
 import { breakpoints } from '../theme/BasicTypography';
 import Summary from '../types/Summary';
 import LocalProgress from '../components/LocalProgress';
@@ -45,11 +45,15 @@ const SummaryPage = () => {
     if(summary.audioId) {
       dispatch(getAudioById(summary.audioId));
     }
-  }, [summary.audioId]);
+  }, [summary.audioId, dispatch]);
 
   useEffect(() => {
     setText(summary.text);
-  }, [summary.text]);
+  }, [summary.text, dispatch]);
+
+  useEffect(() => {
+    document.title = getPageTitle(summary.title);
+  }, [summary.title])
 
   if(!summary.title) {
     if(status === 'pending') {

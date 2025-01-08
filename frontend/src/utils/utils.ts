@@ -202,7 +202,9 @@ const screenSymbols = (str: string) => str.replace(/[~`!@#$%^&*()_\-+=|:;,.?<>{}
 
 const areObjectsEqual = (a: object, b: object) => JSON.stringify(a) === JSON.stringify(b);
 
+const getPageTitle = (routeName: string) => `${routeName} — Brify`;
+
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, arrayCamelToSnake, getOffsetQuery, getLocaleString, screenSymbols,
-  getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual,
+  getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual, getPageTitle,
   LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, NAV_BAR_MARGIN_BOTTOM, PAPER_SMALL_PADDING, statusesTranslations, jsonTypes,
   TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE, SIDEBAR_BUTTON_WIDTH, ERROR_ICON_WIDTH};
