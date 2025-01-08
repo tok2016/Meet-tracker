@@ -102,7 +102,7 @@ def parse_summaryjson(json_text, string_text):
         string_text += "\n"
     return string_text
 
-async def send_bot_message(chat_id, summary_id):
+async def send_bot_message(chat_id, summary_id, summary_topic):
     bot = Bot(token=bot_token)
-    text = f"http://127.0.0.1:5173/account/summary/{summary_id}"
+    text = f"Ваше резюме {summary_topic} готово. Посмотреть его можно по ссылке: http://127.0.0.1:5173/account/summary/{summary_id}"
     await bot.send_message(chat_id=int(chat_id), text=text)
