@@ -9,7 +9,7 @@ import Filter, { defaultFilter } from '../../types/Filter';
 import CollectionParams from '../../types/CollectionParams';
 import RecordQuery from '../../types/RecordQuery';
 
-const RECORD_UPLOAD_TIMEOUT = 1000 * 60 * 10;
+const RECORD_UPLOAD_TIMEOUT = 1000 * 60 * 30;
 
 const postRecordFile = createAsyncThunk<Summary, RecordQuery, AsyncThunkConfig>(
   'summary/postRecordFile',
