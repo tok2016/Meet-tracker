@@ -2,7 +2,7 @@ import { Components } from '@mui/material';
 
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { PAPER_SMALL_PADDING } from '../utils/utils';
+import { PAPER_SMALL_PADDING } from '../theme/MediaValues';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {

@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 
 import useMediaValue from '../hooks/useMediaValue';
-import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../utils/utils';
+import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../theme/MediaValues';
 import Mouse from '../assets/Mouse.svg';
 import useMediaMatch from '../hooks/useMediaMacth';
 import PromoInfo from '../types/PromoInfo';

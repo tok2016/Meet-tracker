@@ -7,6 +7,12 @@ import { selectTimeCode, setTimeCode } from '../../store/timeCodeSlice';
 import { breakpoints } from '../../theme/BasicTypography';
 import { selectSummary } from '../../store/summary/summarySlice';
 
+type AudioPlayerProps = {
+  audioUrl: string,
+  duration: number,
+  updateDuration: (duration: number) => void
+};
+
 const secondsToTimeString = (timeInSeconds: number): string => {
   const minutes = Math.floor(timeInSeconds / 60);
   const seconds = Math.ceil(timeInSeconds - minutes * 60);
@@ -17,10 +23,9 @@ const secondsToTimeString = (timeInSeconds: number): string => {
   return `${minStr}:${secStr}`;
 };
 
-const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
+const AudioPlayer = ({audioUrl, duration, updateDuration}: AudioPlayerProps) => {
   const [audio] = useState<HTMLAudioElement>(new Audio(audioUrl));
   const [isPlaying, setPlaying] = useState<boolean>(false);
-  const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurretTime] = useState<number>(0);
 
   const {timeCode} = useAppSelector(selectTimeCode);
@@ -33,7 +38,7 @@ const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
 
   useEffect(() => {
     audio.onloadedmetadata = () => {
-      setDuration(audio.duration)
+      updateDuration(audio.duration);
     };
 
     audio.onpause = () => {
@@ -43,6 +48,12 @@ const AudioPlayer = ({audioUrl}: {audioUrl: string}) => {
     audio.ontimeupdate = () => {
       setCurretTime(audio.currentTime);
     }
+
+    return () => {
+      audio.onloadedmetadata = null;
+      audio.onpause = null;
+      audio.ontimeupdate = null;
+    };
   }, [audioUrl]);
 
   useEffect(() => {

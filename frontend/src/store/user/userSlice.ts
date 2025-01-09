@@ -124,7 +124,9 @@ const userSlice = createSlice({
         state.error = getErrorMessage(GET_USER_ERRORS, action.error.code);
       })
       .addCase(getCurrentUserAvatar.fulfilled, (state, action) => {
-        state.user.avatar = action.payload;
+        if(typeof state.user !== 'string') {
+          state.user.avatar = action.payload;
+        }
         state.status = 'success';
       })
       .addCase(getCurrentUserAvatar.rejected, (state, action) => {

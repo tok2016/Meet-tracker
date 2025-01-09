@@ -1,7 +1,7 @@
 import { Components } from '@mui/material';
 import {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
-import { AVATAR_WIDTH } from '../utils/utils';
+import { AVATAR_WIDTH } from '../theme/MediaValues';
 import MediaValue from '../types/MediaValue';
 
 const DRAWER_WIDTH: MediaValue = {

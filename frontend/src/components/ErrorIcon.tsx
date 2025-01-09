@@ -2,7 +2,7 @@ import { CloudOff, ContentPasteOff, NoAccounts } from '@mui/icons-material';
 import { SxProps, Theme } from '@mui/material';
 
 import useMediaValue from '../hooks/useMediaValue';
-import { ERROR_ICON_WIDTH } from '../utils/utils';
+import { ERROR_ICON_WIDTH } from '../theme/MediaValues';
 import { ErrorIconType } from '../types/ErrorIconType';
 
 const ErrorIcon = ({type}: {type: ErrorIconType}) => {

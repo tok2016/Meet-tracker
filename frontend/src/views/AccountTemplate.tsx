@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar';
 import { DRAWER_WIDTH } from '../theme/Drawer';
 import { Box } from '@mui/material';
 import useMediaValue from '../hooks/useMediaValue';
-import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../utils/utils';
+import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../theme/MediaValues';
 import { breakpoints } from '../theme/BasicTypography';
 
 const AccountTemplate = () => {

@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { PAPER_SMALL_PADDING } from '../utils/utils';
+import { PAPER_SMALL_PADDING } from '../theme/MediaValues';
 import UIColors from '../utils/Colors';
 import useMediaValue from '../hooks/useMediaValue';
 

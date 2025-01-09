@@ -3,6 +3,7 @@ import { Components } from '@mui/material';
 import UIColors, {getCssVariable} from '../utils/Colors';
 import { breakpoints } from './BasicTypography';
 import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from './FontSizes';
+import { PAPER_SMALL_PADDING } from '../theme/MediaValues';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
@@ -14,7 +15,8 @@ declare module '@mui/material/Button' {
     filter: true,
     filterSelected: true,
     filterValuable: true,
-    filterValue: true
+    filterValue: true,
+    topic: true
   }
 }
 
@@ -235,6 +237,29 @@ const Button: Components['MuiButton'] = {
         },
         ':active': {
           backgroundColor: 'transparent',
+        }
+      }
+    },
+    {
+      props: {
+        variant: 'topic'
+      },
+      style: {
+        backgroundColor: getCssVariable('backgroundColor'),
+        color: getCssVariable('textMainColor'),
+        borderRadius: 10,
+        ':hover': {
+          backgroundColor: getCssVariable('tertiaryColor'),
+          boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);'
+        },
+        [breakpoints.down('md')]: {
+          padding: PAPER_SMALL_PADDING.sm
+        },
+        [breakpoints.only('md')]: {
+          padding: PAPER_SMALL_PADDING.md
+        },
+        [breakpoints.up('lg')]: {
+          padding: PAPER_SMALL_PADDING.lg
         }
       }
     }

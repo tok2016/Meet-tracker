@@ -3,7 +3,7 @@ import { SyntheticEvent, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 
 import useMediaValue from '../../hooks/useMediaValue';
-import { AVATAR_EDITOR_WIDTH } from '../../utils/utils';
+import { AVATAR_EDITOR_WIDTH } from '../../theme/MediaValues';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { postCurrentUserAvatar } from '../../store/user/userThunks';
 import { postUserAvatar } from '../../store/admin/adminThunks';

@@ -1,10 +1,7 @@
 import Filter from '../types/Filter';
-import MediaValue from '../types/MediaValue';
 import SpeakerContent, { SpeakerArrayContent } from '../types/SpeakerContent';
 import Summary, { RawSummary, SummaryInfo } from '../types/Summary';
 import TopicContent, { isTopicContent, isTopicRaw } from '../types/TopicContent';
-
-const BASE_URL = 'http://127.0.0.1:8000';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -13,62 +10,6 @@ const TOKEN_TIME_TO_LIVE = 1000 * 60 * 24 * 7;
 const FILTER_DATE_OFFSET = 1000 * 60 * 24 * 2;
 
 const INPUT_ICON_WIDTH = '1.5em';
-
-const LOGO_WIDTH: MediaValue = {
-  xs: 30,
-  sm: 40,
-  md: 50,
-  lg: 60,
-  xl: 90
-};
-
-const AVATAR_WIDTH: MediaValue = {
-  xs: 30,
-  sm: 40,
-  md: 50,
-  lg: 60,
-  xl: 90
-};
-
-const AVATAR_EDITOR_WIDTH: MediaValue = {
-  xs: 150,
-  sm: 200,
-  md: 350,
-  lg: 350,
-  xl: 500
-};
-
-const NAV_BAR_MARGIN_BOTTOM: MediaValue = {
-  xs: '12.5vh',
-  sm: '12.5vh',
-  md: '10vh',
-  lg: '10vh',
-  xl: '10vh'
-};
-
-const PAPER_SMALL_PADDING: MediaValue = {
-  xs: '0.5em',
-  sm: '1em',
-  md: '1em',
-  lg: '1.5em',
-  xl: '1.5em'
-};
-
-const SIDEBAR_BUTTON_WIDTH: MediaValue = {
-  xs: 30,
-  sm: 40,
-  md: 50,
-  lg: 0,
-  xl: 0
-};
-
-const ERROR_ICON_WIDTH: MediaValue = {
-  xs: 55,
-  sm: 70,
-  md: 100,
-  lg: 100,
-  xl: 120
-};
 
 const statusesTranslations = {
   ['idle']: 'Генерация',
@@ -147,8 +88,12 @@ const speakersObjectToArray = (obj: SpeakerArrayContent): SpeakerContent[] => ob
   speakerInfo: obj.speakerInfo[i]
 }));
 
+const formTimeCode = (timeCode: string): string => timeCode.split(',')[0];
+
 const getTopic = (content: TopicContent): TopicContent => ({
   ...content,
+  start: formTimeCode(content.start),
+  end: formTimeCode(content.end),
   speakers: content.speakers.length !== undefined 
     ? arraySnakeToCamel<SpeakerContent>(content.speakers)
     : speakersObjectToArray(snakeToCamel<SpeakerArrayContent>(content.speakers))
@@ -206,5 +151,4 @@ const getPageTitle = (routeName: string) => `${routeName} — Brify`;
 
 export {camelToSnake, snakeToCamel, arraySnakeToCamel, arrayCamelToSnake, getOffsetQuery, getLocaleString, screenSymbols,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual, getPageTitle,
-  LOGO_WIDTH, AVATAR_WIDTH, AVATAR_EDITOR_WIDTH, NAV_BAR_MARGIN_BOTTOM, PAPER_SMALL_PADDING, statusesTranslations, jsonTypes,
-  TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, BASE_URL, ITEMS_PER_PAGE, SIDEBAR_BUTTON_WIDTH, ERROR_ICON_WIDTH};
+  statusesTranslations, jsonTypes, TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, ITEMS_PER_PAGE};

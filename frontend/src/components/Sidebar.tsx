@@ -9,7 +9,7 @@ import { selectUser } from '../store/user/userSlice';
 import { breakpoints } from '../theme/BasicTypography';
 import useMediaMatch from '../hooks/useMediaMacth';
 import useMediaValue from '../hooks/useMediaValue';
-import { AVATAR_WIDTH, SIDEBAR_BUTTON_WIDTH } from '../utils/utils';
+import { AVATAR_WIDTH, SIDEBAR_BUTTON_WIDTH } from '../theme/MediaValues';
 import UIColors from '../utils/Colors';
 
 const sidebarPages: Page[] = [

@@ -5,15 +5,16 @@ import { SpeakerWithIndex } from '../../types/SpeakerContent';
 import { breakpoints } from '../../theme/BasicTypography';
 import { LgFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from '../../theme/FontSizes';
 import TextArea from '../TextArea';
-import RollDownButton from './RollDownButton';
+import TopicButtonsMenu from './TopicButtonsMenu';
 
 type SpeakerPlainProps = {
   speaker: SpeakerWithIndex,
-  commitChanges: (speaker: SpeakerWithIndex) => void
+  commitChanges: (speaker: SpeakerWithIndex) => void,
+  deleteSpeaker: (speakerIndex: number) => void,
   onKeyDown: () => void
 };
 
-const SpeakerPlain = ({speaker, commitChanges, onKeyDown}: SpeakerPlainProps) => {
+const SpeakerPlain = ({speaker, commitChanges, deleteSpeaker, onKeyDown}: SpeakerPlainProps) => {
   const [name, setName] = useState<string>(speaker.speakerName);
   const [info, setInfo] = useState<string>(speaker.speakerInfo);
 
@@ -73,7 +74,10 @@ const SpeakerPlain = ({speaker, commitChanges, onKeyDown}: SpeakerPlainProps) =>
           >
         </TextArea>
 
-        <RollDownButton isRolledDown={isRolledDown} rollPlain={rollPlain} />
+        <TopicButtonsMenu 
+          isRolledDown={isRolledDown} 
+          onTopicRoll={rollPlain}
+          onTopicDelete={() => deleteSpeaker(speaker.index)} />
     </Paper>
   )
 };

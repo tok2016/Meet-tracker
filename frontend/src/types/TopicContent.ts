@@ -21,3 +21,11 @@ export type TopicRaw = {
 
 export const isTopicContent = (content: object): content is TopicContent => (content as TopicContent).topic !== undefined;
 export const isTopicRaw = (content: object): content is TopicRaw => (content as TopicRaw).segments !== undefined;
+
+export const defaultTopic: TopicContent = {
+  topic: 'Новая тема',
+  text: 'Текст новой темы',
+  start: '00:00:00',
+  end: '00:00:00',
+  speakers: []
+};

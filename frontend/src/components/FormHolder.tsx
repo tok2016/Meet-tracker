@@ -2,7 +2,7 @@ import { Paper, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 
 import useMediaValue from '../hooks/useMediaValue';
-import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../utils/utils';
+import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../theme/MediaValues';
 import useMediaMatch from '../hooks/useMediaMacth';
 
 const FormHolder = ({children, isForAdmin=false, isInner=false}: {children: ReactNode, isForAdmin?: boolean, isInner?: boolean}) => {

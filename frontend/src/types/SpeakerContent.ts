@@ -9,3 +9,8 @@ export type SpeakerArrayContent = {
   speakerName: string[],
   speakerInfo: string[]
 };
+
+export const defaultSpeaker: SpeakerContent = {
+  speakerName: 'Новый спикер',
+  speakerInfo: 'Информация о спикере'
+};

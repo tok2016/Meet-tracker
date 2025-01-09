@@ -2,7 +2,7 @@ import { Menu as MenuIcon, MoreVert } from '@mui/icons-material';
 import { IconButton, Menu, Stack } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { breakpoints } from '../theme/BasicTypography';
-import { PAPER_SMALL_PADDING } from '../utils/utils';
+import { PAPER_SMALL_PADDING } from '../theme/MediaValues';
 
 const PlainMenu = ({children, downMedium, hidden=true}: {children: ReactNode, downMedium: boolean, hidden?: boolean}) => {
   const [anchor, setAnchor] = useState<HTMLElement | undefined>(undefined);

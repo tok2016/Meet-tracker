@@ -3,7 +3,7 @@ import { Button, Dialog, IconButton, Stack } from '@mui/material';
 import { FilterAlt } from '@mui/icons-material';
 
 import useMediaValue from '../../hooks/useMediaValue';
-import { AVATAR_WIDTH, SIDEBAR_BUTTON_WIDTH } from '../../utils/utils';
+import { AVATAR_WIDTH, SIDEBAR_BUTTON_WIDTH } from '../../theme/MediaValues';
 import FilterFieldMobile from './FilterFieldMobile';
 import FilterFieldSwitch from './FilterFieldSwitch';
 import FiltersTitle from './FiltersTitle';

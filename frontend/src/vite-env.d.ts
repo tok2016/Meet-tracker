@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly SOUNDS_LOCATION: string
+  readonly VITE_SERVER_URL: string
   // more env variables...
 }
 

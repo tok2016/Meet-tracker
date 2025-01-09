@@ -6,7 +6,7 @@ import TopicPlain from '../components/summary/TopicPlain';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectSummary } from '../store/summary/summarySlice';
 import { getAudioById, getSummary, putSummaryChanges } from '../store/summary/summaryThunks';
-import TopicContent from '../types/TopicContent';
+import TopicContent, { defaultTopic } from '../types/TopicContent';
 import AudioPlayer from '../components/summary/AudioPlayer';
 import DownloadButton from '../components/summary/DownloadButton';
 import { areObjectsEqual, getPageTitle } from '../utils/utils';
@@ -24,15 +24,24 @@ const SummaryPage = () => {
   const dispatch = useAppDispatch();
 
   const [text, setText] = useState<TopicContent[]>(summary.text);
+  const [duration, setDuration] = useState<number>(0);
   const disabled = useMemo(() => !text.length || areObjectsEqual(summary.text, text), [summary.text, text]);
 
-  const updateSummary = (index: number, updatedContent: Partial<TopicContent>) => {
-    setText((value) => value.map((content, i) => i === index ? {...content, ...updatedContent} : content));
+  const updateSummary = (index: number, updatedContent: Partial<TopicContent> | undefined) => {
+    if(!updatedContent) {
+      setText((value) => value.filter((_v, i) => i !== index));
+    } else {
+      setText((value) => value.map((content, i) => i === index ? {...content, ...updatedContent} : content));
+    }
   };
 
   const sendUpdates = () => {
     const update: Summary = {...summary, text};
     dispatch(putSummaryChanges(update));
+  };
+
+  const onNewTopicAdd = () => {
+    setText(text.concat(defaultTopic));
   };
 
   useEffect(() => {
@@ -71,23 +80,31 @@ const SummaryPage = () => {
         <Typography variant='h2' marginBottom='25px' width='70%'>{summary.title}</Typography>
 
         {summary.id === parsedId && summary.audio 
-          ? <AudioPlayer audioUrl={summary.audio} />
+          ? <AudioPlayer audioUrl={summary.audio} duration={duration} updateDuration={(newDuration) => setDuration(newDuration)} />
           : <></>}
           
         <Typography variant='h2' marginBottom='25px'>Расшифровка</Typography>
 
         <Typography variant='error' marginBottom='10px'>{error}</Typography>
 
-        <Stack width='100%'>
+        <Stack width='100%' marginBottom='20px'>
           {        
             text.map((content, i) => (
               <TopicPlain 
                 key={content.topic} 
                 index={i} 
                 content={content} 
+                entireDuration={duration}
                 updateSummary={updateSummary}/>
             ))
           }
+          
+          <Button
+            variant='topic'
+            fullWidth
+            onClick={onNewTopicAdd}>
+              +
+          </Button>
         </Stack>
 
         <Stack

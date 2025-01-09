@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { selectPalette } from '../../store/palette/paletteSlice';
 import { postLogo } from '../../store/palette/paletteThunks';
 import useMediaValue from '../../hooks/useMediaValue';
-import { LOGO_WIDTH } from '../../utils/utils';
+import { LOGO_WIDTH } from '../../theme/MediaValues';
 
 const LogoUploadPlain = () => {
   const {logo, status, logoError} = useAppSelector(selectPalette);

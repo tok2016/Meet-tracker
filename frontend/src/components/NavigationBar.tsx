@@ -6,7 +6,7 @@ import useMediaValue from '../hooks/useMediaValue';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { selectUser } from '../store/user/userSlice';
 import { postLogout } from '../store/user/userThunks';
-import { LOGO_WIDTH, AVATAR_WIDTH } from '../utils/utils';
+import { LOGO_WIDTH, AVATAR_WIDTH } from '../theme/MediaValues';
 import { selectPalette } from '../store/palette/paletteSlice';
 import { breakpoints } from '../theme/BasicTypography';
 

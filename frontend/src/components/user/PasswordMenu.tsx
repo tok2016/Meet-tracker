@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 
 import PasswordField from './PasswordField';
 import { KeyboardBackspace } from '@mui/icons-material';
-import { AVATAR_WIDTH, INPUT_ICON_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../../utils/utils';
+import { INPUT_ICON_WIDTH } from '../../utils/utils';
+import { AVATAR_WIDTH, NAV_BAR_MARGIN_BOTTOM } from '../../theme/MediaValues';
 import userSchema from '../../schemas/userSchema';
 import { isValidationError } from '../../schemas/validationError';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';

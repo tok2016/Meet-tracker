@@ -1,25 +1,25 @@
-import { Input, Paper, Stack } from '@mui/material';
+import { Button, Paper, Stack } from '@mui/material';
 import { memo, useMemo, useReducer, useState } from 'react';
 
 import SpeakerPlain from './SpeakerPlain';
 import TopicContent from '../../types/TopicContent';
 import TextArea from '../TextArea';
-import { breakpoints } from '../../theme/BasicTypography';
-import { LgFontSizes, MdFontSizes, SmFontSizes, XlFontSizes, XsFontSizes } from '../../theme/FontSizes';
-import RollDownButton from './RollDownButton';
-import { SpeakerWithIndex } from '../../types/SpeakerContent';
+import TopicButtonsMenu from './TopicButtonsMenu';
+import { defaultSpeaker, SpeakerWithIndex } from '../../types/SpeakerContent';
 import useMediaMatch from '../../hooks/useMediaMacth';
 import TopicTimeCodes from './TopicTimeCodes';
+import TopicInput from './TopicInput';
 
 const TYPE_TIMEOUT = 2500;
 
 type TopicPlainProps = {
   index: number,
   content: TopicContent, 
-  updateSummary: (index: number, updatedContent: Partial<TopicContent>) => void,
+  entireDuration: number,
+  updateSummary: (index: number, updatedContent: Partial<TopicContent> | undefined) => void,
 };
 
-const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
+const TopicPlainRaw = ({index, content, entireDuration, updateSummary}: TopicPlainProps) => {
   const [isRolledDown, rollPlain] = useReducer((value) => !value, false);
 
   const speakers = useMemo(() => (
@@ -45,6 +45,20 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
         speakers: [...content.speakers.slice(0, speaker.index), speaker, ...content.speakers.slice(speaker.index + 1)]
       });
     }, TYPE_TIMEOUT);
+  };
+  
+  const deleteSpeaker = (speakerIndex: number) => {
+    updateSummary(index, {
+      speakers: [...content.speakers.slice(0, speakerIndex), ...content.speakers.slice(speakerIndex + 1)]
+    });
+  };
+
+  const commitTimeCodesChange = (start: string, end: string) => {
+    updateSummary(index, {start, end});
+  };
+
+  const onNewSpeakerAdd = () => {
+    updateSummary(index, {speakers: content.speakers.concat(defaultSpeaker)});
   };
 
   const onKeyUp = () => {
@@ -79,44 +93,28 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
             gap='10px' 
             justifyContent='center'
             width='100%'>
+              <TopicInput
+                type='text'
+                value={customTitle}
+                width={`${customTitle.length / 1.5}em`}
+                onChange={(evt) => setCustomTitle(evt.target.value)}
+                onKeyUp={onKeyUp}
+                onKeyDown={onKeyDown} />
 
-            <Input
-              type='text' 
-              disableUnderline
-              value={customTitle}
-              itemType=''
-              onChange={(evt) => setCustomTitle(evt.target.value)}
-              onKeyUp={onKeyUp}
-              onKeyDown={onKeyDown}
-              sx={{
-                fontWeight: 700,
-                [breakpoints.down('sm')]: {
-                  fontSize: XsFontSizes.h4
-                },
-                [breakpoints.up('sm')]: {
-                  fontSize: SmFontSizes.h4
-                },
-                [breakpoints.up('sm')]: {
-                  fontSize: MdFontSizes.h4
-                },
-                [breakpoints.up('lg')]: {
-                  fontSize: LgFontSizes.h3
-                },
-                [breakpoints.only('xl')]: {
-                  fontSize: XlFontSizes.h3
-                },
-                width: `${customTitle.length / 1.5}em`,
-                maxWidth: '50%',
-                '& .MuiInputBase-input': {
-                  overflow: "hidden",
-                  textOverflow: "ellipsis"
-                }
-              }} />
-
-            <TopicTimeCodes start={content.start} end={content.end} hidden={medium} />
+              <TopicTimeCodes 
+                start={content.start} 
+                end={content.end}
+                entireDuration={entireDuration}
+                hidden={medium} 
+                commitChange={commitTimeCodesChange} />
           </Stack>
 
-          <TopicTimeCodes start={content.start} end={content.end} hidden={!medium || !isRolledDown} />
+          <TopicTimeCodes 
+            start={content.start} 
+            end={content.end}
+            entireDuration={entireDuration}
+            hidden={!medium || !isRolledDown} 
+            commitChange={commitTimeCodesChange} />
 
           <TextArea 
             readOnly={false}
@@ -129,7 +127,7 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
           </TextArea>
 
           <Paper variant='elevationInside' style={{
-            display: speakers.length && isRolledDown ? 'flex' : 'none',
+            display: isRolledDown ? 'flex' : 'none',
             flexDirection: 'column',
             gap: '20px'
           }}>
@@ -138,11 +136,22 @@ const TopicPlainRaw = ({index, content, updateSummary}: TopicPlainProps) => {
                 key={speaker.index} 
                 speaker={speaker} 
                 onKeyDown={onKeyDown} 
-                commitChanges={commitSpeakerChanges}/>
+                commitChanges={commitSpeakerChanges}
+                deleteSpeaker={deleteSpeaker} />
             ))}
+
+            <Button 
+              variant='topic' 
+              fullWidth
+              onClick={onNewSpeakerAdd}>
+                +
+            </Button>
           </Paper>
 
-          <RollDownButton isRolledDown={isRolledDown} rollPlain={rollPlain} />
+          <TopicButtonsMenu 
+            isRolledDown={isRolledDown} 
+            onTopicRoll={rollPlain} 
+            onTopicDelete={() => updateSummary(index, undefined)}/>
     </Paper>
   );
 };

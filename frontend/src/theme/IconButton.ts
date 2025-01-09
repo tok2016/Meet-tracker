@@ -20,6 +20,18 @@ const IconButton: Components['MuiIconButton'] = {
       ':hover *': {
         color: getCssVariable('disabledColor')
       }
+    },
+    colorWarning: {
+      padding: 0,
+      '*': {
+        color: getCssVariable('errorColor'),
+      },
+      ':hover': {
+        backgroundColor: getCssVariable('errorColor')
+      },
+      ':hover *': {
+        color: getCssVariable('backgroundColor')
+      }
     }
   }
 };
