@@ -9,6 +9,7 @@ import PasswordMenu from './PasswordMenu';
 import UserInfo from './UserInfo';
 import { Typography } from '@mui/material';
 import { Status } from '../../types/Status';
+import { PHONE_NUMBER_LENGTH } from '../../utils/utils';
 
 const UserProfileForm = ({isForAdmin, user, disabled, id, status, error}: {isForAdmin: boolean, user: User, disabled: boolean, id: number, status: Status, error?: string}) => {
   const dispatch = useAppDispatch();
@@ -89,7 +90,7 @@ const UserProfileForm = ({isForAdmin, user, disabled, id, status, error}: {isFor
         label='Номер телефона'
         defaultValue={user.phoneNumber}
         disabled={disabled}
-        apply={(update) => sendUpdate({...user, phoneNumber: update})} />
+        apply={(update) => sendUpdate({...user, phoneNumber: update.slice(update.length - PHONE_NUMBER_LENGTH)})} />
 
       <UserInfoInput 
         path='password'

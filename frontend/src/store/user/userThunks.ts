@@ -4,9 +4,7 @@ import { User, UserLogin, UserRaw } from '../../types/User';
 import { AsyncThunkConfig } from '../store';
 import AxiosInstance from '../../utils/Axios';
 import Token, { TokenRaw } from '../../types/Token';
-import { camelToSnake, snakeToCamel, TOKEN_TIME_TO_LIVE } from '../../utils/utils';
-
-const PHONE_NUMBER_LENGTH = 10;
+import { reformUser, camelToSnake, PHONE_NUMBER_LENGTH, snakeToCamel, TOKEN_TIME_TO_LIVE } from '../../utils/utils';
 
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/postUserData', 
@@ -16,7 +14,8 @@ const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
 
     const response = await AxiosInstance.post('/user', body);
 
-    return snakeToCamel<User>(response.data);
+    const rawUser = snakeToCamel<User>(response.data);
+    return reformUser(rawUser);
   }
 );
 
@@ -71,7 +70,8 @@ const getCurrentUser = createAsyncThunk<User, void, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel<User>(response.data);
+    const rawUser = snakeToCamel<User>(response.data);
+    return reformUser(rawUser);
   }
 );
 
@@ -88,7 +88,8 @@ const patchCurrentUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel<User>(response.data);
+    const rawUser = snakeToCamel<User>(response.data);
+    return reformUser(rawUser);
   }
 );
 

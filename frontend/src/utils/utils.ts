@@ -2,6 +2,7 @@ import Filter from '../types/Filter';
 import SpeakerContent, { SpeakerArrayContent } from '../types/SpeakerContent';
 import Summary, { RawSummary, SummaryInfo } from '../types/Summary';
 import TopicContent, { isTopicContent, isTopicRaw } from '../types/TopicContent';
+import { User } from '../types/User';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -10,6 +11,8 @@ const TOKEN_TIME_TO_LIVE = 1000 * 60 * 24 * 7;
 const FILTER_DATE_OFFSET = 1000 * 60 * 24 * 2;
 
 const INPUT_ICON_WIDTH = '1.5em';
+
+const PHONE_NUMBER_LENGTH = 10;
 
 const statusesTranslations = {
   ['idle']: 'Генерация',
@@ -149,6 +152,11 @@ const areObjectsEqual = (a: object, b: object) => JSON.stringify(a) === JSON.str
 
 const getPageTitle = (routeName: string) => `${routeName} — Brify`;
 
-export {camelToSnake, snakeToCamel, arraySnakeToCamel, arrayCamelToSnake, getOffsetQuery, getLocaleString, screenSymbols,
+const reformUser = (user: User): User => ({
+  ...user,
+  phoneNumber: user.phoneNumber.length === PHONE_NUMBER_LENGTH ? `+7${user.phoneNumber}` : user.phoneNumber
+});
+
+export {camelToSnake, snakeToCamel, arraySnakeToCamel, arrayCamelToSnake, getOffsetQuery, getLocaleString, screenSymbols, reformUser,
   getFullSummary, getFullSummaries, getCollectionQuery, parseSummaryContent, getFilterWithDates, areObjectsEqual, getPageTitle,
-  statusesTranslations, jsonTypes, TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, ITEMS_PER_PAGE};
+  statusesTranslations, jsonTypes, TOKEN_TIME_TO_LIVE, INPUT_ICON_WIDTH, ITEMS_PER_PAGE, PHONE_NUMBER_LENGTH};

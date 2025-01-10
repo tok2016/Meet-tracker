@@ -1,17 +1,11 @@
 FROM node:20.17.0-alpine3.19
 
-WORKDIR /frontend
+WORKDIR /frontend/build
 
-COPY package.json .
+COPY build .
 
-RUN npm install
-
-RUN npm install -g serve
-
-COPY . .
-
-RUN npm run build
+RUN npm install -g serve 
 
 EXPOSE 3000
 
-CMD ["npx", "serve", "-s", "build"]
+CMD ["npx", "serve", "-s", "../build"]

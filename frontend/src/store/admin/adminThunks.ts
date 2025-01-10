@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '../store';
 import { User, UserPassword, UserRaw, UsersRaw } from '../../types/User';
 import AxiosInstance from '../../utils/Axios';
-import { arraySnakeToCamel, camelToSnake, getFilterWithDates, getCollectionQuery, getFullSummaries, snakeToCamel } from '../../utils/utils';
+import { arraySnakeToCamel, camelToSnake, getFilterWithDates, getCollectionQuery, getFullSummaries, snakeToCamel, reformUser } from '../../utils/utils';
 import { RawSummary, SummariesRaw } from '../../types/Summary';
 import CollectionParams from '../../types/CollectionParams';
 import { defaultFilter } from '../../types/Filter';
@@ -24,7 +24,8 @@ const getUsers = createAsyncThunk<UsersRaw, CollectionParams, AsyncThunkConfig>(
     });
 
     const data = snakeToCamel<CollectionData>(response.data.pop());
-    const users = arraySnakeToCamel<User>(response.data);
+    const rawUsers = arraySnakeToCamel<User>(response.data);
+    const users = rawUsers.map((raw) => reformUser(raw));
 
     const usersWithTotal: UsersRaw = {
       users,
@@ -48,7 +49,8 @@ const postNewUser = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel<User>(response.data);
+    const rawUser = snakeToCamel<User>(response.data);
+    return reformUser(rawUser);
   }
 );
 
@@ -63,7 +65,8 @@ const getUserById = createAsyncThunk<User, number, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel<User>(response.data);
+    const rawUser = snakeToCamel<User>(response.data);
+    return reformUser(rawUser);
   }
 );
 
@@ -80,7 +83,8 @@ const patchUserById = createAsyncThunk<User, User, AsyncThunkConfig>(
       }
     });
 
-    return snakeToCamel<User>(response.data);
+    const rawUser = snakeToCamel<User>(response.data);
+    return reformUser(rawUser);
   }
 );
 

@@ -141,6 +141,8 @@ const userSlice = createSlice({
       .addCase(patchCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.status = 'success';
+
+        sessionStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(patchCurrentUser.rejected, (state, action) => {
         state.status = 'error';
