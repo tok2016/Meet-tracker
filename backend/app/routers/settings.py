@@ -9,7 +9,7 @@ from app.models import LlmSettings, WhisperSettings, DiarizeSettings, ColorSetti
 router = APIRouter()
 
 @router.get("/settings")
-def get_settings(session: SessionDep):
+async def get_settings(session: SessionDep):
     return {
         "app_name": settings.app_name,
         "llm_model": settings.llm_model,
@@ -20,7 +20,7 @@ def get_settings(session: SessionDep):
     }
 
 @router.post("/change_settings")
-def change_settings(value: str):
+async def change_settings(value: str):
     settings.app_name = value
     return {
         "app_name": settings.app_name,
