@@ -18,7 +18,7 @@ router = APIRouter()
 
 
 @router.post("/user/", response_model=UserPublic)
-def create_user(user: UserCreate, session: SessionDep):
+async def create_user(user: UserCreate, session: SessionDep):
     db_user = User.model_validate(user, update={"password": get_password_hash(user.password)})
     session.add(db_user)
     session.commit()
@@ -26,13 +26,13 @@ def create_user(user: UserCreate, session: SessionDep):
     return db_user
 
 @router.get("/users/", dependencies=[Depends(get_current_active_superuser)], response_model=list[UserPublic])
-def read_users( session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=100)] = 100, ):
+async def read_users( session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=100)] = 100, ):
     users = session.exec(select(User).offset(offset).limit(limit)).all()
     return users
 
 
 @router.get("/user/{username}", dependencies=[Depends(get_current_active_superuser)], response_model=UserPublic)
-def read_user(user_username: int, session: SessionDep):
+async def read_user(user_username: int, session: SessionDep):
     user = session.get(User, user_username)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -40,7 +40,7 @@ def read_user(user_username: int, session: SessionDep):
 
 
 @router.patch("/user/{username}", response_model=UserPublic)
-def update_user(user_username: int, user: UserUpdate, session: SessionDep):
+async def update_user(user_username: int, user: UserUpdate, session: SessionDep):
     user_db = session.get(User, user_username)
     if not user_db:
         raise HTTPException(status_code=404, detail="User not found")
@@ -58,7 +58,7 @@ def update_user(user_username: int, user: UserUpdate, session: SessionDep):
 
 
 @router.delete("/user/{username}")
-def delete_user(user_username: int, session: SessionDep):
+async def delete_user(user_username: int, session: SessionDep):
     user = session.get(User, user_username)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -68,7 +68,7 @@ def delete_user(user_username: int, session: SessionDep):
 
 
 @router.post("/user/login")
-def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep) -> Token:
+async def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep) -> Token:
     user = authenticate( session=session, email=form_data.username, password=form_data.password )
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
@@ -76,11 +76,11 @@ def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], sessi
     return Token(access_token=create_access_token( user.id, expires_delta=access_token_expires ) )
 
 @router.get("/current_user/", response_model=UserPublic)
-def read_user_me(current_user: CurrentUser):
+async def read_user_me(current_user: CurrentUser):
     return current_user
 
 @router.patch("/current_user/", response_model=UserPublic)
-def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: CurrentUser):
+async def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: CurrentUser):
     if user_in.email:
         existing_user = get_user_by_email(session=session, email=user_in.email)
         if existing_user and existing_user.id != current_user.id:
@@ -93,17 +93,17 @@ def update_user_me(session: SessionDep, user_in: UserUpdateMe, current_user: Cur
     return current_user
 
 @router.post("/current_user/upload_picture")
-def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(...),):
+async def upload_profile_picture(current_user: CurrentUser, file: UploadFile = File(...),):
     full_image_path = upload_picture(current_user.id, file)
     return {"image": f"{full_image_path}"}
 
 @router.get("/current_user/profile_picture")
-def get_profile_picture(current_user: CurrentUser):
+async def get_profile_picture(current_user: CurrentUser):
     path_image_dir = "app/images/user/profile/" + str(current_user.id) + "/profile.png"
     return FileResponse(path_image_dir)
 
 @router.get("/user/{username}/profile_picture")
-def get_user_profile_picutre(user_username: int, current_user: CurrentUser):
+async def get_user_profile_picutre(user_username: int, current_user: CurrentUser):
     if not current_user.is_admin:
         raise HTTPException(
             status_code=403, detail="Only admin"
@@ -112,7 +112,7 @@ def get_user_profile_picutre(user_username: int, current_user: CurrentUser):
     return FileResponse(path_image_dir)
 
 @router.post("/user/{username}/profile_picture")
-def create_user_profile_picutre(user_username: int, current_user: CurrentUser, file: UploadFile = File(...),):
+async def create_user_profile_picutre(user_username: int, current_user: CurrentUser, file: UploadFile = File(...),):
     if not current_user.is_admin:
         raise HTTPException( status_code=403, detail="Only admin" )
     full_image_path = upload_picture(user_username, file)
@@ -134,7 +134,7 @@ async def filter_user(session: SessionDep, user_filter: UserFilter = FilterDepen
     return response
 
 @router.post("/reset-password/{username}", dependencies=[Depends(get_current_active_superuser)])
-def reset_password_admin(session: SessionDep, body: NewPassword, user_username: int):
+async def reset_password_admin(session: SessionDep, body: NewPassword, user_username: int):
     """
     Обновление пароля для админов
     """
@@ -146,7 +146,7 @@ def reset_password_admin(session: SessionDep, body: NewPassword, user_username: 
     return {"result": "Password updated successfully"}
 
 @router.post("/current-user/reset-password")
-def reset_password_admin(session: SessionDep, current_user: CurrentUser, body: NewPassword):
+async def reset_password_admin(session: SessionDep, current_user: CurrentUser, body: NewPassword):
     """
     Обновление пароля для обычных пользователей
     """
