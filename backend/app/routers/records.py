@@ -182,12 +182,19 @@ async def record_diarize( file: UploadFile, session: SessionDep, title: str, cur
     return db_summary
 
 @router.get("/records")
-async def read_records(session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=20)] = 20):
+async def read_records(session: SessionDep, current_user: CurrentUser, page: int = Query(ge=0, default=0), 
+        size: int = Query(ge=1, le=100) ):
     """
-    Function to get 20 summaries. Функция для для получения 20 (или меньше) резюме.
+    Function to get user's summaries. Функция для для получения резюме пользователя
     """
-    records = session.exec(select(Summary).offset(offset).limit(limit)).all()
-    return records
+    #Пагинация
+    offset_min = page * size
+    offset_max = (page + 1) * size
+    #Фильтруем
+    query = select(Summary).filter_by(user_id=current_user.id)
+    result = session.execute(query).scalars().all()
+    response = result[offset_min:offset_max] + [ {"page": page, "size": size, "total": math.ceil(len(result)/size)-1} ]
+    return response
 
 @router.get("/summary/{summary_id}/")
 async def get_summary_record(session: SessionDep, summary_id: int):
