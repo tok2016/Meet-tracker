@@ -10,6 +10,7 @@ import UserInfo from './UserInfo';
 import { Typography } from '@mui/material';
 import { Status } from '../../types/Status';
 import { PHONE_NUMBER_LENGTH } from '../../utils/utils';
+import BotWarning from '../BotWarning';
 
 const UserProfileForm = ({isForAdmin, user, disabled, id, status, error}: {isForAdmin: boolean, user: User, disabled: boolean, id: number, status: Status, error?: string}) => {
   const dispatch = useAppDispatch();
@@ -108,6 +109,8 @@ const UserProfileForm = ({isForAdmin, user, disabled, id, status, error}: {isFor
         isOpened={isOpened} 
         status={status}
         toggleOpen={toggleOpen} />
+
+      <BotWarning chatId={user.chatId} isForAdmin={isForAdmin} />
     </>
   );
 };
