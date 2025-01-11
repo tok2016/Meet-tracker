@@ -15,6 +15,10 @@ const ListAlert = ({listType}: {listType: 'user'| 'summary'}) => {
     dispatch(hideListError());
   };
 
+  if(!error) {
+    return;
+  }
+
   return (
     <Snackbar 
       anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
