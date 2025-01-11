@@ -47,7 +47,8 @@ const userSchema: ObjectSchema<UserRaw> = object({
     .required(REQUIRED_MESSAGE)
     .trim()
     .min(MIN_PHONE_NUMBER_LENGTH, `Минимальное число символов - ${MIN_PHONE_NUMBER_LENGTH}`)
-    .matches(/^[+0-9]+$/, 'Номер телефона может включать в себя только цифры и символ +')
+    .matches(/^[+0-9]+$/, 'Номер телефона может включать в себя только цифры и символ +'),
+  chatId: string().default('')
 });
 
 export default userSchema;
