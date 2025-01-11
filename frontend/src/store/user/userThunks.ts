@@ -9,7 +9,7 @@ import { reformUser, camelToSnake, PHONE_NUMBER_LENGTH, snakeToCamel, TOKEN_TIME
 const postUserData = createAsyncThunk<User, UserRaw, AsyncThunkConfig>(
   'user/postUserData', 
   async (userData) => {
-    const finalUser = {...userData, chatId: '', phoneNumber: userData.phoneNumber.slice(userData.phoneNumber.length - PHONE_NUMBER_LENGTH)};
+    const finalUser = {...userData, phoneNumber: userData.phoneNumber.slice(userData.phoneNumber.length - PHONE_NUMBER_LENGTH)};
     const body = camelToSnake(finalUser);
 
     const response = await AxiosInstance.post('/user', body);
