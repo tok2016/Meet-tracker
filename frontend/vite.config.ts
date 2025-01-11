@@ -17,7 +17,7 @@ export default defineConfig({
     }
   },
   server: {
-    host: '84.252.135.242'
+    host: '127.0.0.1'
   },
   optimizeDeps: {
     include: ['@emotion/styled']
