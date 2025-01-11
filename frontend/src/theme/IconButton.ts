@@ -32,6 +32,18 @@ const IconButton: Components['MuiIconButton'] = {
       ':hover *': {
         color: getCssVariable('backgroundColor')
       }
+    },
+    colorInfo: {
+      padding: 0,
+      '*': {
+        color: getCssVariable('textContrastColor')
+      },
+      ':hover': {
+        backgroundColor: getCssVariable('textContrastColor')
+      },
+      ':hover *': {
+        color: getCssVariable('textHighlightColor')
+      }
     }
   }
 };
