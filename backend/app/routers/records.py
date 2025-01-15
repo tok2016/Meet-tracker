@@ -55,8 +55,6 @@ from app.diarization_funcs import (
 
 from app.settings import settings
 
-#Llama модель
-model = OllamaLLM(model=settings.llm_model, format="json", base_url="http://127.0.0.1:11434/")
 json_response = """
   "segments":
   [
@@ -81,6 +79,8 @@ router = APIRouter()
 #Запрос для распознования спикеров
 @router.post("/record/diarize")
 async def record_diarize( file: UploadFile, session: SessionDep, title: str, current_user: CurrentUser):
+    #Llama модель
+    model = OllamaLLM(model=settings.llm_model, format="json", base_url="http://127.0.0.1:11434/")
     #Конвертируем аудио/видео в wav
     audio = AudioSegment.from_file(io.BytesIO(file.file.read()))
     audio_id = str(uuid4())
